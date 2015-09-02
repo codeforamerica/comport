@@ -97,3 +97,4 @@ class TestRegistering:
         assert res.status_code == 200
         # A new user was created
         assert len(User.query.all()) == old_count + 1
+        assert len(department.users) == 1

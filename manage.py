@@ -48,7 +48,7 @@ def delete_everything():
     if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
        db.reflect()
        db.drop_all()
-       db.create_all()
+       
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))

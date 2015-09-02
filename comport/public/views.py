@@ -53,7 +53,8 @@ def register():
         new_user = User.create(username=form.username.data,
                         email=form.email.data,
                         password=form.password.data,
-                        active=True)
+                        active=True,
+                        department_id=invite_code.department_id)
 
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))
