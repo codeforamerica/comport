@@ -68,7 +68,7 @@ class TestUser:
         assert admin_role in u.roles
         assert other_role in u.roles
 
-    def test__many_users(self):
+    def test_many_users(self):
         admin_role = Role(name='admin')
         admin_role.save()
 
@@ -85,3 +85,20 @@ class TestUser:
 
         assert admin_role in u.roles
         assert admin_role_two in u_two.roles
+
+    def test_is_admin(self):
+        admin_role = Role(name='admin')
+        admin_role.save()
+
+        u = UserFactory()
+        u.roles.append(admin_role)
+        u.save()
+
+        assert u.is_admin()
+
+    def test_is_not_admin(self):
+
+        u = UserFactory()
+        u.save()
+
+        assert not u.is_admin()

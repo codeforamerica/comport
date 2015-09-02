@@ -8,5 +8,10 @@ blueprint = Blueprint("user", __name__, url_prefix='/users',
 
 @blueprint.route("/")
 @login_required
-def members():
-    return render_template("users/members.html")
+def home():
+    if current_user.is_admin():
+        redirect_url = url_for("admin.admin_dashboard")
+        return redirect(redirect_url)
+    else:
+        redirect_url = url_for("department.department_dashboard", department_id=current_user.department_id)
+        return redirect(redirect_url)

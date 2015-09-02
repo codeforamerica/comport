@@ -65,6 +65,12 @@ class User(UserMixin, SurrogatePK, Model):
     def check_password(self, value):
         return bcrypt.check_password_hash(self.password, value)
 
+    def is_admin(self):
+        def names(role):
+            return role.name
+
+        return "admin" in map(names, self.roles)
+
     @property
     def full_name(self):
         return "{0} {1}".format(self.first_name, self.last_name)

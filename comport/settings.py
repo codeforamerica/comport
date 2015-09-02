@@ -37,4 +37,5 @@ class TestConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os_env.get('TEST_DATABASE_URL','postgresql://localhost/comport_test')
     BCRYPT_LOG_ROUNDS = 1  # For faster tests
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
     WTF_CSRF_ENABLED = False  # Allows form testing

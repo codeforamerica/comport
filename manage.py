@@ -6,6 +6,7 @@ from flask_migrate import MigrateCommand
 
 from comport.app import create_app
 from comport.user.models import User, Role
+from comport.department.models import Department
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 
@@ -31,7 +32,7 @@ def _make_context():
 def test():
     """Run the tests."""
     import pytest
-    exit_code = pytest.main([TEST_PATH, '--verbose'])
+    exit_code = pytest.main([TEST_PATH, '-x', '--verbose'])
     return exit_code
 
 
@@ -44,11 +45,17 @@ def make_admin_user():
     user.save()
 
 @manager.command
+def make_normal_user():
+    department = Department.create(name="Busy Town Public Safety")
+    user = User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+    user.save()
+
+@manager.command
 def delete_everything():
     if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
        db.reflect()
        db.drop_all()
-       
+
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))

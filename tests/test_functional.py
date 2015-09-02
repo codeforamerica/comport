@@ -74,6 +74,17 @@ class TestUserRoles:
         assert res.status_code == 200
         assert "This is the admin-only page" in res
 
+    def test_deparment_access(self, user, testapp):
+        department = Department.create(name="Busy Town Public Safety")
+        user.department_id = department.id
+        user.save()
+        TestLoggingIn.test_can_log_in_returns_200(self, user=user, testapp=testapp)
+        res = testapp.get("/department/6").follow()
+
+        assert res.status_code == 200
+        assert "You do not have sufficent permissions to do that" in res
+
+        
 class TestRegistering:
 
     def test_can_register(self, user, testapp):

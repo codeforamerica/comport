@@ -9,7 +9,7 @@ from comport.settings import TestConfig
 from comport.app import create_app
 from comport.database import db as _db
 
-from .factories import UserFactory
+from .factories import UserFactory, DepartmentFactory
 
 
 @pytest.yield_fixture(scope='function')
@@ -38,6 +38,10 @@ def db(app):
 
 @pytest.fixture
 def user(db):
+    department = DepartmentFactory()
+    department.save()
     user = UserFactory(password='myprecious')
+    user.department_id = department.id
+    user.save()
     db.session.commit()
     return user

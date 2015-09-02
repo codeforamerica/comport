@@ -3,6 +3,7 @@ from factory import Sequence, PostGenerationMethodCall
 from factory.alchemy import SQLAlchemyModelFactory
 
 from comport.user.models import User
+from comport.department.models import Department
 from comport.database import db
 
 
@@ -12,6 +13,11 @@ class BaseFactory(SQLAlchemyModelFactory):
         abstract = True
         sqlalchemy_session = db.session
 
+class DepartmentFactory(BaseFactory):
+    name = Sequence(lambda n: "Department {0}".format(n))
+
+    class Meta:
+        model = Department
 
 class UserFactory(BaseFactory):
     username = Sequence(lambda n: "user{0}".format(n))
