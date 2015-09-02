@@ -5,7 +5,7 @@ from flask import (Blueprint, request, render_template, flash, url_for,
 from flask.ext.login import login_user, login_required, logout_user
 
 from comport.extensions import login_manager
-from comport.user.models import User
+from comport.user.models import User, Invite_Code
 from comport.public.forms import LoginForm
 from comport.user.forms import RegisterForm
 from comport.utils import flash_errors
@@ -46,10 +46,15 @@ def logout():
 def register():
     form = RegisterForm(request.form, csrf_enabled=False)
     if form.validate_on_submit():
+        invite_code = Invite_Code.query.filter_by(code=form.invite_code.data).first()
+        invite_code.used = True
+        invite_code.save()
+
         new_user = User.create(username=form.username.data,
                         email=form.email.data,
                         password=form.password.data,
                         active=True)
+
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))
     else:

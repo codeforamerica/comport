@@ -22,9 +22,12 @@
                 {{form.confirm.label}}
                 {{form.confirm(placeholder="Password (again)", class_="form-control")}}
             </div>
+            <div class="form-group">
+                {{form.invite_code.label}}
+                {{form.invite_code(placeholder="Invite Code", class_="form-control")}}
+            </div>
             <p><input class="btn btn-default btn-submit" type="submit" value="Register"></p>
     </form>
     <p><em>Already registered?</em> Click <a href="/">here</a> to login.</p>
 </div>
 {% endblock %}
-

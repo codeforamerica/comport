@@ -3,7 +3,7 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
 
-from .models import User
+from .models import User, Invite_Code
 
 
 class RegisterForm(Form):
@@ -15,6 +15,8 @@ class RegisterForm(Form):
                                 validators=[DataRequired(), Length(min=6, max=40)])
     confirm = PasswordField('Verify password',
                 [DataRequired(), EqualTo('password', message='Passwords must match')])
+
+    invite_code = TextField('Invite Code', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -31,5 +33,12 @@ class RegisterForm(Form):
         user = User.query.filter_by(email=self.email.data).first()
         if user:
             self.email.errors.append("Email already registered")
+            return False
+        found_invite_code = Invite_Code.query.filter_by(code=self.invite_code.data).first()
+        if not found_invite_code:
+            self.invite_code.errors.append("Invite Code not recognized.")
+            return False
+        if found_invite_code.used:
+            self.invite_code.errors.append("Invite Code has already been used.")
             return False
         return True
