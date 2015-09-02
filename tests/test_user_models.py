@@ -5,7 +5,19 @@ import datetime as dt
 import pytest
 
 from comport.user.models import User, Role
-from .factories import UserFactory
+from comport.department.models import Extractor
+from .factories import UserFactory, DepartmentFactory
+
+
+@pytest.mark.usefixtures('db')
+class TestUserInheritance:
+    def test_extractors_are_users(self):
+        department = DepartmentFactory()
+        department.save()
+
+        extractor = Extractor.create(username='foobarbaz', email='foo2@bar.com', department_id=department.id)
+        
+        assert extractor.department_id == department.id
 
 
 @pytest.mark.usefixtures('db')

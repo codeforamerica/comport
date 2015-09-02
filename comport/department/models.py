@@ -9,6 +9,8 @@ from comport.database import (
     SurrogatePK,
 )
 
+from comport.user.models import User
+
 
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
@@ -22,3 +24,13 @@ class Department(SurrogatePK, Model):
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
+
+
+class Extractor(User):
+    __tablename__ = 'extractors'
+    id = Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity':'extractors',
+        'inherit_condition': (id==User.id)
+    }

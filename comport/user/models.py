@@ -42,6 +42,7 @@ class Invite_Code(SurrogatePK, Model):
 class User(UserMixin, SurrogatePK, Model):
 
     __tablename__ = 'users'
+    id = Column(db.Integer, primary_key=True, index=True)
     username = Column(db.String(80), unique=True, nullable=False)
     email = Column(db.String(80), unique=True, nullable=False)
     #: The hashed password
@@ -51,6 +52,12 @@ class User(UserMixin, SurrogatePK, Model):
     last_name = Column(db.String(30), nullable=True)
     active = Column(db.Boolean(), default=False)
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=True)
+    type = Column(db.String(50))
+
+    __mapper_args__ = {
+        'polymorphic_on':type
+    }
+
 
     def __init__(self, username, email, password=None, **kwargs):
         db.Model.__init__(self, username=username, email=email, **kwargs)
@@ -68,8 +75,8 @@ class User(UserMixin, SurrogatePK, Model):
     def is_admin(self):
         def names(role):
             return role.name
-
         return "admin" in map(names, self.roles)
+
 
     @property
     def full_name(self):
