@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, url_for, redirect
 from flask.ext.login import login_required
+from flask_login import current_user
 
 blueprint = Blueprint("user", __name__, url_prefix='/users',
                       static_folder="../static")
