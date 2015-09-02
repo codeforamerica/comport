@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField
+from wtforms import TextField, SelectField
 from wtforms.validators import DataRequired
 from comport.department.models import Department
 
@@ -21,3 +21,9 @@ class NewDepartmentForm(Form):
             return False
 
         return True
+
+class NewInviteForm(Form):
+    department_id = SelectField("Department", coerce=int)
+
+    def __init__(self, *args, **kwargs):
+        super(NewInviteForm, self).__init__(*args, **kwargs)

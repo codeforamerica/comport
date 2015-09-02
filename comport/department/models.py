@@ -14,6 +14,7 @@ class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
     id = Column(db.Integer, primary_key=True, index=True)
     name = Column(db.String(80), unique=True, nullable=False)
+    invite_codes = relationship("Invite_Code", backref="department")
 
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)

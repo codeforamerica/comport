@@ -27,6 +27,18 @@ class Role(SurrogatePK, Model):
         return '<Role({name})>'.format(name=self.name)
 
 
+class Invite_Code(SurrogatePK, Model):
+    __tablename__ = 'invite_codes'
+    id = Column(db.Integer, primary_key=True, index=True)
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'))
+    code = Column(db.String(36), unique=True, nullable=False)
+    used = Column(db.Boolean(), default=False)
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
+
+
+
 class User(UserMixin, SurrogatePK, Model):
 
     __tablename__ = 'users'

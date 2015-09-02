@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>New Invite Code</h1>
+  <br/>
+  <form id="registerForm" class="form form-register" method="POST" action="" role="form">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+              {{form.department_id.label}}
+              {{form.department_id}}
+          </div>
+          <p><input class="btn btn-default btn-submit" type="submit" value="Add"></p>
+  </form>
+{% endblock %}
