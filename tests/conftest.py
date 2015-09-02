@@ -28,16 +28,12 @@ def testapp(app):
     """A Webtest app."""
     return TestApp(app)
 
-
-@pytest.yield_fixture(scope='function')
+@pytest.fixture(scope='function')
 def db(app):
     _db.app = app
-    with app.app_context():
-        _db.create_all()
-
-    yield _db
-
     _db.drop_all()
+    _db.create_all()
+    return _db
 
 
 @pytest.fixture
