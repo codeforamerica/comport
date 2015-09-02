@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from flask_script import Manager, Shell, Server
+from flask_script import Manager, Shell, Server, prompt_bool
 from flask_migrate import MigrateCommand
 
 from comport.app import create_app
-from comport.user.models import User
+from comport.user.models import User, Role
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 
@@ -34,6 +34,21 @@ def test():
     exit_code = pytest.main([TEST_PATH, '--verbose'])
     return exit_code
 
+
+@manager.command
+def make_admin_user():
+    user = User.create(username="admin", email="email@example.com",password="password",active=True)
+    admin_role = Role(name='admin')
+    admin_role.save()
+    user.roles.append(admin_role)
+    user.save()
+
+@manager.command
+def delete_everything():
+    if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
+       db.reflect()
+       db.drop_all()
+       db.create_all()
 
 manager.add_command('server', Server())
 manager.add_command('shell', Shell(make_context=_make_context))

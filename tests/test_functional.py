@@ -7,7 +7,7 @@ import pytest
 from flask import url_for
 
 
-from comport.user.models import User
+from comport.user.models import User, Role
 from .factories import UserFactory
 
 
@@ -60,6 +60,18 @@ class TestLoggingIn:
         # sees error
         assert "Unknown user" in res
 
+
+class TestUserRoles:
+
+    def test_access(self, user, testapp):
+        admin_role = Role.create(name="admin")
+        user.roles.append(admin_role)
+        user.save()
+        TestLoggingIn.test_can_log_in_returns_200(self, user=user, testapp=testapp)
+        res = testapp.get("/admin").follow()
+
+        assert res.status_code == 200
+        assert "This is the admin-only page" in res
 
 class TestRegistering:
 
