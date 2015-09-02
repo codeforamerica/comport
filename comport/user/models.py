@@ -16,7 +16,7 @@ from comport.database import (
 
 class Role(SurrogatePK, Model):
     __tablename__ = 'roles'
-    name = Column(db.String(80), unique=True, nullable=False)
+    name = Column(db.String(80), unique=False, nullable=False)
     user_id = ReferenceCol('users', nullable=True)
     user = relationship('User', backref='roles')
 
@@ -38,7 +38,6 @@ class User(UserMixin, SurrogatePK, Model):
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
     active = Column(db.Boolean(), default=False)
-    is_admin = Column(db.Boolean(), default=False)
 
     def __init__(self, username, email, password=None, **kwargs):
         db.Model.__init__(self, username=username, email=email, **kwargs)

@@ -35,7 +35,6 @@ class TestUser:
         assert bool(user.username)
         assert bool(user.email)
         assert bool(user.created_at)
-        assert user.is_admin is False
         assert user.active is True
         assert user.check_password('myprecious')
 
@@ -49,10 +48,40 @@ class TestUser:
         user = UserFactory(first_name="Foo", last_name="Bar")
         assert user.full_name == "Foo Bar"
 
-    def test_roles(self):
+    def test_role(self):
         role = Role(name='admin')
         role.save()
         u = UserFactory()
         u.roles.append(role)
         u.save()
         assert role in u.roles
+
+    def test__many_roles(self):
+        admin_role = Role(name='admin')
+        admin_role.save()
+        other_role = Role(name='other')
+        other_role.save()
+        u = UserFactory()
+        u.roles.append(admin_role)
+        u.roles.append(other_role)
+        u.save()
+        assert admin_role in u.roles
+        assert other_role in u.roles
+
+    def test__many_users(self):
+        admin_role = Role(name='admin')
+        admin_role.save()
+
+        u = UserFactory()
+        u.roles.append(admin_role)
+        u.save()
+
+        admin_role_two = Role(name='admin')
+        admin_role_two.save()
+
+        u_two = UserFactory()
+        u_two.roles.append(admin_role_two)
+        u_two.save()
+
+        assert admin_role in u.roles
+        assert admin_role_two in u_two.roles
