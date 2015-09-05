@@ -2,4 +2,15 @@
 {% block content %}
     <h1>Welcome {{ session.username }}</h1>
     <h3>This is the {{department.name}} page.</h3>
+    {% if department.get_extractor() == None %}
+    <form action="{{department.id}}/activate" method="post">
+      <input type="submit" name="submit" value="Activate">
+    </form>
+    {% else %}
+    <form action="{{department.id}}/activate" method="post">
+      <input type="submit" name="submit" value="Regenerate">
+    </form>
+    {% endif %}
+
+
 {% endblock %}

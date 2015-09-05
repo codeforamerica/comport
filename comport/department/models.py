@@ -9,7 +9,7 @@ from comport.database import (
     SurrogatePK,
 )
 
-from comport.user.models import User
+from comport.user.models import User, Role
 
 
 class Department(SurrogatePK, Model):
@@ -18,6 +18,10 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
+
+    def get_extractor(self):
+        extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
+        return extractors[0] if extractors else None
 
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
@@ -34,3 +38,23 @@ class Extractor(User):
         'polymorphic_identity':'extractors',
         'inherit_condition': (id==User.id)
     }
+
+    def generate_envs(self, password):
+        return """
+            COMPORT_BASE_URL = changeme
+            COMPORT_USERNAME = %s
+            COMPORT_PASSWORD = %s
+            COMPORT_SQL_SERVER_URL =
+            COMPORT_SQL_SERVER_DATABASE =
+            COMPORT_SQL_SERVER_USERNAME =
+            COMPORT_SQL_SERVER_PASSWORD =
+        """ % (self.username, password,)
+
+    def from_department_and_password(department, password):
+        extractor = Extractor.create(username='%s-extractor' % department.name.replace (" ", "_"), email='extractor@example.com', department_id=department.id, password=password)
+        extractor.roles.append(Role.create(name="extractor"))
+        extractor.save()
+
+        envs = extractor.generate_envs(password)
+
+        return (extractor,envs)
