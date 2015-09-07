@@ -16,8 +16,18 @@ class TestUserInheritance:
         department.save()
 
         extractor = Extractor.create(username='foobarbaz', email='foo2@bar.com', department_id=department.id)
-        
+
         assert extractor.department_id == department.id
+
+    def test_users_are_not_extractors(self):
+        department = DepartmentFactory()
+        department.save()
+        user = User(username='foo', email='foo@bar.com', department_id=department.id)
+        user.save()
+
+
+        assert Extractor.get_by_id(user.id) == None
+        assert Extractor.query.filter_by(username=user.username).first() == None
 
 
 @pytest.mark.usefixtures('db')

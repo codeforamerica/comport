@@ -1,6 +1,7 @@
 from functools import wraps
 from flask_login import current_user
-from flask import flash, redirect,request
+from flask import flash, redirect,request, abort
+from comport.department.models import Extractor, Department
 
 def requires_roles(required_roles):
     '''
@@ -21,8 +22,8 @@ def requires_roles(required_roles):
 
 def admin_or_department_required():
     '''
-    Takes in a list of department and checks whether the user
-    has access to that department
+    Reads department from current_user and checks whether the user
+    has access to that department or is an admin
     '''
     def check_department(view_function):
         @wraps(view_function)
@@ -33,3 +34,32 @@ def admin_or_department_required():
             return view_function(*args, **kwargs)
         return decorated_function
     return check_department
+
+def extractor_auth_required():
+    '''
+    Ensures that current_user is an extractor with access to the correct department
+    '''
+    def check_extractor(view_function):
+        @wraps(view_function)
+        def decorated_function(*args, **kwargs):
+            required_department_id = kwargs["department_id"]
+            username = request.authorization.username
+            password = request.authorization.password
+
+            found_extractor = Extractor.query.filter_by(username=username).first()
+
+
+            if not found_extractor or not found_extractor.check_password(password):
+                abort(401)
+
+            found_department = Department.get_by_id(required_department_id)
+
+            if not found_department:
+                abort(404)
+
+            if found_extractor.department_id != required_department_id:
+                abort(403)
+
+            return view_function(*args, **kwargs)
+        return decorated_function
+    return check_extractor

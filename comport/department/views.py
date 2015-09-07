@@ -3,8 +3,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from comport.utils import flash_errors
 from .models import Department, Extractor
 from flask.ext.login import login_required
-from comport.decorators import admin_or_department_required
+from comport.decorators import admin_or_department_required, extractor_auth_required
 import uuid
+import json
 
 blueprint = Blueprint("department", __name__, url_prefix='/department',
                       static_folder="../static")
@@ -34,7 +35,13 @@ def activate_extractor(department_id):
             extractor = department.get_extractor()
             password = str(uuid.uuid4())
             extractor.set_password(password)
+            extractor.save()
 
             envs = extractor.generate_envs(password=password)
 
             return render_template("department/extractorEnvs.html", department=department, envs=envs)
+
+@blueprint.route("/<int:department_id>/heartbeat", methods=['POST'])
+@extractor_auth_required()
+def heartbeat(department_id):
+    return json.dumps({"received":request.json})

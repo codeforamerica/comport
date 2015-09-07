@@ -18,6 +18,7 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
+    months = relationship("Month", backref="department")
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
@@ -41,14 +42,15 @@ class Extractor(User):
 
     def generate_envs(self, password):
         return """
-            COMPORT_BASE_URL = changeme
-            COMPORT_USERNAME = %s
-            COMPORT_PASSWORD = %s
+            COMPORT_BASE_URL="changeme"
+            COMPORT_USERNAME="%s"
+            COMPORT_PASSWORD="%s"
+            COMPORT_DEPARTMENT_ID="%s"
             COMPORT_SQL_SERVER_URL =
             COMPORT_SQL_SERVER_DATABASE =
             COMPORT_SQL_SERVER_USERNAME =
             COMPORT_SQL_SERVER_PASSWORD =
-        """ % (self.username, password,)
+        """ % (self.username, password, self.department_id,)
 
     def from_department_and_password(department, password):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace (" ", "_"), email='extractor@example.com', department_id=department.id, password=password)
