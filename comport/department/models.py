@@ -34,6 +34,8 @@ class Department(SurrogatePK, Model):
 class Extractor(User):
     __tablename__ = 'extractors'
     id = Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    next_month = Column(db.Integer)
+    next_year = Column(db.Integer)
 
     __mapper_args__ = {
         'polymorphic_identity':'extractors',

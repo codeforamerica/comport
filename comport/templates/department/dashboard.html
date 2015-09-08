@@ -12,5 +12,12 @@
     </form>
     {% endif %}
 
+    {% if department.get_extractor() != None %}
+    <form action="{{department.id}}/start" method="post">
+      <input type="number" name="month" min="1" max="12">
+      <input type="number" name="year" min="2000" max={{current_year}}>
+      <input type="submit" name="submit" value="Start">
+    </form>
+    {% endif %}
 
 {% endblock %}
