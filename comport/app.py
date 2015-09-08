@@ -12,7 +12,7 @@ from comport.extensions import (
     migrate,
     debug_toolbar,
 )
-from comport import public, user, admin, department
+from comport import public, user, admin, department, data
 
 
 def create_app(config_object=ProdConfig):
@@ -45,6 +45,7 @@ def register_blueprints(app):
     app.register_blueprint(user.views.blueprint)
     app.register_blueprint(admin.views.blueprint)
     app.register_blueprint(department.views.blueprint)
+    app.register_blueprint(data.views.blueprint)
     return None
 
 

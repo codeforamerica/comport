@@ -42,23 +42,13 @@ def extractor_auth_required():
     def check_extractor(view_function):
         @wraps(view_function)
         def decorated_function(*args, **kwargs):
-            required_department_id = kwargs["department_id"]
             username = request.authorization.username
             password = request.authorization.password
 
             found_extractor = Extractor.query.filter_by(username=username).first()
 
-
             if not found_extractor or not found_extractor.check_password(password):
                 abort(401)
-
-            found_department = Department.get_by_id(required_department_id)
-
-            if not found_department:
-                abort(404)
-
-            if found_extractor.department_id != required_department_id:
-                abort(403)
 
             return view_function(*args, **kwargs)
         return decorated_function

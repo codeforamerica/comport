@@ -40,8 +40,3 @@ def activate_extractor(department_id):
             envs = extractor.generate_envs(password=password)
 
             return render_template("department/extractorEnvs.html", department=department, envs=envs)
-
-@blueprint.route("/<int:department_id>/heartbeat", methods=['POST'])
-@extractor_auth_required()
-def heartbeat(department_id):
-    return json.dumps({"received":request.json})
