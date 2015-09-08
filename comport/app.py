@@ -13,6 +13,7 @@ from comport.extensions import (
     debug_toolbar,
 )
 from comport import public, user, admin, department, data
+from flask_sslify import SSLify
 
 
 def create_app(config_object=ProdConfig):
@@ -22,6 +23,7 @@ def create_app(config_object=ProdConfig):
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__)
+    sslify = SSLify(app)
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
