@@ -56,4 +56,4 @@ def start_extractor(department_id):
             extractor.next_month = request.form["month"]
             extractor.save()
             flash("Extractor started", "info")
-            return render_template("department/dashboard.html", department=department)
+            return redirect(url_for('department.department_dashboard',department_id=department.id))

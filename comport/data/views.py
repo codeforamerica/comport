@@ -13,6 +13,12 @@ blueprint = Blueprint("data", __name__, url_prefix='/data',
 @blueprint.route("/heartbeat", methods=['POST'])
 @extractor_auth_required()
 def heartbeat():
+    username = request.authorization.username
+    extractor = Extractor.query.filter_by(username=username).first()
+
+    if extractor.next_month and extractor.next_year:
+        return json.dumps({"received":request.json, "nextMonth":extractor.next_month, "nextYear":extractor.next_year})
+
     return json.dumps({"received":request.json})
 
 @blueprint.route("/serviceType", methods=['POST'])
@@ -33,5 +39,7 @@ def service_type():
         service_type = ServiceType.create(service_type=json_service_type["serviceType"], count=json_service_type["count"], month_id=found_month.id)
 
     found_month.save()
-
+    extractor.next_month = None
+    extractor.next_year = None
+    extractor.save()
     return json.dumps({"month": found_month.month, "year":found_month.year, "addedRows": len(found_month.service_types)})
