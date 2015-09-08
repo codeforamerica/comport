@@ -4,7 +4,7 @@ from comport.utils import flash_errors
 from flask.ext.login import login_required
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import Month
+from comport.data.models import Month, ServiceType
 import json
 
 blueprint = Blueprint("data", __name__, url_prefix='/data',
@@ -21,5 +21,17 @@ def service_type():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
     j = request.json
-    month = Month.create(month=int(j["month"]), year=int(j["year"]), department_id=extractor.department_id)
-    return json.dumps(month.to_json())
+
+    found_month = Month.query.filter_by(month=int(j["month"]), year=int(j["year"]), department_id=extractor.department_id).first()
+
+    if not found_month:
+        found_month = Month.create(month=int(j["month"]), year=int(j["year"]), department_id=extractor.department_id)
+
+    found_month.service_types = []
+
+    for json_service_type in j["data"]:
+        service_type = ServiceType.create(service_type=json_service_type["serviceType"], count=json_service_type["count"], month_id=found_month.id)
+
+    found_month.save()
+
+    return json.dumps({"month": found_month.month, "year":found_month.year, "addedRows": len(found_month.service_types)})
