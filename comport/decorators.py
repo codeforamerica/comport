@@ -28,10 +28,11 @@ def admin_or_department_required():
     def check_department(view_function):
         @wraps(view_function)
         def decorated_function(*args, **kwargs):
-            if current_user.department_id != kwargs["department_id"] or not current_user.is_admin:
-                flash('You do not have sufficent permissions to do that', 'alert alert-danger')
-                return redirect(request.args.get('next') or '/')
-            return view_function(*args, **kwargs)
+            print(current_user.is_admin())
+            if current_user.department_id == kwargs["department_id"] or current_user.is_admin():
+                return view_function(*args, **kwargs)
+            flash('You do not have sufficent permissions to do that', 'alert alert-danger')
+            return redirect(request.args.get('next') or '/')
         return decorated_function
     return check_department
 

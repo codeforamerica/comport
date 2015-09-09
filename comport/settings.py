@@ -5,6 +5,7 @@ os_env = os.environ
 
 class Config(object):
     SECRET_KEY = os_env.get('COMPORT_SECRET', 'comport-secret-key')
+    BASE_URL = os_env.get('BASE_URL','http://localhost:5000/')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
     BCRYPT_LOG_ROUNDS = 13

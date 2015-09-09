@@ -4,6 +4,7 @@ import os
 from flask_script import Manager, Shell, Server, prompt_bool
 from flask_migrate import MigrateCommand
 
+
 from comport.app import create_app
 from comport.user.models import User, Role
 from comport.data.models import Month

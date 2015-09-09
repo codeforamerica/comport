@@ -9,6 +9,8 @@ from comport.database import (
     SurrogatePK,
 )
 
+from flask import current_app
+
 from comport.user.models import User, Role
 
 
@@ -44,7 +46,7 @@ class Extractor(User):
 
     def generate_envs(self, password):
         return """
-            COMPORT_BASE_URL="changeme"
+            COMPORT_BASE_URL="%s"
             COMPORT_USERNAME="%s"
             COMPORT_PASSWORD="%s"
             COMPORT_DEPARTMENT_ID="%s"
@@ -52,7 +54,7 @@ class Extractor(User):
             COMPORT_SQL_SERVER_DATABASE =
             COMPORT_SQL_SERVER_USERNAME =
             COMPORT_SQL_SERVER_PASSWORD =
-        """ % (self.username, password, self.department_id,)
+        """ % (current_app.config["BASE_URL"], self.username, password, self.department_id,)
 
     def from_department_and_password(department, password):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace (" ", "_"), email='extractor@example.com', department_id=department.id, password=password)
