@@ -57,3 +57,9 @@ def start_extractor(department_id):
             extractor.save()
             flash("Extractor started", "info")
             return redirect(url_for('department.department_dashboard',department_id=department.id))
+
+@blueprint.route("/charts")
+def charts():
+    return render_template("department/charts.html")
+
+

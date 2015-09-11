@@ -44,3 +44,9 @@ docs/_build
 
 # Virtualenvs
 env/
+
+# bower installs
+comport/static/libs
+
+# Static secret data
+comport/static/data/
