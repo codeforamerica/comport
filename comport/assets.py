@@ -12,11 +12,18 @@ js = Bundle(
     "libs/jQuery/dist/jquery.js",
     "libs/bootstrap/dist/js/bootstrap.js",
     "js/plugins.js",
+    "libs/d3/d3.js",
     filters='jsmin',
     output="public/js/common.js"
 )
+
+data = Bundle(
+    "data/UOF.csv",
+    output="public/data/data.csv"
+        )
 
 assets = Environment()
 
 assets.register("js_all", js)
 assets.register("css_all", css)
+assets.register("data_all", data)
