@@ -7,7 +7,6 @@ from flask_migrate import MigrateCommand
 
 from comport.app import create_app
 from comport.user.models import User, Role
-from comport.data.models import Month
 from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db

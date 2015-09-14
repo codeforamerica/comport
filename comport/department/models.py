@@ -20,7 +20,7 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
-    months = relationship("Month", backref="department")
+    use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
