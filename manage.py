@@ -52,7 +52,7 @@ def make_admin_user():
     user.save()
 
 @manager.command
-def make_normal_user():
+def load_test_data():
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
