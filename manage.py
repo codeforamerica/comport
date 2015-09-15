@@ -14,6 +14,7 @@ from comport.utils import random_string
 from comport.data.models import UseOfForceIncident
 
 import csv
+from datetime import datetime
 
 if os.environ.get("COMPORT_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -60,8 +61,16 @@ def make_normal_user():
     with open('comport/testData/UOF.csv', 'rt') as f:
         reader = csv.DictReader(f)
         for incident in reader:
-            UseOfForceIncident.create(opaque_id=random_string(6), service_type=incident["SERVICE_TYPE"],department_id=department.id)
+            occured_date = parse_date(incident["OCCURRED_DT"])
+            received_date = parse_date(incident["RECEIVED_DT"])
+            UseOfForceIncident.create(opaque_id=random_string(6),
+                service_type=incident["SERVICE_TYPE"],
+                occured_date=occured_date,
+                received_date=received_date,
+                department_id=department.id)
 
+def parse_date(date):
+    return None if date == 'NULL' else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
 
 @manager.command
 def delete_everything():

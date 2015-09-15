@@ -32,6 +32,13 @@ class Department(SurrogatePK, Model):
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
 
+    def get_uof_csv(self):
+        csv = "id,serviceType,occuredDate,receivedDate\n"
+        use_of_force_incidents = self.use_of_force_incidents
+        for incident in use_of_force_incidents:
+            csv += incident.to_csv_row()
+        return csv
+
 
 class Extractor(User):
     __tablename__ = 'extractors'

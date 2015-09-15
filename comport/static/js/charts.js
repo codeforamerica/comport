@@ -5,7 +5,7 @@
 var currentYear = 2015;
 var width = 500;
 var height = 20;
-var defaultNullValue = "NULL";
+var defaultNullValue = "";
 
 
 function mergeMaps(a, b){
@@ -36,14 +36,14 @@ function rollByCategories(rows, keyfunc, rollup, categories){
 }
 
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-var dateTimeKey = "OCCURRED_DT";
-var backupDateTimeKey = "RECEIVED_DT";
+var dateTimeKey = "occuredDate";
+var backupDateTimeKey = "receivedDate";
 function parseDate(dateTimeString){
   return dateTimeFormat.parse(dateTimeString);
 }
 
 d3.csv(
-  "/department/testData ",
+  "/department/1/uof.csv ",
   function(error, rows){
 
     rows.forEach(function(r){

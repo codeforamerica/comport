@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file
+from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, Response
 from comport.utils import flash_errors
 from .models import Department, Extractor
 from flask.ext.login import login_required
@@ -7,6 +7,7 @@ from comport.decorators import admin_or_department_required, extractor_auth_requ
 import uuid
 import datetime
 import json
+import io
 
 blueprint = Blueprint("department", __name__, url_prefix='/department',
                       static_folder="../static")
@@ -58,10 +59,15 @@ def start_extractor(department_id):
             flash("Extractor started", "info")
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
-@blueprint.route('/testData')
-def download_file():
+@blueprint.route('/<int:department_id>/uof.csv')
+@login_required
+@admin_or_department_required()
+def use_of_force_csv(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return Response(department.get_uof_csv(), mimetype="text/csv")
 
-    return send_file('./testData/UOF.csv')
 
 @blueprint.route("/<int:department_id>/charts")
 @login_required
