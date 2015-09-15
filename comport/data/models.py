@@ -38,7 +38,13 @@ class UseOfForceIncident(SurrogatePK, Model):
     def to_csv_row(self):
         occured_date = self.coalesce_date(self.occured_date)
         received_date = self.coalesce_date(self.received_date)
-        return ','.join([self.opaque_id,self.service_type,occured_date,received_date]) + "\n"
+        return ','.join([
+            self.opaque_id,
+            self.service_type or "",
+            occured_date,
+            received_date,
+            self.use_of_force_reason  or ""
+            ]) + "\n"
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)

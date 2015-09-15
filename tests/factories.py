@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from factory import Sequence, PostGenerationMethodCall
+from factory import Sequence, PostGenerationMethodCall, LazyAttribute
 from factory.fuzzy import FuzzyText, FuzzyNaiveDateTime, FuzzyChoice
 from factory.alchemy import SQLAlchemyModelFactory
 
@@ -7,7 +7,9 @@ from comport.user.models import User
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncident
 from comport.database import db
+from comport.utils import random_date
 from datetime import date, datetime, timedelta
+
 
 
 
@@ -36,8 +38,9 @@ class UserFactory(BaseFactory):
 class UseOfForceIncidentFactory(BaseFactory):
     opaque_id = FuzzyText(length=12)
     occured_date = FuzzyNaiveDateTime(start_dt= datetime(2008, 1, 1))
-    received_date = FuzzyNaiveDateTime(start_dt= datetime(2008, 1, 1), end_dt= datetime(2008, 1, 1) + timedelta(days=7))
-    service_type = FuzzyChoice(["Arresting", "Call for Service","Code Inforcement", "Interviewing","Restraining", "Transporting"])
+    received_date = LazyAttribute(lambda a: random_date(a.occured_date, a.occured_date + timedelta(days=7)))
+    service_type = FuzzyChoice(["Arresting", "Call for Service","Code Inforcement", "Interviewing","Restraining", "Transporting", None])
+    use_of_force_reason = FuzzyChoice(["Assaulting Citizen(s)","Assaulting Officer","Combative Subject","Damage to City Prop.","Damage to Private Prop.","Non-compliance","Resisting Arrest", None])
 
 
     class Meta:

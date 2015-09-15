@@ -27,6 +27,8 @@ First, create a python 3 virtualenv and activate it. Then:
 git clone git@github.com:codeforamerica/comport.git
 # create the 'comport' database
 psql -c 'create database comport;'
+pip install -r requirements.txt
+pip install -r requirements/dev.txt
 python manage.py db upgrade
 python manage.py make_test_data
 python manage.py server

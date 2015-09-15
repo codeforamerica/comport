@@ -5,6 +5,7 @@ from flask.ext.login import login_required
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.data.models import UseOfForceIncident
+from comport.utils import parse_date
 import json
 
 blueprint = Blueprint("data", __name__, url_prefix='/data',
@@ -34,13 +35,25 @@ def use_of_force():
 
         found_incident = UseOfForceIncident.query.filter_by(opaque_id=incident["opaqueId"]).first()
 
+        occured_date = parse_date(incident["occuredDate"])
+        received_date = parse_date(incident["receivedDate"])
+
         if not found_incident:
-            found_incident = UseOfForceIncident.create(opaque_id=incident["opaqueId"], service_type=incident["serviceType"],department_id=extractor.department_id)
+
+            found_incident = UseOfForceIncident.create(
+                opaque_id=incident["opaqueId"],
+                service_type=incident["serviceType"],
+                occured_date = occured_date,
+                received_date = received_date,
+                use_of_force_reason = incident["useOfForceReason"],
+                department_id=extractor.department_id)
             added_rows += 1
             continue
 
         found_incident.service_type = incident["serviceType"]
-
+        found_incident.occured_date = occured_date
+        found_incident.received_date = received_date
+        found_incident.use_of_force_reason = incident["useOfForceReason"]
         found_incident.save()
         updated_rows += 1
 
