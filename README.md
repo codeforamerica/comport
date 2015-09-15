@@ -19,7 +19,7 @@ It is highly recommended that you use use [virtualenv](https://readthedocs.org/p
 
 #### Installation and setup
 
-##### Quick local installation using Make
+##### Quick local installation
 
 First, create a python 3 virtualenv and activate it. Then:
 
@@ -28,7 +28,7 @@ git clone git@github.com:codeforamerica/comport.git
 # create the 'comport' database
 psql -c 'create database comport;'
 python manage.py db upgrade
-python manage.py load_test_data
+python manage.py make_test_data
 python manage.py server
 ```
 

@@ -12,6 +12,7 @@ from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 from comport.utils import random_string
 from comport.data.models import UseOfForceIncident
+from tests.factories import UseOfForceIncidentFactory
 
 import csv
 from datetime import datetime
@@ -68,6 +69,16 @@ def load_test_data():
                 occured_date=occured_date,
                 received_date=received_date,
                 department_id=department.id)
+
+@manager.command
+def make_test_data():
+    department = Department.query.filter_by(name="Busy Town Public Safety").first()
+    if not department:
+        department = Department.create(name="Busy Town Public Safety")
+    if not User.query.filter_by(username="user").first():
+        User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+    for _ in range(100):
+        UseOfForceIncidentFactory()
 
 def parse_date(date):
     return None if date == 'NULL' else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
