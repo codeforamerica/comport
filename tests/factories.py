@@ -37,7 +37,7 @@ class UserFactory(BaseFactory):
 
 class UseOfForceIncidentFactory(BaseFactory):
     opaque_id = FuzzyText(length=12)
-    occured_date = FuzzyNaiveDateTime(start_dt= datetime(2008, 1, 1))
+    occured_date = FuzzyNaiveDateTime(start_dt= datetime(2012, 1, 1))
     received_date = LazyAttribute(lambda a: random_date(a.occured_date, a.occured_date + timedelta(days=7)))
     service_type = FuzzyChoice(["Arresting", "Call for Service","Code Inforcement", "Interviewing","Restraining", "Transporting", None])
     use_of_force_reason = FuzzyChoice(["Assaulting Citizen(s)","Assaulting Officer","Combative Subject","Damage to City Prop.","Damage to Private Prop.","Non-compliance","Resisting Arrest", None])
