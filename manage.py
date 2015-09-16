@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 from flask_script import Manager, Shell, Server, prompt_bool, prompt_pass
-from flask_migrate import MigrateCommand
+from flask_migrate import MigrateCommand, upgrade
 
 
 from comport.app import create_app
@@ -68,6 +68,7 @@ def load_test_data():
                 occured_date=occured_date,
                 received_date=received_date,
                 use_of_force_reason=incident["UOF_REASON"],
+                census_tract=None,
                 department_id=department.id)
 
 @manager.command
@@ -87,7 +88,7 @@ def delete_everything():
     if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
        db.reflect()
        db.drop_all()
-       db.create_all()
+       upgrade()
 
 
 manager.add_command('server', Server())
