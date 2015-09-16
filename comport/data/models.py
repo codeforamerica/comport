@@ -31,6 +31,7 @@ class UseOfForceIncident(SurrogatePK, Model):
     officer_injured = Column(db.Boolean, nullable=True)
     officer_hospitalized = Column(db.Boolean, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
+    citizen_weapon = Column(db.String(255), unique=False, nullable=True)
 
     def coalesce_date(self, date):
         return "" if date == None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
@@ -43,7 +44,8 @@ class UseOfForceIncident(SurrogatePK, Model):
             self.service_type or "",
             occured_date,
             received_date,
-            self.use_of_force_reason  or ""
+            self.use_of_force_reason  or "",
+            self.citizen_weapon or ""
             ]) + "\n"
 
     def __init__(self, **kwargs):

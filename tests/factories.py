@@ -41,6 +41,7 @@ class UseOfForceIncidentFactory(BaseFactory):
     received_date = LazyAttribute(lambda a: random_date(a.occured_date, a.occured_date + timedelta(days=7)))
     service_type = FuzzyChoice(["Arresting", "Call for Service","Code Inforcement", "Interviewing","Restraining", "Transporting", None])
     use_of_force_reason = FuzzyChoice(["Assaulting Citizen(s)","Assaulting Officer","Combative Subject","Damage to City Prop.","Damage to Private Prop.","Non-compliance","Resisting Arrest", None])
+    citizen_weapon = FuzzyChoice(["Gun","Knife","Verbal threats", None])
 
 
     class Meta:

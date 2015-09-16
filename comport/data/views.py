@@ -46,6 +46,7 @@ def use_of_force():
                 occured_date = occured_date,
                 received_date = received_date,
                 use_of_force_reason = incident["useOfForceReason"],
+                citizen_weapon = incident["citizenWeapon"],
                 department_id=extractor.department_id)
             added_rows += 1
             continue
@@ -54,6 +55,7 @@ def use_of_force():
         found_incident.occured_date = occured_date
         found_incident.received_date = received_date
         found_incident.use_of_force_reason = incident["useOfForceReason"]
+        found_incident.citizen_weapon = incident["citizenWeapon"]
         found_incident.save()
         updated_rows += 1
 
