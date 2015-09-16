@@ -9,52 +9,63 @@
 
 <h3>Use of Force</h3>
 
-<h4>Percent of arrests involving use of force</h4>
-
-<div class="chart perc arrests uof">
-  Can't do this: need total number of arrests.
-</div>
-
+<h4>uof-by-year</h4>
+<div class="uof-by-year"></div>
 <h4>use of force by year</h4>
-<div class="chart per year uof">
+{{chart_blocks['uof-by-year'].slug}}
+<div class="uof-by-year">
   {{chart_blocks['uof-by-year'].content}}
 </div>
 
-<h4>use of force by month</h4>
-<div class="chart per year uof">
-</div>
+<h4>uof-type-of-call</h4>
+<div class="uof-type-of-call"></div>
 
-<h4>use of force by district</h4>
-<div class="chart per district uof">
-</div>
 
-<h4>use of force map</h4>
-<div class="chart map uof">
-</div>
+<h4>uof-reason</h4>
+<div class="uof-reason"></div>
 
-<h4>use of force by type of force</h4>
-<div class="chart type uof">
-</div>
+<h4>uof-citizen-weapon</h4>
+<div class="uof-citizen-weapon"></div>
 
-<h4>% use of force involving firearms</h4>
-<div class="chart perc firearms uof">
-</div>
+<h4>uof-by-shift</h4>
+<div class="uof-by-shift"></div>
 
-<h4>% use of force involving firearms</h4>
-<div class="chart perc firearms uof">
-</div>
+<h4>uof-by-inc-district</h4>
+<div class="uof-by-inc-district"></div>
 
-<h4>officer injuries in incidents with use of force</h4>
-<div class="chart perc officer_injuries uof">
-</div>
+<h4>uof-map</h4>
+<div class="uof-map"></div>
 
-<h4>citizen injuries in incidents with use of force</h4>
-<div class="chart perc citizen_injuries uof">
-</div>
+<h4>uof-force-type</h4>
+<div class="uof-force-type"></div>
+
+<h4>uof-officer-injuries</h4>
+<div class="uof-officer-injuries"></div>
+
+<h4>uof-resident-injuries</h4>
+<div class="uof-resident-injuries"></div>
+
+<h4>uof-dispositions</h4>
+<div class="uof-dispositions"></div>
+
+<h4>pd-resident-demographics</h4>
+<div class="pd-resident-demographics"></div>
+
+<h4>uof-race</h4>
+<div class="uof-race"></div>
+
+<h4>uof-per-officer</h4>
+<div class="uof-per-officer"></div>
+
+<h4>uof-officer-experience</h4>
+<div class="uof-officer-experience"></div>
+
 
 {% endblock content %}
 
 {% block js %}
+<script type="text/javascript" src="/static/js/histogram.js"></script>
+<script type="text/javascript" src="/static/js/lineChart.js"></script>
 <script type="text/javascript" src="/static/js/charts.js"></script>
 
 {% endblock js %}

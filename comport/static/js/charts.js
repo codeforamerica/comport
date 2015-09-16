@@ -1,11 +1,96 @@
-// Chart steps:
-// 1. data query
-// 2. axes
-// 3. sizes
+function last12Months(rows){
+  // offset today by 12 d3-defined months in the past
+  var startDate = d3.time.month.offset(new Date(), -12);
+  console.log("startDate", startDate);
+  return rows.filter(function(r){
+    return startDate < r.date;
+  });
+}
+
+var charts = [
+  ['uof-by-year', {
+    chartType: 'lineChart',
+    keyFunc: function(d){ return d.date.getFullYear(); },
+    dataMapAdjust: addMissingYears,
+    x: 'year',
+    xFunc: function(b){ return b[0].date.getFullYear(); },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    }],
+  ['uof-type-of-call', {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.serviceType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].serviceType; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    }],
+  ['uof-reason', {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.useOfForceReason; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].useOfForceReason; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    }],
+  ['uof-citizen-weapon', {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.citizenWeapon; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].citizenWeapon; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    }],
+  ['uof-by-shift', {
+    chartType: 'flagHistogram',
+    }],
+  ['uof-by-inc-district', {
+    chartType: 'flagHistogram',
+    }],
+  ['uof-map', {
+    chartType: 'map',
+    }],
+  ['uof-force-type', {
+    chartType: 'flagHistogram',
+    }],
+  ['uof-officer-injuries', {
+    chartType: 'percent',
+    }],
+  ['uof-resident-injuries', {
+    chartType: 'percent',
+    }],
+  ['uof-dispositions', {
+    chartType: 'percent',
+    }],
+  ['uof-disposition-outcomes', {
+    chartType: 'flagHistogram',
+    }],
+  ['pd-resident-demographics', {
+    chartType: 'flagHistogram',
+    }],
+  ['uof-race', {
+    chartType: 'matrix',
+    }],
+  ['uof-per-officer', {
+    chartType: 'flagHistogram',
+    }],
+  ['uof-officer-experience', {
+    chartType: 'flagHistogram',
+    }],
+];
+
 var currentYear = 2015;
 var defaultNullValue = "NULL";
-var xAxisTickFormat = d3.format("d");
 
+function translate(x, y){
+  return "translate(" + x + "," + y + ")";
+}
 
 function mergeMaps(a, b){
   b.forEach(function(k, v){
@@ -40,173 +125,105 @@ function parseData(rows){
   return rows;
 }
 
+
+function drawChart(rows, config){
+  // structure data for the particular chart
+  console.log("config pre structure data", config);
+  var data = structureData(rows, config);
+
+  // get the correct function for drawing this chart
+  drawingFunction = drawFuncs[config.chartType];
+
+  // run the function to draw the chart
+  drawingFunction(config, data);
+}
+
 d3.csv(
   "/department/1/uof.csv ",
   function(error, rows){
-    uofByYear(
-      parseData(rows)
-      );
-});
+    // parse the raw csv data
+    var parsed_rows = parseData(rows);
+    console.log("parsed data", parsed_rows);
 
-function structureData(parsed_rows){
+    // restrict to charts with full configs
+    charts = charts.slice(0,4);
+    // deal with each chart configuration
+    charts.forEach(function(config_data){
+
+      // get configuration
+      var config = config_data[1];
+      
+      // get class name for parent div
+      config.parent = '.' + config_data[0];
+      console.log("making", config.parent, "with", config);
+      drawChart(parsed_rows, config);
+    });
+  }
+);
+
+function addMissingYears(dataMap){
+  // add missing years to the map, so we know they are empty
+  var year0 = d3.min(dataMap.keys());
+  var allYears = d3.range(year0, currentYear);
+  allYears.forEach(function(yr){
+    if( !dataMap.has(yr) ){
+      dataMap.set(
+        yr, {
+          year: yr,
+          count: 0,
+          incidents: [],
+      });
+    }
+  });
+}
+
+function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
+  
+  // filter rows if necessary
+  if( config.filter ){
+    parsed_rows = config.filter(parsed_rows);
+  }
+
   // create a grouping machine that groups by year
   var unmapped_data = d3.nest()
-    .key(function(d){ return d.date.getFullYear(); })
+    .key(config.keyFunc)
     .rollup(function(leaves){
-      return { "count": leaves.length,
-        "incidents": leaves,
-        "year": leaves[0].date.getFullYear()
-      };
+      var datum = {};
+      datum[config.y] = config.yFunc(leaves);
+      datum[config.x] = config.xFunc(leaves);
+      datum['incidents'] = leaves;
+      return datum;
     });
 
   // use the parsed data and the grouping machine to create a
   // simple key value store (aka "map") with years as keys
   var data = unmapped_data.map(parsed_rows, d3.map);
+  console.log("mapped & filtered data", data);
 
-  // add missing years to the map, so we know they are empty
-  var year0 = d3.min(data.keys());
-  var allYears = d3.range(year0, currentYear);
-  allYears.forEach(function(yr){
-    if( !data.has(yr) ){
-      data.set(
-        yr, {
-          year: yr,
-          count: 0,
-          incidents: [],
-        }
-      );
-    }
-  });
+  if( config.dataMapAdjust ){
+    config.dataMapAdjust(data);
+  }
 
   // return data structured for a chart
-  return data.values();
+  var structured_data = data.values();
+  if( config.sortWith ){
+    var mapped = structured_data.map(function(d, i){
+      return { index: i, value: config.sortWith(d) };
+    });
+    mapped.sort(function(a,b){
+      return +(a.value > b.value) || +(a.value === b.value) - 1;
+    });
+    structured_data = mapped.map(function(n){
+      return structured_data[n.index];
+    });
+  }
+  console.log("structured_data", structured_data);
+  return structured_data;
 }
 
-function uofByYear(rows){
-  // creates one chart, using parsed data
-
-  // restructure the data
-  var data = structureData(rows);
-  console.log("data", data);
-
-  // get basic dimensions (in ems)
-  var height,
-      width,
-      margin,
-      year_width,
-      dot_radius,
-      font_size;
-  margin = { top: 2, right: 2, bottom: 3, left: 2 };
-  font_size = 14; // px
-  year_width = 7;
-  height = 14;
-  width = (data.length * year_width);
-  dot_radius = 0.5;
-
-  // determine x axis scale
-  var x = d3.scale.linear()
-    .domain([
-        d3.min(data, function(d){return d.year;}),
-        d3.max(data, function(d){return d.year;})
-        ])
-    .range([
-        0,
-        font_size * width
-        ]);
-
-  // determine y axis scale
-  var y = d3.scale.linear()
-    .domain([
-        0,
-        d3.max(data, function(d){return d.count;})
-        ])
-    .range([
-        font_size * height,
-        0
-        ]);
-
-  // draw svg
-  var svg = d3.select(".chart.per.year.uof")
-    .append("svg")
-    .attr("class", "line-chart")
-    .attr("height", (height + margin.top + margin.bottom) + "em")
-    .attr("width", (width + margin.left + margin.right) + "em");
-
-  // draw chart container
-  var g = svg.append("g")
-    .attr("class", "chart-box")
-    .attr("transform", "translate("
-        + (font_size * margin.left) + ","
-        + (font_size * margin.top) + ")");
-
-  // draw x axis
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickFormat(xAxisTickFormat);
-  g.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + (
-            font_size * (
-              height + (
-                margin.bottom * 0.25
-                ))
-            ) + ")")
-    .call(xAxis);
-
-  // draw tick lines
-  var tickLine = g.selectAll(".tick-line")
-    .data(data).enter().append("line")
-    .attr("class", "tick-line")
-    .attr("transform", function(d){
-      return "translate("
-      + x(d.year) + ","
-      + y(d.count) + ")";
-    })
-    .attr("y2", function(d){
-      return  (font_size * height) 
-              - y(d.count)
-              + (font_size * 0.5);
-    });
-  
-
-  var lineFunction = d3.svg.line()
-    .x(function(d){ return x(d.year); })
-    .y(function(d){ return y(d.count); });
-
-  // draw line
-  var line = g.append("path")
-    .datum(data)
-    .attr("class", "trend-line")
-    .attr("d", lineFunction);
-
-  var dotBoxes = g.selectAll(".datum")
-    .data(data).enter().append("g")
-    .attr("class", "datum")
-    .attr("transform", function(d){
-      return "translate(" + x(d.year) + ","
-        + y(d.count) + ")";
-    });
-
-  // draw dots
-  var dots = dotBoxes.append("circle")
-    .attr("class", "dot")
-    .attr("r", font_size * dot_radius);
-
-  // draw text
-  var dotText = dotBoxes.append("text")
-    .attr("class", "datum-text")
-    .attr("y", -15)
-    .attr("text-anchor", "middle")
-    .text(function(d){return d.count;});
-
-  // draw y axis
-  //var yAxis = d3.svg.axis()
-    //.scale(y)
-    //.orient("left");
-  //g.append("g")
-    //.attr("class", "y axis")
-    //.call(yAxis);
-
+drawFuncs = {
+  'lineChart': lineChart,
+  'flagHistogram': flagHistogram,
+  'mountainHistogram': mountainHistogram,
 }
