@@ -17,6 +17,7 @@ var charts = [
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
+
   ['uof-type-of-call', {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -27,6 +28,7 @@ var charts = [
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
+
   ['uof-reason', {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -37,6 +39,7 @@ var charts = [
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
+
   ['uof-citizen-weapon', {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -47,14 +50,26 @@ var charts = [
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
+
+  ['uof-map', {
+    chartType: 'map',
+    filter: function(b){
+      return last12Months(b).filter(function(d){
+       if( d.censusTract ){ return true; } else { return false; }
+      });
+    },
+    keyFunc: function(d){ return d.censusTract; },
+    x: 'censusTract',
+    xFunc: function(b){ return b[0].censusTract; },
+    y: 'count',
+    yFunc: function(b){ return b.length; }
+    }],
+
   ['uof-by-shift', {
     chartType: 'flagHistogram',
     }],
   ['uof-by-inc-district', {
     chartType: 'flagHistogram',
-    }],
-  ['uof-map', {
-    chartType: 'map',
     }],
   ['uof-force-type', {
     chartType: 'flagHistogram',
@@ -146,7 +161,7 @@ d3.csv(
     console.log("parsed data", parsed_rows);
 
     // restrict to charts with full configs
-    charts = charts.slice(0,4);
+    charts = charts.slice(0,5);
     // deal with each chart configuration
     charts.forEach(function(config_data){
 
@@ -224,6 +239,7 @@ function structureData(parsed_rows, config){
 
 drawFuncs = {
   'lineChart': lineChart,
+  'map': mapChart,
   'flagHistogram': flagHistogram,
   'mountainHistogram': mountainHistogram,
 }

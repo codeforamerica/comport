@@ -2,6 +2,8 @@
 
 {% block css %}
   <link href="/static/css/charts.css" rel="stylesheet">
+  <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
 {% endblock css %}
 
 {% block content %}
@@ -64,6 +66,7 @@
 {% endblock content %}
 
 {% block js %}
+<script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>
 <script type="text/javascript" src="/static/js/charts.js"></script>
