@@ -77,4 +77,4 @@ def charts(department_id):
     if not department:
         abort(404)
 
-    return render_template("department/charts.html", department=department)
+    return render_template("department/charts.html", department=department, chart_blocks=department.get_uof_blocks())

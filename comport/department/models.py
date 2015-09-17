@@ -8,11 +8,11 @@ from comport.database import (
     relationship,
     SurrogatePK,
 )
+from comport.charts.models import ChartBlockDefaults
 
 from flask import current_app
 
 from comport.user.models import User, Role
-
 
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
@@ -21,6 +21,10 @@ class Department(SurrogatePK, Model):
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
     use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
+    blocks = relationship("ChartBlock", backref="department")
+
+    def get_uof_blocks(self):
+        return dict([(block.slug, block) for block in self.blocks if block.dataset == "Use of Force"])
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
@@ -28,6 +32,8 @@ class Department(SurrogatePK, Model):
 
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
+        for default_chart_block in ChartBlockDefaults.query.all():
+            self.blocks.append(default_chart_block.make_real_block())
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
@@ -38,7 +44,6 @@ class Department(SurrogatePK, Model):
         for incident in use_of_force_incidents:
             csv += incident.to_csv_row()
         return csv
-
 
 class Extractor(User):
     __tablename__ = 'extractors'

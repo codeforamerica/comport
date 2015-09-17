@@ -12,7 +12,7 @@ from comport.database import (
 from datetime import datetime
 
 class UseOfForceIncident(SurrogatePK, Model):
-    __tablename__ = 'useOfForceIncidents'
+    __tablename__ = 'use_of_force_incidents'
     opaque_id = Column(db.String(255), unique=True, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
     received_date = Column(db.DateTime, nullable=True)

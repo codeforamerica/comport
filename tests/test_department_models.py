@@ -4,6 +4,7 @@ import datetime as dt
 import pytest
 
 from comport.user.models import User, Role
+from comport.charts.models import ChartBlock
 from comport.department.models import Extractor, Department
 from .factories import UserFactory, DepartmentFactory
 import uuid
@@ -57,3 +58,15 @@ class TestExtactors:
         department.save()
 
         assert department.get_extractor() == None
+
+    def test_get_uof_blocks(self):
+        department = DepartmentFactory()
+        department.save()
+
+        uof_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-slug", department_id=department.id)
+        non_uof_block = ChartBlock.create(dataset="Complaints",title="Complaints", slug="complaints-slug", department_id=department.id)
+
+        uof_blocks = department.get_uof_blocks()
+
+        assert uof_blocks["uof-slug"] == uof_block
+        assert "non_uof_block" not in uof_blocks.keys()

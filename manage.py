@@ -7,13 +7,14 @@ from flask_migrate import MigrateCommand, upgrade
 
 from comport.app import create_app
 from comport.user.models import User, Role
+from comport.charts.models import ChartBlockDefaults
 from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 from comport.utils import random_string, parse_date
 from comport.data.models import UseOfForceIncident
 from tests.factories import UseOfForceIncidentFactory
-
+import json
 import csv
 
 if os.environ.get("COMPORT_ENV") == 'prod':
@@ -73,9 +74,11 @@ def load_test_data():
 
 @manager.command
 def make_test_data():
+    add_chart_block_defaults()
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
+        
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
     for _ in range(100):
@@ -89,6 +92,19 @@ def delete_everything():
        db.reflect()
        db.drop_all()
        upgrade()
+
+@manager.command
+def add_chart_block_defaults():
+    dir = os.path.dirname(__file__)
+    filename = os.path.join(dir, 'data/chartBlockDefaults.json')
+    with open(filename) as chart_block_data_file:
+        defaults = json.load(chart_block_data_file)
+        for default in defaults:
+            ChartBlockDefaults.create(title=default["title"],
+                caption=default["caption"],
+                slug=default["slug"],
+                dataset=default["dataset"],
+                content=default["content"])
 
 
 manager.add_command('server', Server())
