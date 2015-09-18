@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from factory import Sequence, PostGenerationMethodCall, LazyAttribute
-from factory.fuzzy import FuzzyText, FuzzyNaiveDateTime, FuzzyChoice, BaseFuzzyAttribute, _random
+from factory.fuzzy import FuzzyText, FuzzyNaiveDateTime, FuzzyChoice, BaseFuzzyAttribute, _random, FuzzyInteger
 from factory.alchemy import SQLAlchemyModelFactory
 
 from comport.user.models import User
@@ -241,6 +241,7 @@ class UseOfForceIncidentFactory(BaseFactory):
     resident_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     officer_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     officer_identifier = FuzzyChoice([factory_random_string(12) for x in range(30)])
+    officer_years_of_service = FuzzyInteger(30)
 
     @classmethod
     def _after_postgeneration(cls, obj,create,results=None):

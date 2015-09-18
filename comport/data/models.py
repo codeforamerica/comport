@@ -37,7 +37,7 @@ class UseOfForceIncident(SurrogatePK, Model):
     resident_race = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
-
+    officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
 
 
     def coalesce_date(self, date):
@@ -45,6 +45,9 @@ class UseOfForceIncident(SurrogatePK, Model):
 
     def coalesce_bool(self, field):
         return "" if field == None else "true" if field == True else "false"
+
+    def coalesce_int(self, num):
+        return "" if num == None else str(num)
 
     def to_csv_row(self):
         occured_date = self.coalesce_date(self.occured_date)
@@ -71,6 +74,7 @@ class UseOfForceIncident(SurrogatePK, Model):
             self.use_of_force_reason or "",
             self.resident_race or "",
             self.officer_race or "",
+            self.coalesce_int(self.officer_years_of_service),
             self.officer_identifier or ""
         ]
 
