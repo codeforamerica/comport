@@ -1,67 +1,75 @@
 {% extends "layout.html" %}
 
 {% block css %}
-  <link href="/static/css/charts.css" rel="stylesheet">
   <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
   <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+  <link href="/static/css/charts.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
-<h1>We are on the {{department.name}} charts page!</h1>
+<h1>{{department.name}}</h1>
 
 <h3>Use of Force</h3>
 
-<h4>uof-by-year</h4>
-<div class="uof-by-year"></div>
-<h4>use of force by year</h4>
-{{chart_blocks['uof-by-year'].slug}}
-<div class="uof-by-year">
-  {{chart_blocks['uof-by-year'].content}}
-</div>
+{% with brick = chart_blocks['uof-by-year']  %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-type-of-call</h4>
-<div class="uof-type-of-call"></div>
+{% with brick = chart_blocks['uof-type-of-call'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
+{% with brick = chart_blocks['uof-reason'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-reason</h4>
-<div class="uof-reason"></div>
+{% with brick = chart_blocks['uof-citizen-weapon'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-citizen-weapon</h4>
-<div class="uof-citizen-weapon"></div>
+{% with brick = chart_blocks['uof-by-shift'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-by-shift</h4>
-<div class="uof-by-shift"></div>
+{% with brick = chart_blocks['uof-by-inc-district'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-by-inc-district</h4>
-<div class="uof-by-inc-district"></div>
+{% with brick = chart_blocks['uof-map'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-map</h4>
-<div class="uof-map"></div>
+{% with brick = chart_blocks['uof-force-type'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-force-type</h4>
-<div class="uof-force-type"></div>
+{% with brick = chart_blocks['uof-officer-injuries'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-officer-injuries</h4>
-<div class="uof-officer-injuries"></div>
+{% with brick = chart_blocks['uof-resident-injuries'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-resident-injuries</h4>
-<div class="uof-resident-injuries"></div>
+{% with brick = chart_blocks['uof-dispositions'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-dispositions</h4>
-<div class="uof-dispositions"></div>
+{% with brick = chart_blocks['pd-resident-demographics'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>pd-resident-demographics</h4>
-<div class="pd-resident-demographics"></div>
+{% with brick = chart_blocks['uof-race'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-race</h4>
-<div class="uof-race"></div>
+{% with brick = chart_blocks['uof-per-officer'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>uof-per-officer</h4>
-<div class="uof-per-officer"></div>
-
-<h4>uof-officer-experience</h4>
-<div class="uof-officer-experience"></div>
-
+{% with brick = chart_blocks['uof-officer-experience'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
 {% endblock content %}
 

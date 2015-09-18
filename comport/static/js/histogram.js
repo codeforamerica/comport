@@ -1,7 +1,7 @@
 function flagHistogram(config, data){
 
   // set basic dimensions
-   // we need a width, a height for each
+  // we need a width, a height for each
   var height,
       width,
       margin,
@@ -13,7 +13,7 @@ function flagHistogram(config, data){
   height = (data.length * barHeight);
   width = 20
   
-  // set x axis scale
+  // set y axis scale
   var yScale = d3.scale.linear()
     .domain([ 0, 
         d3.max(data, function(d){ return d[config.y]; })
@@ -22,9 +22,7 @@ function flagHistogram(config, data){
 
   var y = function(d){ return yScale(d[config.y]) };
 
-  // set y axis scale
-  // x and y functions
-  // draw svg
+  // draw table
   var table = d3.select(config.parent)
     .append("table")
     .attr("class", "flagHistogram-table");

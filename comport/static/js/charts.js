@@ -8,6 +8,7 @@ function last12Months(rows){
 }
 
 var charts = [
+
   ['uof-by-year', {
     chartType: 'lineChart',
     keyFunc: function(d){ return d.date.getFullYear(); },
@@ -58,6 +59,7 @@ var charts = [
        if( d.censusTract ){ return true; } else { return false; }
       });
     },
+    dontFlatten: true,
     keyFunc: function(d){ return d.censusTract; },
     x: 'censusTract',
     xFunc: function(b){ return b[0].censusTract; },
@@ -68,6 +70,7 @@ var charts = [
   ['uof-by-shift', {
     chartType: 'flagHistogram',
     }],
+
   ['uof-by-inc-district', {
     chartType: 'flagHistogram',
     }],
@@ -143,7 +146,6 @@ function parseData(rows){
 
 function drawChart(rows, config){
   // structure data for the particular chart
-  console.log("config pre structure data", config);
   var data = structureData(rows, config);
 
   // get the correct function for drawing this chart
@@ -162,6 +164,7 @@ d3.csv(
 
     // restrict to charts with full configs
     charts = charts.slice(0,5);
+
     // deal with each chart configuration
     charts.forEach(function(config_data){
 
@@ -218,6 +221,10 @@ function structureData(parsed_rows, config){
 
   if( config.dataMapAdjust ){
     config.dataMapAdjust(data);
+  }
+
+  if( config.dontFlatten ){
+    return data;
   }
 
   // return data structured for a chart
