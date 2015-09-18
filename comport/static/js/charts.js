@@ -44,10 +44,10 @@ var charts = [
   ['uof-citizen-weapon', {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.citizenWeapon; },
+    keyFunc: function(d){ return d.residentWeaponUsed; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].citizenWeapon; },
+    xFunc: function(b){ return b[0].residentWeaponUsed; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
@@ -69,38 +69,77 @@ var charts = [
 
   ['uof-by-shift', {
     chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.shift; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].shift; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
     }],
 
   ['uof-by-inc-district', {
     chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.precinct; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].precinct; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
     }],
+
   ['uof-force-type', {
     chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.officerForceType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].officerForceType; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
     }],
+
   ['uof-officer-injuries', {
     chartType: 'percent',
     }],
+
   ['uof-resident-injuries', {
     chartType: 'percent',
     }],
+
   ['uof-dispositions', {
     chartType: 'percent',
     }],
+
   ['uof-disposition-outcomes', {
     chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.disposition; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].disposition; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
     }],
+
   ['pd-resident-demographics', {
     chartType: 'flagHistogram',
     }],
+
   ['uof-race', {
     chartType: 'matrix',
     }],
+
   ['uof-per-officer', {
     chartType: 'flagHistogram',
+
     }],
+
   ['uof-officer-experience', {
     chartType: 'flagHistogram',
     }],
+
 ];
 
 var currentYear = 2015;
@@ -162,19 +201,19 @@ d3.csv(
     var parsed_rows = parseData(rows);
     console.log("parsed data", parsed_rows);
 
-    // restrict to charts with full configs
-    charts = charts.slice(0,5);
-
     // deal with each chart configuration
     charts.forEach(function(config_data){
 
       // get configuration
       var config = config_data[1];
+
+      if( config.keyFunc ){
+        // get class name for parent div
+        config.parent = '.' + config_data[0];
+        console.log("making", config.parent, "with", config);
+        drawChart(parsed_rows, config);
+      }
       
-      // get class name for parent div
-      config.parent = '.' + config_data[0];
-      console.log("making", config.parent, "with", config);
-      drawChart(parsed_rows, config);
     });
   }
 );
