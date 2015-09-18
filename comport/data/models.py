@@ -24,7 +24,7 @@ class UseOfForceIncident(SurrogatePK, Model):
     census_tract = Column(db.String(255), unique=False, nullable=True)
     officer_force_type = Column(db.String(255), unique=False, nullable=True)
     resident_resist_type = Column(db.String(255), unique=False, nullable=True)
-    office_weapon_used = Column(db.String(255), unique=False, nullable=True)
+    officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
     resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     arrest_made = Column(db.Boolean, nullable=True)
@@ -36,6 +36,9 @@ class UseOfForceIncident(SurrogatePK, Model):
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
+    officer_identifier = Column(db.String(255), unique=False, nullable=True)
+
+
 
     def coalesce_date(self, date):
         return "" if date == None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
@@ -56,7 +59,7 @@ class UseOfForceIncident(SurrogatePK, Model):
             self.census_tract or "",
             self.officer_force_type or "",
             self.resident_resist_type or "",
-            self.office_weapon_used or "",
+            self.officer_weapon_used or "",
             self.resident_weapon_used or "",
             self.service_type or "",
             self.coalesce_bool(self.arrest_made),
@@ -67,9 +70,9 @@ class UseOfForceIncident(SurrogatePK, Model):
             self.coalesce_bool(self.officer_hospitalized),
             self.use_of_force_reason or "",
             self.resident_race or "",
-            self.officer_race or ""
+            self.officer_race or "",
+            self.officer_identifier or ""
         ]
-        print(values)
 
         return ','.join(values) + "\n"
 

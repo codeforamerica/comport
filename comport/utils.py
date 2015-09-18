@@ -2,8 +2,9 @@
 """Helper utilities and decorators."""
 from flask import flash
 import string
-from random import randint
+from random import randint, random
 from datetime import datetime, timedelta
+from factory.fuzzy import _random
 
 
 def flash_errors(form, category="warning"):
@@ -15,6 +16,9 @@ def flash_errors(form, category="warning"):
 
 def random_string(N):
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+def factory_random_string(N):
+    return ''.join(_random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 def parse_date(date):
     return None if date == 'NULL' else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
