@@ -37,9 +37,9 @@ function rollByCategories(rows, keyfunc, rollup, categories){
 
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 var dateTimeKey = "occuredDate";
-var backupDateTimeKey = "receivedDate";
+
 function parseDate(dateTimeString){
-  return dateTimeFormat.parse(dateTimeString);
+  return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
 }
 
 d3.csv(
@@ -48,9 +48,7 @@ d3.csv(
 
     rows.forEach(function(r){
       var dateString = nullify(r[dateTimeKey]);
-      if( dateString === null ){
-        dateString = r[backupDateTimeKey];
-      }
+
       r.date = parseDate(dateString);
     });
 

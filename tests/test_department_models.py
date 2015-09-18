@@ -70,3 +70,17 @@ class TestExtactors:
 
         assert uof_blocks["uof-slug"] == uof_block
         assert "non_uof_block" not in uof_blocks.keys()
+
+    def test__multiple_get_uof_blocks(self):
+        department = DepartmentFactory()
+        department.save()
+
+        uof_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-slug", department_id=department.id)
+        uof_type_of_call_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-type-of-call", department_id=department.id)
+        non_uof_block = ChartBlock.create(dataset="Complaints",title="Complaints", slug="complaints-slug", department_id=department.id)
+
+        uof_blocks = department.get_uof_blocks()
+
+        assert uof_blocks["uof-slug"] == uof_block
+        assert uof_blocks["uof-type-of-call"] == uof_type_of_call_block
+        assert "non_uof_block" not in uof_blocks.keys()

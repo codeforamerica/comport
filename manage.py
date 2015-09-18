@@ -54,6 +54,7 @@ def make_admin_user():
 
 @manager.command
 def load_test_data():
+    add_chart_block_defaults()
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
@@ -63,11 +64,9 @@ def load_test_data():
         reader = csv.DictReader(f)
         for incident in reader:
             occured_date = parse_date(incident["OCCURRED_DT"])
-            received_date = parse_date(incident["RECEIVED_DT"])
             UseOfForceIncident.create(opaque_id=random_string(6),
                 service_type=incident["SERVICE_TYPE"],
                 occured_date=occured_date,
-                received_date=received_date,
                 use_of_force_reason=incident["UOF_REASON"],
                 census_tract=None,
                 department_id=department.id)
@@ -78,7 +77,7 @@ def make_test_data():
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
-        
+
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
     for _ in range(100):
@@ -88,10 +87,10 @@ def make_test_data():
 
 @manager.command
 def delete_everything():
-    if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
-       db.reflect()
-       db.drop_all()
-       upgrade()
+    # if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
+   db.reflect()
+   db.drop_all()
+   upgrade()
 
 @manager.command
 def add_chart_block_defaults():
