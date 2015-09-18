@@ -7,8 +7,9 @@ from comport.user.models import User
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncident
 from comport.database import db
-from comport.utils import random_date
+from comport.utils import random_date, factory_random_string
 from datetime import date, datetime, timedelta
+
 
 import random
 
@@ -222,7 +223,7 @@ class UseOfForceIncidentFactory(BaseFactory):
         "Verbal Resistance",
         None
     ])
-    office_weapon_used = FuzzyChoice(["Gun","Handcuffs","Physical",None])
+    officer_weapon_used = FuzzyChoice(["Gun","Handcuffs","Physical",None])
     resident_weapon_used = FuzzyChoice(["Gun","Knife","Verbal threats",None])
 
     arrest_made = FuzzyChoice([True, False, None])
@@ -239,14 +240,17 @@ class UseOfForceIncidentFactory(BaseFactory):
     officer_hospitalized =  FuzzyChoice([True, False, None])
     resident_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     officer_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
+    officer_identifier = FuzzyChoice([factory_random_string(12) for x in range(30)])
 
     @classmethod
     def _after_postgeneration(cls, obj,create,results=None):
-        tmp= obj.division
+        tmp = obj.division
         obj.division = tmp[0]
         obj.precinct = tmp[1]
         obj.shift = tmp[2]
         obj.beat = tmp[3]
+
+
 
     class Meta:
         model = UseOfForceIncident
