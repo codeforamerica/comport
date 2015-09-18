@@ -1,0 +1,28 @@
+
+.trend-line {
+  fill: none;
+  stroke-width: 2px;
+  stroke: #00f;
+}
+
+.dot {
+  fill: #00f;
+  stroke-width: 2px;
+  stroke: #fff;
+}
+
+.x.axis path {
+  fill: none;
+}
+
+.tick-line {
+  stroke-width: 0.5px;
+  stroke: #aaa;
+}
+
+.hist-flag-bar {
+  height: 1em;
+  background-color: #aaf;
+  display: inline-block;
+  margin: 0 1em;
+}

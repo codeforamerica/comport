@@ -87,7 +87,6 @@ def make_test_data():
 
 @manager.command
 def delete_everything():
-    # if prompt_bool("WOAH THERE GRIZZLY BEAR. This will delete everything. Continue?"):
    db.reflect()
    db.drop_all()
    upgrade()

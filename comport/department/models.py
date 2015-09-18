@@ -39,7 +39,7 @@ class Department(SurrogatePK, Model):
         return '<Department({name})>'.format(name=self.name)
 
     def get_uof_csv(self):
-        csv = "id,occuredDate,division,precinct,shiftbeat,disposition,censusTract,officerForceType,residentResistType,officeWeaponUsed,residentWeaponUsed,serviceType,arrestMade,arrestCharges,residentInjured,residentHospitalized,officerInjured,officerHospitalized,useOfForceReason,residentRace,officerRace\n"
+        csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,officerForceType,residentResistType,officeWeaponUsed,residentWeaponUsed,serviceType,arrestMade,arrestCharges,residentInjured,residentHospitalized,officerInjured,officerHospitalized,useOfForceReason,residentRace,officerRace\n"
         use_of_force_incidents = self.use_of_force_incidents
         for incident in use_of_force_incidents:
             csv += incident.to_csv_row()

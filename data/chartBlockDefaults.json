@@ -1,7 +1,108 @@
-[{
-"title": "Incidents per Year",
-"caption": "Use of force by year compared to police contacts with citizens.",
-"slug":"uof-by-year",
-"dataset": "Use of Force",
-"content": "Residents: How big a problem is this? How often is it happening?"
-}]
+[
+
+{"title": "Annual use of force incidents",
+ "caption": "Use of force by year compared to police contacts with citizens.",
+ "slug":"uof-by-year",
+ "dataset": "Use of Force",
+ "content": "Residents: How big a problem is this? How often is it happening?" },
+
+{"title": "Types of service calls that involved use of force",
+  "caption": "",
+  "slug": "uof-type-of-call",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "Why officers used force",
+  "caption": "",
+  "slug": "uof-reason",
+  "dataset": "Use of Force",
+  "content": "No comment"
+},
+
+{"title": "Type of force used by resident",
+  "caption": "",
+  "slug": "uof-citizen-weapon",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-by-shift",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-by-inc-district",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-map",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-force-type",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-officer-injuries",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-resident-injuries",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-dispositions",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "pd-resident-demographics",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-race",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-per-officer",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "",
+  "caption": "",
+  "slug": "uof-officer-experience",
+  "dataset": "Use of Force",
+  "content": ""
+}
+
+
+]

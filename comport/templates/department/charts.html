@@ -1,60 +1,82 @@
 {% extends "layout.html" %}
 
 {% block css %}
+  <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
   <link href="/static/css/charts.css" rel="stylesheet">
 {% endblock css %}
 
 {% block content %}
-<h1>We are on the {{department.name}} charts page!</h1>
+<h1>{{department.name}}</h1>
 
 <h3>Use of Force</h3>
 
-<h4>Percent of arrests involving use of force</h4>
+{% with brick = chart_blocks['uof-by-year']  %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<div class="chart perc arrests uof">
-  Can't do this: need total number of arrests.
-</div>
+{% with brick = chart_blocks['uof-type-of-call'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>use of force by year</h4>
-<div class="chart per year uof">
-  {{chart_blocks['uof-by-year'].content}}
-</div>
+{% with brick = chart_blocks['uof-reason'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>use of force by month</h4>
-<div class="chart per year uof">
-</div>
+{% with brick = chart_blocks['uof-citizen-weapon'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>use of force by district</h4>
-<div class="chart per district uof">
-</div>
+{% with brick = chart_blocks['uof-by-shift'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>use of force map</h4>
-<div class="chart map uof">
-</div>
+{% with brick = chart_blocks['uof-by-inc-district'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>use of force by type of force</h4>
-<div class="chart type uof">
-</div>
+{% with brick = chart_blocks['uof-map'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>% use of force involving firearms</h4>
-<div class="chart perc firearms uof">
-</div>
+{% with brick = chart_blocks['uof-force-type'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>% use of force involving firearms</h4>
-<div class="chart perc firearms uof">
-</div>
+{% with brick = chart_blocks['uof-officer-injuries'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>officer injuries in incidents with use of force</h4>
-<div class="chart perc officer_injuries uof">
-</div>
+{% with brick = chart_blocks['uof-resident-injuries'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
-<h4>citizen injuries in incidents with use of force</h4>
-<div class="chart perc citizen_injuries uof">
-</div>
+{% with brick = chart_blocks['uof-dispositions'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['pd-resident-demographics'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-race'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-per-officer'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-officer-experience'] %}
+{% include "department/chart_block.html" %}
+{% endwith %}
 
 {% endblock content %}
 
 {% block js %}
+<script type="text/javascript" src="/static/js/map.js"></script>
+<script type="text/javascript" src="/static/js/histogram.js"></script>
+<script type="text/javascript" src="/static/js/lineChart.js"></script>
 <script type="text/javascript" src="/static/js/charts.js"></script>
 
 {% endblock js %}
