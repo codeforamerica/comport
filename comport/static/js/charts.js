@@ -78,7 +78,7 @@ var charts = [
     yFunc: function(b){ return b.length; },
     }],
 
-  ['uof-by-inc-district', {
+  ['uof-by-precinct', {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.precinct; },
@@ -112,7 +112,7 @@ var charts = [
     chartType: 'percent',
     }],
 
-  ['uof-disposition-outcomes', {
+  ['uof-dispositions-outcomes', {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.disposition; },
@@ -138,6 +138,13 @@ var charts = [
 
   ['uof-officer-experience', {
     chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.officerYearsOfService; },
+    sortWith: function(d){ return parseInt(d.years); },
+    x: 'years',
+    xFunc: function(b){ return b[0].officerYearsOfService; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
     }],
 
 ];

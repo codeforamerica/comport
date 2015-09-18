@@ -27,77 +27,77 @@
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force by shift",
   "caption": "",
   "slug": "uof-by-shift",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force by precinct",
   "caption": "",
-  "slug": "uof-by-inc-district",
+  "slug": "uof-by-precinct",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force by census tract",
   "caption": "",
   "slug": "uof-map",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
-  "caption": "",
+{"title": "Types of force used by officers",
+  "caption": "lorem ",
   "slug": "uof-force-type",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force injuries to officers",
   "caption": "",
   "slug": "uof-officer-injuries",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force injuries to residents",
   "caption": "",
   "slug": "uof-resident-injuries",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force dispositions",
   "caption": "",
-  "slug": "uof-dispositions",
+  "slug": "uof-dispositions-outcomes",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Department demographics",
   "caption": "",
   "slug": "pd-resident-demographics",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Race",
   "caption": "",
   "slug": "uof-race",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force per officer",
   "caption": "",
   "slug": "uof-per-officer",
   "dataset": "Use of Force",
   "content": ""
 },
 
-{"title": "",
+{"title": "Use of force years of experience",
   "caption": "",
   "slug": "uof-officer-experience",
   "dataset": "Use of Force",
