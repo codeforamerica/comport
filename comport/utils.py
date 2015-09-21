@@ -26,3 +26,6 @@ def parse_date(date):
 def random_date(start, end):
     return start + timedelta(
         seconds=randint(0, int((end - start).total_seconds())))
+
+def diff_month(d1, d2):
+    return (d1.year - d2.year)*12 + d1.month - d2.month

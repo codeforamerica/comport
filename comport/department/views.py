@@ -68,6 +68,15 @@ def use_of_force_csv(department_id):
         abort(404)
     return Response(department.get_uof_csv(), mimetype="text/csv")
 
+@blueprint.route('/<int:department_id>/denominator.csv')
+@login_required
+@admin_or_department_required()
+def denominator_csv(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return Response(department.get_denominator_csv(), mimetype="text/csv")
+
 
 @blueprint.route("/<int:department_id>/charts")
 @login_required

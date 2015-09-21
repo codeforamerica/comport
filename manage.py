@@ -11,11 +11,12 @@ from comport.charts.models import ChartBlockDefaults
 from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
-from comport.utils import random_string, parse_date
+from comport.utils import random_string, parse_date, diff_month
 from comport.data.models import UseOfForceIncident
-from tests.factories import UseOfForceIncidentFactory
+from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory
 import json
 import csv
+from datetime import datetime
 
 if os.environ.get("COMPORT_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -80,10 +81,17 @@ def make_test_data():
 
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+
     for _ in range(100):
         incident = UseOfForceIncidentFactory()
         incident.department_id = department.id
         incident.save()
+
+    for _ in range(diff_month(datetime.now(),datetime(2012,1,1))):
+        denominator_value = DenominatorValueFactory()
+        denominator_value.department_id = department.id
+        denominator_value.save()
+
 
 @manager.command
 def delete_everything():

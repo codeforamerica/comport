@@ -5,17 +5,12 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from comport.user.models import User
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncident
+from comport.data.models import UseOfForceIncident, DenominatorValue
 from comport.database import db
 from comport.utils import random_date, factory_random_string
 from datetime import date, datetime, timedelta
-
-
+from dateutil.relativedelta import *
 import random
-
-
-
-
 
 class BaseFactory(SQLAlchemyModelFactory):
 
@@ -37,6 +32,21 @@ class UserFactory(BaseFactory):
 
     class Meta:
         model = User
+
+class DenominatorValueFactory(BaseFactory):
+    month = Sequence(lambda n: datetime(2012, 1, 1) + relativedelta(months=n))
+    arrests=FuzzyInteger(200,500)
+    calls_for_service=FuzzyInteger(500,1500)
+    officer_initiated_calls=FuzzyInteger(500,1500)
+
+    class Meta:
+        model = DenominatorValue
+
+    @classmethod
+    def _after_postgeneration(cls, obj,create,results=None):
+        tmp = obj.month
+        obj.month = tmp.month
+        obj.year = tmp.year
 
 class UseOfForceIncidentFactory(BaseFactory):
     opaque_id = FuzzyText(length=12)

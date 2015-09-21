@@ -11,6 +11,32 @@ from comport.database import (
 
 from datetime import datetime
 
+class DenominatorValue(SurrogatePK, Model):
+    __tablename__="denominator_values"
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
+    month=Column(db.Integer, unique=False, nullable=False)
+    year=Column(db.Integer, unique=False, nullable=False)
+    arrests=Column(db.Integer, unique=False, nullable=True)
+    calls_for_service=Column(db.Integer, unique=False, nullable=True)
+    officer_initiated_calls=Column(db.Integer, unique=False, nullable=True)
+
+    def coalesce_int(self, num):
+        return "" if num == None else str(num)
+
+    def to_csv_row(self):
+        values = [
+            self.coalesce_int(self.month),
+            self.coalesce_int(self.year),
+            self.coalesce_int(self.arrests),
+            self.coalesce_int(self.calls_for_service),
+            self.coalesce_int(self.officer_initiated_calls)
+        ]
+        return ','.join(values) + "\n"
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
+
+
 class UseOfForceIncident(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)

@@ -21,7 +21,8 @@ class Department(SurrogatePK, Model):
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
     use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
-    blocks = relationship("ChartBlock", backref="department")
+    chart_blocks = relationship("ChartBlock", backref="department")
+    denominator_values = relationship("DenominatorValue", backref="department")
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.blocks if block.dataset == "Use of Force"])
@@ -33,7 +34,7 @@ class Department(SurrogatePK, Model):
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
         for default_chart_block in ChartBlockDefaults.query.all():
-            self.blocks.append(default_chart_block.make_real_block())
+            self.chart_blocks.append(default_chart_block.make_real_block())
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
@@ -43,6 +44,13 @@ class Department(SurrogatePK, Model):
         use_of_force_incidents = self.use_of_force_incidents
         for incident in use_of_force_incidents:
             csv += incident.to_csv_row()
+        return csv
+
+    def get_denominator_csv(self):
+        csv = "month,year,arrests,callsForService,officerInitiatedCalls\n"
+        denominator_values = self.denominator_values
+        for month in denominator_values:
+            csv += month.to_csv_row()
         return csv
 
 class Extractor(User):
