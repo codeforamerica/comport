@@ -12,7 +12,7 @@ import io
 blueprint = Blueprint("department", __name__, url_prefix='/department',
                       static_folder="../static")
 
-
+#<<<<<<<< ADMIN ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>")
 @login_required
 @admin_or_department_required()
@@ -59,6 +59,7 @@ def start_extractor(department_id):
             flash("Extractor started", "info")
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
+#<<<<<<<< SITE ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>/site/useofforce")
 @login_required
 @admin_or_department_required()
@@ -79,7 +80,7 @@ def index(department_id):
     return render_template("department/index.html", department=department)
 
 
-# DATA ENDPOINTS >>>>>>>>>>
+#<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
 @login_required
 @admin_or_department_required()

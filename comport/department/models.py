@@ -13,6 +13,7 @@ from comport.charts.models import ChartBlockDefaults
 from flask import current_app
 
 from comport.user.models import User, Role
+from .defaults import DepartmentDefaults
 
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
@@ -23,7 +24,10 @@ class Department(SurrogatePK, Model):
     use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
-    
+    what_this_is = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
+    why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
+    how_you_can_use_this_data = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
+    contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])
@@ -34,6 +38,11 @@ class Department(SurrogatePK, Model):
 
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
+        self.what_this_is = DepartmentDefaults.what_this_is
+        self.why_we_are_doing_this = DepartmentDefaults.why_we_are_doing_this
+        self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
+        self.contact_us = DepartmentDefaults.contact_us
+        
         for default_chart_block in ChartBlockDefaults.query.all():
             self.chart_blocks.append(default_chart_block.make_real_block())
 
