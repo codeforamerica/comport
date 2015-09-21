@@ -2,7 +2,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, Response
 from comport.utils import flash_errors
 from .models import Department, Extractor
+from .forms import IndexContentForm
 from flask.ext.login import login_required
+
 from comport.decorators import admin_or_department_required, extractor_auth_required
 import uuid
 import datetime
@@ -69,15 +71,36 @@ def use_of_force(department_id):
         abort(404)
     return render_template("department/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
 
-@blueprint.route("/<int:department_id>/site/index")
+@blueprint.route("/<int:department_id>/site/index",methods=["GET","POST"])
 @login_required
 @admin_or_department_required()
 def index(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
+    form = IndexContentForm(request.form)
 
-    return render_template("department/index.html", department=department)
+    if form.validate_on_submit():
+        department.why_we_are_doing_this = form.why_we_are_doing_this.data
+        department.what_this_is = form.what_this_is.data
+        department.contact_us = form.contact_us.data
+        department.how_you_can_use_this_data = form.how_you_can_use_this_data.data
+        department.save()
+        flash("Saved.", 'success')
+        return redirect(url_for(
+            'department.index', department_id=department_id
+        ))
+    else:
+        flash_errors(form)
+
+
+
+    form.why_we_are_doing_this.data = department.why_we_are_doing_this
+    form.what_this_is.data = department.what_this_is
+    form.contact_us.data = department.contact_us
+    form.how_you_can_use_this_data.data = department.how_you_can_use_this_data
+
+    return render_template("department/index.html", form=form, department=department)
 
 
 #<<<<<<<< DATA ENDPOINTS >>>>>>>>>>

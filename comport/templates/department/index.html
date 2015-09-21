@@ -1,17 +1,34 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<form id="indexContentForm" class="form form-register" method="POST" action="" role="form">
+  {{ form.hidden_tag() }}
 
-<h2>Letter from the Chief</h2>
-<div class="department">
-  <img src="/static/img/chief.jpg" alt="An image of the departmet spokesperson" class="department-spokesperson">
-  <div class="department-statement">
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+  <h2>Letter from the Chief</h2>
+  <div class="department">
+    <img src="/static/img/chief.jpg" alt="An image of the departmet spokesperson" class="department-spokesperson">
+    <div class="department-statement form-group">
+        {{form.why_we_are_doing_this(class_="form-control")}}
+    </div>
   </div>
-</div>
+
+  <h2>What is this</h2>
+  <div class="department">
+    <div class="department-statement form-group">
+        {{form.what_this_is(class_="form-control")}}
+    </div>
+  </div>
+
+  <h2>How you can use this data</h2>
+  <div class="department">
+    <div class="department-statement form-group">
+        {{form.how_you_can_use_this_data(class_="form-control")}}
+    </div>
+  </div>
+
+  <input class="btn btn-default btn-submit" type="submit" value="Save">
+</form>
 
 <h2>Data</h2>
 
@@ -57,7 +74,7 @@
 </ul>
 
 <h2>Community Outreach</h2>
-  
+
 <ul>
   <li>
     <a href="">Check out our Facebook page for upcoming community engagement events.</a>
@@ -78,5 +95,5 @@
       </ul>
 
     </small>
-  
+
 {% endblock footer %}
