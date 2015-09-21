@@ -82,9 +82,6 @@ def index(department_id):
 
     if form.validate_on_submit():
         department.why_we_are_doing_this = form.why_we_are_doing_this.data
-        department.what_this_is = form.what_this_is.data
-        department.contact_us = form.contact_us.data
-        department.how_you_can_use_this_data = form.how_you_can_use_this_data.data
         department.save()
         flash("Saved.", 'success')
         return redirect(url_for(
@@ -93,13 +90,7 @@ def index(department_id):
     else:
         flash_errors(form)
 
-
-
     form.why_we_are_doing_this.data = department.why_we_are_doing_this
-    form.what_this_is.data = department.what_this_is
-    form.contact_us.data = department.contact_us
-    form.how_you_can_use_this_data.data = department.how_you_can_use_this_data
-
     return render_template("department/index.html", form=form, department=department)
 
 
