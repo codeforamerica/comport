@@ -1,3 +1,5 @@
+var allRows;
+
 function last12Months(rows){
   // offset today by 12 d3-defined months in the past
   var startDate = d3.time.month.offset(new Date(), -12);
@@ -7,7 +9,35 @@ function last12Months(rows){
   });
 }
 
+var experienceBuckets = d3.scale.quantize()
+  .domain([2.5, 5.5, 10.5])
+  .range([
+      '0-2 years',
+      '3-5 years',
+      '6-10 years',
+      '10+ years',
+      ]);
+
 var charts = [
+
+  // filter with
+    // filters: [
+    // ]
+  // per branch (if nested) or total:
+    // variables: {
+    //  key: varFunc,
+    //  key: varFunc
+    // }
+  // nest with
+    // nest by [keyFunc1, keyFunc2]
+    // postNest: mapFunc
+    // don't flatten: false/true
+  // if flattened or unnested
+    // sortBy: [
+    //  -key,
+    //  key,
+    //  sortFunc,
+    // ]
 
   ['uof-by-year', {
     chartType: 'lineChart',
@@ -102,10 +132,42 @@ var charts = [
 
   ['uof-officer-injuries', {
     chartType: 'percent',
+    filter: last12Months,
+    keyFunc: function(d){ return d.officerInjured; },
+    x: "injured",
+    xFunc: function (b) { return b.length; },
+    y: "hospitalized",
+    yFunc: function (b){
+      var hospitalizations = b.filter(function(d){
+        return d.officerHospitalized == "true";
+      });
+      return hospitalizations.length;
+    },
+    dataMapAdjust: function (dataMap){
+      dataMap.remove("");
+      dataMap.remove("false");
+      dataMap.get("true").total = last12Months(allRows).length;
+    },
     }],
 
   ['uof-resident-injuries', {
     chartType: 'percent',
+    filter: last12Months,
+    keyFunc: function(d){ return d.residentInjured; },
+    x: "injured",
+    xFunc: function (b) { return b.length; },
+    y: "hospitalized",
+    yFunc: function (b){
+      var hospitalizations = b.filter(function(d){
+        return d.residentHospitalized == "true";
+      });
+      return hospitalizations.length;
+    },
+    dataMapAdjust: function (dataMap){
+      dataMap.remove("");
+      dataMap.remove("false");
+      dataMap.get("true").total = last12Months(allRows).length;
+    },
     }],
 
   ['uof-dispositions', {
@@ -133,16 +195,15 @@ var charts = [
 
   ['uof-per-officer', {
     chartType: 'flagHistogram',
-
     }],
 
   ['uof-officer-experience', {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.officerYearsOfService; },
+    keyFunc: function(d){ return experienceBuckets(d.officerYearsOfService); },
     sortWith: function(d){ return parseInt(d.years); },
     x: 'years',
-    xFunc: function(b){ return b[0].officerYearsOfService; },
+    xFunc: function(b){ return experienceBuckets(b[0].officerYearsOfService); },
     y: 'count',
     yFunc: function(b){ return b.length; },
     }],
@@ -206,6 +267,7 @@ d3.csv(
   function(error, rows){
     // parse the raw csv data
     var parsed_rows = parseData(rows);
+    allRows = rows;
     console.log("parsed data", parsed_rows);
 
     // deal with each chart configuration
@@ -293,6 +355,7 @@ function structureData(parsed_rows, config){
 drawFuncs = {
   'lineChart': lineChart,
   'map': mapChart,
+  'percent': basicPercent,
   'flagHistogram': flagHistogram,
   'mountainHistogram': mountainHistogram,
 }

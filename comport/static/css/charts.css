@@ -1,3 +1,7 @@
+div[role="main"] {
+  width: 40em;
+  margin: 0 auto;
+}
 
 .trend-line {
   fill: none;
@@ -26,3 +30,25 @@
   display: inline-block;
   margin: 0 1em;
 }
+
+.percent + .percent {
+  margin-left: 2em;
+}
+.percent-amt {
+  font-size: 2em;
+}
+.percent-symbol {
+  font-size: 0.6em;
+}
+.percent-label {
+  margin-left: 0.5em;
+}
+
+.brick + .brick {
+  margin-top: 2.5em;
+}
+.brick-title {
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid black;
+}
+.chart { padding-top: 0.4em; }

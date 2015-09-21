@@ -1,3 +1,38 @@
+var percentFormat = d3.format("d");
+
+function basicPercent(config, data){
+ var div = d3.select(config.parent);
+ var rows = div.selectAll(".percentStatement")
+   .data(data).enter().append("div")
+   .attr("class", "percentStatement");
+
+ var percents = rows.selectAll(".percent")
+   .data(function(d){
+     return [
+       { "label": config.x,
+         "amt": (d[config.x] / d.total) * 100 },
+       { "label": config.y,
+         "amt": (d[config.y] / d.total) * 100 }
+     ];
+   }).enter()
+   .append("span")
+   .attr("class", "percent");
+
+ percents.append("span")
+   .attr("class", "percent-amt")
+   .text(function(d){
+     console.log("percent", d);
+     return d3.round(d.amt, 0);
+   }).append("sup")
+  .attr("class", "percent-symbol")
+  .text("%");
+
+  percents.append("span")
+    .attr("class", "percent-label")
+    .text(function(d){ return d.label; });
+
+}
+
 function flagHistogram(config, data){
 
   // set basic dimensions

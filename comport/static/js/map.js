@@ -5,11 +5,11 @@ function mapChart(config, data){
   console.log("data for map", data);
   var mapWrapper = d3.select(config.parent);
   var div = mapWrapper[0][0];
-  mapWrapper.style('width', '50em')
-    .style('height', '30em');
+  mapWrapper.style('width', '32em')
+    .style('height', '25em');
 
   var map = L.mapbox.map(div, 'mapbox.light')
-    .setView([39.759729, -86.154723], 10)
+    .setView([39.78, -86.15], 10)
 
   var maxY = d3.max(data.values(), function(d){ return d[config.y]; });
 
@@ -27,18 +27,22 @@ function mapChart(config, data){
   function style(f) {
 
     var y = f.properties[config.y];
+    var color, opacity;
 
     if(y){
-      var color = colorScale(y);
+      color = colorScale(y);
+      opacity = 0.5;
     } else {
-      var color = "#cccccc"
+      color = "#cccccc";
+      opacity = 0;
     }
     return {
       fillColor: color,
-      weight: 1,
-      opacity: 0.7,
-      color: 'white',
-      fillOpacity: 0.7
+      weight: 0.5,
+      opacity: 0.5,
+      color: '#444444',
+      dashArray: "2, 1",
+      fillOpacity: opacity
     };
   }
 
@@ -61,7 +65,6 @@ function mapChart(config, data){
     var tracts = d3.selectAll('.leaflet-overlay-pane path');
 
     console.log("tracts", tracts);
-
 
   });
 
