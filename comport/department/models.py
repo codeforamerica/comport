@@ -23,6 +23,7 @@ class Department(SurrogatePK, Model):
     use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
+    
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])

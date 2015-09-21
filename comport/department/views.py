@@ -59,6 +59,27 @@ def start_extractor(department_id):
             flash("Extractor started", "info")
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
+@blueprint.route("/<int:department_id>/site/useofforce")
+@login_required
+@admin_or_department_required()
+def use_of_force(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
+
+@blueprint.route("/<int:department_id>/site/index")
+@login_required
+@admin_or_department_required()
+def index(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+
+    return render_template("department/index.html", department=department)
+
+
+# DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
 @login_required
 @admin_or_department_required()
@@ -76,14 +97,3 @@ def denominator_csv(department_id):
     if not department:
         abort(404)
     return Response(department.get_denominator_csv(), mimetype="text/csv")
-
-
-@blueprint.route("/<int:department_id>/charts")
-@login_required
-@admin_or_department_required()
-def charts(department_id):
-    department = Department.get_by_id(department_id)
-    if not department:
-        abort(404)
-
-    return render_template("department/charts.html", department=department, chart_blocks=department.get_uof_blocks())
