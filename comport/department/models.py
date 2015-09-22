@@ -8,7 +8,7 @@ from comport.database import (
     relationship,
     SurrogatePK,
 )
-from comport.charts.models import ChartBlockDefaults
+from comport.content.models import ChartBlockDefaults
 
 from flask import current_app
 
@@ -27,6 +27,10 @@ class Department(SurrogatePK, Model):
     why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     how_you_can_use_this_data = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
+    links = relationship("Link", backref="department")
+
+    def get_links_by_type(self,type):
+        return list(filter(lambda l: l.type == type, self.links))
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])

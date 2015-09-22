@@ -4,7 +4,7 @@ import datetime as dt
 import pytest
 
 from comport.user.models import User, Role
-from comport.charts.models import ChartBlock
+from comport.content.models import ChartBlock
 from comport.department.models import Extractor, Department
 from .factories import UserFactory, DepartmentFactory
 import uuid

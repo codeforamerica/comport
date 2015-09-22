@@ -7,8 +7,9 @@ from flask_migrate import MigrateCommand, upgrade
 
 from comport.app import create_app
 from comport.user.models import User, Role
-from comport.charts.models import ChartBlockDefaults
+from comport.content.models import ChartBlockDefaults
 from comport.department.models import Department, Extractor
+from comport.content.models import Link
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 from comport.utils import random_string, parse_date, diff_month
@@ -78,9 +79,14 @@ def make_test_data():
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
+        Link.create(title="The Department's Policy on Force", url="www.example.com/policy/force.pdf", department_id=department.id, type="policy")
+        Link.create(title="The Department's Training Policy on Force", url="www.example.com/training/force.pdf", department_id=department.id, type="training")
+        Link.create(title="The Department's Outreach Strategy", url="www.example.com/outreach.pdf", department_id=department.id, type="outreach")
 
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+
+
 
     for _ in range(100):
         incident = UseOfForceIncidentFactory()

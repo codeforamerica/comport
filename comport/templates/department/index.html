@@ -36,37 +36,54 @@
 <p>Two charts highlighting this data set</p>
 
 <h2>Policies</h2>
-
-<ul>
-  <li>
-    <a href="">Use of force policy</a>
-  </li>
-  <li>
-    <a href="">Another important policy</a>
-  </li>
-  <li>
-    <a href="">Policy about other things</a>
-  </li>
-</ul>
+<table class="table">
+  <tr>
+    <th>Text</th>
+    <th>Url</th>
+    <th></th>
+  </tr>
+{% for link in department.get_links_by_type(type="policy") %}
+<tr>
+  <th>{{link.title}}</th>
+  <th>{{link.url}}</th>
+  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
+</tr>
+{% endfor %}
+</table>
+<a href="/content/link/new">New Link</a>
 
 <h2>Police Training</h2>
-
-<ul>
-  <li>
-    <a href="">Link to how we train officers</a>
-  </li>
-  <li>
-    <a href="">Another link about training</a>
-  </li>
-</ul>
-
+<table class="table">
+  <tr>
+    <th>Text</th>
+    <th>Url</th>
+    <th></th>
+  </tr>
+{% for link in department.get_links_by_type(type="training") %}
+<tr>
+  <th>{{link.title}}</th>
+  <th>{{link.url}}</th>
+  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
+</tr>
+{% endfor %}
+</table>
+<a href="/content/link/new">New Link</a>
 <h2>Community Outreach</h2>
-
-<ul>
-  <li>
-    <a href="">Check out our Facebook page for upcoming community engagement events.</a>
-  </li>
-</ul>
+<table class="table">
+  <tr>
+    <th>Text</th>
+    <th>Url</th>
+    <th></th>
+  </tr>
+{% for link in department.get_links_by_type(type="outreach") %}
+<tr>
+  <th>{{link.title}}</th>
+  <th>{{link.url}}</th>
+  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
+</tr>
+{% endfor %}
+</table>
+<a href="/content/link/new">New Link</a>
 
 {% endblock content %}
 

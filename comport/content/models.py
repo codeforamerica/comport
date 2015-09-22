@@ -9,6 +9,17 @@ from comport.database import (
     SurrogatePK,
 )
 
+class Link(SurrogatePK, Model):
+    __tablename__ = 'links'
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
+    title = Column(db.String(255), unique=False, nullable=False)
+    url = Column(db.String(2083), unique=False, nullable=False)
+    type = Column(db.String(255), unique=False, nullable=False)
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
+
+
 class ChartBlockDefaults(SurrogatePK, Model):
     __tablename__ = 'chart_block_defaults'
     title = Column(db.String(255), unique=False, nullable=False)
