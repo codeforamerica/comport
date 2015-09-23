@@ -109,6 +109,7 @@ class CitizenComplaint(SurrogatePK, Model):
     shift = Column(db.String(255), unique=False, nullable=True)
     beat = Column(db.String(255), unique=False, nullable=True)
     disposition = Column(db.String(255), unique=False, nullable=True)
+    category = Column(db.String(255), unique=False, nullable=True)
     census_tract = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
@@ -127,6 +128,7 @@ class CitizenComplaint(SurrogatePK, Model):
             self.shift or "",
             self.beat or "",
             self.disposition or "",
+            self.category or "",
             self.census_tract or "",
             self.resident_race or "",
             self.resident_sex or "",

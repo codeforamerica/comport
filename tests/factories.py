@@ -191,13 +191,13 @@ class CitizenComplaintFactory(BaseFactory):
         "Within policy",
         None
     ])
+    category = FuzzyChoice(["Inappropriate use of force","Substandard officer performance","Officer used inappropriate language","Officer didn't file incident report","K-9 Incidents","Profiling","Rudeness","Mistreatment",None])
     resident_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     resident_sex = FuzzyChoice(["Anonymou","Female","Male", None])
     officer_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     officer_sex = FuzzyChoice(["Anonymou","Female","Male", None])
     officer_identifier = FuzzyChoice([factory_random_string(12) for x in range(30)])
     officer_years_of_service = FuzzyInteger(30)
-
     @classmethod
     def _after_postgeneration(cls, obj,create,results=None):
         tmp = obj.division

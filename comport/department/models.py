@@ -64,7 +64,7 @@ class Department(SurrogatePK, Model):
         return csv
 
     def get_complaint_csv(self):
-        csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,residentRace,residentSex,officerRace,officerSex,officerYearsOfService,officerIdentifier\n"
+        csv = "id,occuredDate,division,precinct,shift,beat,disposition,category,censusTract,residentRace,residentSex,officerRace,officerSex,officerYearsOfService,officerIdentifier\n"
         complaints = self.citizen_complaints
         for complaint in complaints:
             csv += complaint.to_csv_row()
