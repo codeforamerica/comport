@@ -31,7 +31,7 @@ def home():
                 redirect_url = request.args.get("next") or url_for("admin.admin_dashboard")
                 return redirect(redirect_url)
             else:
-                
+
                 redirect_url = request.args.get("next") or url_for("department.department_dashboard", department_id=form.user.department_id)
                 return redirect(redirect_url)
         else:

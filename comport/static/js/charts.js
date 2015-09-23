@@ -213,7 +213,7 @@ d3.csv(
         console.log("making", config.parent, "with", config);
         drawChart(parsed_rows, config);
       }
-      
+
     });
   }
 );
@@ -236,7 +236,7 @@ function addMissingYears(dataMap){
 
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
-  
+
   // filter rows if necessary
   if( config.filter ){
     parsed_rows = config.filter(parsed_rows);

@@ -14,7 +14,7 @@ from comport.settings import DevConfig, ProdConfig
 from comport.database import db
 from comport.utils import random_string, parse_date, diff_month
 from comport.data.models import UseOfForceIncident
-from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory
+from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
 import json
 import csv
 from datetime import datetime
@@ -92,6 +92,11 @@ def make_test_data():
         incident = UseOfForceIncidentFactory()
         incident.department_id = department.id
         incident.save()
+
+    for _ in range(100):
+        complaint = CitizenComplaintFactory()
+        complaint.department_id = department.id
+        complaint.save()
 
     for _ in range(diff_month(datetime.now(),datetime(2012,1,1))):
         denominator_value = DenominatorValueFactory()

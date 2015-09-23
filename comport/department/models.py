@@ -22,6 +22,7 @@ class Department(SurrogatePK, Model):
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
     use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
+    citizen_complaints = relationship("CitizenComplaint", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
@@ -34,6 +35,9 @@ class Department(SurrogatePK, Model):
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])
+
+    def get_complaint_blocks(self):
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Citizen Complaint"])
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
@@ -57,6 +61,13 @@ class Department(SurrogatePK, Model):
         use_of_force_incidents = self.use_of_force_incidents
         for incident in use_of_force_incidents:
             csv += incident.to_csv_row()
+        return csv
+
+    def get_complaint_csv(self):
+        csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,residentRace,residentSex,officerRace,officerSex,officerYearsOfService,officerIdentifier\n"
+        complaints = self.citizen_complaints
+        for complaint in complaints:
+            csv += complaint.to_csv_row()
         return csv
 
     def get_denominator_csv(self):
