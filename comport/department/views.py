@@ -71,6 +71,15 @@ def use_of_force(department_id):
         abort(404)
     return render_template("department/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
 
+@blueprint.route("/<int:department_id>/site/complaints")
+@login_required
+@admin_or_department_required()
+def complaints(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/complaints.html", department=department, chart_blocks=department.get_complaint_blocks())
+
 @blueprint.route("/<int:department_id>/site/index",methods=["GET","POST"])
 @login_required
 @admin_or_department_required()
