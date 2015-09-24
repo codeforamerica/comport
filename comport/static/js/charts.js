@@ -18,7 +18,7 @@ var experienceBuckets = d3.scale.quantize()
       '10+ years',
       ]);
 
-var charts = [
+var configs = {
 
   // filter with
     // filters: [
@@ -39,7 +39,7 @@ var charts = [
     //  sortFunc,
     // ]
 
-  ['uof-by-year', {
+  'uof-by-year': {
     chartType: 'lineChart',
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
@@ -47,9 +47,9 @@ var charts = [
     xFunc: function(b){ return b[0].date.getFullYear(); },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-type-of-call', {
+  'uof-type-of-call': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.serviceType; },
@@ -58,9 +58,9 @@ var charts = [
     xFunc: function(b){ return b[0].serviceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-reason', {
+  'uof-reason': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.useOfForceReason; },
@@ -69,9 +69,9 @@ var charts = [
     xFunc: function(b){ return b[0].useOfForceReason; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-citizen-weapon', {
+  'uof-citizen-weapon': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.residentWeaponUsed; },
@@ -80,9 +80,9 @@ var charts = [
     xFunc: function(b){ return b[0].residentWeaponUsed; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-map', {
+  'uof-map': {
     chartType: 'map',
     filter: function(b){
       return last12Months(b).filter(function(d){
@@ -95,9 +95,9 @@ var charts = [
     xFunc: function(b){ return b[0].censusTract; },
     y: 'count',
     yFunc: function(b){ return b.length; }
-    }],
+    },
 
-  ['uof-by-shift', {
+  'uof-by-shift': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.shift; },
@@ -106,9 +106,9 @@ var charts = [
     xFunc: function(b){ return b[0].shift; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-by-precinct', {
+  'uof-by-precinct': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.precinct; },
@@ -117,9 +117,9 @@ var charts = [
     xFunc: function(b){ return b[0].precinct; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-force-type', {
+  'uof-force-type': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.officerForceType; },
@@ -128,9 +128,9 @@ var charts = [
     xFunc: function(b){ return b[0].officerForceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-officer-injuries', {
+  'uof-officer-injuries': {
     chartType: 'percent',
     filter: last12Months,
     keyFunc: function(d){ return d.officerInjured; },
@@ -148,9 +148,9 @@ var charts = [
       dataMap.remove("false");
       dataMap.get("true").total = last12Months(allRows).length;
     },
-    }],
+    },
 
-  ['uof-resident-injuries', {
+  'uof-resident-injuries': {
     chartType: 'percent',
     filter: last12Months,
     keyFunc: function(d){ return d.residentInjured; },
@@ -168,13 +168,13 @@ var charts = [
       dataMap.remove("false");
       dataMap.get("true").total = last12Months(allRows).length;
     },
-    }],
+    },
 
-  ['uof-dispositions', {
+  'uof-dispositions': {
     chartType: 'percent',
-    }],
+    },
 
-  ['uof-dispositions-outcomes', {
+  'uof-dispositions-outcomes': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.disposition; },
@@ -183,21 +183,21 @@ var charts = [
     xFunc: function(b){ return b[0].disposition; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['pd-resident-demographics', {
+  'pd-resident-demographics': {
     chartType: 'flagHistogram',
-    }],
+    },
 
-  ['uof-race', {
+  'uof-race': {
     chartType: 'matrix',
-    }],
+    },
 
-  ['uof-per-officer', {
+  'uof-per-officer': {
     chartType: 'flagHistogram',
-    }],
+    },
 
-  ['uof-officer-experience', {
+  'uof-officer-experience': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return experienceBuckets(d.officerYearsOfService); },
@@ -206,9 +206,9 @@ var charts = [
     xFunc: function(b){ return experienceBuckets(b[0].officerYearsOfService); },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-];
+};
 
 var currentYear = 2015;
 var defaultNullValue = "NULL";
@@ -271,14 +271,14 @@ d3.csv(
     console.log("parsed data", parsed_rows);
 
     // deal with each chart configuration
-    charts.forEach(function(config_data){
+    charts.forEach(function(name){
 
       // get configuration
-      var config = config_data[1];
+      var config = configs[name];
 
       if( config.keyFunc ){
         // get class name for parent div
-        config.parent = '.' + config_data[0];
+        config.parent = '.' + name;
         console.log("making", config.parent, "with", config);
         drawChart(parsed_rows, config);
       }
