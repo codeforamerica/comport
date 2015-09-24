@@ -31,7 +31,7 @@
 {% include "department/chart_block.html" %}
 {% endwith %}
 
-{% with brick = chart_blocks['uof-by-precinct'] %}
+{% with brick = chart_blocks['uof-by-inc-district'] %}
 {% include "department/chart_block.html" %}
 {% endwith %}
 
@@ -51,7 +51,7 @@
 {% include "department/chart_block.html" %}
 {% endwith %}
 
-{% with brick = chart_blocks['uof-dispositions-outcomes'] %}
+{% with brick = chart_blocks['uof-dispositions'] %}
 {% include "department/chart_block.html" %}
 {% endwith %}
 
@@ -75,18 +75,19 @@
 
 {% block js %}
 <script type="text/javascript">
+var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
 var charts = [
   'uof-by-year',
   'uof-type-of-call',
   'uof-reason',
   'uof-citizen-weapon',
   'uof-by-shift',
-  'uof-by-precinct',
+  'uof-by-inc-district',
   'uof-map',
   'uof-force-type',
   'uof-officer-injuries',
   'uof-resident-injuries',
-  'uof-dispositions-outcomes',
+  'uof-dispositions',
   'pd-resident-demographics',
   'uof-race',
   'uof-per-officer',

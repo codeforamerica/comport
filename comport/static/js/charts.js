@@ -108,13 +108,13 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  'uof-by-precinct': {
+  'uof-by-inc-district': {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.precinct; },
+    keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].precinct; },
+    xFunc: function(b){ return b[0].district; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
@@ -171,10 +171,6 @@ var configs = {
     },
 
   'uof-dispositions': {
-    chartType: 'percent',
-    },
-
-  'uof-dispositions-outcomes': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.disposition; },
@@ -183,6 +179,9 @@ var configs = {
     xFunc: function(b){ return b[0].disposition; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    },
+
+  'uof-dispositions-outcomes': {
     },
 
   'pd-resident-demographics': {
@@ -207,6 +206,75 @@ var configs = {
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
+
+  'complaints-by-year': {
+    title: 'Complaints by Year',
+    noTemplate: true,
+    chartType: 'lineChart',
+    keyFunc: function(d){ return d.date.getFullYear(); },
+    dataMapAdjust: addMissingYears,
+    x: 'year',
+    xFunc: function(b){ return b[0].date.getFullYear(); },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-category': {
+    title: 'Complaints by Category',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.category; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].category; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-shift': {
+    title: 'Complaints by Shift',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.shift; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].shift; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-precinct': {
+    title: 'Complaints by Precinct',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.precinct; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].precinct; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-map': {
+    title: 'Complaints by Census Tract',
+    noTemplate: true,
+    chartType: 'map',
+    filter: function(b){
+      return last12Months(b).filter(function(d){
+       if( d.censusTract ){ return true; } else { return false; }
+      });
+    },
+    dontFlatten: true,
+    keyFunc: function(d){ return d.censusTract; },
+    x: 'censusTract',
+    xFunc: function(b){ return b[0].censusTract; },
+    y: 'count',
+    yFunc: function(b){ return b.length; }
+    },
+
 
 };
 
@@ -258,12 +326,21 @@ function drawChart(rows, config){
   // get the correct function for drawing this chart
   drawingFunction = drawFuncs[config.chartType];
 
+  // if we have no chart block in the database, just make the brick
+  if(config.noTemplate){
+    var brick = d3.select('[role=main]')
+      .append('div').attr("class", "brick");
+    brick.append("h4").attr("class", "brick-title")
+      .text(config.title);
+    config.parent = brick.append("div").attr("class", config.parent)[0][0];
+  }
+
   // run the function to draw the chart
   drawingFunction(config, data);
 }
 
 d3.csv(
-  "/department/1/uof.csv ",
+  csv_url,
   function(error, rows){
     // parse the raw csv data
     var parsed_rows = parseData(rows);

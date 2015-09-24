@@ -15,6 +15,16 @@
 {% endblock content %}
 
 {% block js %}
+<script type="text/javascript">
+var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
+var charts = [
+  'complaints-by-year',
+  'complaints-by-category',
+  'complaints-by-shift',
+  'complaints-by-precinct',
+  'complaints-map',
+];
+</script>
 <script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>
