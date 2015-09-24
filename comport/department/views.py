@@ -103,6 +103,7 @@ def index(department_id):
     return render_template("department/index.html", form=form, department=department)
 
 
+
 #<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
 @login_required

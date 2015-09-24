@@ -102,6 +102,20 @@
   "slug": "uof-officer-experience",
   "dataset": "Use of Force",
   "content": ""
+},
+
+{"title": "Use of force by District",
+  "caption": "",
+  "slug": "uof-by-inc-district",
+  "dataset": "Use of Force",
+  "content": ""
+},
+
+{"title": "Use of force dispositions",
+  "caption": "",
+  "slug": "uof-dispositions",
+  "dataset": "Use of Force",
+  "content": ""
 }
 
 
