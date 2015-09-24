@@ -1,3 +1,5 @@
+var allRows;
+
 function last12Months(rows){
   // offset today by 12 d3-defined months in the past
   var startDate = d3.time.month.offset(new Date(), -12);
@@ -7,9 +9,37 @@ function last12Months(rows){
   });
 }
 
-var charts = [
+var experienceBuckets = d3.scale.quantize()
+  .domain([2.5, 5.5, 10.5])
+  .range([
+      '0-2 years',
+      '3-5 years',
+      '6-10 years',
+      '10+ years',
+      ]);
 
-  ['uof-by-year', {
+var configs = {
+
+  // filter with
+    // filters: [
+    // ]
+  // per branch (if nested) or total:
+    // variables: {
+    //  key: varFunc,
+    //  key: varFunc
+    // }
+  // nest with
+    // nest by [keyFunc1, keyFunc2]
+    // postNest: mapFunc
+    // don't flatten: false/true
+  // if flattened or unnested
+    // sortBy: [
+    //  -key,
+    //  key,
+    //  sortFunc,
+    // ]
+
+  'uof-by-year': {
     chartType: 'lineChart',
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
@@ -17,9 +47,9 @@ var charts = [
     xFunc: function(b){ return b[0].date.getFullYear(); },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-type-of-call', {
+  'uof-type-of-call': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.serviceType; },
@@ -28,9 +58,9 @@ var charts = [
     xFunc: function(b){ return b[0].serviceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-reason', {
+  'uof-reason': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.useOfForceReason; },
@@ -39,9 +69,9 @@ var charts = [
     xFunc: function(b){ return b[0].useOfForceReason; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-citizen-weapon', {
+  'uof-citizen-weapon': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.residentWeaponUsed; },
@@ -50,9 +80,9 @@ var charts = [
     xFunc: function(b){ return b[0].residentWeaponUsed; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-map', {
+  'uof-map': {
     chartType: 'map',
     filter: function(b){
       return last12Months(b).filter(function(d){
@@ -65,9 +95,9 @@ var charts = [
     xFunc: function(b){ return b[0].censusTract; },
     y: 'count',
     yFunc: function(b){ return b.length; }
-    }],
+    },
 
-  ['uof-by-shift', {
+  'uof-by-shift': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.shift; },
@@ -76,20 +106,20 @@ var charts = [
     xFunc: function(b){ return b[0].shift; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-by-inc-district', {
+  'uof-by-inc-district': {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.precinct; },
+    keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].precinct; },
+    xFunc: function(b){ return b[0].district; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-force-type', {
+  'uof-force-type': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.officerForceType; },
@@ -98,21 +128,49 @@ var charts = [
     xFunc: function(b){ return b[0].officerForceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['uof-officer-injuries', {
+  'uof-officer-injuries': {
     chartType: 'percent',
-    }],
+    filter: last12Months,
+    keyFunc: function(d){ return d.officerInjured; },
+    x: "injured",
+    xFunc: function (b) { return b.length; },
+    y: "hospitalized",
+    yFunc: function (b){
+      var hospitalizations = b.filter(function(d){
+        return d.officerHospitalized == "true";
+      });
+      return hospitalizations.length;
+    },
+    dataMapAdjust: function (dataMap){
+      dataMap.remove("");
+      dataMap.remove("false");
+      dataMap.get("true").total = last12Months(allRows).length;
+    },
+    },
 
-  ['uof-resident-injuries', {
+  'uof-resident-injuries': {
     chartType: 'percent',
-    }],
+    filter: last12Months,
+    keyFunc: function(d){ return d.residentInjured; },
+    x: "injured",
+    xFunc: function (b) { return b.length; },
+    y: "hospitalized",
+    yFunc: function (b){
+      var hospitalizations = b.filter(function(d){
+        return d.residentHospitalized == "true";
+      });
+      return hospitalizations.length;
+    },
+    dataMapAdjust: function (dataMap){
+      dataMap.remove("");
+      dataMap.remove("false");
+      dataMap.get("true").total = last12Months(allRows).length;
+    },
+    },
 
-  ['uof-dispositions', {
-    chartType: 'percent',
-    }],
-
-  ['uof-disposition-outcomes', {
+  'uof-dispositions': {
     chartType: 'flagHistogram',
     filter: last12Months,
     keyFunc: function(d){ return d.disposition; },
@@ -121,26 +179,104 @@ var charts = [
     xFunc: function(b){ return b[0].disposition; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    }],
+    },
 
-  ['pd-resident-demographics', {
+  'uof-dispositions-outcomes': {
+    },
+
+  'pd-resident-demographics': {
     chartType: 'flagHistogram',
-    }],
+    },
 
-  ['uof-race', {
+  'uof-race': {
     chartType: 'matrix',
-    }],
+    },
 
-  ['uof-per-officer', {
+  'uof-per-officer': {
     chartType: 'flagHistogram',
+    },
 
-    }],
-
-  ['uof-officer-experience', {
+  'uof-officer-experience': {
     chartType: 'flagHistogram',
-    }],
+    filter: last12Months,
+    keyFunc: function(d){ return experienceBuckets(d.officerYearsOfService); },
+    sortWith: function(d){ return parseInt(d.years); },
+    x: 'years',
+    xFunc: function(b){ return experienceBuckets(b[0].officerYearsOfService); },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
 
-];
+  'complaints-by-year': {
+    title: 'Complaints by Year',
+    noTemplate: true,
+    chartType: 'lineChart',
+    keyFunc: function(d){ return d.date.getFullYear(); },
+    dataMapAdjust: addMissingYears,
+    x: 'year',
+    xFunc: function(b){ return b[0].date.getFullYear(); },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-category': {
+    title: 'Complaints by Category',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.category; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].category; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-shift': {
+    title: 'Complaints by Shift',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.shift; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].shift; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-precinct': {
+    title: 'Complaints by Precinct',
+    noTemplate: true,
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.precinct; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].precinct; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-map': {
+    title: 'Complaints by Census Tract',
+    noTemplate: true,
+    chartType: 'map',
+    filter: function(b){
+      return last12Months(b).filter(function(d){
+       if( d.censusTract ){ return true; } else { return false; }
+      });
+    },
+    dontFlatten: true,
+    keyFunc: function(d){ return d.censusTract; },
+    x: 'censusTract',
+    xFunc: function(b){ return b[0].censusTract; },
+    y: 'count',
+    yFunc: function(b){ return b.length; }
+    },
+
+
+};
 
 var currentYear = 2015;
 var defaultNullValue = "NULL";
@@ -190,26 +326,36 @@ function drawChart(rows, config){
   // get the correct function for drawing this chart
   drawingFunction = drawFuncs[config.chartType];
 
+  // if we have no chart block in the database, just make the brick
+  if(config.noTemplate){
+    var brick = d3.select('[role=main]')
+      .append('div').attr("class", "brick");
+    brick.append("h4").attr("class", "brick-title")
+      .text(config.title);
+    config.parent = brick.append("div").attr("class", config.parent)[0][0];
+  }
+
   // run the function to draw the chart
   drawingFunction(config, data);
 }
 
 d3.csv(
-  "/department/1/uof.csv ",
+  csv_url,
   function(error, rows){
     // parse the raw csv data
     var parsed_rows = parseData(rows);
+    allRows = rows;
     console.log("parsed data", parsed_rows);
 
     // deal with each chart configuration
-    charts.forEach(function(config_data){
+    charts.forEach(function(name){
 
       // get configuration
-      var config = config_data[1];
+      var config = configs[name];
 
       if( config.keyFunc ){
         // get class name for parent div
-        config.parent = '.' + config_data[0];
+        config.parent = '.' + name;
         console.log("making", config.parent, "with", config);
         drawChart(parsed_rows, config);
       }
@@ -286,6 +432,7 @@ function structureData(parsed_rows, config){
 drawFuncs = {
   'lineChart': lineChart,
   'map': mapChart,
+  'percent': basicPercent,
   'flagHistogram': flagHistogram,
   'mountainHistogram': mountainHistogram,
 }

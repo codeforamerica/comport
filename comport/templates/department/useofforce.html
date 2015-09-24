@@ -74,6 +74,26 @@
 {% endblock content %}
 
 {% block js %}
+<script type="text/javascript">
+var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
+var charts = [
+  'uof-by-year',
+  'uof-type-of-call',
+  'uof-reason',
+  'uof-citizen-weapon',
+  'uof-by-shift',
+  'uof-by-inc-district',
+  'uof-map',
+  'uof-force-type',
+  'uof-officer-injuries',
+  'uof-resident-injuries',
+  'uof-dispositions',
+  'pd-resident-demographics',
+  'uof-race',
+  'uof-per-officer',
+  'uof-officer-experience',
+];
+</script>
 <script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>

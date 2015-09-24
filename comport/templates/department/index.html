@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block css %}
+  <link href="/static/css/charts.css" rel="stylesheet">
+{% endblock css %}
+
 {% block content %}
 <form id="indexContentForm" class="form form-register" method="POST" action="" role="form">
   {{ form.hidden_tag() }}
@@ -7,7 +11,7 @@
 
   <h2>Letter from the Chief</h2>
   <div class="department">
-    <img src="/static/img/chief.jpg" alt="An image of the departmet spokesperson" class="department-spokesperson">
+    <img src="/static/img/chief.jpg" alt="An image of the department spokesperson" class="department-spokesperson">
     <div class="department-statement form-group">
         {{form.why_we_are_doing_this(class_="form-control")}}
     </div>
@@ -21,8 +25,13 @@
 
 <h3>Use of force</h3>
 
+<div class="chart-previews">
+  <div class="chart uof-by-year"></div>
+  <div class="chart uof-by-reason"></div>
+</div>
+
 <p>Two sentences about this data set</p>
-<p>Two charts highlighting this data set</p>
+
 
 <h3>Officer-involved shootings</h3>
 
@@ -86,6 +95,20 @@
 <a href="/content/link/new">New Link</a>
 
 {% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+var charts = [
+  'uof-by-year',
+  'uof-reason',
+];
+</script>
+<script type="text/javascript" src="/static/js/map.js"></script>
+<script type="text/javascript" src="/static/js/histogram.js"></script>
+<script type="text/javascript" src="/static/js/lineChart.js"></script>
+<script type="text/javascript" src="/static/js/charts.js"></script>
+
+{% endblock js %}
 
 {% block footer %}
     <small>
