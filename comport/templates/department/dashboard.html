@@ -1,39 +1,86 @@
-{% extends "layout.html" %}
-{% block content %}
-    <h1>{{department.name}}</h1>
+{% extends "layout.html" %} {% block content %}
+<h1>{{department.name}}</h1>
+<div class="row">
+  <div class="col-md-4">
     <div class="row">
-      <div class="col-md-4">
-          <h4>Setup Extraction</h4>
-          {% if department.get_extractor() == None %}
-          <div class="input-group">
-            <form action="{{department.id}}/activate" method="post">
-              <input class="form-control" type="submit" name="submit" value="Activate">
-            </form>
-          </div>
-          {% else %}
-          <div class="input-group">
-            <form action="{{department.id}}/activate" method="post">
-              <input class="form-control" type="submit" name="submit" value="Regenerate">
-            </form>
-          </div>
-          {% endif %}
+      <div class="col-md-12">
+        <h4>Setup Extraction</h4>
+        {% if department.get_extractor() == None %}
+        <div class="input-group">
+          <form action="{{department.id}}/activate" method="post">
+            <input class="form-control" type="submit" name="submit" value="Activate">
+          </form>
         </div>
+        {% else %}
+        <div class="input-group">
+          <form action="{{department.id}}/activate" method="post">
+            <input class="form-control" type="submit" name="submit" value="Regenerate">
+          </form>
+        </div>
+        {% endif %}
+      </div>
     </div>
-    </br>
-      {% if department.get_extractor() != None %}
-        <div class="row">
-          <div class="col-md-4">
-              <form class="form-inline" action="{{department.id}}/start" method="post">
-                <div class="form-group">
-                  <h4>Start Extraction</h4>
-                  <label for="startMonth">Month</label>
-                  <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12">
-                  <label for="startYear">Year</label>
-                  <input class="form-control" id="startYear" type="number" name="year" min="2000" max={{current_year}}>
-                  <input class="form-control" type="submit" name="submit" value="Start">
-                </div>
-              </form>
+    {% if department.get_extractor() != None %}
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline" action="{{department.id}}/start" method="post">
+          <div class="form-group">
+            <h4>Start Extraction</h4>
+            <label for="startMonth">Month</label>
+            <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12">
+            <label for="startYear">Year</label>
+            <input class="form-control" id="startYear" type="number" name="year" min="2000" max={{current_year}}>
+            <input class="form-control" type="submit" name="submit" value="Start">
           </div>
-        </div>
-      {% endif %}
+        </form>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <div class="col-md-8">
+    <table class="table">
+      <tr>
+        <th>
+          Page
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Index
+        </td>
+        <td>
+          <a href="{{department.id}}/site/index">Edit</a>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Use of Force
+        </td>
+        <td>
+          <a href="{{department.id}}/site/useofforce">Edit</a>
+        </td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Complaints
+        </td>
+        <td>
+          <a href="{{department.id}}/site/complaints">Edit</a>
+        </td>
+        <td>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</br>
+
 {% endblock %}
