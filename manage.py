@@ -12,11 +12,13 @@ from comport.department.models import Department, Extractor
 from comport.content.models import Link
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
-from comport.utils import random_string, parse_date, diff_month
-from comport.data.models import UseOfForceIncident
+from comport.utils import random_string, parse_date, diff_month, parse_csv_date
+from comport.data.models import UseOfForceIncident, CitizenComplaint
 from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
 import json
+import glob
 import csv
+import hashlib
 from datetime import datetime
 
 if os.environ.get("COMPORT_ENV") == 'prod':
@@ -57,21 +59,35 @@ def make_admin_user():
 @manager.command
 def load_test_data():
     add_chart_block_defaults()
-    department = Department.query.filter_by(name="Busy Town Public Safety").first()
+    department = Department.query.filter_by(name="IMPD").first()
     if not department:
-        department = Department.create(name="Busy Town Public Safety")
+        department = Department.create(name="IMPD")
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
-    with open('comport/testData/UOF.csv', 'rt') as f:
-        reader = csv.DictReader(f)
-        for incident in reader:
-            occured_date = parse_date(incident["OCCURRED_DT"])
-            UseOfForceIncident.create(opaque_id=random_string(6),
-                service_type=incident["SERVICE_TYPE"],
-                occured_date=occured_date,
-                use_of_force_reason=incident["UOF_REASON"],
-                census_tract=None,
-                department_id=department.id)
+
+    for filename in glob.glob('data/testdata/complaints/*.csv'):
+        with open(filename, 'rt') as f:
+            reader = csv.DictReader(f)
+            for complaint in reader:
+                officer_identifier = hashlib.md5(complaint.get("IDENT", None).encode('UTF-8')).hexdigest()
+                CitizenComplaint.create(opaque_id=random_string(6),
+                    department_id = department.id,
+                    occured_date = parse_csv_date(complaint.get("OCCURRED", None)),
+                    division = None,
+                    precinct = complaint.get("UNIT", None),
+                    shift = None,
+                    beat = None,
+                    disposition = complaint.get("DISPOSITION", None),
+                    category = complaint.get("CATEGORY", None),
+                    census_tract = None,
+                    resident_race = complaint.get("C RACE", None),
+                    officer_race = complaint.get("O RACE", None),
+                    resident_sex = complaint.get("C SEX", None),
+                    officer_sex = complaint.get("O SEX", None),
+                    officer_identifier = officer_identifier,
+                    officer_years_of_service = None
+                )
+
 
 @manager.command
 def make_test_data():

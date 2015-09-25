@@ -2,7 +2,7 @@
 """Helper utilities and decorators."""
 from flask import flash
 import string
-from random import randint, random
+from random import randint, random, choice
 from datetime import datetime, timedelta
 from factory.fuzzy import _random
 
@@ -15,13 +15,19 @@ def flash_errors(form, category="warning"):
                   .format(getattr(form, field).label.text, error), category)
 
 def random_string(N):
-    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+    return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 def factory_random_string(N):
     return ''.join(_random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 def parse_date(date):
     return None if date == 'NULL' else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+
+def parse_csv_date(date):
+    try:
+        return None if date == 'NULL' else datetime.strptime(date, '%m/%d/%y')
+    except ValueError:
+        print("can't parse" + date)
 
 def random_date(start, end):
     return start + timedelta(
