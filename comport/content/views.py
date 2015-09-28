@@ -20,7 +20,7 @@ def add_link():
         Link.create(title=form.title.data, url=form.url.data, department_id=department_id, type=form.type.data)
         flash("Created.", 'success')
         return redirect(url_for(
-            'department.index', department_id=department_id
+            'department.edit_index', department_id=department_id
         ))
     else:
         flash_errors(form)
@@ -45,7 +45,7 @@ def edit_link(link_id):
 
         flash("Updated.", 'success')
         return redirect(url_for(
-            'department.index', department_id=department_id
+            'department.edit_index', department_id=department_id
         ))
     else:
         flash_errors(form)

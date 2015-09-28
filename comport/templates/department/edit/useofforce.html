@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block css %}
+  <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+  <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+  <link href="/static/css/charts.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<h1>{{department.name}}</h1>
+
+<h3>Use of Force</h3>
+
+{% with brick = chart_blocks['uof-by-year']  %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-type-of-call'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-reason'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-citizen-weapon'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-by-shift'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-by-inc-district'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-map'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-force-type'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-officer-injuries'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-resident-injuries'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-dispositions'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['pd-resident-demographics'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-race'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-per-officer'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% with brick = chart_blocks['uof-officer-experience'] %}
+{% include "department/edit/chart_block.html" %}
+{% endwith %}
+
+{% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
+var charts = [
+  'uof-by-year',
+  'uof-type-of-call',
+  'uof-reason',
+  'uof-citizen-weapon',
+  'uof-by-shift',
+  'uof-by-inc-district',
+  'uof-map',
+  'uof-force-type',
+  'uof-officer-injuries',
+  'uof-resident-injuries',
+  'uof-dispositions',
+  'pd-resident-demographics',
+  'uof-race',
+  'uof-per-officer',
+  'uof-officer-experience',
+];
+</script>
+<script type="text/javascript" src="/static/js/map.js"></script>
+<script type="text/javascript" src="/static/js/histogram.js"></script>
+<script type="text/javascript" src="/static/js/lineChart.js"></script>
+<script type="text/javascript" src="/static/js/charts.js"></script>
+
+{% endblock js %}

@@ -61,29 +61,29 @@ def start_extractor(department_id):
             flash("Extractor started", "info")
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
-#<<<<<<<< SITE ENDPOINTS >>>>>>>>>>
-@blueprint.route("/<int:department_id>/site/useofforce")
+#<<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
+@blueprint.route("/<int:department_id>/edit/useofforce")
 @login_required
 @admin_or_department_required()
-def use_of_force(department_id):
+def edit_use_of_force(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
+    return render_template("department/edit/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
 
-@blueprint.route("/<int:department_id>/site/complaints")
+@blueprint.route("/<int:department_id>/edit/complaints")
 @login_required
 @admin_or_department_required()
-def complaints(department_id):
+def edit_complaints(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/complaints.html", department=department, chart_blocks=department.get_complaint_blocks())
+    return render_template("department/edit/complaints.html", department=department, chart_blocks=department.get_complaint_blocks())
 
-@blueprint.route("/<int:department_id>/site/index",methods=["GET","POST"])
+@blueprint.route("/<int:department_id>/edit/index",methods=["GET","POST"])
 @login_required
 @admin_or_department_required()
-def index(department_id):
+def edit_index(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
@@ -100,7 +100,36 @@ def index(department_id):
         flash_errors(form)
 
     form.why_we_are_doing_this.data = department.why_we_are_doing_this
-    return render_template("department/index.html", form=form, department=department)
+    return render_template("department/edit/index.html", form=form, department=department)
+
+
+#<<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
+@blueprint.route("/<int:department_id>/preview/useofforce")
+@login_required
+@admin_or_department_required()
+def preview_use_of_force(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks())
+
+@blueprint.route("/<int:department_id>/preview/complaints")
+@login_required
+@admin_or_department_required()
+def preview_complaints(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks())
+
+@blueprint.route("/<int:department_id>/preview/index",methods=["GET","POST"])
+@login_required
+@admin_or_department_required()
+def preview_index(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/index.html", department=department)
 
 
 
