@@ -1,6 +1,50 @@
 
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Welcome {{ session.username }}</h1>
-    <h3>This is the admin-only page.</h3>
+    <h1>Admin Dashboard</h1>
+    <table class="table">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Location
+        </th>
+        <th>
+          Agency
+        </th>
+        <th>
+          Phone
+        </th>
+        <th>
+          Email
+        </th>
+        <th>
+          Comments
+        </th>
+      </tr>
+      {% for interested in interesteds %}
+      <tr>
+        <td>
+          {{interested.name}}
+        </td>
+        <td>
+          {{interested.location}}
+        </td>
+        <td>
+          {{interested.agency}}
+        </td>
+        <td>
+          {{interested.phone}}
+        </td>
+        <td>
+          {{interested.email}}
+        </td>
+        <td>
+          {{interested.comments}}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
 {% endblock %}
