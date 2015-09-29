@@ -209,8 +209,6 @@ var configs = {
     },
 
   'complaints-by-year': {
-    title: 'Complaints by Year',
-    noTemplate: true,
     chartType: 'lineChart',
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
@@ -221,8 +219,6 @@ var configs = {
     },
 
   'complaints-by-category': {
-    title: 'Complaints by Category',
-    noTemplate: true,
     filter: last12Months,
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.category; },
@@ -234,8 +230,6 @@ var configs = {
     },
 
   'complaints-by-precinct': {
-    title: 'Complaints by Precinct',
-    noTemplate: true,
     filter: last12Months,
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.precinct; },
@@ -247,8 +241,6 @@ var configs = {
     },
 
   'complaints-by-disposition': {
-    title: 'Complaints by Disposition',
-    noTemplate: true,
     filter: last12Months,
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.disposition; },
@@ -260,8 +252,6 @@ var configs = {
     },
 
   'complaints-by-race': {
-    title: 'Complaints by Race',
-    noTemplate: true,
     filter: last12Months,
     chartType: 'matrix',
     x: 'residentRace',

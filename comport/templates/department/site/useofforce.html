@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "department/site/chart_block.html" import brick %}
 
 {% block css %}
   <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
@@ -11,65 +12,35 @@
 
 <h3>Use of Force</h3>
 
-{% with brick = chart_blocks['uof-by-year']  %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-by-year'] ) }}
 
-{% with brick = chart_blocks['uof-type-of-call'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-type-of-call'] ) }}
 
-{% with brick = chart_blocks['uof-reason'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-reason'] ) }}
 
-{% with brick = chart_blocks['uof-citizen-weapon'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-citizen-weapon'] ) }}
 
-{% with brick = chart_blocks['uof-by-shift'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-by-shift'] ) }}
 
-{% with brick = chart_blocks['uof-by-inc-district'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-by-inc-district'] ) }}
 
-{% with brick = chart_blocks['uof-map'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-map'] ) }}
 
-{% with brick = chart_blocks['uof-force-type'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-force-type'] ) }}
 
-{% with brick = chart_blocks['uof-officer-injuries'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-officer-injuries'] ) }}
 
-{% with brick = chart_blocks['uof-resident-injuries'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-resident-injuries'] ) }}
 
-{% with brick = chart_blocks['uof-dispositions'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-dispositions'] ) }}
 
-{% with brick = chart_blocks['pd-resident-demographics'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['pd-resident-demographics'] ) }}
 
-{% with brick = chart_blocks['uof-race'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-race'] ) }}
 
-{% with brick = chart_blocks['uof-per-officer'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-per-officer'] ) }}
 
-{% with brick = chart_blocks['uof-officer-experience'] %}
-{% include "department/site/chart_block.html" %}
-{% endwith %}
+{{ brick( chart_blocks['uof-officer-experience'] ) }}
 
 {% endblock content %}
 

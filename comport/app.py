@@ -12,7 +12,10 @@ from comport.extensions import (
     migrate,
     debug_toolbar,
 )
-from comport import public, user, admin, department, data, content, interest
+from comport import (
+        public, user, admin, department, data, content, interest,
+        template_globals
+        )
 from flask_sslify import SSLify
 
 
@@ -28,6 +31,7 @@ def create_app(config_object=ProdConfig):
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
+    register_template_globals(app)
     return app
 
 
@@ -41,7 +45,6 @@ def register_extensions(app):
     migrate.init_app(app, db)
     return None
 
-
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
@@ -52,7 +55,6 @@ def register_blueprints(app):
     app.register_blueprint(interest.views.blueprint)
     return None
 
-
 def register_errorhandlers(app):
     def render_error(error):
         # If a HTTPException, pull the `code` attribute; default to 500
@@ -61,3 +63,7 @@ def register_errorhandlers(app):
     for errcode in [401, 404, 500]:
         app.errorhandler(errcode)(render_error)
     return None
+
+def register_template_globals(app):
+    app.jinja_env.globals.update(markdown=template_globals.markdown)
+

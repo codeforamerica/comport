@@ -37,7 +37,7 @@ class Department(SurrogatePK, Model):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])
 
     def get_complaint_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Citizen Complaint"])
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "complaints"])
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))

@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "department/site/chart_block.html" import brick %}
 
 {% block css %}
   <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
@@ -11,6 +12,10 @@
 
 <h3>Citizen Complaints</h3>
 
+{{ brick( chart_blocks['complaints-by-year'] ) }}
+{{ brick( chart_blocks['complaints-by-category'] ) }}
+{{ brick( chart_blocks['complaints-by-disposition'] ) }}
+
 {% endblock content %}
 
 {% block js %}
@@ -19,8 +24,8 @@ var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
 var charts = [
   'complaints-by-year',
   'complaints-by-category',
-  'complaints-by-precinct',
   'complaints-by-disposition',
+  'complaints-by-precinct',
 ];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>
