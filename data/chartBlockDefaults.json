@@ -130,6 +130,36 @@
   "slug": "complaints-by-category",
   "dataset": "complaints",
   "content": "Most complaints fall into several major categories: inappropriate use of force, profiling, K9 incidents, inappropriate conduct (such as inappropriate language, rudeness, mistreatment), and procedural violations (improperly filed report, off duty work, involvement in personal disputes)."
+},
+
+{"title": "Demographics of Complainants and Officers",
+  "caption": "",
+  "slug": "complaints-by-race",
+  "dataset": "complaints",
+  "content": "Racial Profiling is addressed in many classes throughout IMPD's academy. It is defined and prohibited in the cultural awareness class. It is defined and prohibited in the general order class as it is outlined in General Order 1.2, Racial Profiling. IMPD trains on criminal law and its requirements pertaining to reasonable suspicion and probable cause. Ethical decision making is a topic of training as well. For more on IMPD training, see these [[link: sample training schedules]]."
+},
+
+{"title": "Demographics of Complainants and Officers",
+  "caption": "",
+  "slug": "complaints-by-sex",
+  "dataset": "complaints",
+  "content": ""
+},
+
+{"title": "Demographics of Complainants and Officers",
+  "caption": "",
+  "slug": "officers-by-sex",
+  "dataset": "complaints",
+  "content": ""
+},
+
+{"title": "Complaints by Officer",
+  "caption": "",
+  "slug": "complaints-by-officer",
+  "dataset": "complaints",
+  "content": "When allegations are sustained, the Chief of Police will take the appropriate disciplinary action. If allegations are found to be not sustained, the officer's name is submitted to IMPD's Early Warning system. In addition, the CPCO monitors complaint frequency, and notifies IMPD Commanders if their district reaches 5 complaints within a month."
 }
+
+
 
 ]
