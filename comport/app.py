@@ -12,7 +12,7 @@ from comport.extensions import (
     migrate,
     debug_toolbar,
 )
-from comport import public, user, admin, department, data, content
+from comport import public, user, admin, department, data, content, interest
 from flask_sslify import SSLify
 
 
@@ -49,6 +49,7 @@ def register_blueprints(app):
     app.register_blueprint(department.views.blueprint)
     app.register_blueprint(data.views.blueprint)
     app.register_blueprint(content.views.blueprint)
+    app.register_blueprint(interest.views.blueprint)
     return None
 
 
