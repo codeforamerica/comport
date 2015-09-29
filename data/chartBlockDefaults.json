@@ -116,7 +116,20 @@
   "slug": "uof-dispositions",
   "dataset": "Use of Force",
   "content": ""
-}
+},
 
+{"title": "Annual citizen complaints about officers",
+  "caption": "",
+  "slug": "complaints-by-year",
+  "dataset": "Complaints",
+  "content": "For the past 7 years, citizens have submitted between 68-178 complaints about officers each year, with an average of 104 per year. This April, the complaints office launched an online complaints form that made it easier for citizens to share their experiences. We have not seen a major increase in complaints due to making the process easier."
+},
+
+{"title": "Types of Complaints",
+  "caption": "",
+  "slug": "complaints-by-category",
+  "dataset": "complaints",
+  "content": "Most complaints fall into several major categories: inappropriate use of force, profiling, K9 incidents, inappropriate conduct (such as inappropriate language, rudeness, mistreatment), and procedural violations (improperly filed report, off duty work, involvement in personal disputes)."
+}
 
 ]
