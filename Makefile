@@ -14,3 +14,7 @@ test_data:
 	python manage.py delete_everything
 	python manage.py make_test_data
 
+real_data:
+	python manage.py delete_everything
+	python manage.py load_test_data
+

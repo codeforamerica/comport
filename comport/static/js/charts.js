@@ -2,7 +2,8 @@ var allRows;
 
 function last12Months(rows){
   // offset today by 12 d3-defined months in the past
-  var startDate = d3.time.month.offset(new Date(), -12);
+  var latestDate = d3.max(rows, function(d){ return d.date; })
+  var startDate = d3.time.month.offset(latestDate, -12);
   console.log("startDate", startDate);
   return rows.filter(function(r){
     return startDate < r.date;
@@ -222,8 +223,8 @@ var configs = {
   'complaints-by-category': {
     title: 'Complaints by Category',
     noTemplate: true,
-    chartType: 'flagHistogram',
     filter: last12Months,
+    chartType: 'flagHistogram',
     keyFunc: function(d){ return d.category; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
@@ -232,24 +233,11 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  'complaints-by-shift': {
-    title: 'Complaints by Shift',
-    noTemplate: true,
-    chartType: 'flagHistogram',
-    filter: last12Months,
-    keyFunc: function(d){ return d.shift; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].shift; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    },
-
   'complaints-by-precinct': {
     title: 'Complaints by Precinct',
     noTemplate: true,
-    chartType: 'flagHistogram',
     filter: last12Months,
+    chartType: 'flagHistogram',
     keyFunc: function(d){ return d.precinct; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
@@ -258,23 +246,28 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  'complaints-map': {
-    title: 'Complaints by Census Tract',
+  'complaints-by-disposition': {
+    title: 'Complaints by Disposition',
     noTemplate: true,
-    chartType: 'map',
-    filter: function(b){
-      return last12Months(b).filter(function(d){
-       if( d.censusTract ){ return true; } else { return false; }
-      });
-    },
-    dontFlatten: true,
-    keyFunc: function(d){ return d.censusTract; },
-    x: 'censusTract',
-    xFunc: function(b){ return b[0].censusTract; },
+    filter: last12Months,
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.disposition; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].disposition; },
     y: 'count',
-    yFunc: function(b){ return b.length; }
+    yFunc: function(b){ return b.length; },
     },
 
+  'complaints-by-race': {
+    title: 'Complaints by Race',
+    noTemplate: true,
+    filter: last12Months,
+    chartType: 'matrix',
+    x: 'residentRace',
+    y: 'officerRace',
+    keyFunc: function(d){ return d.disposition; },
+  }
 
 };
 
@@ -435,4 +428,5 @@ drawFuncs = {
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
   'mountainHistogram': mountainHistogram,
+  //'matrix': matrixChart,
 }

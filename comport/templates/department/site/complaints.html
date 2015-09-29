@@ -11,7 +11,6 @@
 
 <h3>Citizen Complaints</h3>
 
-
 {% endblock content %}
 
 {% block js %}
@@ -20,9 +19,8 @@ var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
 var charts = [
   'complaints-by-year',
   'complaints-by-category',
-  'complaints-by-shift',
   'complaints-by-precinct',
-  'complaints-map',
+  'complaints-by-disposition',
 ];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>
