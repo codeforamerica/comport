@@ -37,16 +37,13 @@ function flagHistogram(config, data){
 
   // set basic dimensions
   // we need a width, a height for each
-  var height,
-      width,
+  var width,
       margin,
       barHeight,
       font_size;
 
   font_size = 14; // px
-  barHeight = 5; 
-  height = (data.length * barHeight);
-  width = 20
+  width = 12;
   
   // set y axis scale
   var yScale = d3.scale.linear()

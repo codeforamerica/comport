@@ -6,17 +6,13 @@
       <div class="col-md-12">
         <h4>Setup Extraction</h4>
         {% if department.get_extractor() == None %}
-        <div class="input-group">
           <form action="{{department.id}}/activate" method="post">
-            <input class="form-control" type="submit" name="submit" value="Activate">
+            <button class="action-button-big" type="submit" name="submit">Activate</button>
           </form>
-        </div>
         {% else %}
-        <div class="input-group">
-          <form action="{{department.id}}/activate" method="post">
-            <input class="form-control" type="submit" name="submit" value="Regenerate">
-          </form>
-        </div>
+        <form action="{{department.id}}/activate" method="post">
+          <button class="action-button-big" type="submit" name="submit">Regenerate</button>
+        </form>
         {% endif %}
       </div>
     </div>

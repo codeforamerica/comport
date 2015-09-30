@@ -4,12 +4,113 @@
 
 /* universal */
 
-html {
-  overflow-y: scroll;
+html { overflow-y: scroll; 
+  font-size: 17px;
+  line-height: 26px;
 }
 
+body { padding-top: 60px; }
+
+/* COLORS
+ */
+.navbar-inverse {
+  background-color: #112e51;
+  color: #fff;
+}
+.navbar-inverse .navbar-brand { color: inherit; }
+.navbar-inverse .navbar-text { color: inherit; }
+.navbar-inverse .navbar-link { color: inherit; }
+.navbar-inverse .navbar-nav > li > a { color: inherit; }
+
+/* TYPOGRAPHY
+ * https://playbook.cio.gov/designstandards/visual-style/#typography
+ */
+
+/* Merriweather bold headings
+ */
+h1, h2, h3, h4, h5 {
+  font-family: Merriweather, Georgia, serif;
+  font-weight: 700;
+}
+.display, .display h1 { font-size: 52px; line-height: 68px; }
+h1 { font-size: 40px; line-height: 52px; }
+h2 { font-size: 30px; line-height: 39px; }
+h3 { font-size: 20px; line-height: 26px; }
+h4 { font-size: 17px; line-height: 22px; }
+h5 { font-size: 15px; line-height: 20px; }
+
+/* Source Sans Pro body */
 body {
-  padding-top: 60px;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+/* LAYOUT
+ */
+.container {
+  width: 40rem;
+}
+p { margin-bottom: 0.5rem;
+    width: 32rem; }
+
+.aside, .lead {
+  font-family: Merriweather, Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 34px; 
+  margin: 0.7em 0 0.7em 0;
+  padding: 0.7em 0;
+}
+
+.aside {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+}
+
+p + p {
+  margin-top: 0.7em;
+}
+
+.display {
+  padding: 1.7em 0 0.7em 0;
+  width: 40rem;
+}
+
+.navbar-nav {
+  font-size: 20px;
+  line-height: 50px;
+  font-weight: 400;
+}
+
+.navbar-brand {
+  font-size: 20px;
+  line-height: 50px;
+}
+
+@media (min-width: 768px) {
+  .navbar-header {
+    margin-left: 3rem;
+  }
+  .navbar-nav.navbar-right:last-child {
+    margin-right: 3rem;
+  }
+  .navbar-nav > li > a {
+    line-height: inherit;
+    padding: 0;
+  }
+  ul.navbar-nav > li + li {
+    margin-left: 1rem;
+  }
+
+  .navbar-brand {
+    height: auto;
+    padding: 0;
+  }
+  .navbar-text, .navbar-link {
+    margin: 0; padding: 0;
+  }
 }
 
 section {
@@ -26,6 +127,35 @@ textarea {
 }
 
 /* Forms */
+
+.form-group {
+  width: 32rem;
+}
+
+button {
+  background-color: #0071bc;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+  margin: 0.5rem 0;
+  padding: 0.3em 0.5em;
+}
+button:hover {
+  background-color: #205493;
+}
+button:active {
+  background-color: #112e51;
+}
+.action-button-big {
+  display: block;
+  width: 100%;
+}
+
+.action-button-huge {
+  width: 100%;
+  font-size: 20px;
+  line-height: 34px; 
+}
 
 .navbar-form input[type="text"],
 .navbar-form input[type="password"] {

@@ -216,6 +216,9 @@ var configs = {
     xFunc: function(b){ return b[0].date.getFullYear(); },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    postDraw: function(){
+      // add note to final year
+    }
     },
 
   'complaints-by-category': {

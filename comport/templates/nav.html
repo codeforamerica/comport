@@ -1,6 +1,5 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container">
 
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -25,7 +24,7 @@
     {% if current_user and current_user.is_authenticated() %}
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <p class="navbar-text"><a class="navbar-link" href="{{ url_for('user.home') }}">Logged in as {{ current_user.username }}</a></p>
+            <span class="navbar-text"><a class="navbar-link" href="{{ url_for('user.home') }}">Logged in as {{ current_user.username }}</a></span>
         </li>
         <li><a class="navbar-link" href="{{ url_for('public.logout') }}"><i class="fa fa-sign-out"></i></a></li>
 
@@ -44,5 +43,4 @@
     </form>
     {% endif %}
   </div><!-- /.navbar-collapse -->
-  </div><!-- /.container -->
 </nav>

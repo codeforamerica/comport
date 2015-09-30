@@ -8,9 +8,9 @@ function lineChart(config, data){
       xWidth,
       dot_radius,
       font_size;
-  margin = { top: 2, right: 2, bottom: 3, left: 2 };
+  margin = { top: 2, right: 3, bottom: 3, left: 2 };
   font_size = 14; // px
-  xWidth = 5;
+  xWidth = 4;
   height = 8;
   width = (data.length * xWidth);
   dot_radius = 0.5;
