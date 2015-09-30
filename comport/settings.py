@@ -21,6 +21,7 @@ class ProdConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os_env.get('DATABASE_URL','postgresql://localhost/comport')
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
+    ASSETS_DEBUG = True 
 
 
 class DevConfig(Config):
