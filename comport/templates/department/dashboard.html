@@ -7,11 +7,11 @@
         <h4>Setup Extraction</h4>
         {% if department.get_extractor() == None %}
           <form action="{{department.id}}/activate" method="post">
-            <button class="action-button-big" type="submit" name="submit">Activate</button>
+            <button class="action-button-big" type="submit" name="submit" value="Activate">Activate</button>
           </form>
         {% else %}
         <form action="{{department.id}}/activate" method="post">
-          <button class="action-button-big" type="submit" name="submit">Regenerate</button>
+          <button class="action-button-big" type="submit" name="submit" value="Regenerate">Regenerate</button>
         </form>
         {% endif %}
       </div>
@@ -20,7 +20,7 @@
     <div class="row">
       <div class="col-md-12">
         <form class="form-inline" action="{{department.id}}/start" method="post">
-          <div class="form-group">
+          <div>
             <h4>Start Extraction</h4>
             <label for="startMonth">Month</label>
             <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12">

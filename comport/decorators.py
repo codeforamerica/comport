@@ -48,7 +48,7 @@ def extractor_auth_required():
             found_extractor = Extractor.query.filter_by(username=username).first()
 
             if not found_extractor or not found_extractor.check_password(password):
-                abort(401)
+                return ("Extractor authorization failed.", 401)
 
             return view_function(*args, **kwargs)
         return decorated_function

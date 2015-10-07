@@ -32,32 +32,66 @@ def use_of_force():
     updated_rows = 0
 
     for incident in j['data']:
-
+        print(incident)
         found_incident = UseOfForceIncident.query.filter_by(opaque_id=incident["opaqueId"]).first()
 
         occured_date = parse_date(incident["occuredDate"])
-        received_date = parse_date(incident["receivedDate"])
 
         if not found_incident:
-
             found_incident = UseOfForceIncident.create(
-                opaque_id=incident["opaqueId"],
-                service_type=incident["serviceType"],
-                occured_date = occured_date,
-                received_date = received_date,
-                use_of_force_reason = incident["useOfForceReason"],
-                citizen_weapon = incident["citizenWeapon"],
-                census_tract = incident["censusTract"],
-                department_id=extractor.department_id)
+                    department_id = extractor.department_id,
+                    opaque_id = incident["opaqueId"],
+                    occured_date = occured_date,
+                    division = incident["division"],
+                    precinct =incident["precinct"],
+                    shift = incident["shift"],
+                    beat =incident["beat"],
+                    disposition =incident["disposition"],
+                    census_tract = None,
+                    officer_force_type =incident["officerForceType"],
+                    resident_resist_type =incident["residentResistType"],
+                    officer_weapon_used =incident["officerWeaponUsed"],
+                    resident_weapon_used =incident["residentWeaponUsed"],
+                    service_type =incident["serviceType"],
+                    arrest_made =incident["arrestMade"],
+                    arrest_charges =incident["arrestCharges"],
+                    resident_injured =incident["residentInjured"],
+                    resident_hospitalized =incident["residentHospitalized"],
+                    officer_injured =incident["officerInjured"],
+                    officer_hospitalized =incident["officerHospitalized"],
+                    use_of_force_reason =incident["useOfForceReason"],
+                    resident_race =incident["residentRace"],
+                    officer_race =incident["officerRace"],
+                    officer_identifier =incident["officerIdentifier"],
+                    officer_years_of_service =incident["officerYearsOfService"])
             added_rows += 1
             continue
 
-        found_incident.service_type = incident["serviceType"]
-        found_incident.occured_date = occured_date
-        found_incident.received_date = received_date
-        found_incident.use_of_force_reason = incident["useOfForceReason"]
-        found_incident.citizen_weapon = incident["citizenWeapon"]
-        found_incident.census_tract = incident["censusTract"]
+        found_incident.department_id = extractor.department_id
+        found_incident.opaque_id = incident["opaqueId"],
+        found_incident.occured_date = occured_date,
+        found_incident.division = incident["division"],
+        found_incident.precinct =incident["precinct"],
+        found_incident.shift = incident["shift"],
+        found_incident.beat =incident["beat"],
+        found_incident.disposition =incident["disposition"],
+        found_incident.census_tract = None,
+        found_incident.officer_force_type =incident["officerForceType"],
+        found_incident.resident_resist_type =incident["residentResistType"],
+        found_incident.officer_weapon_used =incident["officerWeaponUsed"],
+        found_incident.resident_weapon_used =incident["residentWeaponUsed"],
+        found_incident.service_type =incident["serviceType"],
+        found_incident.arrest_made =incident["arrestMade"],
+        found_incident.arrest_charges =incident["arrestCharges"],
+        found_incident.resident_injured =incident["residentInjured"],
+        found_incident.resident_hospitalized =incident["residentHospitalized"],
+        found_incident.officer_injured =incident["officerInjured"],
+        found_incident.officer_hospitalized =incident["officerHospitalized"],
+        found_incident.use_of_force_reason =incident["useOfForceReason"],
+        found_incident.resident_race =incident["residentRace"],
+        found_incident.officer_race =incident["officerRace"],
+        found_incident.officer_identifier =incident["officerIdentifier"],
+        found_incident.officer_years_of_service =incident["officerYearsOfService"]
         found_incident.save()
         updated_rows += 1
 

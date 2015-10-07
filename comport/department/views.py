@@ -40,9 +40,7 @@ def activate_extractor(department_id):
             password = str(uuid.uuid4())
             extractor.set_password(password)
             extractor.save()
-
             envs = extractor.generate_envs(password=password)
-
             return render_template("department/extractorEnvs.html", department=department, envs=envs)
 
 @blueprint.route("/<int:department_id>/start", methods=['POST'])
