@@ -4,7 +4,7 @@ from comport.utils import flash_errors
 from flask.ext.login import login_required
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import UseOfForceIncident
+from comport.data.models import UseOfForceIncident, CitizenComplaint
 from comport.utils import parse_date
 import json
 
@@ -92,6 +92,66 @@ def use_of_force():
         found_incident.officer_race =incident["officerRace"],
         found_incident.officer_identifier =incident["officerIdentifier"],
         found_incident.officer_years_of_service =incident["officerYearsOfService"]
+        found_incident.save()
+        updated_rows += 1
+
+    extractor.next_month = None
+    extractor.next_year = None
+    extractor.save()
+    return json.dumps({"added": added_rows, "updated": updated_rows})
+
+@blueprint.route("/complaints", methods=['POST'])
+@extractor_auth_required()
+def complaints():
+    username = request.authorization.username
+    extractor = Extractor.query.filter_by(username=username).first()
+    j = request.json
+    added_rows = 0
+    updated_rows = 0
+
+    for incident in j['data']:
+        print(incident)
+        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"]).first()
+
+        occured_date = parse_date(incident["occuredDate"])
+
+        if not found_incident:
+            found_incident = CitizenComplaint.create(
+                    department_id = extractor.department_id,
+                    opaque_id = incident["opaqueId"],
+                    occured_date = occured_date,
+                    division = incident["division"],
+                    precinct =incident["precinct"],
+                    shift = incident["shift"],
+                    beat =incident["beat"],
+                    disposition =incident["disposition"],
+                    category = None,
+                    census_tract = None,
+                    resident_race =incident["residentRace"],
+                    officer_race =incident["officerRace"],
+                    resident_sex =incident["residentSex"],
+                    officer_sex =incident["officerSex"],
+                    officer_identifier =incident["officerIdentifier"],
+                    officer_years_of_service =incident["officerYearsOfService"])
+            added_rows += 1
+            continue
+
+        found_incident = department_id = extractor.department_id,
+        found_incident = opaque_id = incident["opaqueId"],
+        found_incident = occured_date = occured_date,
+        found_incident = division = incident["division"],
+        found_incident = precinct =incident["precinct"],
+        found_incident = shift = incident["shift"],
+        found_incident = beat =incident["beat"],
+        found_incident = disposition =incident["disposition"],
+        found_incident = category = None,
+        found_incident = census_tract = None,
+        found_incident = resident_race =incident["residentRace"],
+        found_incident = officer_race =incident["officerRace"],
+        found_incident = resident_sex =incident["residentSex"],
+        found_incident = officer_sex =incident["officerSex"],
+        found_incident = officer_identifier =incident["officerIdentifier"],
+        found_incident = officer_years_of_service =incident["officerYearsOfService"]
         found_incident.save()
         updated_rows += 1
 
