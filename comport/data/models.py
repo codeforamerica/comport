@@ -60,6 +60,8 @@ class UseOfForceIncident(SurrogatePK, Model):
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
+    resident_sex = Column(db.String(255), unique=False, nullable=True)
+    officer_sex = Column(db.String(255), unique=False, nullable=True)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
 
