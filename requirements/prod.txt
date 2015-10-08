@@ -42,3 +42,6 @@ Flask-DebugToolbar==0.9.2
 
 # Templates
 Markdown==2.6.2
+
+#Remove
+colorama==0.2.7
