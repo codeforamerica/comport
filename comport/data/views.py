@@ -115,7 +115,7 @@ def complaints():
 
     for incident in j['data']:
         print(incident)
-        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"]).first()
+        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
 
@@ -129,7 +129,7 @@ def complaints():
                     shift = incident["shift"],
                     beat =incident["beat"],
                     disposition =incident["disposition"],
-                    category = None,
+                    category = incident["category"],
                     census_tract = None,
                     resident_race =incident["residentRace"],
                     officer_race =incident["officerRace"],
@@ -148,7 +148,7 @@ def complaints():
         found_incident = shift = incident["shift"],
         found_incident = beat =incident["beat"],
         found_incident = disposition =incident["disposition"],
-        found_incident = category = None,
+        found_incident = category = incident["category"],
         found_incident = census_tract = None,
         found_incident = resident_race =incident["residentRace"],
         found_incident = officer_race =incident["officerRace"],

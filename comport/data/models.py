@@ -38,7 +38,7 @@ class DenominatorValue(SurrogatePK, Model):
 class UseOfForceIncident(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
-    opaque_id = Column(db.String(255), unique=True, nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     precinct = Column(db.String(255), unique=False, nullable=True)
@@ -104,7 +104,7 @@ class UseOfForceIncident(SurrogatePK, Model):
 class CitizenComplaint(SurrogatePK, Model):
     __tablename__ = 'citizen_complaint'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
-    opaque_id = Column(db.String(255), unique=True, nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     precinct = Column(db.String(255), unique=False, nullable=True)
