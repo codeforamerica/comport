@@ -13,7 +13,6 @@
 <h2>Citizen Complaints</h2>
 
 {{ brick( chart_blocks['complaints-by-year'] ) }}
-{{ brick( chart_blocks['complaints-by-category'] ) }}
 {{ brick( chart_blocks['complaints-by-disposition'] ) }}
 
 {% endblock content %}
@@ -23,7 +22,8 @@
 var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
 var charts = [
   'complaints-by-year',
-  'complaints-by-category',
+  'complaints-by-allegation',
+  'complaints-by-allegation-type',
   'complaints-by-disposition',
   'complaints-by-precinct',
 ];

@@ -29,9 +29,17 @@ def parse_csv_date(date):
     except ValueError:
         print("can't parse" + date)
 
+def parse_int(data):
+    if data == "":
+        return None
+    return int(data)
+
 def random_date(start, end):
     return start + timedelta(
         seconds=randint(0, int((end - start).total_seconds())))
 
 def diff_month(d1, d2):
     return (d1.year - d2.year)*12 + d1.month - d2.month
+
+def coalesce_date(date):
+    return "" if date == None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')

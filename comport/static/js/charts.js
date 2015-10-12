@@ -221,13 +221,29 @@ var configs = {
     }
     },
 
-  'complaints-by-category': {
+  'complaints-by-allegation': {
     filter: last12Months,
+    noTemplate: true,
+    title: "Complaints by Allegation",
     chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.category; },
+    keyFunc: function(d){ return d.allegation; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].category; },
+    xFunc: function(b){ return b[0].allegation; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+
+  'complaints-by-allegation-type': {
+    filter: last12Months,
+    noTemplate: true,
+    title: "Complaints by Allegation Type",
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.allegationType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].allegationType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
@@ -296,12 +312,11 @@ function parseData(rows){
   // parses dates and nulls from the raw csv
   rows.forEach(function(r){
     var dateString = nullify(r[dateTimeKey]);
-    if( dateString === null ){
-      dateString = r[backupDateTimeKey];
-    }
     r.date = parseDate(dateString);
   });
-  return rows;
+  return rows.filter(function(d){
+    return d.date;
+  });
 }
 
 

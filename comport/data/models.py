@@ -64,6 +64,10 @@ class UseOfForceIncident(SurrogatePK, Model):
     officer_sex = Column(db.String(255), unique=False, nullable=True)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    resident_age = Column(db.String(255), unique=False, nullable=True)
+    officer_condition = Column(db.String(255), unique=False, nullable=True)
+    resident_condition = Column(db.String(255), unique=False, nullable=True)
 
 
     def to_csv_row(self):
@@ -88,9 +92,13 @@ class UseOfForceIncident(SurrogatePK, Model):
             csv_utils.coalesce_bool(self.resident_hospitalized),
             csv_utils.coalesce_bool(self.officer_injured),
             csv_utils.coalesce_bool(self.officer_hospitalized),
+            self.resident_condition or "",
+            self.officer_condition or "",
             self.use_of_force_reason or "",
             self.resident_race or "",
             self.officer_race or "",
+            self.resident_age or "",
+            self.officer_age or "",
             csv_utils.coalesce_int(self.officer_years_of_service),
             self.officer_identifier or ""
         ]
@@ -102,7 +110,7 @@ class UseOfForceIncident(SurrogatePK, Model):
 
 
 class CitizenComplaint(SurrogatePK, Model):
-    __tablename__ = 'citizen_complaint'
+    __tablename__ = 'citizen_complaints'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
@@ -111,14 +119,46 @@ class CitizenComplaint(SurrogatePK, Model):
     shift = Column(db.String(255), unique=False, nullable=True)
     beat = Column(db.String(255), unique=False, nullable=True)
     disposition = Column(db.String(255), unique=False, nullable=True)
-    category = Column(db.String(255), unique=False, nullable=True)
+    allegation_type = Column(db.String(255), unique=False, nullable=True)
+    allegation = Column(db.String(255), unique=False, nullable=True)
     census_tract = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     officer_sex = Column(db.String(255), unique=False, nullable=True)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    resident_age = Column(db.String(255), unique=False, nullable=True)
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
+
+class OfficerInvolvedShooting(SurrogatePK, Model):
+    __tablename__ = 'officer_involved_shootings'
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False)
+    occured_date = Column(db.DateTime, nullable=True)
+    division = Column(db.String(255), unique=False, nullable=True)
+    precinct = Column(db.String(255), unique=False, nullable=True)
+    shift = Column(db.String(255), unique=False, nullable=True)
+    beat = Column(db.String(255), unique=False, nullable=True)
+    disposition = Column(db.String(255), unique=False, nullable=True)
+    census_tract = Column(db.String(255), unique=False, nullable=True)
+    officer_force_type = Column(db.String(255), unique=False, nullable=True)
+    resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
+    resident_race = Column(db.String(255), unique=False, nullable=True)
+    officer_race = Column(db.String(255), unique=False, nullable=True)
+    resident_sex = Column(db.String(255), unique=False, nullable=True)
+    officer_sex = Column(db.String(255), unique=False, nullable=True)
+    officer_identifier = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    resident_age = Column(db.String(255), unique=False, nullable=True)
+    officer_condition = Column(db.String(255), unique=False, nullable=True)
+    resident_condition = Column(db.String(255), unique=False, nullable=True)
+
 
     def to_csv_row(self):
         occured_date = csv_utils.coalesce_date(self.occured_date)
@@ -130,14 +170,20 @@ class CitizenComplaint(SurrogatePK, Model):
             self.shift or "",
             self.beat or "",
             self.disposition or "",
-            self.category or "",
             self.census_tract or "",
+            self.officer_force_type or "",
+            self.resident_weapon_used or "",
+            self.service_type or "",
             self.resident_race or "",
-            self.resident_sex or "",
             self.officer_race or "",
+            self.resident_sex or "",
             self.officer_sex or "",
+            self.officer_identifier or "",
             csv_utils.coalesce_int(self.officer_years_of_service),
-            self.officer_identifier or ""
+            self.officer_age or "",
+            self.resident_age or "",
+            self.officer_condition or "",
+            self.resident_condition or ""
         ]
 
         return ','.join(values) + "\n"

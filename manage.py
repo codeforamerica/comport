@@ -10,9 +10,9 @@ from comport.user.models import User, Role
 from comport.content.models import ChartBlockDefaults
 from comport.department.models import Department, Extractor
 from comport.content.models import Link
-from comport.settings import DevConfig, ProdConfig
+from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
-from comport.utils import random_string, parse_date, diff_month, parse_csv_date
+from comport.utils import random_string, parse_date, diff_month, parse_csv_date, parse_int
 from comport.data.models import UseOfForceIncident, CitizenComplaint
 from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
 import json
@@ -65,27 +65,33 @@ def load_test_data():
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
 
-    for filename in glob.glob('data/testdata/complaints/*.csv'):
+    for filename in glob.glob('data/testdata/complaints/complaints.csv'):
         with open(filename, 'rt') as f:
             reader = csv.DictReader(f)
             for complaint in reader:
-                officer_identifier = hashlib.md5(complaint.get("IDENT", None).encode('UTF-8')).hexdigest()
-                CitizenComplaint.create(opaque_id=random_string(6),
+                officer_identifier = hashlib.md5((complaint.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+                opaque_id = hashlib.md5((complaint.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+
+                CitizenComplaint.create(
+                    opaque_id = opaque_id,
                     department_id = department.id,
-                    occured_date = parse_csv_date(complaint.get("OCCURRED", None)),
-                    division = None,
-                    precinct = complaint.get("UNIT", None),
-                    shift = None,
-                    beat = None,
-                    disposition = complaint.get("DISPOSITION", None),
-                    category = complaint.get("CATEGORY", None),
+                    occured_date = parse_csv_date(complaint.get("OCCURRED_DT", None)),
+                    division = complaint.get("UDTEXT24A", None),
+                    precinct = complaint.get("UDTEXT24B", None),
+                    shift = complaint.get("UDTEXT24C", None),
+                    beat = complaint.get("UDTEXT24D", None),
+                    disposition = complaint.get("FINDING", None),
+                    allegation_type = complaint.get("ALG_CLASS", None),
+                    allegation = complaint.get("ALLEGATION", None),
                     census_tract = None,
-                    resident_race = complaint.get("C RACE", None),
-                    officer_race = complaint.get("O RACE", None),
-                    resident_sex = complaint.get("C SEX", None),
-                    officer_sex = complaint.get("O SEX", None),
+                    resident_race = complaint.get("RACE", None),
+                    officer_race = complaint.get("OFF_RACE", None),
+                    resident_sex = complaint.get("SEX", None),
+                    officer_sex = complaint.get("OFF_SEX", None),
                     officer_identifier = officer_identifier,
-                    officer_years_of_service = None
+                    officer_years_of_service = complaint.get("OFF_YR_EMPLOY", None),
+                    officer_age = complaint.get("OFF_AGE", None),
+                    resident_age = complaint.get("CIT_AGE", None)
                 )
 
 
