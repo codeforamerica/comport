@@ -11,6 +11,8 @@ from comport.database import (
 from .csv_utils import csv_utils
 
 from datetime import datetime
+from titlecase import titlecase
+
 
 race_map = {
     "b": "Black"
@@ -154,14 +156,21 @@ class CitizenComplaint(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
         resident_race = kwargs.pop("resident_race", None)
         resident_sex = kwargs.pop("resident_sex", None)
+        precinct = kwargs.pop("precinct", None)
+
+
         if resident_race and resident_race.lower().strip() in race_map:
             resident_race = race_map[resident_race.lower().strip()]
 
         if resident_sex and resident_sex.lower().strip() in sex_map:
             resident_sex = sex_map[resident_sex.lower().strip()]
 
+        if precinct:
+            precinct = titlecase(precinct.strip())
+
         self.resident_race = resident_race.capitalize().strip()
         self.resident_sex = resident_sex.capitalize().strip()
+        self.precinct = precinct
 
 class OfficerInvolvedShooting(SurrogatePK, Model):
     __tablename__ = 'officer_involved_shootings'
