@@ -28,6 +28,7 @@ class Department(SurrogatePK, Model):
     officer_involved_shootings = relationship("OfficerInvolvedShooting", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
+    demographic_values = relationship("DemographicValue", backref="department")
     why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     how_you_can_use_this_data = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
@@ -102,6 +103,27 @@ class Department(SurrogatePK, Model):
 
         return output.getvalue()
 
+
+    def get_demographic_csv(self):
+        output = io.StringIO()
+
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        writer.writerow(["race","gender","count","cityOrDepartment"])
+
+        values = sorted(self.demographic_values, key = lambda x: (x.department_value, x.gender, x.race))
+
+        for value in values:
+            cityOrDepartment = "department" if value.department_value else "city"
+            row = [
+                value.race,
+                value.gender,
+                value.count,
+                cityOrDepartment
+            ]
+            writer.writerow(row)
+
+        return output.getvalue()
 
     def get_ois_csv(self):
         csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,officerForceType,residentWeaponUsed,serviceType,residentRace,officerRace,residentSex,officerSex,officerIdentifier,officerYearsOfService,officerAge,residentAge,officerCondition,residentCondition\n"

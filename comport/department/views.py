@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, Response
 from comport.utils import flash_errors
 from .models import Department, Extractor
+from comport.data.models import DemographicValue
 from .forms import IndexContentForm
 from flask.ext.login import login_required
 
@@ -77,6 +78,54 @@ def edit_complaints(department_id):
     if not department:
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=True)
+
+@blueprint.route("/<int:department_id>/edit/demographics")
+@login_required
+@admin_or_department_required()
+def edit_demographics(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template(
+        "department/demographics.html",
+        department=department,
+        department_values=[v for v in department.demographic_values if v.department_value],
+        city_values=[v for v in department.demographic_values if not v.department_value])
+
+@blueprint.route("/<int:department_id>/demographicValue/create",methods=["POST"])
+@login_required
+@admin_or_department_required()
+def new_demographic_row(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+
+    DemographicValue.create(
+        department_id=department_id,
+        race=request.form["race"],
+        gender=request.form["gender"],
+        count=int(request.form["count"]),
+        department_value=request.form["department_or_city"]=="department")
+
+    return redirect(url_for(
+        'department.edit_demographics', department_id=department_id
+    ))
+
+@blueprint.route("/<int:department_id>/demographicValue/<int:value_id>/delete",methods=["POST"])
+@login_required
+@admin_or_department_required()
+def delete_demographic_row(department_id, value_id):
+    department = Department.get_by_id(department_id)
+    value = DemographicValue.get_by_id(value_id)
+
+    if not department or not value:
+        abort(404)
+
+    value.delete()
+
+    return redirect(url_for(
+        'department.edit_demographics', department_id=department_id
+    ))
 
 @blueprint.route("/<int:department_id>/edit/index",methods=["GET","POST"])
 @login_required
@@ -168,3 +217,12 @@ def denominator_csv(department_id):
     if not department:
         abort(404)
     return Response(department.get_denominator_csv(), mimetype="text/csv")
+
+@blueprint.route('/<int:department_id>/demographics.csv')
+@login_required
+@admin_or_department_required()
+def demographics_csv(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return Response(department.get_demographic_csv(), mimetype="text/csv")
