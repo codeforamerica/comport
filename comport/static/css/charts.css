@@ -1,34 +1,3 @@
-.container {
-  width: 50rem;
-}
-
-/* Chart Typography & Layout
- */
-.brick {
-  overflow: hidden;
-}
-.brick + .brick {
-  margin-top: 2.5em;
-}
-.brick-title {
-  padding-bottom: 0.6em;
-  border-bottom: 1px solid black;
-}
-
-.chart {
-  padding-top: 0.4em; 
-  float: left;
-  /*font-family: Merriweather, Georgia, serif;*/
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  width: 23rem;
-}
-
-.brick .content { float: left; }
-
-.brick p { width: 25rem; }
-
 .trend-line {
   fill: none;
   stroke-width: 2px;
@@ -56,10 +25,10 @@
   display: inline-block;
   margin: 0 0.5em -0.1em 0.7em;
 }
-.flagHistogram-table td, .hist-flag-label { 
+.flagHistogram-table td, .hist-flag-label {
   padding: 0.3em 0 0.3em 0;
 }
-.flagHistogram-table tr + tr { 
+.flagHistogram-table tr + tr {
   border-top: 1px solid #eee;
 }
 
@@ -75,4 +44,3 @@
 .percent-label {
   margin-left: 0.5em;
 }
-

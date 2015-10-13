@@ -4,7 +4,7 @@
 
 /* universal */
 
-html { overflow-y: scroll; 
+html { overflow-y: scroll;
   font-size: 17px;
   line-height: 26px;
 }
@@ -49,9 +49,7 @@ body {
 
 /* LAYOUT
  */
-.container {
-  width: 40rem;
-}
+
 p { margin-bottom: 0.5rem;
     width: 32rem; }
 
@@ -59,7 +57,7 @@ p { margin-bottom: 0.5rem;
   font-family: Merriweather, Georgia, serif;
   font-weight: 400;
   font-size: 20px;
-  line-height: 34px; 
+  line-height: 34px;
   margin: 0.7em 0 0.7em 0;
   padding: 0.7em 0;
 }
@@ -154,7 +152,7 @@ button:active {
 .action-button-huge {
   width: 100%;
   font-size: 20px;
-  line-height: 34px; 
+  line-height: 34px;
 }
 
 .navbar-form input[type="text"],

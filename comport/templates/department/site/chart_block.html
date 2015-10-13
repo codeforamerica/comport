@@ -1,8 +1,14 @@
 {% macro brick(chart_block, editing=False) %}
-
-<div class="brick">
-  <h4 class="brick-title">{{ chart_block.title }}</h4>
-  <div class="chart {{ chart_block.slug }}"></div>
-  <div class="content">{{ markdown(chart_block.content) }}</div>
+<div class="row">
+    <div class="brick">
+      <h4 class="brick-title">{{ chart_block.title }}</h4>
+      
+      <div class="col-md-6">
+        <div class="chart {{ chart_block.slug }}"></div>
+      </div>
+      <div class="col-md-5">
+        <div class="content">{{ markdown(chart_block.content) }}</div>
+      </div>
+  </div>
 </div>
 {% endmacro %}
