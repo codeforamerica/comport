@@ -13,10 +13,14 @@
     <h1>{{department.name}}</h1>
     <h2>Citizen Complaints</h2>
 {{ brick( chart_blocks['complaints-by-year'], editing, department ) }}
+{{ brick( chart_blocks['complaints-by-month'], editing, department ) }}
 {{ brick( chart_blocks['complaints-by-allegation'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-disposition'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-precinct'] , editing, department) }}
+{{ brick( chart_blocks['officer-demographics'] , editing, department) }}
+{{ brick( chart_blocks['complaints-by-demographic'] , editing, department) }}
+{{ brick( chart_blocks['complaints-by-officer'] , editing, department) }}
 </div>
 
 {% endblock content %}

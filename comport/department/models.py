@@ -37,10 +37,10 @@ class Department(SurrogatePK, Model):
         return list(filter(lambda l: l.type == type, self.links))
 
     def get_uof_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "Use of Force"])
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "use-of-force"])
 
     def get_complaint_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "complaints"])
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints","all"]])
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
