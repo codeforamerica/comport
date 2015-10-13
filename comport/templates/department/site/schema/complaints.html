@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <h3>Dataset: Citizen Complaints</h3>
+
+    <form method="get" action="/department/{{department.id}}/complaints.csv">
+      <button type="submit">Download this dataset</button>
+    </form>
+
+    <h4>Fields included in this dataset and their definitions:</h4>
+    <table class="table">
+      <tr>
+        <th>Field</th>
+        <th>Information</th>
+      </tr>
+      <tr>
+        <td>Id</td>
+        <td>This is a unique identifier for a given complaint. Complaints may contain multiple allegations, when that is the case there will be multiple entries for one incident number.</td>
+      </tr>
+      <tr>
+        <td>Service Type</td>
+        <td>The reason that an interaction between an officer and a citizen began.</td>
+      </tr>
+      <tr>
+        <td>Occured Date</td>
+        <td>The date that the incident occurred.</td>
+      </tr>
+      <tr>
+        <td>Division</td>
+        <td>This is the Division that the officer is assigned to.</td>
+      </tr>
+      <tr>
+        <td>Precint</td>
+        <td>This is the District or department that the officer is assigned to.</td>
+      </tr>
+      <tr>
+        <td>Shift</td>
+        <td>This is the shift that the Officer was assigned to.</td>
+      </tr>
+      <tr>
+        <td>Disposition</td>
+        <td>
+          Each complaint may contain multiple allegations, such as rudeness and inappropriate language. Each allegation is ruled on separately. There are four possible rulings:
+          Sustained means that the investigation agreed with the allegation in the complaint. When allegations are sustained, the Chief of Police will take the appropriate disciplinary action.
+          Not sustained means that the investigation did not find evidence to prove or disprove the complaint. If allegations are found to be not sustained, the officer's name is submitted to IMPD's Early Warning system.
+          Exonerated means the incident happened, but it was lawful and proper.
+          Unfounded means that the incident happened, however not as detailed in the complaint.
+          Complaints that are still being investigated will be blank in this column.</td>
+      </tr>
+      <tr>
+        <td>Allegation Type</td>
+        <td>Allegations in complaints fall into a number of classes.</td>
+      </tr>
+      <tr>
+        <td>Allegation</td>
+        <td>Allegations are tied to the regulations and standards which Officers are held to.</td>
+      </tr>
+      <tr>
+        <td>Resident Race</td>
+        <td>The resident's race.</td>
+      </tr>
+      <tr>
+        <td>Resident Sex</td>
+        <td>The resident's sex.</td>
+      </tr>
+      <tr>
+        <td>Resident Age</td>
+        <td>The resident's age at the time of the incident, if known.</td>
+      </tr>
+      <tr>
+        <td>Officer Race</td>
+        <td>The officer's race.</td>
+      </tr>
+      <tr>
+        <td>Officer Sex</td>
+        <td>The officer's sex.</td>
+      </tr>
+      <tr>
+        <td>Officer Age</td>
+        <td>The officer's age at the time of the incident.</td>
+      </tr>
+      <tr>
+        <td>Officer Years of Service</td>
+        <td>The number of years the officer had been employed by IMPD at the time of the incident.</td>
+      </tr>
+      <tr>
+        <td>Officer Indentifier</td>
+        <td>This is a number used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
+
+
+{% endblock content %}
+{% block footer %}
+    <small>
+    <ul class="company">
+      <li>© Team Indy</li>
+    </ul>
+
+      <ul class="footer-nav">
+        <li><a href="/department/id/site/disclaimer">Disclaimer</a></li>
+        <li><a href="mailto:Indy@CodeForAmerica.org">Contact</a></li>
+      </ul>
+
+    </small>
+
+{% endblock footer %}

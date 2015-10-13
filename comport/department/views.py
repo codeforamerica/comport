@@ -130,6 +130,16 @@ def preview_index(department_id):
     return render_template("department/site/index.html", form=None, department=department, editing=False)
 
 
+#<<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
+@blueprint.route('/<int:department_id>/schema/complaints')
+@login_required
+@admin_or_department_required()
+def use_of_force_schema(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/complaints.html", department=department)
+
 
 #<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
