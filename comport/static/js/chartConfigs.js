@@ -200,6 +200,25 @@ var configs = {
     }
     },
 
+  'complaints-by-month': {
+    chartType: 'lineChart',
+    noTemplate: true,
+    title: "Complaints by Month",
+    filter: function(rows){
+      return allegationsToComplaints(last12Months(rows));
+    },
+    keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
+    sortWith: function(d){ return d.month; },
+    x: 'month',
+    xFunc: function(b){ return d3.time.month.floor(b[0].date); },
+    xTickFormat: function(d){ 
+      var fmt = d3.time.format('%b %Y');
+      return fmt(new Date(d));
+    },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
   'complaints-by-allegation': {
     filter: last12Months,
     noTemplate: true,

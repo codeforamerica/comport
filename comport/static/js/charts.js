@@ -10,6 +10,51 @@ function last12Months(rows){
   });
 }
 
+function notEqual(a, b){
+  if( a instanceof Date || b instanceof Date ){
+    return a.getTime() != b.getTime();
+  } else {
+    return a != b;
+  }
+}
+
+function unique(a, b){
+  if( a instanceof Array ){
+    var s = d3.set(a)
+    s.add(b)
+    return s.values();
+  } else {
+    return d3.set([a, b]).values();
+  }
+}
+
+function allegationReducer(complaint, allegation){
+  var newObj = {};
+  for (key in complaint){
+    if( complaint.hasOwnProperty(key) ){
+      var complaintVal = complaint[key];
+      var allegationVal = allegation[key];
+      if( notEqual(complaintVal, allegationVal) ){
+          newObj[key] = unique(complaintVal, allegationVal);
+      } else {
+        newObj[key] = complaint[key];
+      }
+    }
+  }
+  return newObj;
+}
+
+function allegationsToComplaints(rows){
+  var complaintGrouper = d3.nest()
+    .key(function (d){ return d.id; })
+    .rollup(function(allegations){
+      var complaint = allegations.reduce(allegationReducer);
+      complaint['allegations'] = allegations;
+      return complaint;
+    });
+  return complaintGrouper.map(rows, d3.map).values();
+}
+
 var experienceBuckets = d3.scale.quantize()
   .domain([2.5, 5.5, 10.5])
   .range([
@@ -103,8 +148,8 @@ function structureData(parsed_rows, config){
     parsed_rows = config.filter(parsed_rows);
   }
 
-  // create a grouping machine that groups by year
-  var unmapped_data = d3.nest()
+  // create a grouping machine that groups by key function
+  var data_grouper = d3.nest()
     .key(config.keyFunc)
     .rollup(function(leaves){
       var datum = {};
@@ -116,7 +161,7 @@ function structureData(parsed_rows, config){
 
   // use the parsed data and the grouping machine to create a
   // simple key value store (aka "map") with years as keys
-  var data = unmapped_data.map(parsed_rows, d3.map);
+  var data = data_grouper.map(parsed_rows, d3.map);
   console.log("mapped & filtered data", data);
 
   if( config.dataMapAdjust ){

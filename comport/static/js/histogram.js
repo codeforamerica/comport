@@ -84,4 +84,14 @@ function flagHistogram(config, data){
 
 function mountainHistogram(config, data){
 
+  // set basic dimensions
+  // we need a width, a height for each
+  var width,
+      margin,
+      barHeight,
+      font_size;
+
+  font_size = 14; // px
+  width = 12;
+
 }

@@ -14,13 +14,14 @@ function lineChart(config, data){
   height = 8;
   width = (data.length * xWidth);
   dot_radius = 0.5;
-  var xAxisTickFormat = d3.format("d");
+  var xAxisTickFormat = config.xTickFormat || d3.format('d');
+
 
   // determine x axis scale
   var xScale = d3.scale.linear()
     .domain([
-        d3.min(data, function(d){return d.year;}),
-        d3.max(data, function(d){return d.year;})
+        d3.min(data, function(d){return d[config.x];}),
+        d3.max(data, function(d){return d[config.x];})
         ])
     .range([
         0,
@@ -31,7 +32,7 @@ function lineChart(config, data){
   var yScale = d3.scale.linear()
     .domain([
         0,
-        d3.max(data, function(d){return d.count;})
+        d3.max(data, function(d){return d[config.y];})
         ])
     .range([
         font_size * height,
@@ -39,8 +40,8 @@ function lineChart(config, data){
         ]);
 
   // create the x and y functions
-  var x = function(d){ return xScale(d.year); }
-  var y = function(d){ return yScale(d.count); }
+  var x = function(d){ return xScale(d[config.x]); }
+  var y = function(d){ return yScale(d[config.y]); }
 
   // draw svg
   var svg = d3.select(config.parent)
@@ -62,6 +63,7 @@ function lineChart(config, data){
     .scale(xScale)
     .orient("bottom")
     .tickFormat(xAxisTickFormat);
+
   g.append("g")
     .attr("class", "x axis")
     .attr("transform", translate(0,
