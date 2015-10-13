@@ -49,7 +49,6 @@ class Department(SurrogatePK, Model):
     def get_raw_city_demographics(self):
         return [v for v in self.demographic_values if not v.department_value]
 
-
     def get_department_demographics(self):
         result = []
         demographic_values = [v for v in self.demographic_values if v.department_value]

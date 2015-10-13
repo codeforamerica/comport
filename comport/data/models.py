@@ -12,6 +12,14 @@ from .csv_utils import csv_utils
 
 from datetime import datetime
 
+race_map = {
+    "b": "Black"
+}
+
+sex_map = {
+    "f": "Female"
+}
+
 class DenominatorValue(SurrogatePK, Model):
     __tablename__="denominator_values"
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
@@ -144,6 +152,16 @@ class CitizenComplaint(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+        resident_race = kwargs.pop("resident_race", None)
+        resident_sex = kwargs.pop("resident_sex", None)
+        if resident_race and resident_race.lower().strip() in race_map:
+            resident_race = race_map[resident_race.lower().strip()]
+
+        if resident_sex and resident_sex.lower().strip() in sex_map:
+            resident_sex = sex_map[resident_sex.lower().strip()]
+
+        self.resident_race = resident_race.capitalize().strip()
+        self.resident_sex = resident_sex.capitalize().strip()
 
 class OfficerInvolvedShooting(SurrogatePK, Model):
     __tablename__ = 'officer_involved_shootings'
