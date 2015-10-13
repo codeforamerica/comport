@@ -21,7 +21,7 @@ def factory_random_string(N):
     return ''.join(_random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 def parse_date(date):
-    return None if date == 'NULL' else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+    return None if not date else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
 
 def parse_csv_date(date):
     try:
