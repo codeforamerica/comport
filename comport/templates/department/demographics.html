@@ -65,13 +65,9 @@
           Race
         </th>
         <th>
-          Gender
-        </th>
-        <th>
           Count
         </th>
         <th>
-
         </th>
       </tr>
       {% for value in city_values %}
@@ -80,10 +76,12 @@
           {{value.race}}
         </td>
         <td>
-          {{value.gender}}
+          {{value.count}}
         </td>
         <td>
-          {{value.count}}
+        <form method="post" action="/department/{{department.id}}/demographicValue/{{value.id}}/delete">
+            <input type="submit" value="Delete"/>
+        </form>
         </td>
       </tr>
       {% endfor %}
@@ -93,13 +91,11 @@
             <input type="text" class="form-control" name="race"/>
           </td>
           <td>
-            <input type="text" class="form-control" name="gender"/>
-          </td>
-          <td>
             <input type="text" class="form-control" name="count"/>
           </td>
           <td>
-            <input type="hidden" name="department_or_city" value="city">
+            <input type="hidden" name="department_or_city" value="city"/>
+            <input type="hidden" name="gender" value="N/A"/>
             <input type="submit" />
           </td>
         </form>

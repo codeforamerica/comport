@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% from "department/site/chart_block.html" import brick %}
+{% from "department/site/demographics_table_block.html" import demographic_brick %}
 
 {% block css %}
   <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
@@ -18,7 +19,7 @@
 {{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-disposition'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-precinct'] , editing, department) }}
-{{ brick( chart_blocks['officer-demographics'] , editing, department) }}
+{{ demographic_brick( chart_blocks['officer-demographics'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-demographic'] , editing, department) }}
 {{ brick( chart_blocks['complaints-by-officer'] , editing, department) }}
 </div>
@@ -35,6 +36,7 @@ var charts = [
   'complaints-by-allegation-type',
   'complaints-by-disposition',
   'complaints-by-precinct',
+  'officer-demographics'
 ];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>

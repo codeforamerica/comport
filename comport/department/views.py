@@ -89,8 +89,8 @@ def edit_demographics(department_id):
     return render_template(
         "department/demographics.html",
         department=department,
-        department_values=[v for v in department.demographic_values if v.department_value],
-        city_values=[v for v in department.demographic_values if not v.department_value])
+        department_values= department.get_raw_department_demographics(),
+        city_values= department.get_raw_city_demographics())
 
 @blueprint.route("/<int:department_id>/demographicValue/create",methods=["POST"])
 @login_required
