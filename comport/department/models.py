@@ -8,7 +8,7 @@ from comport.database import (
     relationship,
     SurrogatePK,
 )
-from comport.content.models import ChartBlockDefaults
+from comport.content.defaults import ChartBlockDefaults
 
 from flask import current_app
 from comport.utils import coalesce_date
@@ -53,8 +53,8 @@ class Department(SurrogatePK, Model):
         self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
         self.contact_us = DepartmentDefaults.contact_us
 
-        for default_chart_block in ChartBlockDefaults.query.all():
-            self.chart_blocks.append(default_chart_block.make_real_block())
+        for default_chart_block in ChartBlockDefaults.defaults:
+            self.chart_blocks.append(default_chart_block)
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)

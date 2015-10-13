@@ -27,7 +27,7 @@ def parse_csv_date(date):
     try:
         return None if date == 'NULL' else datetime.strptime(date, '%m/%d/%y')
     except ValueError:
-        print("can't parse" + date)
+        print("Can't parse the following date: " + date)
 
 def parse_int(data):
     if data == "":

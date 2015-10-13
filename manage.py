@@ -7,7 +7,6 @@ from flask_migrate import MigrateCommand, upgrade
 
 from comport.app import create_app
 from comport.user.models import User, Role
-from comport.content.models import ChartBlockDefaults
 from comport.department.models import Department, Extractor
 from comport.content.models import Link
 from comport.settings import DevConfig, ProdConfig, Config
@@ -58,7 +57,6 @@ def make_admin_user():
 
 @manager.command
 def load_test_data():
-    add_chart_block_defaults()
     department = Department.query.filter_by(name="IMPD").first()
     if not department:
         department = Department.create(name="IMPD")
@@ -132,18 +130,6 @@ def delete_everything():
    db.drop_all()
    upgrade()
 
-@manager.command
-def add_chart_block_defaults():
-    dir = os.path.dirname(__file__)
-    filename = os.path.join(dir, 'data/chartBlockDefaults.json')
-    with open(filename) as chart_block_data_file:
-        defaults = json.load(chart_block_data_file)
-        for default in defaults:
-            ChartBlockDefaults.create(title=default["title"],
-                caption=default["caption"],
-                slug=default["slug"],
-                dataset=default["dataset"],
-                content=default["content"])
 
 
 manager.add_command('server', Server())

@@ -223,8 +223,6 @@ var configs = {
 
   'complaints-by-allegation': {
     filter: last12Months,
-    noTemplate: true,
-    title: "Complaints by Allegation",
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegation; },
     sortWith: function(d){ return -d.count; },
@@ -237,8 +235,6 @@ var configs = {
 
   'complaints-by-allegation-type': {
     filter: last12Months,
-    noTemplate: true,
-    title: "Complaints by Allegation Type",
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegationType; },
     sortWith: function(d){ return -d.count; },
