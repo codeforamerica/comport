@@ -55,6 +55,48 @@ function allegationsToComplaints(rows){
   return complaintGrouper.map(rows, d3.map).values();
 }
 
+var raceKey = {
+  "Unknown": "Unknown",
+  "Black": "Black",
+  "": "Unknown",
+  "Hispanic": "Hispanic",
+  "White": "White",
+  "Bi-racial": "Other",
+  "White ": "White",
+  "black": "Black",
+  "B": "Black",
+  "Asian": "Asian",
+  "Other": "Other",
+};
+
+function race(k){
+  return function(d){ return raceKey[d[k]]; };
+}
+
+function raceMatrix(config, data){
+  var raceData = d3.nest()
+    .key( race('residentRace') )
+    .key( race('officerRace') )
+    .rollup( function (values){ 
+      return values.length;
+    }).map(data, d3.map);
+  var officerRaceTotals = d3.nest()
+    .key( race('officerRace') )
+    .rollup( function( values ){
+      return values.length;
+    }).map(data, d3.map);
+  raceData.forEach(function(resRace, resRaceMap){
+    var total = 0;
+    resRaceMap.values().map(function (d){
+      total = total + d;
+    });
+    resRaceMap.total = total;
+  });
+  raceData.officerTotals = officerRaceTotals;
+  console.log("nested some races :(", raceData);
+  return raceData;
+}
+
 var experienceBuckets = d3.scale.quantize()
   .domain([2.5, 5.5, 10.5])
   .range([
@@ -106,7 +148,11 @@ function parseData(rows){
 
 function drawChart(rows, config){
   // structure data for the particular chart
-  var data = structureData(rows, config);
+  if( config.dataFunc ){
+    var data = config.dataFunc(config, rows);
+  } else {
+    var data = structureData(rows, config);
+  }
 
   // get the correct function for drawing this chart
   drawingFunction = drawFuncs[config.chartType];
@@ -195,5 +241,5 @@ drawFuncs = {
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
   'mountainHistogram': mountainHistogram,
-  //'matrix': matrixChart,
+  'matrix': matrixChart,
 }

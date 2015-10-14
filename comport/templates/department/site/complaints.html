@@ -13,15 +13,15 @@
   <div class="col-md-10 col-md-offset-1">
     <h1>{{department.name}}</h1>
     <h2>Citizen Complaints</h2>
-{{ brick( chart_blocks['complaints-by-year'], editing, department ) }}
-{{ brick( chart_blocks['complaints-by-month'], editing, department ) }}
-{{ brick( chart_blocks['complaints-by-allegation'] , editing, department) }}
-{{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
-{{ brick( chart_blocks['complaints-by-disposition'] , editing, department) }}
-{{ brick( chart_blocks['complaints-by-precinct'] , editing, department) }}
-{{ demographic_brick( chart_blocks['officer-demographics'] , editing, department) }}
-{{ brick( chart_blocks['complaints-by-demographic'] , editing, department) }}
-{{ brick( chart_blocks['complaints-by-officer'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-year'], editing, department ) }}
+    {{ brick( chart_blocks['complaints-by-month'], editing, department ) }}
+    {{ brick( chart_blocks['complaints-by-allegation'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-disposition'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-precinct'] , editing, department) }}
+    {{ brick( chart_blocks['officer-demographics'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-demographic'] , editing, department) }}
+    {{ brick( chart_blocks['complaints-by-officer'] , editing, department) }}
 </div>
 
 {% endblock content %}
@@ -36,12 +36,13 @@ var charts = [
   'complaints-by-allegation-type',
   'complaints-by-disposition',
   'complaints-by-precinct',
-  'officer-demographics'
+  'complaints-by-demographic',
 ];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>
+<script type="text/javascript" src="/static/js/matrixChart.js"></script>
 <script type="text/javascript" src="/static/js/charts.js"></script>
 <script type="text/javascript" src="/static/js/chartConfigs.js"></script>
 

@@ -202,8 +202,6 @@ var configs = {
 
   'complaints-by-month': {
     chartType: 'lineChart',
-    noTemplate: true,
-    title: "Complaints by Month",
     filter: function(rows){
       return allegationsToComplaints(last12Months(rows));
     },
@@ -221,8 +219,6 @@ var configs = {
 
   'complaints-by-allegation': {
     filter: last12Months,
-    noTemplate: true,
-    title: "Complaints by Allegation",
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegation; },
     sortWith: function(d){ return -d.count; },
@@ -235,8 +231,6 @@ var configs = {
 
   'complaints-by-allegation-type': {
     filter: last12Months,
-    noTemplate: true,
-    title: "Complaints by Allegation Type",
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegationType; },
     sortWith: function(d){ return -d.count; },
@@ -268,13 +262,12 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  'complaints-by-race': {
+  'complaints-by-demographic': {
     filter: last12Months,
     chartType: 'matrix',
-    x: 'residentRace',
-    y: 'officerRace',
-    keyFunc: function(d){ return d.disposition; },
-  }
+    dataFunc: raceMatrix,
+  },
+
 
 };
 
@@ -294,7 +287,7 @@ d3.csv(
       // get configuration
       var config = configs[name];
 
-      if( config.keyFunc ){
+      if( config.chartType ){
         // get class name for parent div
         config.parent = '.' + name;
         console.log("making", config.parent, "with", config);
