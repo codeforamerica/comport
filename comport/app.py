@@ -17,6 +17,9 @@ from comport import (
         template_globals
         )
 from flask_sslify import SSLify
+import logging
+import sys
+import os
 
 
 def create_app(config_object=ProdConfig):
@@ -32,6 +35,11 @@ def create_app(config_object=ProdConfig):
     register_blueprints(app)
     register_errorhandlers(app)
     register_template_globals(app)
+
+    @app.before_first_request
+    def before_first_request():
+        register_logging(app)
+
     return app
 
 
@@ -67,3 +75,42 @@ def register_errorhandlers(app):
 def register_template_globals(app):
     app.jinja_env.globals.update(markdown=template_globals.markdown)
 
+
+def register_logging(app):
+    if 'config.ProductionConfig' in os.environ['APP_SETTINGS']:
+
+        print("PROD LOGGING ENGAGED")
+
+        # for heroku, just send everything to the console (instead of a file)
+        # and it will forward automatically to the logging service
+
+        # disable the existing flask handler, we are replacing it with our own
+        app.logger.removeHandler(app.logger.handlers[0])
+
+        app.logger.setLevel(logging.DEBUG)
+        stdout = logging.StreamHandler(sys.stdout)
+        stdout.setFormatter(logging.Formatter(
+            '''--------------------------------------------------------------------------------
+%(asctime)s | %(levelname)s in %(module)s [%(funcName)s] | %(user_id)s | [%(pathname)s:%(lineno)d] | %(message)s
+--------------------------------------------------------------------------------'''
+        ))
+        app.logger.addHandler(stdout)
+
+        # log to a file. this is commented out for heroku deploy, but kept
+        # in case we need it later
+
+        # file_handler = logging.handlers.RotatingFileHandler(log_file(app), 'a', 10000000, 10)
+        # file_handler.setFormatter(logging.Formatter(
+        #     '%(asctime)s | %(name)s | %(levelname)s in %(module)s [%(pathname)s:%(lineno)d]: %(message)s')
+        # )
+        # app.logger.addHandler(file_handler)
+        # app.logger.setLevel(logging.DEBUG)
+
+    elif 'test' in config_string.lower():
+        app.logger.setLevel(logging.CRITICAL)
+
+    else:
+        # log to console for dev
+        app.logger.setLevel(logging.DEBUG)
+
+    return None
