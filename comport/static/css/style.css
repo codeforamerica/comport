@@ -135,6 +135,26 @@ textarea {
   margin-bottom: 1em;
 }
 
+/*Schema */
+.schema-wrapper{
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.schema-header{
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.schema-table td{
+  padding: 15px;
+}
+
+.schema-table td:first-child {
+  font-style: italic;
+  padding-right: 30px;
+}
+
 /* Forms */
 
 .form-group {
