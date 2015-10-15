@@ -49,31 +49,30 @@ def use_of_force():
                     disposition =incident["disposition"],
                     census_tract = None,
                     officer_force_type =incident["officerForceType"],
-                    officer_weapon_used =incident["officerWeaponUsed"],
-                    resident_weapon_used =incident["residentWeaponUsed"],
+                    use_of_force_reason =incident["useOfForceReason"],
                     service_type =incident["serviceType"],
                     arrest_made =incident["arrestMade"],
                     arrest_charges =incident["arrestCharges"],
+                    resident_weapon_used =incident["residentWeaponUsed"],
                     resident_injured =incident["residentInjured"],
                     resident_hospitalized =incident["residentHospitalized"],
                     officer_injured =incident["officerInjured"],
                     officer_hospitalized =incident["officerHospitalized"],
-                    use_of_force_reason =incident["useOfForceReason"],
                     resident_race =incident["residentRace"],
-                    officer_race =incident["officerRace"],
                     resident_sex =incident["residentSex"],
-                    officer_sex =incident["officerSex"],
                     resident_age = incident["residentAge"],
-                    officer_age = incident["officerAge"],
-                    officer_identifier =incident["officerIdentifier"],
-                    officer_years_of_service =incident["officerYearsOfService"],
                     resident_condition =incident["residentCondition"],
+                    officer_identifier =incident["officerIdentifier"],
+                    officer_race =incident["officerRace"],
+                    officer_sex =incident["officerSex"],
+                    officer_age = incident["officerAge"],
+                    officer_years_of_service =incident["officerYearsOfService"],
                     officer_condition =incident["officerCondition"]
                     )
             added_rows += 1
             continue
 
-        found_incident.department_id = extractor.department_id
+        found_incident.department_id = extractor.department_id,
         found_incident.opaque_id = incident["opaqueId"],
         found_incident.occured_date = occured_date,
         found_incident.division = incident["division"],
@@ -83,26 +82,25 @@ def use_of_force():
         found_incident.disposition =incident["disposition"],
         found_incident.census_tract = None,
         found_incident.officer_force_type =incident["officerForceType"],
-        found_incident.resident_resist_type =incident["residentResistType"],
-        found_incident.officer_weapon_used =incident["officerWeaponUsed"],
+        found_incident.use_of_force_reason =incident["useOfForceReason"],
         found_incident.service_type =incident["serviceType"],
         found_incident.arrest_made =incident["arrestMade"],
         found_incident.arrest_charges =incident["arrestCharges"],
+        found_incident.resident_weapon_used =incident["residentWeaponUsed"],
         found_incident.resident_injured =incident["residentInjured"],
         found_incident.resident_hospitalized =incident["residentHospitalized"],
         found_incident.officer_injured =incident["officerInjured"],
         found_incident.officer_hospitalized =incident["officerHospitalized"],
-        found_incident.use_of_force_reason =incident["useOfForceReason"],
         found_incident.resident_race =incident["residentRace"],
-        found_incident.officer_race =incident["officerRace"],
-        found_incident.resident_age =incident["residentAge"],
-        found_incident.officer_age =incident["officerAge"],
         found_incident.resident_sex =incident["residentSex"],
-        found_incident.officer_sex =incident["officerSex"],
+        found_incident.resident_age = incident["residentAge"],
         found_incident.resident_condition =incident["residentCondition"],
-        found_incident.officer_condition =incident["officerCondition"],
         found_incident.officer_identifier =incident["officerIdentifier"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"]
+        found_incident.officer_race =incident["officerRace"],
+        found_incident.officer_sex =incident["officerSex"],
+        found_incident.officer_age = incident["officerAge"],
+        found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        found_incident.officer_condition =incident["officerCondition"]
         found_incident.save()
         updated_rows += 1
 
@@ -130,52 +128,52 @@ def officer_involved_shooting():
             found_incident = OfficerInvolvedShooting.create(
                     department_id = extractor.department_id,
                     opaque_id = incident["opaqueId"],
+                    service_type =incident["serviceType"],
                     occured_date = occured_date,
                     division = incident["division"],
                     precinct =incident["precinct"],
                     shift = incident["shift"],
                     beat =incident["beat"],
                     disposition =incident["disposition"],
-                    census_tract = None,
-                    officer_force_type =incident["officerForceType"],
-                    resident_weapon_used =incident["residentWeaponUsed"],
-                    service_type =incident["serviceType"],
-                    resident_race =incident["residentRace"],
-                    officer_race =incident["officerRace"],
                     resident_sex =incident["residentSex"],
-                    officer_sex =incident["officerSex"],
+                    resident_race =incident["residentRace"],
                     resident_age = incident["residentAge"],
-                    officer_age = incident["officerAge"],
-                    officer_identifier =incident["officerIdentifier"],
-                    officer_years_of_service =incident["officerYearsOfService"],
+                    resident_weapon_used =incident["residentWeaponUsed"],
                     resident_condition =incident["residentCondition"],
-                    officer_condition =incident["officerCondition"]
+                    officer_identifier =incident["officerIdentifier"],
+                    officer_force_type =incident["officerForceType"],
+                    officer_race =incident["officerRace"],
+                    officer_sex =incident["officerSex"],
+                    officer_age = incident["officerAge"],
+                    officer_years_of_service =incident["officerYearsOfService"],
+                    officer_condition =incident["officerCondition"],
+                    census_tract = None
                     )
             added_rows += 1
             continue
 
         found_incident.department_id = extractor.department_id,
         found_incident.opaque_id = incident["opaqueId"],
+        found_incident.service_type =incident["serviceType"],
         found_incident.occured_date = occured_date,
         found_incident.division = incident["division"],
         found_incident.precinct =incident["precinct"],
         found_incident.shift = incident["shift"],
         found_incident.beat =incident["beat"],
         found_incident.disposition =incident["disposition"],
-        found_incident.census_tract = None,
-        found_incident.officer_force_type =incident["officerForceType"],
-        found_incident.resident_weapon_used =incident["residentWeaponUsed"],
-        found_incident.service_type =incident["serviceType"],
-        found_incident.resident_race =incident["residentRace"],
-        found_incident.officer_race =incident["officerRace"],
         found_incident.resident_sex =incident["residentSex"],
-        found_incident.officer_sex =incident["officerSex"],
+        found_incident.resident_race =incident["residentRace"],
         found_incident.resident_age = incident["residentAge"],
-        found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_identifier =incident["officerIdentifier"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"]
+        found_incident.resident_weapon_used =incident["residentWeaponUsed"],
         found_incident.resident_condition =incident["residentCondition"],
-        found_incident.officer_condition =incident["officerCondition"]
+        found_incident.officer_identifier =incident["officerIdentifier"],
+        found_incident.officer_force_type =incident["officerForceType"],
+        found_incident.officer_race =incident["officerRace"],
+        found_incident.officer_sex =incident["officerSex"],
+        found_incident.officer_age = incident["officerAge"],
+        found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        found_incident.officer_condition =incident["officerCondition"],
+        found_incident.census_tract = None
         found_incident.save()
         updated_rows += 1
 
@@ -208,18 +206,20 @@ def complaints():
                     precinct =incident["precinct"],
                     shift = incident["shift"],
                     beat =incident["beat"],
-                    disposition =incident["disposition"],
-                    allegation = incident["allegation"],
                     allegation_type = incident["allegationType"],
-                    census_tract = None,
+                    allegation = incident["allegation"],
+                    disposition =incident["disposition"],
                     resident_race =incident["residentRace"],
-                    officer_race =incident["officerRace"],
                     resident_sex =incident["residentSex"],
-                    officer_sex =incident["officerSex"],
                     resident_age = incident["residentAge"],
-                    officer_age = incident["officerAge"],
                     officer_identifier =incident["officerIdentifier"],
-                    officer_years_of_service =incident["officerYearsOfService"])
+                    officer_race =incident["officerRace"],
+                    officer_sex =incident["officerSex"],
+                    officer_age = incident["officerAge"],
+                    officer_years_of_service =incident["officerYearsOfService"],
+                    census_tract = None
+                    )
+
             added_rows += 1
             continue
 
@@ -230,18 +230,18 @@ def complaints():
         found_incident.precinct =incident["precinct"],
         found_incident.shift = incident["shift"],
         found_incident.beat =incident["beat"],
-        found_incident.disposition =incident["disposition"],
-        found_incident.allegation = incident["allegation"],
         found_incident.allegation_type = incident["allegationType"],
-        found_incident.census_tract = None,
+        found_incident.allegation = incident["allegation"],
+        found_incident.disposition =incident["disposition"],
         found_incident.resident_race =incident["residentRace"],
-        found_incident.officer_race =incident["officerRace"],
         found_incident.resident_sex =incident["residentSex"],
-        found_incident.officer_sex =incident["officerSex"],
-        found_incident.resident_age =incident["residentAge"],
-        found_incident.officer_age =incident["officerAge"],
+        found_incident.resident_age = incident["residentAge"],
         found_incident.officer_identifier =incident["officerIdentifier"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"]
+        found_incident.officer_race =incident["officerRace"],
+        found_incident.officer_sex =incident["officerSex"],
+        found_incident.officer_age = incident["officerAge"],
+        found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        found_incident.census_tract = None
         found_incident.save()
         updated_rows += 1
 
