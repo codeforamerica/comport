@@ -5,7 +5,7 @@ from flask.ext.login import login_required
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.data.models import UseOfForceIncident, CitizenComplaint,OfficerInvolvedShooting
-from comport.utils import parse_date
+from comport.utils import parse_date, parse_int
 import json
 
 blueprint = Blueprint("data", __name__, url_prefix='/data',
@@ -66,8 +66,8 @@ def use_of_force():
                     officer_race =incident["officerRace"],
                     officer_sex =incident["officerSex"],
                     officer_age = incident["officerAge"],
-                    officer_years_of_service =incident["officerYearsOfService"],
-                    officer_condition =incident["officerCondition"]
+                    officer_years_of_service = parse_int(incident["officerYearsOfService"]),
+                    officer_condition = incident["officerCondition"]
                     )
             added_rows += 1
             continue
@@ -99,7 +99,7 @@ def use_of_force():
         found_incident.officer_race =incident["officerRace"],
         found_incident.officer_sex =incident["officerSex"],
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        found_incident.officer_years_of_service =parse_int(incident["officerYearsOfService"]),
         found_incident.officer_condition =incident["officerCondition"]
         found_incident.save()
         updated_rows += 1
@@ -145,7 +145,7 @@ def officer_involved_shooting():
                     officer_race =incident["officerRace"],
                     officer_sex =incident["officerSex"],
                     officer_age = incident["officerAge"],
-                    officer_years_of_service =incident["officerYearsOfService"],
+                    officer_years_of_service =parse_int(incident["officerYearsOfService"]),
                     officer_condition =incident["officerCondition"],
                     census_tract = None
                     )
@@ -171,7 +171,7 @@ def officer_involved_shooting():
         found_incident.officer_race =incident["officerRace"],
         found_incident.officer_sex =incident["officerSex"],
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        found_incident.officer_years_of_service =parse_int(incident["officerYearsOfService"]),
         found_incident.officer_condition =incident["officerCondition"],
         found_incident.census_tract = None
         found_incident.save()
