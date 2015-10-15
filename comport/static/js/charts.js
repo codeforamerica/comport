@@ -55,6 +55,23 @@ function allegationsToComplaints(rows){
   return complaintGrouper.map(rows, d3.map).values();
 }
 
+function uniqueOfficerComplaints(rows){
+  var newSet = [];
+  var grouper = d3.nest()
+    .key(function (d){ return d.officerIdentifier; })
+    .key(function (d){ return d.id; });
+  var officerComplaintMap = grouper.map(rows, d3.map);
+  officerComplaintMap.forEach(function(offId, complaints){
+    newSet.push({ 
+      officerId: offId,
+      complaintCount: complaints.keys().length,
+      values: complaints
+    });
+  });
+  return newSet;
+}
+
+
 var raceKey = {
   "Unknown": "Unknown",
   "Black": "Black",
@@ -73,28 +90,96 @@ function race(k){
   return function(d){ return raceKey[d[k]]; };
 }
 
+function uniqueResidentProxy(d){
+   return [ d.residentAge, "year old", d.residentRace, d.residentSex ].join(" ");
+}
+
+function uniqueComplaintAboutOfficerByResidentProxy(d){
+   return [ 
+     d.residentAge, 
+     "year old", 
+     d.residentRace, 
+     d.residentSex,
+     "filed",
+     d.id,
+     "about",
+     d.officerIdentifier
+       ].join(" ");
+}
+
 function raceMatrix(config, data){
-  var raceData = d3.nest()
-    .key( race('residentRace') )
-    .key( race('officerRace') )
-    .rollup( function (values){ 
-      return values.length;
-    }).map(data, d3.map);
-  var officerRaceTotals = d3.nest()
-    .key( race('officerRace') )
-    .rollup( function( values ){
-      return values.length;
-    }).map(data, d3.map);
-  raceData.forEach(function(resRace, resRaceMap){
-    var total = 0;
-    resRaceMap.values().map(function (d){
-      total = total + d;
+
+  var complaints = d3.nest()
+    .key(uniqueComplaintAboutOfficerByResidentProxy)
+    .rollup(function (group){
+      var obj = {};
+      [ 'residentAge', 'residentSex', 'officerAge',
+        'officerSex', 'officerYearsOfService',
+        ].map(function(k){
+          obj[k] = group[0][k];
+        });
+      [ 'residentRace', 'officerRace',
+        ].map(function(k){
+          obj[k] = raceKey[group[0][k]];
+        });
+      obj.allegations = group;
+      return obj;
+    }).entries(data);
+
+  var totalComplaintCount = complaints.length;
+  var counts = d3.nest()
+    .key(function(d){
+      return d.values.residentRace;
+    }).key(function(d){
+      return d.values.officerRace;
+    }).rollup(function(group){
+      return {
+        count: group.length,
+        percent: ( group.length / totalComplaintCount ),
+        complaints: group,
+      };
+    }).map(complaints, d3.map);
+
+  // get resident race totals
+  counts.keys().forEach(function(resRace){
+      var total = 0;
+      var subgroups = counts.get(resRace);
+      subgroups.values().map(function(offRace){ total += offRace.count; });
+      subgroups.count = total;
+      subgroups.percent = ( total / totalComplaintCount );
     });
-    resRaceMap.total = total;
+
+  var officerRaceTotals = d3.nest()
+    .key(function(d){ return d.values.officerRace; })
+    .rollup(function(group){
+      return {
+        count: group.length,
+        percent: ( group.length / totalComplaintCount ),
+      };
+    }).map(complaints, d3.map);
+
+  counts.officerRaceTotals = officerRaceTotals;
+  return counts;
+}
+
+function officerComplaintsCount(config, data){
+  data = uniqueOfficerComplaints(data);
+  var counts = d3.nest()
+    .key( function (d){
+      return d.complaintCount;
+    }).rollup( function (values){
+      return values.length;
+    }).entries(data);
+  return counts.map(function(e){
+    var obj = {};
+    var n = e.key;
+    obj['label'] = "Officers with " + ( n > 1 ? n+" complaints" : n+" complaint" );
+    obj['count'] = n;
+    obj[config.y] = e.values;
+    return obj;
   });
-  raceData.officerTotals = officerRaceTotals;
-  console.log("nested some races :(", raceData);
-  return raceData;
+
+
 }
 
 var experienceBuckets = d3.scale.quantize()

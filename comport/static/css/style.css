@@ -124,6 +124,17 @@ textarea {
   max-width: 700px;
 }
 
+/* Bricks/Blocks */
+.row + .row {
+  margin-top: 2em;
+}
+
+.brick-title {
+  border-bottom: 1px solid black;
+  padding-bottom: 0.6em;
+  margin-bottom: 1em;
+}
+
 /* Forms */
 
 .form-group {

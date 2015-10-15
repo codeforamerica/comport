@@ -13,7 +13,7 @@ function lineChart(config, data){
   xWidth = 4;
   height = 8;
   width = (data.length * xWidth);
-  dot_radius = 0.5;
+  dot_radius = 0.4;
   var xAxisTickFormat = config.xTickFormat || d3.format('d');
 
 

@@ -16,7 +16,9 @@
            </form>
          </br>
       {% else %}
-        <h4 class="brick-title">{{ chart_block.title }}</h4>
+        <div class="brick-titleblock col-md-12">
+          <h4 class="brick-title">{{ chart_block.title }}</h4>
+        </div>
         <div class="col-md-6">
           <div class="chart {{ chart_block.slug }}"></div>
         </div>

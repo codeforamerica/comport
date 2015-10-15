@@ -268,9 +268,15 @@ var configs = {
     dataFunc: raceMatrix,
   },
 
+  'complaints-by-officer': {
+    chartType: 'flagHistogram',
+    x: "label",
+    y: "count",
+    dataFunc: officerComplaintsCount,
+  },
+
 
 };
-
 
 
 d3.csv(

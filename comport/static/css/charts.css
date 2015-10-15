@@ -1,12 +1,17 @@
+.chart {
+  font-size: 0.8em;
+  line-height: 1.1em;
+}
+
 .trend-line {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 1.5px;
   stroke: #205493;
 }
 
 .dot {
   fill: #205493;
-  stroke-width: 2px;
+  stroke-width: 1px;
   stroke: #fff;
 }
 
@@ -19,6 +24,9 @@
   stroke: #aaa;
 }
 
+.hist-label {
+  max-width: 18em;
+}
 .hist-flag-bar {
   height: 1em;
   background-color: #205493;
@@ -43,4 +51,11 @@
 }
 .percent-label {
   margin-left: 0.5em;
+}
+
+.matrix-table th, .matrix-table td {
+  padding: 0.5em 0.4em;
+}
+.matrix-row + .matrix-row {
+  margin-top: 0.4em;
 }

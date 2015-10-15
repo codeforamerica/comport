@@ -16,6 +16,12 @@ function orderedGet(keys, map){
   return results;
 }
 
+percentFmt = d3.format("%");
+
+function countAndPercentFmt(d){
+  return d.count + " (" +  percentFmt(d.percent) + ")";
+}
+
 function sortedEntries(keys, map){
   var sorted = [];
   var entries = map.entries();
@@ -54,7 +60,8 @@ function matrixChart(config, data){
     .append("table")
     .attr("class", "matrix-table table");
 
-  var officerEntries = sortedEntries(races, data.officerTotals);
+  console.log("data for matrix", data);
+  var officerEntries = sortedEntries(races, data.officerRaceTotals);
   var officerRaceKeys = officerEntries.map(function(e){ return e.key; });
   var officerRaceTotals = officerEntries.map(function(e){ return e.value; });
 
@@ -67,12 +74,12 @@ function matrixChart(config, data){
       return orderedGet(races, e.value);
     }).enter().append("td")
     .attr("class", "matrix-cell")
-    .text(String);
+    .text(countAndPercentFmt);
 
   var residentTotals = rows.insert("th", ":first-child")
     .attr("class", "matrix-total")
     .text(function (e){ 
-      return e.value.total;
+      return countAndPercentFmt(e.value);
     });
 
   var residentLabels = rows.insert("th", ":first-child")
@@ -85,7 +92,7 @@ function matrixChart(config, data){
   officerTotals.selectAll("th")
     .data(officerRaceTotals).enter().append("th")
     .attr("class", "matrix-total")
-    .text(String);
+    .text(countAndPercentFmt);
 
   var officerLabels = table.insert("tr", ":first-child");
   officerLabels.selectAll("th")
