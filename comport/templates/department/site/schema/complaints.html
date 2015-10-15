@@ -3,15 +3,16 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-md-12">
-    <h3>Dataset: Citizen Complaints</h3>
-
-    <form method="get" action="/department/{{department.id}}/complaints.csv">
-      <button type="submit">Download this dataset</button>
-    </form>
+  <div class="col-md-12 schema-wrapper">
+    <div class="schema-header">
+      <h1>Dataset: Citizen Complaints</h1>
+      <form method="get" action="/department/{{department.id}}/complaints.csv">
+        <button type="submit">Download this dataset</button>
+      </form>
+    </div>
 
     <h4>Fields included in this dataset and their definitions:</h4>
-    <table class="table">
+    <table class="table schema-table">
       <tr>
         <th>Field</th>
         <th>Information</th>
