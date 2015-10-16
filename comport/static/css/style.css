@@ -86,6 +86,9 @@ p + p {
   font-size: 20px;
   line-height: 50px;
 }
+.navbar-right{
+  margin-right: 51px;
+}
 
 @media (min-width: 768px) {
   .navbar-header {
