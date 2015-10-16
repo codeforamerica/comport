@@ -153,10 +153,10 @@ var configs = {
   'uof-dispositions': {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.disposition; },
+    keyFunc: function(d){ return d.finding; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].disposition; },
+    xFunc: function(b){ return b[0].finding; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
@@ -209,7 +209,7 @@ var configs = {
     sortWith: function(d){ return d.month; },
     x: 'month',
     xFunc: function(b){ return d3.time.month.floor(b[0].date); },
-    xTickFormat: function(d){ 
+    xTickFormat: function(d){
       var fmt = d3.time.format('%b %Y');
       return fmt(new Date(d));
     },
@@ -243,10 +243,10 @@ var configs = {
   'complaints-by-precinct': {
     filter: last12Months,
     chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.precinct; },
+    keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].precinct; },
+    xFunc: function(b){ return b[0].district; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
@@ -254,10 +254,10 @@ var configs = {
   'complaints-by-disposition': {
     filter: last12Months,
     chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.disposition; },
+    keyFunc: function(d){ return d.finding; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].disposition; },
+    xFunc: function(b){ return b[0].finding; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },
