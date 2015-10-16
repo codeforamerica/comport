@@ -9,11 +9,12 @@
       <form method="get" action="/department/{{department.id}}/complaints.csv">
         <button type="submit">Download this dataset</button>
       </form>
+
+      <form method="get" action="/department/{{department.id}}/demographics.csv">
+        <button type="submit">Download Officer Demographic Information for the IMPD</button>
+      </form>
     </div>
 
-    <form method="get" action="/department/{{department.id}}/demographics.csv">
-      <button type="submit">Download Officer Demographic Information for the IMPD</button>
-    </form>
 
     <h4>Fields included in this dataset and their definitions:</h4>
     <table class="table schema-table">
