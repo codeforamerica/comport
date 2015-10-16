@@ -239,3 +239,7 @@ footer .footer-nav {
   margin-right: 25px;
   list-style: none;
 }
+
+.horizontal-content > p {
+  width: inherit;
+}
