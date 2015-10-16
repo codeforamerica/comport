@@ -237,4 +237,4 @@ def public_complaints_schema():
     department = Department.get_by_id(1)
     if not department:
         abort(404)
-    return render_template("department/site/schema/complaints.html", department=department)
+    return render_template("department/site/schema/complaints.html", department=department, published=True)
