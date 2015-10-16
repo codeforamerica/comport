@@ -49,9 +49,9 @@ body {
 
 /* LAYOUT
  */
-
+/*
 p { margin-bottom: 0.5rem;
-    width: 32rem; }
+    width: 32rem; }*/
 
 .aside, .lead {
   font-family: Merriweather, Georgia, serif;
@@ -163,10 +163,10 @@ textarea {
 .disclaimer{
   font-size: 7px;
   color: #CCCCCC;
-}  
+}
 .disclaimer p{
   width: 100%;
-}                        
+}
 
 /* Forms */
 
