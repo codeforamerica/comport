@@ -201,8 +201,6 @@ def use_of_force_csv(department_id):
     return Response(department.get_uof_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/complaints.csv')
-@login_required
-@admin_or_department_required()
 def complaints_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -219,10 +217,24 @@ def denominator_csv(department_id):
     return Response(department.get_denominator_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/demographics.csv')
-@login_required
-@admin_or_department_required()
 def demographics_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
     return Response(department.get_demographic_csv(), mimetype="text/csv")
+
+
+#<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
+@blueprint.route("/IMPD/complaints")
+def public_complaints():
+    department = Department.get_by_id(1)
+    if not department:
+        abort(404)
+    return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False, published=True)
+
+@blueprint.route('/IMPD/schema/complaints')
+def public_complaints_schema():
+    department = Department.get_by_id(1)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/complaints.html", department=department)
