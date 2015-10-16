@@ -77,7 +77,7 @@ def register_template_globals(app):
 
 
 def register_logging(app):
-    if 'config.ProductionConfig' in os.environ['APP_SETTINGS']:
+    if 'config.ProductionConfig' in os.environ.get('APP_SETTINGS', []):
 
         print("PROD LOGGING ENGAGED")
 
@@ -106,8 +106,6 @@ def register_logging(app):
         # app.logger.addHandler(file_handler)
         # app.logger.setLevel(logging.DEBUG)
 
-    elif 'test' in config_string.lower():
-        app.logger.setLevel(logging.CRITICAL)
 
     else:
         # log to console for dev
