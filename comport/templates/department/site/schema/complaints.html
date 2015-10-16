@@ -24,11 +24,7 @@
       </tr>
       <tr>
         <td>Id</td>
-        <td>This is a unique identifier for a given complaint. Complaints may contain multiple allegations, when that is the case there will be multiple entries for one incident number.</td>
-      </tr>
-      <tr>
-        <td>Service Type</td>
-        <td>The reason that an interaction between an officer and a citizen began.</td>
+        <td>This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.</td>
       </tr>
       <tr>
         <td>Occured Date</td>
@@ -36,18 +32,22 @@
       </tr>
       <tr>
         <td>Division</td>
-        <td>This is the Division that the officer is assigned to.</td>
+        <td>This is the Division that the officer was assigned to at time of incident, such as Criminal Investigation or Administration.</td>
       </tr>
       <tr>
-        <td>Precint</td>
-        <td>This is the District or department that the officer is assigned to.</td>
+        <td>District</td>
+        <td>This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.</td>
       </tr>
       <tr>
         <td>Shift</td>
-        <td>This is the shift that the Officer was assigned to.</td>
+        <td>This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.</td>
       </tr>
       <tr>
-        <td>Disposition</td>
+        <td>Beat</td>
+        <td>Some shifts contain this secondary level of detail on the officer's assignment.</td>
+      </tr>
+      <tr>
+        <td>Finding</td>
         <td>
           Each complaint may contain multiple allegations, such as rudeness and inappropriate language. Each allegation is ruled on separately. There are four possible rulings:
           Sustained means that the investigation agreed with the allegation in the complaint. When allegations are sustained, the Chief of Police will take the appropriate disciplinary action.
@@ -58,11 +58,11 @@
       </tr>
       <tr>
         <td>Allegation Type</td>
-        <td>Allegations in complaints fall into a number of classes.</td>
+        <td>Allegations in complaints fall into a number of classes. Some classes of allegations are: Citizen Interactions, Bias Based Policing and Use of Force.</td>
       </tr>
       <tr>
         <td>Allegation</td>
-        <td>Allegations are tied to the regulations and standards which Officers are held to.</td>
+        <td>Allegations are tied to the regulations and standards which Officers are held to. Examples are: rude, demeaning and affronting language, and failure to provide name or badge number, which both fall under the allegation class of citizen interaction.</td>
       </tr>
       <tr>
         <td>Resident Race</td>
@@ -94,7 +94,7 @@
       </tr>
       <tr>
         <td>Officer Indentifier</td>
-        <td>This is a number used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+        <td>This is a hased identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
       </tr>
     </table>
   </div>
