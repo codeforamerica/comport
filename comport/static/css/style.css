@@ -143,6 +143,9 @@ textarea {
   padding-left: 40px;
   padding-right: 40px;
 }
+.schema-wrapper p{
+  width: 100%;
+}
 
 .schema-header{
   text-align: center;
@@ -157,6 +160,13 @@ textarea {
   font-style: italic;
   padding-right: 30px;
 }
+.disclaimer{
+  font-size: 7px;
+  color: #CCCCCC;
+}  
+.disclaimer p{
+  width: 100%;
+}                        
 
 /* Forms */
 
