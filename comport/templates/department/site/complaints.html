@@ -15,6 +15,23 @@
   <div class="col-md-10 col-md-offset-1">
     <h1>{{department.name}}</h1>
     <h2>Citizen Complaints</h2>
+    {% if editing %}
+        <form method="post" action="/content/complaints-introduction/{{department.id}}">
+          <div class="form-group">
+            <label for="chart_content">Content:</label>
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['complaints-introduction'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+            <input type="submit" />
+         </form>
+       </br>
+    {% else %}
+      {{ markdown(chart_blocks['complaints-introduction'].content) }}
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
     {{ brick( chart_blocks['complaints-by-year'], editing, department ) }}
     {{ horizontal_brick( chart_blocks['complaints-by-month'], editing, department ) }}
     {{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
