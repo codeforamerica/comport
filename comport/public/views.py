@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import (Blueprint, request, render_template, flash, url_for,
+from flask import (Blueprint, request, render_template, flash, url_for, abort,
                     redirect, session)
 from flask.ext.login import login_user, login_required, logout_user
 
