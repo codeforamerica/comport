@@ -82,5 +82,14 @@ class ChartBlockDefaults:
             content ="Here is the content for Complaints by Officer",
             date_updated = None,
             date_edited = None
+        ),
+        ChartBlock(
+            title ="Introduction to Complaints Data",
+            caption ="",
+            slug ="complaints-introduction",
+            dataset ="complaints",
+            content ="Here is the introduction to the Complaints data",
+            date_updated = None,
+            date_edited = None
         )
     ]
