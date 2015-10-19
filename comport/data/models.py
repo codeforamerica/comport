@@ -159,13 +159,13 @@ class CitizenComplaint(SurrogatePK, Model):
         precinct = kwargs.pop("precinct", None)
 
 
-        if resident_race and resident_race.lower().strip() in race_map:
+        if resident_race is not None and resident_race.lower().strip() in race_map:
             resident_race = race_map[resident_race.lower().strip()]
 
-        if resident_sex and resident_sex.lower().strip() in sex_map:
+        if resident_sex is not None and resident_sex.lower().strip() in sex_map:
             resident_sex = sex_map[resident_sex.lower().strip()]
 
-        if precinct:
+        if precinct is not None:
             precinct = titlecase(precinct.strip())
 
         self.resident_race = resident_race.capitalize().strip()
