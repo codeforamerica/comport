@@ -193,7 +193,7 @@ def complaints():
 
     for incident in j['data']:
         print(incident)
-        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
+        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"],allegation_type = incident["allegationType"],allegation = incident["allegation"],officer_identifier =incident["officerIdentifier"],department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
 
