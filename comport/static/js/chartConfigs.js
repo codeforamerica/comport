@@ -189,6 +189,9 @@ var configs = {
 
   'complaints-by-year': {
     chartType: 'lineChart',
+    filter: function(rows){
+      return allegationsToComplaints(rows);
+    },
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
     x: 'year',
