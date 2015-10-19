@@ -168,8 +168,14 @@ class CitizenComplaint(SurrogatePK, Model):
         if precinct is not None:
             precinct = titlecase(precinct.strip())
 
-        self.resident_race = resident_race.capitalize().strip()
-        self.resident_sex = resident_sex.capitalize().strip()
+        if resident_race is not None:
+            resident_race = resident_race.capitalize().strip()
+
+        if resident_sex is not None:
+            resident_sex = resident_sex.capitalize().strip()
+
+        self.resident_race = resident_race
+        self.resident_sex = resident_sex
         self.precinct = precinct
 
 class OfficerInvolvedShooting(SurrogatePK, Model):
