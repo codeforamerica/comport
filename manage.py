@@ -35,7 +35,7 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'UseOfForceIncident': UseOfForceIncident}
+    return {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'UseOfForceIncident': UseOfForceIncident, "CitizenComplaint": CitizenComplaint}
 
 
 @manager.command
@@ -69,7 +69,7 @@ def load_test_data():
             for complaint in reader:
                 officer_identifier = hashlib.md5((complaint.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
                 opaque_id = hashlib.md5((complaint.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
-                
+
                 CitizenComplaint.create(
                     opaque_id = opaque_id,
                     department_id = department.id,
