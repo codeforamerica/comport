@@ -1,3 +1,21 @@
+/*
+This contains two charting functions: 
+
+1) `basicPercent`, use to draw a list of percents as a chart. 
+2) `flagHistogram`, creates an html table that contains labels in the left column and 
+   bars with quantities in the right column.
+
+All chart drawing functions take two arguments:
+
+1) a `config` object
+2) structured `data`
+
+All chart configs are coming from `chartConfigs.js`, so you can find examples there.
+
+`charts.js` processes each config object, structures data accordingly, finds the correct drawing function,
+and then passes config and structured data into the drawing function. 
+
+*/
 var percentFormat = d3.format("d");
 
 function basicPercent(config, data){
@@ -82,16 +100,3 @@ function flagHistogram(config, data){
 
 }
 
-function mountainHistogram(config, data){
-
-  // set basic dimensions
-  // we need a width, a height for each
-  var width,
-      margin,
-      barHeight,
-      font_size;
-
-  font_size = 14; // px
-  width = 12;
-
-}
