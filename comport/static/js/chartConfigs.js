@@ -169,7 +169,11 @@ var configs = {
     },
 
   'uof-race': {
+    filter: last12Months,
     chartType: 'matrix',
+    dataFunc: raceMatrix,
+    xAxisTitle: "Resident",
+    yAxisTitle: "Officer",
     },
 
   'uof-per-officer': {
@@ -287,6 +291,7 @@ var configs = {
 
 };
 
+console.log("csv_url", csv_url);
 // Running the all the code that draws the charts
 d3.csv(
   csv_url,

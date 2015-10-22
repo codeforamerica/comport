@@ -20,6 +20,9 @@
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     {{ brick( chart_blocks['uof-by-inc-district'] , editing, department) }}
+    {{ brick( chart_blocks['uof-force-type'] , editing, department) }}
+    {{ brick( chart_blocks['uof-race'] , editing, department) }}
+  </div>
 </div>
 
 {% endblock content %}
@@ -27,7 +30,11 @@
 {% block js %}
 <script type="text/javascript">
 var csv_url = '{{ url_for(".use_of_force_csv", department_id=department.id ) }}';
-var charts = [];
+var charts = [
+    'uof-by-inc-district',
+    'uof-force-type',
+    'uof-race',
+];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>

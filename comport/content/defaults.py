@@ -166,13 +166,37 @@ We have done some initial analysis on this dataset, though there are many other 
             date_updated = None,
             date_edited = None
         ),
+
         ChartBlock(
             title ="Use of force by precinct/district of incident",
             caption ="",
             slug ="uof-by-inc-district",
             dataset ="use-of-force",
-            content ="""For PD leadership, residents: accountability, Who is resorting to force? Where?""",
+            content ="""No content
+            '""",
             date_updated = None,
             date_edited = None
-        )
+        ),
+
+        ChartBlock(
+            title ="Demographics of Indy & IMPD",
+            caption ="",
+            slug ="uof-force-type",
+            dataset ="use-of-force",
+            content ="""No content
+            '""",
+            date_updated = None,
+            date_edited = None
+        ),
+
+        ChartBlock(
+            title ="Racial breakdown in use of force",
+            caption ="",
+            slug ="uof-race",
+            dataset ="use-of-force",
+            content ="""No content
+            '""",
+            date_updated = None,
+            date_edited = None
+        ),
     ]
