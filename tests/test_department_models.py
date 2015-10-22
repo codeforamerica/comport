@@ -63,8 +63,14 @@ class TestExtactors:
         department = DepartmentFactory()
         department.save()
 
-        uof_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-slug", department_id=department.id)
-        non_uof_block = ChartBlock.create(dataset="Complaints",title="Complaints", slug="complaints-slug", department_id=department.id)
+        uof_block = ChartBlock(title="Use of Force", dataset="use-of-force", slug="uof-slug")
+        non_uof_block = ChartBlock(dataset="Complaints",title="complaints", slug="complaints-slug")
+
+        department.chart_blocks.append(uof_block)
+        department.chart_blocks.append(non_uof_block)
+
+        department.save()
+
 
         uof_blocks = department.get_uof_blocks()
 
@@ -75,9 +81,9 @@ class TestExtactors:
         department = DepartmentFactory()
         department.save()
 
-        uof_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-slug", department_id=department.id)
-        uof_type_of_call_block = ChartBlock.create(title="Use of Force", dataset="Use of Force", slug="uof-type-of-call", department_id=department.id)
-        non_uof_block = ChartBlock.create(dataset="Complaints",title="Complaints", slug="complaints-slug", department_id=department.id)
+        uof_block = ChartBlock.create(title="Use of Force", dataset="use-of-force", slug="uof-slug", department_id=department.id)
+        uof_type_of_call_block = ChartBlock.create(title="Use of Force", dataset="use-of-force", slug="uof-type-of-call", department_id=department.id)
+        non_uof_block = ChartBlock.create(dataset="Complaints",title="complaints", slug="complaints-slug", department_id=department.id)
 
         uof_blocks = department.get_uof_blocks()
 
