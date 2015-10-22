@@ -165,5 +165,14 @@ We believe that being transparent about our work will help us better serve the p
 We have done some initial analysis on this dataset, though there are many other ways the data can be compared and analyzed. The underlying data is available [here](https://www.projectcomport.org/department/IMPD/schema/complaints) for public use.""",
             date_updated = None,
             date_edited = None
+        ),
+        ChartBlock(
+            title ="Use of force by precinct/district of incident",
+            caption ="",
+            slug ="uof-by-inc-district",
+            dataset ="use-of-force",
+            content ="""For PD leadership, residents: accountability, Who is resorting to force? Where?""",
+            date_updated = None,
+            date_edited = None
         )
     ]

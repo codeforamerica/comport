@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
+
 {% from "department/site/chart_block.html" import brick %}
+{% from "department/site/horizontal_chart_block.html" import horizontal_brick %}
+{% from "department/site/demographics_table_block.html" import demographic_brick %}
 
 {% block css %}
   <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
@@ -8,66 +11,29 @@
 {% endblock css %}
 
 {% block content %}
-<h1>{{department.name}}</h1>
-
-<h3>Use of Force</h3>
-
-{{ brick( chart_blocks['uof-by-year'] ) }}
-
-{{ brick( chart_blocks['uof-type-of-call'] ) }}
-
-{{ brick( chart_blocks['uof-reason'] ) }}
-
-{{ brick( chart_blocks['uof-citizen-weapon'] ) }}
-
-{{ brick( chart_blocks['uof-by-shift'] ) }}
-
-{{ brick( chart_blocks['uof-by-inc-district'] ) }}
-
-{{ brick( chart_blocks['uof-map'] ) }}
-
-{{ brick( chart_blocks['uof-force-type'] ) }}
-
-{{ brick( chart_blocks['uof-officer-injuries'] ) }}
-
-{{ brick( chart_blocks['uof-resident-injuries'] ) }}
-
-{{ brick( chart_blocks['uof-dispositions'] ) }}
-
-{{ brick( chart_blocks['pd-resident-demographics'] ) }}
-
-{{ brick( chart_blocks['uof-race'] ) }}
-
-{{ brick( chart_blocks['uof-per-officer'] ) }}
-
-{{ brick( chart_blocks['uof-officer-experience'] ) }}
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h1>{{department.name}}</h1>
+    <h2>Use of Force</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    {{ brick( chart_blocks['uof-by-inc-district'] , editing, department) }}
+</div>
 
 {% endblock content %}
 
 {% block js %}
 <script type="text/javascript">
-var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
-var charts = [
-  'uof-by-year',
-  'uof-type-of-call',
-  'uof-reason',
-  'uof-citizen-weapon',
-  'uof-by-shift',
-  'uof-by-inc-district',
-  'uof-map',
-  'uof-force-type',
-  'uof-officer-injuries',
-  'uof-resident-injuries',
-  'uof-dispositions',
-  'pd-resident-demographics',
-  'uof-race',
-  'uof-per-officer',
-  'uof-officer-experience',
-];
+var csv_url = '{{ url_for(".use_of_force_csv", department_id=department.id ) }}';
+var charts = [];
 </script>
 <script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>
+<script type="text/javascript" src="/static/js/matrixChart.js"></script>
 <script type="text/javascript" src="/static/js/charts.js"></script>
+<script type="text/javascript" src="/static/js/chartConfigs.js"></script>
 
 {% endblock js %}
