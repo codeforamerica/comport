@@ -13,7 +13,6 @@ from comport.content.defaults import ChartBlockDefaults
 from flask import current_app
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
-from .defaults import DepartmentDefaults
 import csv
 import io
 
@@ -29,23 +28,12 @@ class Department(SurrogatePK, Model):
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     demographic_values = relationship("DemographicValue", backref="department")
-    why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
-    how_you_can_use_this_data = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
-    contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
 
     def __init__(self, name, load_defaults=True, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
-        self.what_this_is = DepartmentDefaults.what_this_is
-        self.why_we_are_doing_this = DepartmentDefaults.why_we_are_doing_this
-        self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
-        self.contact_us = DepartmentDefaults.contact_us
-
         if load_defaults:
             for default_chart_block in ChartBlockDefaults.defaults:
                 self.chart_blocks.append(default_chart_block)
-
-    def get_links_by_type(self,type):
-        return list(filter(lambda l: l.type == type, self.links))
 
     def get_uof_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "use-of-force"])
