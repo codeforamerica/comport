@@ -56,8 +56,6 @@ function flagHistogram(config, data){
   // set basic dimensions
   // we need a width, a height for each
   var width,
-      margin,
-      barHeight,
       font_size;
 
   font_size = 14; // px
@@ -72,7 +70,7 @@ function flagHistogram(config, data){
 
   var y = function(d){ return yScale(d[config.y]) };
 
-  // draw table
+  // draw containing table node
   var table = d3.select(config.parent)
     .append("table")
     .attr("class", "flagHistogram-table");
@@ -83,6 +81,11 @@ function flagHistogram(config, data){
 
   var rowLabels = rows.append("td")
     .attr("class", "hist-label")
+    .attr("title", function(d){
+      if( d[config.x] == "Other" ){
+        return "Other includes:\n- " + d.groups.join("\n- ");
+      }
+    })
     .text(function(d){ return d[config.x] || "Unspecified"; });
 
   var flags = rows.append("td")

@@ -162,6 +162,34 @@ function raceMatrix(config, data){
   return counts;
 }
 
+function addOtherCategory(dataMap){
+  var threshold = .01;
+  var small_list = [];
+  var total = dataMap.values().map(function (g){
+    return g.count;
+  }).reduce(function (a,b) {
+    return a + b;
+  }); 
+  var otherTotal = 0;
+
+  dataMap.forEach(function(key, group) {
+    if(group.count / total < threshold){
+      small_list.push(key);
+      otherTotal = otherTotal + group.count;
+    }
+  });
+    
+  dataMap.set("Other", {
+    count: otherTotal,
+    type: "Other",
+    groups: small_list,
+  });
+  
+  small_list.forEach(function(key){
+    dataMap.remove(key);
+  });
+}
+
 function officerComplaintsCount(config, data){
   data = uniqueOfficerComplaints(data);
   var counts = d3.nest()
@@ -325,6 +353,5 @@ drawFuncs = {
   'map': mapChart,
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
-  'mountainHistogram': mountainHistogram,
   'matrix': matrixChart,
 }
