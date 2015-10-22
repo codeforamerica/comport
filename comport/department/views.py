@@ -16,7 +16,7 @@ blueprint = Blueprint("department", __name__, url_prefix='/department',
                       static_folder="../static")
 
 #<<<<<<<< ADMIN ENDPOINTS >>>>>>>>>>
-@blueprint.route("/<int:department_id>/")
+@blueprint.route("/<int:department_id>")
 @login_required
 @admin_or_department_required()
 def department_dashboard(department_id):
@@ -61,7 +61,7 @@ def start_extractor(department_id):
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
 #<<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
-@blueprint.route("/<int:department_id>/edit/useofforce/")
+@blueprint.route("/<int:department_id>/edit/useofforce")
 @login_required
 @admin_or_department_required()
 def edit_use_of_force(department_id):
@@ -70,7 +70,7 @@ def edit_use_of_force(department_id):
         abort(404)
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=True)
 
-@blueprint.route("/<int:department_id>/edit/complaints/")
+@blueprint.route("/<int:department_id>/edit/complaints")
 @login_required
 @admin_or_department_required()
 def edit_complaints(department_id):
@@ -79,7 +79,7 @@ def edit_complaints(department_id):
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=True)
 
-@blueprint.route("/<int:department_id>/edit/demographics/")
+@blueprint.route("/<int:department_id>/edit/demographics")
 @login_required
 @admin_or_department_required()
 def edit_demographics(department_id):
@@ -127,7 +127,7 @@ def delete_demographic_row(department_id, value_id):
         'department.edit_demographics', department_id=department_id
     ))
 
-@blueprint.route("/<int:department_id>/edit/index/",methods=["GET","POST"])
+@blueprint.route("/<int:department_id>/edit/index",methods=["GET","POST"])
 @login_required
 @admin_or_department_required()
 def edit_index(department_id):
@@ -151,7 +151,7 @@ def edit_index(department_id):
 
 
 #<<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
-@blueprint.route("/<int:department_id>/preview/useofforce/")
+@blueprint.route("/<int:department_id>/preview/useofforce")
 @login_required
 @admin_or_department_required()
 def preview_use_of_force(department_id):
@@ -160,7 +160,7 @@ def preview_use_of_force(department_id):
         abort(404)
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=False)
 
-@blueprint.route("/<int:department_id>/preview/complaints/")
+@blueprint.route("/<int:department_id>/preview/complaints")
 @login_required
 @admin_or_department_required()
 def preview_complaints(department_id):
@@ -169,7 +169,7 @@ def preview_complaints(department_id):
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False)
 
-@blueprint.route("/<int:department_id>/preview/index/",methods=["GET","POST"])
+@blueprint.route("/<int:department_id>/preview/index",methods=["GET","POST"])
 @login_required
 @admin_or_department_required()
 def preview_index(department_id):
@@ -180,7 +180,7 @@ def preview_index(department_id):
 
 
 #<<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
-@blueprint.route('/<int:department_id>/schema/complaints/')
+@blueprint.route('/<int:department_id>/schema/complaints')
 @login_required
 @admin_or_department_required()
 def use_of_force_schema(department_id):
@@ -232,14 +232,14 @@ def demographics_csv(department_id):
 
 
 #<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
-@blueprint.route("/IMPD/complaints/")
+@blueprint.route("/IMPD/complaints")
 def public_complaints():
     department = Department.get_by_id(1)
     if not department:
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False, published=True)
 
-@blueprint.route('/IMPD/schema/complaints/')
+@blueprint.route('/IMPD/schema/complaints')
 def public_complaints_schema():
     department = Department.get_by_id(1)
     if not department:
