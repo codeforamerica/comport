@@ -229,7 +229,7 @@ var configs = {
     xFunc: function(b){ return b[0].allegation; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    dataMapAdjust: addOtherCategory,
+    addOther: true,
     },
 
 
@@ -242,7 +242,7 @@ var configs = {
     xFunc: function(b){ return b[0].allegationType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    dataMapAdjust: addOtherCategory,
+    addOther: true,
     },
 
   'complaints-by-precinct': {
@@ -254,6 +254,7 @@ var configs = {
     xFunc: function(b){ return b[0].district; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    addOther: true,
     },
 
   'complaints-by-disposition': {
