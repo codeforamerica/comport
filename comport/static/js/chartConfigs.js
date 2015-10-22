@@ -91,12 +91,13 @@ var configs = {
   'uof-by-inc-district': {
     chartType: 'flagHistogram',
     filter: last12Months,
-    keyFunc: function(d){ return d.district; },
+    keyFunc: function(d){ return d.precinct; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].district; },
+    xFunc: function(b){ return b[0].precinct; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    addOther: true,
     },
 
   'uof-force-type': {
@@ -108,6 +109,7 @@ var configs = {
     xFunc: function(b){ return b[0].officerForceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    addOther: true,
     },
 
   'uof-officer-injuries': {
