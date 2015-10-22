@@ -83,7 +83,9 @@ function flagHistogram(config, data){
     .attr("class", "hist-label")
     .attr("title", function(d){
       if( d[config.x] == "Other" ){
-        return "Other includes:\n- " + d.groups.join("\n- ");
+        return "Other includes:\n- " + d.groups.map(function(d){
+          return d.type + " (" + d.count + ")";
+        }).join("\n- ");
       }
     })
     .text(function(d){ return d[config.x] || "Unspecified"; });

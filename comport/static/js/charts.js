@@ -4,7 +4,6 @@ function last12Months(rows){
   // offset today by 12 d3-defined months in the past
   var latestDate = d3.max(rows, function(d){ return d.date; })
   var startDate = d3.time.month.offset(latestDate, -12);
-  console.log("startDate", startDate);
   return rows.filter(function(r){
     return startDate < r.date;
   });
@@ -162,34 +161,6 @@ function raceMatrix(config, data){
   return counts;
 }
 
-function addOtherCategory(dataMap){
-  var threshold = .01;
-  var small_list = [];
-  var total = dataMap.values().map(function (g){
-    return g.count;
-  }).reduce(function (a,b) {
-    return a + b;
-  }); 
-  var otherTotal = 0;
-
-  dataMap.forEach(function(key, group) {
-    if(group.count / total < threshold){
-      small_list.push(key);
-      otherTotal = otherTotal + group.count;
-    }
-  });
-    
-  dataMap.set("Other", {
-    count: otherTotal,
-    type: "Other",
-    groups: small_list,
-  });
-  
-  small_list.forEach(function(key){
-    dataMap.remove(key);
-  });
-}
-
 function officerComplaintsCount(config, data){
   data = uniqueOfficerComplaints(data);
   var counts = d3.nest()
@@ -299,6 +270,41 @@ function addMissingYears(dataMap){
   });
 }
 
+function addOtherCategory(data){
+  var threshold = .006;
+  var small_list = [];
+  var total = data.map(function (g){
+    return g.count;
+  }).reduce(function (a,b) {
+    return a + b;
+  }); 
+  var otherTotal = 0;
+
+  data.forEach(function(d, i) {
+    if(d.count / total < threshold){
+      small_list.push(i);
+      otherTotal = otherTotal + d.count;
+    }
+  });
+
+  data.push({
+    type: "Other",
+    count: otherTotal,
+    groups: small_list.map(function(i){
+      return data[i];
+    })
+  })
+    
+  var removed_count = 0;
+  small_list.forEach(function(i){
+    i -= removed_count;
+    data.splice(i, 1);
+    removed_count += 1;
+  });
+
+}
+
+
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
 
@@ -347,6 +353,9 @@ function structureData(parsed_rows, config){
     structured_data = mapped.map(function(n){
       return structured_data[n.index];
     });
+  }
+  if( config.addOther ){
+    addOtherCategory(structured_data)
   }
   console.log("structured_data", structured_data);
   return structured_data;
