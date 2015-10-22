@@ -1,7 +1,9 @@
-function insertBlankCell(sel){
-  sel.insert('td', ':first-child')
-    .attr("colspan", 2)
-    .attr("class", "blank-cell");
+function insertBlankCell(cols){
+  return function(sel){
+    sel.insert('td', ':first-child')
+      .attr("colspan", cols)
+      .attr("class", "blank-cell");
+  }
 }
 
 function orderedGet(keys, map){
@@ -16,10 +18,11 @@ function orderedGet(keys, map){
   return results;
 }
 
-percentFmt = d3.format(".1%");
+percentFmt = d3.format(".1f");
 
 function percentFormat(d){
-  return percentFmt(d.percent);
+  var num = percentFmt(d.percent * 100);
+  return num + '<span class="percent">%</span>';
 }
 
 
@@ -76,12 +79,12 @@ function matrixChart(config, data){
     }).enter().append("td")
     .attr("class", "matrix-cell")
     .attr("title", function(d){ return d.count; })
-    .text(percentFormat);
+    .html(percentFormat);
 
   var residentTotals = rows.insert("th", ":first-child")
     .attr("class", "matrix-total")
     .attr("title", function(e){ return e.value.count; })
-    .text(function (e){ 
+    .html(function (e){ 
       return percentFormat(e.value);
     });
 
@@ -96,7 +99,7 @@ function matrixChart(config, data){
     .data(officerRaceTotals).enter().append("th")
     .attr("class", "matrix-total")
     .attr("title", function(d){ return d.count; })
-    .text(percentFormat);
+    .html(percentFormat);
 
   var officerLabels = table.insert("tr", ":first-child");
   officerLabels.selectAll("th")
@@ -104,6 +107,18 @@ function matrixChart(config, data){
     .attr("class", "matrix-label")
     .text(String);
 
-  [officerLabels, officerTotals].map(insertBlankCell);
+  var yAxisLabel = table.insert("tr", ":first-child");
+
+  yAxisLabel.append("th")
+    .attr("class", "y-axis-title")
+    .attr("colspan", officerRaceKeys.length)
+    .text(config['yAxisTitle']);
+
+  [officerLabels, yAxisLabel].map(insertBlankCell(2));
+  officerTotals.insert("th", ":first-child")
+    .attr("class", "x-axis-title")
+    .attr("colspan", 2)
+    .text(config['xAxisTitle']);
+
 
 }
