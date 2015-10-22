@@ -20,7 +20,7 @@ def edit_chart_block(department_id, chart_slug):
     if not block:
         abort(404)
 
-    if user_department_id != department_id:
+    if user_department_id != department_id and not current_user.is_admin():
         abort(401)
 
     block.title = request.form["chart_title"]
