@@ -117,15 +117,16 @@ class Department(SurrogatePK, Model):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
         return extractors[0] if extractors else None
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, load_defaults=True, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
         self.what_this_is = DepartmentDefaults.what_this_is
         self.why_we_are_doing_this = DepartmentDefaults.why_we_are_doing_this
         self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
         self.contact_us = DepartmentDefaults.contact_us
 
-        for default_chart_block in ChartBlockDefaults.defaults:
-            self.chart_blocks.append(default_chart_block)
+        if load_defaults:
+            for default_chart_block in ChartBlockDefaults.defaults:
+                self.chart_blocks.append(default_chart_block)
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)

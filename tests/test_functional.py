@@ -72,10 +72,10 @@ class TestUserRoles:
         res = testapp.get("/admin").follow()
 
         assert res.status_code == 200
-        assert "This is the admin-only page" in res
+        assert "Admin Dashboard" in res
 
     def test_department_access(self, user, testapp):
-        department = Department.create(name="Busy Town Public Safety")
+        department = Department.create(name="Busy Town Public Safety", load_defaults=False)
         user.department_id = department.id
         user.save()
         TestLoggingIn.test_can_log_in_returns_200(self, user=user, testapp=testapp)
@@ -88,7 +88,7 @@ class TestUserRoles:
 class TestRegistering:
 
     def test_can_register(self, user, testapp):
-        department = Department.create(name="dept")
+        department = Department.create(name="dept", load_defaults=False)
         Invite_Code.create(department_id=department.id, code="code")
 
         old_count = len(User.query.all())
