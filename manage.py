@@ -3,12 +3,12 @@
 import os
 from flask_script import Manager, Shell, Server, prompt_bool, prompt_pass
 from flask_migrate import MigrateCommand, upgrade
+from comport.content.defaults import ChartBlockDefaults
 
 
 from comport.app import create_app
 from comport.user.models import User, Role
 from comport.department.models import Department, Extractor
-from comport.content.models import Link
 from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
 from comport.utils import random_string, parse_date, diff_month, parse_csv_date, parse_int
@@ -126,6 +126,14 @@ def delete_everything():
    db.reflect()
    db.drop_all()
    upgrade()
+
+@manager.command
+def add_new_blocks():
+    for department in Department.query.all():
+        for block in ChartBlockDefaults.defaults:
+            if block.slug not in [x.slug for x in department.chart_blocks]:
+                department.chart_blocks.append(block)
+                department.save()
 
 
 

@@ -5,151 +5,31 @@
 {% endblock css %}
 
 {% block content %}
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <h1>{{department.name}}</h1>
+    {% if editing %}
 
-{% if editing %}
-<form id="indexContentForm" class="form form-register" method="POST" action="" role="form">
-  {{ form.hidden_tag() }}
-
-
-  <h2>Letter from the Chief</h2>
-  <div class="department">
-    <img src="/static/img/chief.jpg" alt="An image of the department spokesperson" class="department-spokesperson">
-    <div class="department-statement form-group">
-        {{form.why_we_are_doing_this(class_="form-control")}}
-    </div>
-  </div>
-
-
-  <input class="btn btn-default btn-submit" type="submit" value="Save">
-</form>
-
-{% else %}
-<h2>Letter from the Chief</h2>
-<div class="department">
-  <img src="/static/img/chief.jpg" alt="An image of the department spokesperson" class="department-spokesperson">
-  <div class="department-statement form-group">
-      {{department.why_we_are_doing_this}}
+        <form method="post" action="/content/introduction/{{department.id}}">
+          <div class="form-group">
+            <label for="chart_title">Chart Title:</label>
+            <input type="text" class="form-control" name="chart_title" value="{{chart_blocks['introduction'].title}}"/><br />
+          </div>
+          <div class="form-group">
+            <label for="chart_content">Content:</label>
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
+          </div>
+            <input type="submit" />
+         </form>
+       </br>
+    {% else %}
+      <h2>{{chart_blocks['introduction'].title}}</h2>
+      {{ markdown(chart_blocks['introduction'].content) }}
+    {% endif %}
   </div>
 </div>
-{% endif %}
-
-<h2>Data</h2>
-
-<h3>Use of force</h3>
-
-<div class="chart-previews">
-  <div class="chart uof-by-year"></div>
-  <div class="chart uof-by-reason"></div>
-</div>
-
-<p>Two sentences about this data set</p>
-
-
-<h3>Officer-involved shootings</h3>
-
-<p>Two sentences about this data set</p>
-<p>Two charts highlighting this data set</p>
-
-
-<h3>Complaints</h3>
-
-<p>Two sentences about this data set</p>
-<p>Two charts highlighting this data set</p>
-
-<h2>Policies</h2>
-
-{% if editing %}
-<table class="table">
-  <tr>
-    <th>Text</th>
-    <th>Url</th>
-    <th></th>
-  </tr>
-{% for link in department.get_links_by_type(type="policy") %}
-<tr>
-  <th>{{link.title}}</th>
-  <th>{{link.url}}</th>
-  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
-</tr>
-{% endfor %}
-</table>
-<a href="/content/link/new">New Link</a>
-
-<h2>Police Training</h2>
-<table class="table">
-  <tr>
-    <th>Text</th>
-    <th>Url</th>
-    <th></th>
-  </tr>
-{% for link in department.get_links_by_type(type="training") %}
-<tr>
-  <th>{{link.title}}</th>
-  <th>{{link.url}}</th>
-  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
-</tr>
-{% endfor %}
-</table>
-<a href="/content/link/new">New Link</a>
-<h2>Community Outreach</h2>
-<table class="table">
-  <tr>
-    <th>Text</th>
-    <th>Url</th>
-    <th></th>
-  </tr>
-{% for link in department.get_links_by_type(type="outreach") %}
-<tr>
-  <th>{{link.title}}</th>
-  <th>{{link.url}}</th>
-  <th><a href="/content/link/{{link.id}}">Edit Link</a></th>
-</tr>
-{% endfor %}
-</table>
-<a href="/content/link/new">New Link</a>
-{% else %}
-<h2>Policy</h2>
-<ul>
-  {% for link in department.get_links_by_type(type="policy") %}
-  <li>
-    <a href="{{link.url}}">{{link.title}}</a>
-  </li>
-  {% endfor %}
-</ul>
-<h2>Training</h2>
-<ul>
-  {% for link in department.get_links_by_type(type="training") %}
-  <li>
-    <a href="{{link.url}}">{{link.title}}</a>
-  </li>
-  {% endfor %}
-</ul>
-<h2>Community Outreach</h2>
-<ul>
-  {% for link in department.get_links_by_type(type="outreach") %}
-  <li>
-    <a href="{{link.url}}">{{link.title}}</a>
-  </li>
-  {% endfor %}
-</ul>
-{% endif %}
-
 
 {% endblock content %}
-
-{% block js %}
-<script type="text/javascript">
-var charts = [
-  'uof-by-year',
-  'uof-reason',
-];
-</script>
-<script type="text/javascript" src="/static/js/map.js"></script>
-<script type="text/javascript" src="/static/js/histogram.js"></script>
-<script type="text/javascript" src="/static/js/lineChart.js"></script>
-<script type="text/javascript" src="/static/js/charts.js"></script>
-
-{% endblock js %}
 
 {% block footer %}
     <small>

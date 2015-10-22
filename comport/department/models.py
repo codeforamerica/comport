@@ -32,7 +32,6 @@ class Department(SurrogatePK, Model):
     why_we_are_doing_this = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     how_you_can_use_this_data = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
-    links = relationship("Link", backref="department")
 
     def __init__(self, name, load_defaults=True, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
@@ -53,6 +52,9 @@ class Department(SurrogatePK, Model):
 
     def get_complaint_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints","all"]])
+
+    def get_introduction_blocks(self):
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])
 
     def get_raw_department_demographics(self):
         return [v for v in self.demographic_values if v.department_value]
