@@ -331,6 +331,10 @@ function structureData(parsed_rows, config){
     return data;
   }
 
+  if( config.removeBlankX ){
+    data.remove("");
+  }
+
   // return data structured for a chart
   var structured_data = data.values();
   if( config.sortWith ){

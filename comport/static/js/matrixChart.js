@@ -16,11 +16,12 @@ function orderedGet(keys, map){
   return results;
 }
 
-percentFmt = d3.format("%");
+percentFmt = d3.format(".1%");
 
-function countAndPercentFmt(d){
-  return d.count + " (" +  percentFmt(d.percent) + ")";
+function percentFormat(d){
+  return percentFmt(d.percent);
 }
+
 
 function sortedEntries(keys, map){
   var sorted = [];
@@ -74,12 +75,14 @@ function matrixChart(config, data){
       return orderedGet(races, e.value);
     }).enter().append("td")
     .attr("class", "matrix-cell")
-    .text(countAndPercentFmt);
+    .attr("title", function(d){ return d.count; })
+    .text(percentFormat);
 
   var residentTotals = rows.insert("th", ":first-child")
     .attr("class", "matrix-total")
+    .attr("title", function(e){ return e.value.count; })
     .text(function (e){ 
-      return countAndPercentFmt(e.value);
+      return percentFormat(e.value);
     });
 
   var residentLabels = rows.insert("th", ":first-child")
@@ -92,7 +95,8 @@ function matrixChart(config, data){
   officerTotals.selectAll("th")
     .data(officerRaceTotals).enter().append("th")
     .attr("class", "matrix-total")
-    .text(countAndPercentFmt);
+    .attr("title", function(d){ return d.count; })
+    .text(percentFormat);
 
   var officerLabels = table.insert("tr", ":first-child");
   officerLabels.selectAll("th")
