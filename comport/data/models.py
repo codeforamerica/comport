@@ -12,6 +12,7 @@ from .csv_utils import csv_utils
 
 from datetime import datetime
 from titlecase import titlecase
+import types
 
 
 race_map = {
@@ -31,7 +32,9 @@ def abbreviations(word, **kwargs):
      return word.upper()
 
 def capitalize(value):
-    return titlecase(value.strip(), callback=abbreviations) if value is not None else None
+    if value is None or isinstance(value, list):
+        return value
+    return titlecase(value.strip(), callback=abbreviations) 
 
 def clean_incident(incident, args):
     resident_race = clean_keys(args.pop("resident_race", None))
@@ -63,16 +66,6 @@ class DenominatorValue(SurrogatePK, Model):
     arrests=Column(db.Integer, unique=False, nullable=True)
     calls_for_service=Column(db.Integer, unique=False, nullable=True)
     officer_initiated_calls=Column(db.Integer, unique=False, nullable=True)
-
-    def to_csv_row(self):
-        values = [
-            csv_utils.coalesce_int(self.month),
-            csv_utils.coalesce_int(self.year),
-            csv_utils.coalesce_int(self.arrests),
-            csv_utils.coalesce_int(self.calls_for_service),
-            csv_utils.coalesce_int(self.officer_initiated_calls)
-        ]
-        return ','.join(values) + "\n"
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
@@ -123,41 +116,6 @@ class UseOfForceIncident(SurrogatePK, Model):
     officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_condition = Column(db.String(255), unique=False, nullable=True)
 
-
-    def to_csv_row(self):
-        occured_date = csv_utils.coalesce_date(self.occured_date)
-        values = [
-            self.opaque_id or "",
-            occured_date,
-            self.division or "",
-            self.precinct or "",
-            self.shift or "",
-            self.beat or "",
-            self.disposition or "",
-            self.census_tract or "",
-            self.officer_force_type or "",
-            self.resident_resist_type or "",
-            self.officer_weapon_used or "",
-            self.resident_weapon_used or "",
-            self.service_type or "",
-            csv_utils.coalesce_bool(self.arrest_made),
-            self.arrest_charges or "",
-            csv_utils.coalesce_bool(self.resident_injured),
-            csv_utils.coalesce_bool(self.resident_hospitalized),
-            csv_utils.coalesce_bool(self.officer_injured),
-            csv_utils.coalesce_bool(self.officer_hospitalized),
-            self.resident_condition or "",
-            self.officer_condition or "",
-            self.use_of_force_reason or "",
-            self.resident_race or "",
-            self.officer_race or "",
-            self.resident_age or "",
-            self.officer_age or "",
-            csv_utils.coalesce_int(self.officer_years_of_service),
-            self.officer_identifier or ""
-        ]
-
-        return ','.join(values) + "\n"
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
@@ -217,34 +175,6 @@ class OfficerInvolvedShooting(SurrogatePK, Model):
     officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_condition = Column(db.String(255), unique=False, nullable=True)
 
-
-    def to_csv_row(self):
-        occured_date = csv_utils.coalesce_date(self.occured_date)
-        values = [
-            self.opaque_id or "",
-            occured_date,
-            self.division or "",
-            self.precinct or "",
-            self.shift or "",
-            self.beat or "",
-            self.disposition or "",
-            self.census_tract or "",
-            self.officer_force_type or "",
-            self.resident_weapon_used or "",
-            self.service_type or "",
-            self.resident_race or "",
-            self.officer_race or "",
-            self.resident_sex or "",
-            self.officer_sex or "",
-            self.officer_identifier or "",
-            csv_utils.coalesce_int(self.officer_years_of_service),
-            self.officer_age or "",
-            self.resident_age or "",
-            self.officer_condition or "",
-            self.resident_condition or ""
-        ]
-
-        return ','.join(values) + "\n"
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)

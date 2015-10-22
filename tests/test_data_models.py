@@ -9,12 +9,6 @@ import uuid
 
 @pytest.mark.usefixtures('db')
 class TestDataModels:
-        def test_get_csv_row_from_incident_when_column_is_none(self):
-            incident = UseOfForceIncident()
-            incident.officer_race = None
-            incident.officerInjured = False
-            incident.to_csv_row()
-
         def test_allow_no_race(self):
             complaint = CitizenComplaint(resident_race=None)
             assert complaint.resident_race == None
