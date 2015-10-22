@@ -92,6 +92,50 @@ def load_test_data():
                     resident_age = complaint.get("CIT_AGE", None)
                 )
 
+    for filename in glob.glob('data/testdata/uof/uof.csv'):
+        with open(filename, 'rt') as f:
+            reader = csv.DictReader(f)
+            for incident in reader:
+                officer_identifier = hashlib.md5((incident.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+                opaque_id = hashlib.md5((incident.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+
+                UseOfForceIncident.create(
+                    department_id =department.id,
+                    opaque_id =opaque_id,
+                    occured_date =parse_csv_date(incident.get("OCCURRED_DT", None)),
+                    division = incident.get("UDTEXT24A", None),
+                    precinct = incident.get("UDTEXT24B", None),
+                    shift = incident.get("UDTEXT24C", None),
+                    beat = incident.get("UDTEXT24D", None),
+                    disposition = incident.get("FINDING", None),
+                    census_tract = None,
+                    officer_force_type = incident.get("UOF_FORCE_TYPE", None),
+                    resident_resist_type =None,
+                    officer_weapon_used =None,
+                    resident_weapon_used =None,
+                    service_type = incident.get("SERVICE_TYPE", None),
+                    arrest_made = incident.get("CIT_ARRESTED", None),
+                    arrest_charges = incident.get("CITCHARGE_TYPE", None),
+                    resident_injured = incident.get("CIT_INJURED", None),
+                    resident_hospitalized =incident.get("CIT_HOSPITAL", None),
+                    officer_injured =incident.get("OFF_INJURED", None),
+                    officer_hospitalized =incident.get("OFF_HOSPITAL", None),
+                    use_of_force_reason = incident.get("UOF_REASON", None),
+                    resident_race =incident.get("RACE", None),
+                    officer_race =incident.get("OFF_RACE", None),
+                    resident_sex =incident.get("SEX", None),
+                    officer_sex =incident.get("OFF_SEX", None),
+                    officer_identifier =officer_identifier,
+                    officer_years_of_service =incident.get("OFF_YR_EMPLOY", None),
+                    officer_age =incident.get("OFF_AGE", None),
+                    resident_age =incident.get("AGE", None),
+                    officer_condition =incident.get("OFF_COND_TYPE", None),
+                    resident_condition =incident.get("CIT_COND_TYPE", None)
+                )
+
+
+
+
 
 @manager.command
 def make_test_data():
@@ -132,6 +176,7 @@ def add_new_blocks():
     for department in Department.query.all():
         for block in ChartBlockDefaults.defaults:
             if block.slug not in [x.slug for x in department.chart_blocks]:
+                print("adding %s to %s", [block.slug, department.name])
                 department.chart_blocks.append(block)
                 department.save()
 
