@@ -19,8 +19,41 @@ race_map = {
 }
 
 sex_map = {
-    "f": "Female"
+    "f": "Female",
+    "m": "Male"
 }
+
+def clean_keys(key):
+    return key.lower().strip() if key is not None else None
+
+def abbreviations(word, **kwargs):
+   if word.upper() in ('NW', 'SE', 'ED', 'DT', 'FTO', 'ND', 'SW', "DWI"):
+     return word.upper()
+
+def capitalize(value):
+    return titlecase(value.strip(), callback=abbreviations) if value is not None else None
+
+def clean_incident(incident, args):
+    resident_race = clean_keys(args.pop("resident_race", None))
+    resident_sex = clean_keys(args.pop("resident_sex", None))
+    precinct = args.pop("precinct", None)
+    division = args.pop("division", None)
+    shift = args.pop("shift", None)
+    beat = args.pop("beat", None)
+
+    if resident_race is not None and resident_race in race_map:
+        resident_race = race_map[resident_race]
+        incident.resident_race = resident_race
+
+    if resident_sex is not None and resident_sex in sex_map:
+        resident_sex = sex_map[resident_sex]
+        incident.resident_sex = resident_sex
+
+    incident.precinct = capitalize(precinct)
+    incident.division = capitalize(division)
+    incident.shift = capitalize(shift)
+    incident.beat = capitalize(beat)
+
 
 class DenominatorValue(SurrogatePK, Model):
     __tablename__="denominator_values"
@@ -128,6 +161,7 @@ class UseOfForceIncident(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+        clean_incident(self, kwargs)
 
 
 class CitizenComplaint(SurrogatePK, Model):
@@ -154,29 +188,9 @@ class CitizenComplaint(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
-        resident_race = kwargs.pop("resident_race", None)
-        resident_sex = kwargs.pop("resident_sex", None)
-        precinct = kwargs.pop("precinct", None)
 
+        clean_incident(self, kwargs)
 
-        if resident_race is not None and resident_race.lower().strip() in race_map:
-            resident_race = race_map[resident_race.lower().strip()]
-
-        if resident_sex is not None and resident_sex.lower().strip() in sex_map:
-            resident_sex = sex_map[resident_sex.lower().strip()]
-
-        if precinct is not None:
-            precinct = titlecase(precinct.strip())
-
-        if resident_race is not None:
-            resident_race = resident_race.capitalize().strip()
-
-        if resident_sex is not None:
-            resident_sex = resident_sex.capitalize().strip()
-
-        self.resident_race = resident_race
-        self.resident_sex = resident_sex
-        self.precinct = precinct
 
 class OfficerInvolvedShooting(SurrogatePK, Model):
     __tablename__ = 'officer_involved_shootings'
@@ -234,3 +248,4 @@ class OfficerInvolvedShooting(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+        clean_incident(self, kwargs)
