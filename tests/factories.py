@@ -21,7 +21,7 @@ class BaseFactory(SQLAlchemyModelFactory):
 class DepartmentFactory(BaseFactory):
     name = Sequence(lambda n: "Department {0}".format(n))
     load_defaults = False
-    
+
     class Meta:
         model = Department
 
@@ -192,7 +192,7 @@ class CitizenComplaintFactory(BaseFactory):
         "Within policy",
         None
     ])
-    category = FuzzyChoice(["Inappropriate use of force","Substandard officer performance","Officer used inappropriate language","Officer didn't file incident report","K-9 Incidents","Profiling","Rudeness","Mistreatment",None])
+    allegation = FuzzyChoice(["Inappropriate use of force","Substandard officer performance","Officer used inappropriate language","Officer didn't file incident report","K-9 Incidents","Profiling","Rudeness","Mistreatment",None])
     resident_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])
     resident_sex = FuzzyChoice(["Anonymou","Female","Male", None])
     officer_race = FuzzyChoice(["Asian","Black","Hispanic","Native Ameri","Polynesian","Unknown","White", None])

@@ -95,7 +95,6 @@ def load_test_data():
 
 @manager.command
 def make_test_data():
-    add_chart_block_defaults()
     department = Department.query.filter_by(name="Busy Town Public Safety").first()
     if not department:
         department = Department.create(name="Busy Town Public Safety")
@@ -105,8 +104,6 @@ def make_test_data():
 
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
-
-
 
     for _ in range(100):
         incident = UseOfForceIncidentFactory()

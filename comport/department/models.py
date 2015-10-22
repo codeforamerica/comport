@@ -34,6 +34,17 @@ class Department(SurrogatePK, Model):
     contact_us = Column(db.Text( convert_unicode=True), unique=False, nullable=True)
     links = relationship("Link", backref="department")
 
+    def __init__(self, name, load_defaults=True, **kwargs):
+        db.Model.__init__(self, name=name, **kwargs)
+        self.what_this_is = DepartmentDefaults.what_this_is
+        self.why_we_are_doing_this = DepartmentDefaults.why_we_are_doing_this
+        self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
+        self.contact_us = DepartmentDefaults.contact_us
+
+        if load_defaults:
+            for default_chart_block in ChartBlockDefaults.defaults:
+                self.chart_blocks.append(default_chart_block)
+
     def get_links_by_type(self,type):
         return list(filter(lambda l: l.type == type, self.links))
 
@@ -117,27 +128,100 @@ class Department(SurrogatePK, Model):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
         return extractors[0] if extractors else None
 
-    def __init__(self, name, load_defaults=True, **kwargs):
-        db.Model.__init__(self, name=name, **kwargs)
-        self.what_this_is = DepartmentDefaults.what_this_is
-        self.why_we_are_doing_this = DepartmentDefaults.why_we_are_doing_this
-        self.how_you_can_use_this_data = DepartmentDefaults.how_you_can_use_this_data
-        self.contact_us = DepartmentDefaults.contact_us
-
-        if load_defaults:
-            for default_chart_block in ChartBlockDefaults.defaults:
-                self.chart_blocks.append(default_chart_block)
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
 
     def get_uof_csv(self):
-        csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,officerForceType,residentResistType,officerWeaponUsed,residentWeaponUsed,serviceType,arrestMade,arrestCharges,residentInjured,residentHospitalized,officerInjured,officerHospitalized,residentCondition,officerCondition,useOfForceReason,residentRace,officerRace,residentAge,officerAge,officerYearsOfService,officerIdentifier\n"
-        use_of_force_incidents = self.use_of_force_incidents
-        for incident in use_of_force_incidents:
-            csv += incident.to_csv_row()
-        return csv
+        output = io.StringIO()
 
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        writer.writerow(["id","occuredDate","division","precinct","shift",
+        "beat","disposition","officerForceType","residentResistType",
+        "officerWeaponUsed","residentWeaponUsed","serviceType","arrestMade",
+        "arrestCharges","residentInjured","residentHospitalized","officerInjured",
+        "officerHospitalized","residentCondition","officerCondition","useOfForceReason",
+        "residentRace","officerRace","residentAge","officerAge","officerYearsOfService",
+        "officerIdentifier"])
+
+        use_of_force_incidents = self.use_of_force_incidents
+
+        for incident in use_of_force_incidents:
+            occured_date = coalesce_date(incident.occured_date)
+            values = [
+                incident.opaque_id,
+                occured_date,
+                incident.division,
+                incident.precinct,
+                incident.shift,
+                incident.beat,
+                incident.disposition,
+                incident.officer_force_type,
+                incident.resident_resist_type,
+                incident.officer_weapon_used,
+                incident.resident_weapon_used,
+                incident.service_type,
+                incident.arrest_made,
+                incident.arrest_charges,
+                incident.resident_injured,
+                incident.resident_hospitalized,
+                incident.officer_injured,
+                incident.officer_hospitalized,
+                incident.resident_condition,
+                incident.officer_condition,
+                incident.use_of_force_reason,
+                incident.resident_race,
+                incident.officer_race,
+                incident.resident_age,
+                incident.officer_age,
+                incident.officer_years_of_service,
+                incident.officer_identifier
+            ]
+            writer.writerow(values)
+
+        return output.getvalue()
+
+
+    def get_ois_csv(self):
+        output = io.StringIO()
+
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        writer.writerow(["id","occuredDate","division","precinct","shift",
+        "beat","disposition","officerForceType","residentWeaponUsed",
+        "serviceType","residentRace","residentSex","residentAge","officerRace",
+        "officerSex","officerAge","officerIdentifier","officerYearsOfService",
+        "officerCondition","residentCondition"])
+
+        officer_involved_shootings = self.officer_involved_shootings
+        for incident in officer_involved_shootings:
+            occured_date = coalesce_date(incident.occured_date)
+            values = [
+                incident.opaque_id,
+                occured_date,
+                incident.division,
+                incident.precinct,
+                incident.shift,
+                incident.beat,
+                incident.disposition,
+                incident.officer_force_type,
+                incident.resident_weapon_used,
+                incident.service_type,
+                incident.resident_race,
+                incident.resident_sex,
+                incident.resident_age,
+                incident.officer_race,
+                incident.officer_sex,
+                incident.officer_age,
+                incident.officer_identifier,
+                incident.officer_years_of_service,
+                incident.officer_condition,
+                incident.resident_condition
+            ]
+            writer.writerow(values)
+
+        return output.getvalue()
 
     def get_complaint_csv(self):
         output = io.StringIO()
@@ -196,12 +280,6 @@ class Department(SurrogatePK, Model):
 
         return output.getvalue()
 
-    def get_ois_csv(self):
-        csv = "id,occuredDate,division,precinct,shift,beat,disposition,censusTract,officerForceType,residentWeaponUsed,serviceType,residentRace,officerRace,residentSex,officerSex,officerIdentifier,officerYearsOfService,officerAge,residentAge,officerCondition,residentCondition\n"
-        officer_involved_shootings = self.officer_involved_shooting
-        for incident in officer_involved_shootings:
-            csv += incident.to_csv_row()
-        return csv
 
     def get_denominator_csv(self):
         csv = "month,year,arrests,callsForService,officerInitiatedCalls\n"

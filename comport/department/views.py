@@ -207,6 +207,13 @@ def complaints_csv(department_id):
         abort(404)
     return Response(department.get_complaint_csv(), mimetype="text/csv")
 
+@blueprint.route('/<int:department_id>/ois.csv')
+def ois_csv(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return Response(department.get_ois_csv(), mimetype="text/csv")
+
 @blueprint.route('/<int:department_id>/denominator.csv')
 @login_required
 @admin_or_department_required()
