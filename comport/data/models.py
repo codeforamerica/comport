@@ -34,7 +34,7 @@ def abbreviations(word, **kwargs):
 def capitalize(value):
     if value is None or isinstance(value, list):
         return value
-    return titlecase(value.strip(), callback=abbreviations) 
+    return titlecase(value.strip(), callback=abbreviations)
 
 def clean_incident(incident, args):
     resident_race = clean_keys(args.pop("resident_race", None))
@@ -110,7 +110,7 @@ class UseOfForceIncident(SurrogatePK, Model):
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     officer_sex = Column(db.String(255), unique=False, nullable=True)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
-    officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     officer_age = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
     officer_condition = Column(db.String(255), unique=False, nullable=True)
