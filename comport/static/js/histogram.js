@@ -77,10 +77,7 @@ function flagHistogram(config, data){
 
   var rows = table.selectAll("tr")
     .data(data).enter()
-    .append("tr");
-
-  var rowLabels = rows.append("td")
-    .attr("class", "hist-label")
+    .append("tr")
     .attr("title", function(d){
       if( d[config.x] == "Other" ){
         return "Other includes:\n- " + d.groups.map(function(d){
@@ -88,6 +85,16 @@ function flagHistogram(config, data){
         }).join("\n- ");
       }
     })
+    .style("cursor", function(d){
+      if(d[config.x] == "Other"){
+        return "pointer";
+      } else {
+        return "auto";
+      }
+    });
+
+  var rowLabels = rows.append("td")
+    .attr("class", "hist-label")
     .text(function(d){ return d[config.x] || "Unspecified"; });
 
   var flags = rows.append("td")
