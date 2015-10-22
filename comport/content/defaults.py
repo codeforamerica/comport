@@ -3,6 +3,18 @@ from .models import ChartBlock
 class ChartBlockDefaults:
     defaults=[
         ChartBlock(
+            title ="Open Data Introduction",
+            caption ="",
+            slug ="introduction",
+            dataset ="introduction",
+            content ="""We believe that being transparent about our work will help us better serve the people of Indianapolis, and that being accountable to our citizens will allow us to work together to improve relationships between IMPD and Indianapolis residents.
+
+[Here](http://www.socrata.com) is a link to the City's open data portal and open data policy
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
+        ChartBlock(
             title ="Complaints By Year",
             caption ="",
             slug ="complaints-by-year",

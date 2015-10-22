@@ -3,7 +3,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from comport.utils import flash_errors
 from .models import Department, Extractor
 from comport.data.models import DemographicValue
-from .forms import IndexContentForm
 from flask.ext.login import login_required
 
 from comport.decorators import admin_or_department_required, extractor_auth_required
@@ -134,21 +133,8 @@ def edit_index(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    form = IndexContentForm(request.form)
 
-    if form.validate_on_submit():
-        department.why_we_are_doing_this = form.why_we_are_doing_this.data
-        department.save()
-        flash("Saved.", 'success')
-        return redirect(url_for(
-            'department.index', department_id=department_id
-        ))
-    else:
-        flash_errors(form)
-
-    form.why_we_are_doing_this.data = department.why_we_are_doing_this
-    return render_template("department/site/index.html", form=form, department=department, editing=True)
-
+    return render_template("department/site/index.html", department=department, chart_blocks=department.get_introduction_blocks(), editing=True)
 
 #<<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>/preview/useofforce")
@@ -169,14 +155,14 @@ def preview_complaints(department_id):
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False)
 
-@blueprint.route("/<int:department_id>/preview/index",methods=["GET","POST"])
+@blueprint.route("/<int:department_id>/preview/index")
 @login_required
 @admin_or_department_required()
 def preview_index(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/index.html", form=None, department=department, editing=False)
+    return render_template("department/site/index.html", chart_blocks=department.get_introduction_blocks(), department=department, editing=False)
 
 
 #<<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
