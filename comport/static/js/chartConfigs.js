@@ -229,6 +229,7 @@ var configs = {
     xFunc: function(b){ return b[0].allegation; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    dataMapAdjust: addOtherCategory,
     },
 
 
@@ -241,6 +242,7 @@ var configs = {
     xFunc: function(b){ return b[0].allegationType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    dataMapAdjust: addOtherCategory,
     },
 
   'complaints-by-precinct': {
@@ -281,7 +283,7 @@ var configs = {
 
 };
 
-
+// Running the all the code that draws the charts
 d3.csv(
   csv_url,
   function(error, rows){
