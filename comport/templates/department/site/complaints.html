@@ -32,7 +32,6 @@
 </div>
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    {{ brick( chart_blocks['complaints-by-year'], editing, department ) }}
     {{ horizontal_brick( chart_blocks['complaints-by-month'], editing, department ) }}
     {{ brick( chart_blocks['complaints-by-allegation-type'] , editing, department) }}
     {{ brick( chart_blocks['complaints-by-allegation'] , editing, department) }}
@@ -49,7 +48,6 @@
 <script type="text/javascript">
 var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
 var charts = [
-  'complaints-by-year',
   'complaints-by-month',
   'complaints-by-allegation',
   'complaints-by-allegation-type',

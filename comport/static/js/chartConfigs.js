@@ -259,6 +259,7 @@ var configs = {
   'complaints-by-disposition': {
     filter: last12Months,
     chartType: 'flagHistogram',
+    removeBlankX: true,
     keyFunc: function(d){ return d.finding; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
