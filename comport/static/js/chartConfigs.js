@@ -273,6 +273,8 @@ var configs = {
     filter: last12Months,
     chartType: 'matrix',
     dataFunc: raceMatrix,
+    xAxisTitle: "Resident",
+    yAxisTitle: "Officer",
   },
 
   'complaints-by-officer': {

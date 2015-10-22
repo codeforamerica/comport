@@ -59,3 +59,15 @@
 .matrix-row + .matrix-row {
   margin-top: 0.4em;
 }
+.percent {
+  font-size: 0.8em;
+  font-weight: normal;
+  position: relative;
+  top: -0.1em;
+}
+.x-axis-title, .y-axis-title {
+  border-bottom: 1px solid black;
+  text-transform: uppercase;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
