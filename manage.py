@@ -107,7 +107,7 @@ def load_test_data():
                     precinct = incident.get("UDTEXT24B", None),
                     shift = incident.get("UDTEXT24C", None),
                     beat = incident.get("UDTEXT24D", None),
-                    disposition = incident.get("FINDING", None),
+                    disposition = incident.get("DISPOSITION", None),
                     census_tract = None,
                     officer_force_type = incident.get("UOF_FORCE_TYPE", None),
                     resident_resist_type =None,
@@ -128,7 +128,7 @@ def load_test_data():
                     officer_identifier =officer_identifier,
                     officer_years_of_service =incident.get("OFF_YR_EMPLOY", None),
                     officer_age =incident.get("OFF_AGE", None),
-                    resident_age =incident.get("AGE", None),
+                    resident_age =incident.get("CIT_AGE", None),
                     officer_condition =incident.get("OFF_COND_TYPE", None),
                     resident_condition =incident.get("CIT_COND_TYPE", None)
                 )
