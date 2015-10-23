@@ -36,7 +36,7 @@ class Department(SurrogatePK, Model):
                 self.chart_blocks.append(default_chart_block)
 
     def get_uof_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset == "use-of-force"])
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["use-of-force", "all"]])
 
     def get_complaint_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints","all"]])
@@ -128,9 +128,9 @@ class Department(SurrogatePK, Model):
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
         writer.writerow(["id","occuredDate","division","precinct","shift",
-        "beat","disposition","officerForceType","residentResistType",
-        "officerWeaponUsed","residentWeaponUsed","serviceType","arrestMade",
-        "arrestCharges","residentInjured","residentHospitalized","officerInjured",
+        "beat","disposition","officerForceType",
+        "serviceType","arrestMade","arrestCharges","residentInjured",
+        "residentHospitalized","officerInjured",
         "officerHospitalized","residentCondition","officerCondition","useOfForceReason",
         "residentRace","officerRace","residentAge","officerAge","officerYearsOfService",
         "officerIdentifier"])
@@ -148,9 +148,6 @@ class Department(SurrogatePK, Model):
                 incident.beat,
                 incident.disposition,
                 incident.officer_force_type,
-                incident.resident_resist_type,
-                incident.officer_weapon_used,
-                incident.resident_weapon_used,
                 incident.service_type,
                 incident.arrest_made,
                 incident.arrest_charges,

@@ -5,8 +5,9 @@
 <div class="row">
   <div class="col-md-12 schema-wrapper">
     <div class="schema-header">
-      <h1>Dataset: Use of Force</h1>
-      <form method="get" action="/department/{{department.id}}/useof.csv">
+
+      <h1>Dataset: Use of Force Incidents</h1>
+      <form method="get" action="/department/{{department.id}}/uof.csv">
         <button type="submit">Download this dataset</button>
       </form>
 
@@ -55,6 +56,7 @@
       </tr>
       <tr>
         <td>Use of Force Reason</td>
+
         <td>The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.</td>
       </tr>
       <tr>
@@ -120,7 +122,6 @@
 			</ul> 
 	 	</td>
       </tr>
-     
     </table>
   </div>
   <div class='row'>
@@ -152,4 +153,3 @@
     </small>
 
 {% endblock footer %}
-
