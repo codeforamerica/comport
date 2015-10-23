@@ -1,12 +1,6 @@
-if( !window.console ){
-  console = {};
-  console.log = function(){};
-}
-
 function mapChart(config, data){
   L.mapbox.accessToken  = "pk.eyJ1IjoiY29kZWZvcmFtZXJpY2EiLCJhIjoiSTZlTTZTcyJ9.3aSlHLNzvsTwK-CYfZsG_Q"
 
-  console.log("data for map", data);
   var mapWrapper = d3.select(config.parent);
   var div = mapWrapper[0][0];
   mapWrapper.style('width', '32em')
@@ -61,14 +55,12 @@ function mapChart(config, data){
       }
     });
 
-    console.log("geojson!", json);
 
     var tracts = L.mapbox.featureLayer(json, {style: style})
         .addTo(map);
 
     var tracts = d3.selectAll('.leaflet-overlay-pane path');
 
-    console.log("tracts", tracts);
 
   });
 

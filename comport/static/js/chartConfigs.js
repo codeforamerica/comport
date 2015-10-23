@@ -293,7 +293,6 @@ var configs = {
 
 };
 
-console.log("csv_url", csv_url);
 // Running the all the code that draws the charts
 d3.csv(
   csv_url,
@@ -301,7 +300,6 @@ d3.csv(
     // parse the raw csv data
     var parsed_rows = parseData(rows);
     allRows = rows;
-    console.log("parsed data", parsed_rows);
 
     // deal with each chart configuration
     charts.forEach(function(name){
@@ -312,7 +310,6 @@ d3.csv(
       if( config.chartType ){
         // get class name for parent div
         config.parent = '.' + name;
-        console.log("making", config.parent, "with", config);
         drawChart(parsed_rows, config);
       }
 
