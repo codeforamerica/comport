@@ -116,7 +116,6 @@ class UseOfForceIncident(SurrogatePK, Model):
     officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_condition = Column(db.String(255), unique=False, nullable=True)
 
-
     def __init__(self, **kwargs):
         cleaned_incident = clean_incident(self, kwargs)
         db.Model.__init__(cleaned_incident, **kwargs)

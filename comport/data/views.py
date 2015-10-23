@@ -32,7 +32,12 @@ def use_of_force():
     updated_rows = 0
 
     for incident in j['data']:
-        found_incident = UseOfForceIncident.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
+        found_incident = UseOfForceIncident.query.filter_by(
+            opaque_id=incident["opaqueId"],
+            department_id=extractor.department_id,
+            officer_identifier =incident["officerIdentifier"],
+            officer_force_type =incident["officerForceType"]
+            ).first()
 
         occured_date = parse_date(incident["occuredDate"])
 
