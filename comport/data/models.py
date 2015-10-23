@@ -56,7 +56,7 @@ def clean_incident(incident, args):
     incident.division = capitalize(division)
     incident.shift = capitalize(shift)
     incident.beat = capitalize(beat)
-
+    return incident
 
 class DenominatorValue(SurrogatePK, Model):
     __tablename__="denominator_values"
@@ -118,8 +118,8 @@ class UseOfForceIncident(SurrogatePK, Model):
 
 
     def __init__(self, **kwargs):
-        db.Model.__init__(self, **kwargs)
-        clean_incident(self, kwargs)
+        cleaned_incident = clean_incident(self, kwargs)
+        db.Model.__init__(cleaned_incident, **kwargs)
 
 
 class CitizenComplaint(SurrogatePK, Model):
@@ -145,9 +145,10 @@ class CitizenComplaint(SurrogatePK, Model):
     resident_age = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
-        db.Model.__init__(self, **kwargs)
+        cleaned_incident = clean_incident(self, kwargs)
+        db.Model.__init__(cleaned_incident, **kwargs)
 
-        clean_incident(self, kwargs)
+
 
 
 class OfficerInvolvedShooting(SurrogatePK, Model):
@@ -177,5 +178,5 @@ class OfficerInvolvedShooting(SurrogatePK, Model):
 
 
     def __init__(self, **kwargs):
-        db.Model.__init__(self, **kwargs)
-        clean_incident(self, kwargs)
+        cleaned_incident = clean_incident(self, kwargs)
+        db.Model.__init__(cleaned_incident, **kwargs)

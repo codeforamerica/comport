@@ -66,3 +66,10 @@ class TestDataModels:
             assert ois.precinct == "NW Day Shift"
             assert ois.resident_sex == "Female"
             assert ois.resident_race == "Black"
+
+        def test_cleaning_on_uof(self):
+            ois = UseOfForceIncident(precinct="NW DAY SHIFT", resident_sex="f", resident_race='b')
+
+            assert ois.precinct == "NW Day Shift"
+            assert ois.resident_sex == "Female"
+            assert ois.resident_race == "Black"
