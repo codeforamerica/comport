@@ -1,3 +1,7 @@
+if( !window.console ){
+  console = {};
+  console.log = function(){};
+}
 
 function mapChart(config, data){
   L.mapbox.accessToken  = "pk.eyJ1IjoiY29kZWZvcmFtZXJpY2EiLCJhIjoiSTZlTTZTcyJ9.3aSlHLNzvsTwK-CYfZsG_Q"
