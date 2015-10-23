@@ -87,7 +87,7 @@ function raceKey( value ) {
     "B": "Black",
     "Asian": "Asian",
     "Other": "Other",
-    "Polynesian": "Other",
+    "Polynesian": "Asian",
   }[value];
 };
 
