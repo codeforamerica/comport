@@ -2,6 +2,7 @@
   "name": "comport",
   "dependencies": {
     "bootstrap": "~3.2.0",
-    "d3": "~3.5.6"
+    "d3": "~3.5.6",
+    "aight": "~2.0"
   }
 }
