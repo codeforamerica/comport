@@ -115,9 +115,6 @@ function uniqueComplaintAboutOfficerByResidentProxy(d){
 }
 
 function raceMatrix(config, data){
-  var s = d3.set( data.map(function(d){
-    return d.officerRace;
-  }));
 
   var complaints = d3.nest()
     .key(uniqueComplaintAboutOfficerByResidentProxy)
@@ -150,15 +147,6 @@ function raceMatrix(config, data){
       };
     }).map(complaints, d3.map);
 
-  // get resident race totals
-  counts.keys().forEach(function(resRace){
-      var total = 0;
-      var subgroups = counts.get(resRace);
-      subgroups.values().map(function(offRace){ total += offRace.count; });
-      subgroups.count = total;
-      subgroups.percent = ( total / totalComplaintCount );
-    });
-
   var officerRaceTotals = d3.nest()
     .key(function(d){ return d.values.officerRace; })
     .rollup(function(group){
@@ -167,6 +155,28 @@ function raceMatrix(config, data){
         percent: ( group.length / totalComplaintCount ),
       };
     }).map(complaints, d3.map);
+
+  // unique keys for officer axis
+  var allOfficerRaceKeys = officerRaceTotals.keys();
+
+  // get resident race totals
+  counts.keys().forEach(function(resRace){
+      var total = 0;
+      var subgroups = counts.get(resRace);
+      subgroups.values().map(function(offRace){ total += offRace.count; });
+
+      // add missing races, but only the unique keys of the corresponding axis
+      allOfficerRaceKeys.forEach(function(officerRace){
+        if( !subgroups.get(officerRace) ){
+          subgroups.set(officerRace, {})
+        }
+      });
+      subgroups.count = total;
+      subgroups.percent = ( total / totalComplaintCount );
+    });
+
+
+
 
   counts.officerRaceTotals = officerRaceTotals;
   return counts;
@@ -338,7 +348,6 @@ function structureData(parsed_rows, config){
   // use the parsed data and the grouping machine to create a
   // simple key value store (aka "map") with years as keys
   var data = data_grouper.map(parsed_rows, d3.map);
-  console.log("mapped & filtered data", data);
 
   if( config.dataMapAdjust ){
     config.dataMapAdjust(data);
@@ -368,7 +377,6 @@ function structureData(parsed_rows, config){
   if( config.addOther ){
     addOtherCategory(structured_data)
   }
-  console.log("structured_data", structured_data);
   return structured_data;
 }
 

@@ -21,6 +21,9 @@ function orderedGet(keys, map){
 percentFmt = d3.format(".1f");
 
 function percentFormat(d){
+  if(d.percent === undefined ){
+    return "";
+  }
   var num = percentFmt(d.percent * 100);
   return num + '<span class="percent">%</span>';
 }
@@ -63,8 +66,6 @@ function matrixChart(config, data){
   var table = d3.select(config.parent)
     .append("table")
     .attr("class", "matrix-table table");
-
-  console.log("data for matrix", data);
 
   var officerEntries = sortedEntries(races, data.officerRaceTotals);
   var officerRaceKeys = officerEntries.map(function(e){ return e.key; });
