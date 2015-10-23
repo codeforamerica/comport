@@ -32,7 +32,6 @@ def use_of_force():
     updated_rows = 0
 
     for incident in j['data']:
-        print(incident)
         found_incident = UseOfForceIncident.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
@@ -119,7 +118,6 @@ def officer_involved_shooting():
     updated_rows = 0
 
     for incident in j['data']:
-        print(incident)
         found_incident = OfficerInvolvedShooting.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
@@ -192,7 +190,6 @@ def complaints():
     updated_rows = 0
 
     for incident in j['data']:
-        print(incident)
         found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"],allegation_type = incident["allegationType"],allegation = incident["allegation"],officer_identifier =incident["officerIdentifier"],department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
