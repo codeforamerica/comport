@@ -71,22 +71,30 @@ function uniqueOfficerComplaints(rows){
 }
 
 
-var raceKey = {
-  "Unknown": "Unknown",
-  "Black": "Black",
-  "": "Unknown",
-  "Hispanic": "Hispanic",
-  "White": "White",
-  "Bi-racial": "Other",
-  "White ": "White",
-  "black": "Black",
-  "B": "Black",
-  "Asian": "Asian",
-  "Other": "Other",
+function raceKey( value ) {
+  if( !value ){
+    value = "";
+  }
+  return {
+    "Unknown": "Unknown",
+    "Black": "Black",
+    "": "Unknown",
+    "Hispanic": "Hispanic",
+    "White": "White",
+    "Bi-racial": "Other",
+    "White ": "White",
+    "black": "Black",
+    "B": "Black",
+    "Asian": "Asian",
+    "Other": "Other",
+    "Polynesian": "Other",
+  }[value];
 };
 
 function race(k){
-  return function(d){ return raceKey[d[k]]; };
+  return function(d){ 
+    return raceKey(d[k]); 
+  };
 }
 
 function uniqueResidentProxy(d){
@@ -107,6 +115,9 @@ function uniqueComplaintAboutOfficerByResidentProxy(d){
 }
 
 function raceMatrix(config, data){
+  var s = d3.set( data.map(function(d){
+    return d.officerRace;
+  }));
 
   var complaints = d3.nest()
     .key(uniqueComplaintAboutOfficerByResidentProxy)
@@ -119,7 +130,7 @@ function raceMatrix(config, data){
         });
       [ 'residentRace', 'officerRace',
         ].map(function(k){
-          obj[k] = raceKey[group[0][k]];
+          obj[k] = raceKey(group[0][k]);
         });
       obj.allegations = group;
       return obj;

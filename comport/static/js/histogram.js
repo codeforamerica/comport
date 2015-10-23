@@ -39,7 +39,6 @@ function basicPercent(config, data){
  percents.append("span")
    .attr("class", "percent-amt")
    .text(function(d){
-     console.log("percent", d);
      return d3.round(d.amt, 0);
    }).append("sup")
   .attr("class", "percent-symbol")
