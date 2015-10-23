@@ -65,6 +65,7 @@ function matrixChart(config, data){
     .attr("class", "matrix-table table");
 
   console.log("data for matrix", data);
+
   var officerEntries = sortedEntries(races, data.officerRaceTotals);
   var officerRaceKeys = officerEntries.map(function(e){ return e.key; });
   var officerRaceTotals = officerEntries.map(function(e){ return e.value; });
