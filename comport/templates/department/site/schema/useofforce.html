@@ -5,7 +5,6 @@
 <div class="row">
   <div class="col-md-12 schema-wrapper">
     <div class="schema-header">
-
       <h1>Dataset: Use of Force Incidents</h1>
       <form method="get" action="/department/{{department.id}}/uof.csv">
         <button type="submit">Download this dataset</button>
@@ -15,7 +14,7 @@
         <button type="submit">Download Officer Demographic Information for the IMPD</button>
       </form>
     </div>
-    <p> Please Note: IMPD started using a new database and process for collecting this data in Summer 2014. Entries prior to July 2014 were entered in to the database from an older paper form, so they may not be consistent with entries after Summer 2014.</p>
+    <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p>
 
     <h4>Fields included in this dataset and their definitions:</h4>
     <table class="table schema-table">
@@ -25,7 +24,7 @@
       </tr>
       <tr>
         <td>Id</td>
-        <td>This is the number of the incident. Incidents may contain multiple uses of force. When that is the case, there will be multiple entries for one incident number..</td>
+        <td>This is a hashed unique identifier for a given incident. Incidents may contain multiple uses of force. When that is the case, there will be multiple entries for one incident number.</td>
       </tr>
       <tr>
         <td>Occured Date</td>
@@ -56,12 +55,8 @@
       </tr>
       <tr>
         <td>Use of Force Reason</td>
-
-        <td>The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.</td>
-      </tr>
-      <tr>
-        <td>Census Tract</td>
-        <td>Location information has been mapped to census tract level for privacy.</td>
+        <td>The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.
+        </td>
       </tr>
       <tr>
         <td>Resident Race</td>
@@ -77,22 +72,15 @@
       </tr>
       <tr>
         <td>Resident Arrested</td>
-        <td>Whether the resident was arrested as part of the incident.
-        </td>
+        <td>Whether the resident was arrested as part of the incident.</td>
       </tr>
-       <tr>
+      <tr>
         <td>Resident Charge Type</td>
-        <td>If the resident was arrested as part of the incident, what they were charged with.
-        </td>
+        <td>If the resident was arrested as part of the incident, what they were charged with.</td>
       </tr>
-       <tr>
-        <td>Resident Condition Type</td>
-        <td>Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.
-        </td>
-      </tr>
-       <tr>
-        <td>Officer Indentifier</td>
-        <td>This is a hased identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+      <tr>
+        <td>Resident Condition</td>
+        <td>Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.</td>
       </tr>
       <tr>
         <td>Officer Race</td>
@@ -110,17 +98,9 @@
         <td>Officer Years of Service</td>
         <td>The number of years the officer had been employed by IMPD at the time of the incident.</td>
       </tr>
-       <tr>
-        <td>Use of Force Type</td>
-        <td>In Indianapolis, kinds of force are categorized as physical if the officer uses their body, less lethal if the officer uses a weapon that's commonly considered non-lethal, or lethal if the officer uses a firearm, knife or vehicle. The types of force counted are:
-	        <ul>
-	        	<li>Physical: Elbow Strike, Fist Strike, Handcuffing, Joint/Pressure, Kick, Knee Strike, Leg Sweep, Other, Palm Strike, Take Down, Weight Leverage </li>
-	           
-	        	<li>Less Lethal: Baton, Bean Bag, BPS Gas, Burning CS, Clearout OC, CS Fogger, CS Grenade, CS/OC, Flash Bang, Other, Pepperball, Taser </li>
-				<li>Lethal: Handgun, Knife, Rifle, Shotgun, Sniper Rifle, Sub Machine Gun, Vehicle  
-				<li>Canine Bite is the only use of force type that doesn’t fall within the three types. </li>
-			</ul> 
-	 	</td>
+      <tr>
+        <td>Officer Indentifier</td>
+        <td>This is a hased identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
       </tr>
     </table>
   </div>
