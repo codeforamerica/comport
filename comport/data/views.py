@@ -195,7 +195,12 @@ def complaints():
     updated_rows = 0
 
     for incident in j['data']:
-        found_incident = CitizenComplaint.query.filter_by(opaque_id=incident["opaqueId"],allegation_type = incident["allegationType"],allegation = incident["allegation"],officer_identifier =incident["officerIdentifier"],department_id=extractor.department_id).first()
+        found_incident = CitizenComplaint.query.filter_by(
+            opaque_id=incident["opaqueId"],
+            allegation_type = incident["allegationType"],
+            allegation = incident["allegation"],
+            officer_identifier =incident["officerIdentifier"],
+            department_id=extractor.department_id).first()
 
         occured_date = parse_date(incident["occuredDate"])
 
@@ -225,27 +230,27 @@ def complaints():
             added_rows += 1
             continue
 
-        found_incident.department_id = extractor.department_id,
-        found_incident.opaque_id = incident["opaqueId"],
-        found_incident.occured_date = occured_date,
-        found_incident.division = incident["division"],
-        found_incident.precinct =incident["precinct"],
-        found_incident.shift = incident["shift"],
-        found_incident.beat =incident["beat"],
-        found_incident.allegation_type = incident["allegationType"],
-        found_incident.allegation = incident["allegation"],
-        found_incident.disposition =incident["disposition"],
-        found_incident.resident_race =incident["residentRace"],
-        found_incident.resident_sex =incident["residentSex"],
-        found_incident.resident_age = incident["residentAge"],
-        found_incident.officer_identifier =incident["officerIdentifier"],
-        found_incident.officer_race =incident["officerRace"],
-        found_incident.officer_sex =incident["officerSex"],
-        found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service =incident["officerYearsOfService"],
-        found_incident.census_tract = None
-        found_incident.save()
-        updated_rows += 1
+        # found_incident.department_id = extractor.department_id,
+        # found_incident.opaque_id = incident["opaqueId"],
+        # found_incident.occured_date = occured_date,
+        # found_incident.division = incident["division"],
+        # found_incident.precinct =incident["precinct"],
+        # found_incident.shift = incident["shift"],
+        # found_incident.beat =incident["beat"],
+        # found_incident.allegation_type = incident["allegationType"],
+        # found_incident.allegation = incident["allegation"],
+        # found_incident.disposition =incident["disposition"],
+        # found_incident.resident_race =incident["residentRace"],
+        # found_incident.resident_sex =incident["residentSex"],
+        # found_incident.resident_age = incident["residentAge"],
+        # found_incident.officer_identifier =incident["officerIdentifier"],
+        # found_incident.officer_race =incident["officerRace"],
+        # found_incident.officer_sex =incident["officerSex"],
+        # found_incident.officer_age = incident["officerAge"],
+        # found_incident.officer_years_of_service =incident["officerYearsOfService"],
+        # found_incident.census_tract = None
+        # found_incident.save()
+        # updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None
