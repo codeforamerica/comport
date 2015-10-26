@@ -47,10 +47,14 @@ def clean_incident(incident, args):
     if resident_race is not None and resident_race in race_map:
         resident_race = race_map[resident_race]
         incident.resident_race = resident_race
+    else:
+        incident.resident_race = titlecase(resident_race)
 
     if resident_sex is not None and resident_sex in sex_map:
         resident_sex = sex_map[resident_sex]
         incident.resident_sex = resident_sex
+    else:
+        incident.resident_sex = titlecase(resident_sex)
 
     incident.precinct = capitalize(precinct)
     incident.division = capitalize(division)
