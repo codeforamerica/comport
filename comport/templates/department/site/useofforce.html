@@ -15,6 +15,19 @@
   <div class="col-md-10 col-md-offset-1">
     <h1>{{department.name}}</h1>
     <h2>Use of Force</h2>
+    {% if editing %}
+        <form method="post" action="/content/uof-introduction/{{department.id}}">
+          <div class="form-group">
+            <label for="chart_content">Content:</label>
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['uof-introduction'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+            <input type="submit" />
+         </form>
+       </br>
+    {% else %}
+      {{ markdown(chart_blocks['uof-introduction'].content) }}
+    {% endif %}
   </div>
 </div>
 <div class="row">

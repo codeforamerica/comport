@@ -199,4 +199,15 @@ We have done some initial analysis on this dataset, though there are many other 
             date_updated = None,
             date_edited = None
         ),
+
+        ChartBlock(
+            title ="Use of Force Introduction",
+            caption ="",
+            slug ="uof-introduction",
+            dataset ="use-of-force",
+            content ="""No content
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
     ]
