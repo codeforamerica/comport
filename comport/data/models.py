@@ -130,6 +130,8 @@ class CitizenComplaint(SurrogatePK, Model):
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
+    source = Column(db.String(255), unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     precinct = Column(db.String(255), unique=False, nullable=True)
     shift = Column(db.String(255), unique=False, nullable=True)
