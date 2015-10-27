@@ -9,7 +9,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    
+
     <a class="navbar-brand" href="{{ url_for('public.home') }}">
     <img class= "logo" src="/static/img/comportlogodark.png" alt="project comportlogo">
 
@@ -21,20 +21,16 @@
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <!-- <ul class="nav navbar-nav"> -->
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="/department/IMPD">Home</a></li>
-        <li><a href="/department/IMPD/complaints">Complaints</a></li>
-         <li><a href="/department/IMPD/useofforce">Use of Force</a></li>
-          <!-- <li><a href="/department/IMPD/ois">Office Involved Shootings</a></li> -->
-
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Raw Data <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/department/IMPD/schema/complaints">Complaints</a></li>
-            <li><a href="/department/IMPD/schema/useofforce">Use of Force</a></li>
-          </ul>
-        </li>
-      <!-- <li><a href="{{ url_for('public.home') }}">Home</a></li> -->
-      <!-- <li><a href="{{ url_for('public.about') }}">About</a></li> -->
+      <li><a href="/department/IMPD">Home</a></li>
+      <li><a href="/department/IMPD/complaints">Complaints</a></li>
+      <li><a href="/department/IMPD/useofforce">Use of Force</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Raw Data<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/department/IMPD/schema/complaints">Complaints</a></li>
+          <li><a href="/department/IMPD/schema/useofforce">Use of Force</a></li>
+        </ul>
+      </li>
     </ul>
     {% if current_user and current_user.is_authenticated() and not published%}
     <ul class="nav navbar-nav navbar-right">
