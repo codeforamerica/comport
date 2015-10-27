@@ -216,6 +216,13 @@ def demographics_csv(department_id):
 
 
 #<<<<<<<< PUBLIC ENDPOINTS >>>>>>>>>>
+@blueprint.route("/IMPD")
+def public_intro():
+    department = Department.get_by_id(1)
+    if not department:
+        abort(404)
+    return render_template("department/site/index.html", chart_blocks=department.get_introduction_blocks(), department=department, editing=False, published=True)
+
 @blueprint.route("/IMPD/complaints")
 def public_complaints():
     department = Department.get_by_id(1)

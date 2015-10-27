@@ -209,6 +209,8 @@ def complaints():
                     department_id = extractor.department_id,
                     opaque_id = incident["opaqueId"],
                     occured_date = occured_date,
+                    service_type = incident["serviceType"],
+                    source = incident["source"],
                     division = incident["division"],
                     precinct =incident["precinct"],
                     shift = incident["shift"],

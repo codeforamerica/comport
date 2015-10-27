@@ -179,6 +179,7 @@ def add_new_blocks():
                 print("adding %s to %s", [block.slug, department.name])
                 department.chart_blocks.append(block)
                 department.save()
+    db.session.commit()
 
 
 

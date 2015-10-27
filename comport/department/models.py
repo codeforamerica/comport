@@ -215,7 +215,11 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id","occuredDate","division","district","shift","beat","finding","allegationType","allegation","censusTract","residentRace","residentSex","residentAge","officerRace","officerSex","officerAge","officerYearsOfService","officerIdentifier"])
+        writer.writerow(["id","occuredDate","serviceType", "source","division",
+        "district","shift","beat","finding","allegationType",
+        "allegation","censusTract","residentRace",
+        "residentSex","residentAge","officerRace","officerSex","officerAge",
+        "officerYearsOfService","officerIdentifier"])
 
         complaints = self.citizen_complaints
 
@@ -224,6 +228,8 @@ class Department(SurrogatePK, Model):
             values = [
                 complaint.opaque_id,
                 occured_date,
+                complaint.service_type,
+                complaint.source,
                 complaint.division,
                 complaint.precinct,
                 complaint.shift,
