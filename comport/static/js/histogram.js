@@ -120,6 +120,11 @@ function flagHistogram(config, data){
 }
 
 function symmetricalFlags(config, data){
+
+  if(data.length == 0){
+    return;
+  }
+
   var raceKeys = [
     "White", "Black", "Hispanic", "Asian", "Other"];
   var raceColors = [
