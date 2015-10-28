@@ -34,6 +34,7 @@
   <div class="col-md-10 col-md-offset-1">
     {{ brick( chart_blocks['uof-by-inc-district'] , editing, department) }}
     {{ brick( chart_blocks['uof-force-type'] , editing, department) }}
+    {{ brick( chart_blocks['officer-demographics'] , editing, department) }}
     {{ brick( chart_blocks['uof-race'] , editing, department) }}
   </div>
 </div>
@@ -43,9 +44,11 @@
 {% block js %}
 <script type="text/javascript">
 var csv_url = '{{ url_for(".use_of_force_csv", department_id=department.id ) }}';
+var DEMOGRAPHICS = {{ department.serialize_demographics()|safe }};
 var charts = [
     'uof-by-inc-district',
     'uof-force-type',
+    'officer-demographics',
     'uof-race',
 ];
 </script>

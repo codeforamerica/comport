@@ -18,16 +18,6 @@ function orderedGet(keys, map){
   return results;
 }
 
-percentFmt = d3.format(".1f");
-
-function percentFormat(d){
-  if(d.percent === undefined ){
-    return "";
-  }
-  var num = percentFmt(d.percent * 100);
-  return num + '<span class="percent">%</span>';
-}
-
 
 function sortedEntries(keys, map){
   var sorted = [];
