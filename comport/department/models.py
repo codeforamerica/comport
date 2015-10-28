@@ -15,6 +15,7 @@ from comport.utils import coalesce_date
 from comport.user.models import User, Role
 import csv
 import io
+import json
 
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
@@ -113,6 +114,17 @@ class Department(SurrogatePK, Model):
             })
         return result
 
+
+    def serialize_demographics(self):
+        results = []
+        for v in self.demographic_values:
+            if v.gender in ('', 'N/A'):
+                results.append({
+                    'race': v.race,
+                    'count': v.count,
+                    'entity': 'department' if v.department_value else 'city'
+                    })
+        return json.dumps(results);
 
     def get_extractor(self):
         extractors = list(filter(lambda u: u.type == "extractors" ,self.users))

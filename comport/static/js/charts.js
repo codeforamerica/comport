@@ -385,5 +385,6 @@ drawFuncs = {
   'map': mapChart,
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
+  'symmetricalFlags': symmetricalFlags,
   'matrix': matrixChart,
 }

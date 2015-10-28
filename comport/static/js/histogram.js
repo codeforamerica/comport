@@ -16,7 +16,15 @@ All chart configs are coming from `chartConfigs.js`, so you can find examples th
 and then passes config and structured data into the drawing function. 
 
 */
-var percentFormat = d3.format("d");
+percentFmt = d3.format(".1f");
+
+function percentFormat(d){
+  if(d.percent === undefined ){
+    return "";
+  }
+  var num = percentFmt(d.percent * 100);
+  return num + '<span class="percent">%</span>';
+}
 
 function basicPercent(config, data){
  var div = d3.select(config.parent);
@@ -111,3 +119,81 @@ function flagHistogram(config, data){
 
 }
 
+function symmetricalFlags(config, data){
+  var raceKeys = [
+    "White", "Black", "Hispanic", "Asian", "Other"];
+  var raceColors = [
+    "#a865a8", "#00a6d2", "#fdb81e", "#4aa564", "#cd2026"];
+
+  var raceMap = d3.map();
+  raceKeys.forEach(function(r, i){
+    raceMap.set(r, {
+      color: raceColors[i],
+      race: r,
+    });
+  });
+
+  ['city', 'department'].forEach(function(entity){
+    var total = 0;
+    var subset = data.filter(function(d){
+          return d.entity == entity.toLowerCase();
+        });
+    subset.forEach(function(d){
+      total += d.count;
+    });
+    subset.forEach(function(d){
+      d.percent = d.count / total;
+      var datum = raceMap.get(d.race)
+      datum[entity] = d;
+    });
+  });
+
+  var data = raceKeys.map(function(r){
+    return raceMap.get(r);
+  });
+
+  var table = d3.select(config.parent).append("table")
+    .attr("class", "sym-flag-table");
+
+  var rows = table.selectAll("tr")
+    .data(data).enter()
+    .append("tr")
+    .attr("class", "sym-flag-row");
+
+  rows.append("th").attr("class", 'sym-flag-row-label')
+    .text(function(d){ return d.race; });
+
+  ['city', 'department'].forEach(function(entity, right){
+    var flagCells = rows.append("td")
+      .attr("class", 'flag-cell ' + (right ? 'flag-right' : 'flag-left'));
+    function makeFlags(cells){
+      cells.append("span")
+        .attr("class", "sym-flag-bar")
+        .style("width", function(d){ return (d[entity].percent * 75) + "%"; })
+        .style("background-color", function(d){ return d.color; });
+    }
+    function makeLabels(cells){
+      cells.append("span")
+        .attr("class", "sym-flag-label")
+        .html(function(d){ 
+          return percentFormat(d[entity]);
+        });
+    }
+    if( right ){
+      makeFlags(flagCells);
+      makeLabels(flagCells);
+    } else {
+      makeLabels(flagCells);
+      makeFlags(flagCells);
+    }
+  });
+
+  var headers = table.insert("tr", ":first-child")
+    .attr("class", "sym-flag-col-header")
+    .selectAll("th")
+    .data(["", "residents", "officers"]).enter()
+    .append("th")
+    .attr("class", "sym-flag-col-header")
+    .text(String);
+
+}

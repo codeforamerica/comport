@@ -1,6 +1,7 @@
 .chart {
   font-size: 0.8em;
   line-height: 1.1em;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .trend-line {
@@ -24,6 +25,41 @@
   stroke: #aaa;
 }
 
+.sym-flag-table { width: 100%; }
+.sym-flag-table tr + tr {
+  border-top: 1px solid #eee;
+}
+.sym-flag-table td, .sym-flag-table th { 
+  padding: 0.3em 0 0.3em 0;
+}
+
+th.sym-flag-col-header { 
+  text-align: center; 
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 0.75em;
+}
+
+.sym-flag-row-label { width: 15%; text-align: right; }
+
+td span + span {
+  margin-left: 1em;
+}
+
+
+.flag-left {
+  text-align: right;
+}
+.flag-right {
+  text-align: left;
+  border-left: 1px solid #000;
+}
+.sym-flag-bar {
+  height: 1em;
+  display: inline-block;
+}
+
 .hist-label {
   max-width: 18em;
 }
@@ -31,8 +67,14 @@
   height: 1em;
   background-color: #205493;
   display: inline-block;
-  margin: 0 0.5em -0.1em 0.7em;
+  margin: 0 0 -0.1em 0.7em;
 }
+
+.bar-container {
+  width: 100%;
+  overflow: auto;
+}
+
 .flagHistogram-table td, .hist-flag-label {
   padding: 0.3em 0 0.3em 0;
 }
@@ -40,18 +82,10 @@
   border-top: 1px solid #eee;
 }
 
-.percent + .percent {
-  margin-left: 2em;
-}
-.percent-amt {
-  font-size: 2em;
-}
-.percent-symbol {
-  font-size: 0.6em;
-}
-.percent-label {
-  margin-left: 0.5em;
-}
+.percent + .percent { margin-left: 2em; }
+.percent-amt { font-size: 2em; }
+.percent-symbol { font-size: 0.6em; }
+.percent-label { margin-left: 0.5em; }
 
 .matrix-table th, .matrix-table td {
   padding: 0.5em 0.4em;
@@ -71,3 +105,4 @@
   font-weight: normal;
   letter-spacing: 1px;
 }
+

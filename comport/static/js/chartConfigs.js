@@ -166,8 +166,9 @@ var configs = {
   'uof-dispositions-outcomes': {
     },
 
-  'pd-resident-demographics': {
-    chartType: 'flagHistogram',
+  'officer-demographics': {
+    chartType: 'symmetricalFlags',
+    dataFunc: function(){ return DEMOGRAPHICS; }
     },
 
   'uof-race': {
