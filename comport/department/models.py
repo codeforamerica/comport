@@ -298,6 +298,7 @@ class Extractor(User):
     id = Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     next_month = Column(db.Integer)
     next_year = Column(db.Integer)
+    last_contact = Column(db.DateTime)
 
     __mapper_args__ = {
         'polymorphic_identity':'extractors',

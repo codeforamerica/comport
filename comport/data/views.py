@@ -7,6 +7,7 @@ from comport.department.models import Extractor
 from comport.data.models import UseOfForceIncident, CitizenComplaint,OfficerInvolvedShooting
 from comport.utils import parse_date, parse_int
 import json
+from datetime import datetime
 
 blueprint = Blueprint("data", __name__, url_prefix='/data',
                       static_folder="../static")
@@ -16,6 +17,9 @@ blueprint = Blueprint("data", __name__, url_prefix='/data',
 def heartbeat():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
+
+    extractor.last_contact = datetime.now()
+    extractor.save()
 
     if extractor.next_month and extractor.next_year:
         return json.dumps({"received":request.json, "nextMonth":extractor.next_month, "nextYear":extractor.next_year})
