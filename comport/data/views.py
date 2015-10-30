@@ -74,7 +74,7 @@ def use_of_force():
                     officer_race =incident["officerRace"],
                     officer_sex =incident["officerSex"],
                     officer_age = incident["officerAge"],
-                    officer_years_of_service = parse_int(incident["officerYearsOfService"]),
+                    officer_years_of_service = incident["officerYearsOfService"],
                     officer_condition = incident["officerCondition"]
                     )
             added_rows += 1
@@ -107,7 +107,7 @@ def use_of_force():
         found_incident.officer_race =incident["officerRace"],
         found_incident.officer_sex =incident["officerSex"],
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service =parse_int(incident["officerYearsOfService"]),
+        found_incident.officer_years_of_service =incident["officerYearsOfService"],
         found_incident.officer_condition =incident["officerCondition"]
         found_incident.save()
         updated_rows += 1
