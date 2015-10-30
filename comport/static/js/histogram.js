@@ -1,8 +1,8 @@
 /*
-This contains two charting functions: 
+This contains two charting functions:
 
-1) `basicPercent`, use to draw a list of percents as a chart. 
-2) `flagHistogram`, creates an html table that contains labels in the left column and 
+1) `basicPercent`, use to draw a list of percents as a chart.
+2) `flagHistogram`, creates an html table that contains labels in the left column and
    bars with quantities in the right column.
 
 All chart drawing functions take two arguments:
@@ -13,7 +13,7 @@ All chart drawing functions take two arguments:
 All chart configs are coming from `chartConfigs.js`, so you can find examples there.
 
 `charts.js` processes each config object, structures data accordingly, finds the correct drawing function,
-and then passes config and structured data into the drawing function. 
+and then passes config and structured data into the drawing function.
 
 */
 percentFmt = d3.format(".1f");
@@ -67,10 +67,10 @@ function flagHistogram(config, data){
 
   font_size = 14; // px
   width = 12;
-  
+
   // set y axis scale
   var yScale = d3.scale.linear()
-    .domain([ 0, 
+    .domain([ 0,
         d3.max(data, function(d){ return d[config.y]; })
         ])
     .range([0, font_size * width]);
@@ -113,7 +113,7 @@ function flagHistogram(config, data){
 
   var flagLabels = flags.append("span")
     .attr("class", "hist-flag-label")
-    .text(function(d){ 
+    .text(function(d){
       return d[config.y];
     });
 
@@ -154,7 +154,23 @@ function symmetricalFlags(config, data){
   });
 
   var data = raceKeys.map(function(r){
+    var d = raceMap.get(r);
+    // if there is only city or department, but not both
+    // http://stackoverflow.com/a/4540481/418586
+    if( !d.city ^ !d.department  ){
+      var filler = {
+        count: 0,
+        percent: 0
+      }
+      if( !d.city ){
+        d.city = filler;
+      } else {
+        d.department = filler;
+      }
+    }
     return raceMap.get(r);
+  }).filter(function(d){
+    return d;
   });
 
   var table = d3.select(config.parent).append("table")
@@ -180,7 +196,7 @@ function symmetricalFlags(config, data){
     function makeLabels(cells){
       cells.append("span")
         .attr("class", "sym-flag-label")
-        .html(function(d){ 
+        .html(function(d){
           return percentFormat(d[entity]);
         });
     }

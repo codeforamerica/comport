@@ -9,9 +9,6 @@
           Race
         </th>
         <th>
-          Gender
-        </th>
-        <th>
           Count
         </th>
         <th>
@@ -22,9 +19,6 @@
       <tr>
         <td>
           {{value.race}}
-        </td>
-        <td>
-          {{value.gender}}
         </td>
         <td>
           {{value.count}}
@@ -40,9 +34,6 @@
         <form method="post" action="/department/{{department.id}}/demographicValue/create">
           <td>
             <input type="text" class="form-control" name="race"/>
-          </td>
-          <td>
-            <input type="text" class="form-control" name="gender"/>
           </td>
           <td>
             <input type="text" class="form-control" name="count"/>
@@ -95,7 +86,6 @@
           </td>
           <td>
             <input type="hidden" name="department_or_city" value="city"/>
-            <input type="hidden" name="gender" value="N/A"/>
             <input type="submit" />
           </td>
         </form>

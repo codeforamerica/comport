@@ -102,7 +102,6 @@ def new_demographic_row(department_id):
     DemographicValue.create(
         department_id=department_id,
         race=request.form["race"],
-        gender=request.form["gender"],
         count=int(request.form["count"]),
         department_value=request.form["department_or_city"]=="department")
 

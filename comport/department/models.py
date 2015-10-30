@@ -51,51 +51,6 @@ class Department(SurrogatePK, Model):
     def get_raw_city_demographics(self):
         return [v for v in self.demographic_values if not v.department_value]
 
-    def get_department_demographics(self):
-        result = []
-        demographic_values = [v for v in self.demographic_values if v.department_value]
-
-        races = {}
-        genders = {}
-        total = 0
-
-        for value in demographic_values:
-            if not value.race in races:
-                races[value.race] = value.count
-            else:
-                races[value.race] += value.count
-
-            if not value.gender in genders:
-                genders[value.gender] = value.count
-            else:
-                genders[value.gender] += value.count
-            total += value.count
-
-        for key, value in genders.items():
-            result.append({
-                "gender": key,
-                "race": "",
-                "count": value,
-                "percent": "{0:.0f}%".format(value/total * 100)
-            })
-
-        for key, value in races.items():
-            result.append({
-                "gender": "",
-                "race": key,
-                "count": value,
-                "percent": "{0:.0f}%".format(value/total * 100)
-            })
-        for value in demographic_values:
-            result.append({
-                "gender": value.gender,
-                "race": value.race,
-                "count": value.count,
-                "percent": "{0:.0f}%".format(value.count/total * 100)
-            })
-        return result
-
-
     def get_city_demographics(self):
         result = []
         demographic_values = [v for v in self.demographic_values if not v.department_value]
@@ -118,12 +73,11 @@ class Department(SurrogatePK, Model):
     def serialize_demographics(self):
         results = []
         for v in self.demographic_values:
-            if v.gender in ('', 'N/A'):
-                results.append({
-                    'race': v.race,
-                    'count': v.count,
-                    'entity': 'department' if v.department_value else 'city'
-                    })
+            results.append({
+                'race': v.race,
+                'count': v.count,
+                'entity': 'department' if v.department_value else 'city'
+                })
         return json.dumps(results);
 
     def get_extractor(self):
@@ -269,15 +223,14 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["race","gender","count","cityOrDepartment"])
+        writer.writerow(["race","count","cityOrDepartment"])
 
-        values = sorted(self.demographic_values, key = lambda x: (x.department_value, x.gender, x.race))
+        values = sorted(self.demographic_values, key = lambda x: (x.department_value, x.race))
 
         for value in values:
             cityOrDepartment = "department" if value.department_value else "city"
             row = [
                 value.race,
-                value.gender,
                 value.count,
                 cityOrDepartment
             ]

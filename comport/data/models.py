@@ -78,7 +78,6 @@ class DemographicValue(SurrogatePK, Model):
     __tablename__="demographic_values"
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
     race = Column(db.String(255), unique=False, nullable=True)
-    gender = Column(db.String(255), unique=False, nullable=True)
     count = Column(db.Integer, unique=False, nullable=True)
     department_value = Column(db.Boolean, nullable=True)
 
