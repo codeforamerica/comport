@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h3>Officers Out On Service Data</h3>
+    <table class="table">
+      <tr>
+        <th>
+          Year
+        </th>
+        <th>
+          Month
+        </th>
+        <th>
+          Officers Out On Service
+        </th>
+        <th>
+
+        </th>
+      </tr>
+      {% for value in denominator_values %}
+      <tr>
+        <td>
+          {{value.year}}
+        </td>
+        <td>
+          {{value.month}}
+        </td>
+        <td>
+          {{value.officers_out_on_service}}
+        </td>
+        <td>
+          <form method="post" action="/department/{{department.id}}/denominatorValue/{{value.id}}/delete">
+              <input type="submit" value="Delete"/>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <form method="post" action="/department/{{department.id}}/denominatorValue/create">
+          <td>
+            <input type="number" class="form-control" name="year"/>
+          </td>
+          <td>
+            <input type="number" class="form-control" name="month"/>
+          </td>
+          <td>
+            <input type="number" class="form-control" name="officersOutOnService"/>
+          </td>
+          <td>
+            <input type="submit" value="Create" />
+          </td>
+        </form>
+      </tr>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -36,7 +36,7 @@ class UserFactory(BaseFactory):
 
 class DenominatorValueFactory(BaseFactory):
     month = Sequence(lambda n: datetime(2012, 1, 1) + relativedelta(months=n))
-    arrests=FuzzyInteger(200,500)
+    officers_out_on_service=FuzzyInteger(200,500)
     calls_for_service=FuzzyInteger(500,1500)
     officer_initiated_calls=FuzzyInteger(500,1500)
 

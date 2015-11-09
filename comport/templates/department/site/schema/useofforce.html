@@ -13,6 +13,10 @@
       <form method="get" action="/department/{{department.id}}/demographics.csv">
         <button type="submit">Download Officer Demographic Information for the IMPD</button>
       </form>
+
+      <form method="get" action="/department/{{department.id}}/denominator.csv">
+        <button type="submit">Download Officer Call Information for the IMPD</button>
+      </form>
     </div>
     <p> Please Note: IMPD started using a new database and process for collecting this data in Summer 2014. Entries prior to July 2014 were entered in to the database from an older paper form, so they may not be consistent with entries after Summer 2014.</p>
     <h4>Fields included in this dataset and their definitions:</h4>

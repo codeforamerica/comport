@@ -67,9 +67,7 @@ class DenominatorValue(SurrogatePK, Model):
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=False)
     month=Column(db.Integer, unique=False, nullable=False)
     year=Column(db.Integer, unique=False, nullable=False)
-    arrests=Column(db.Integer, unique=False, nullable=True)
-    calls_for_service=Column(db.Integer, unique=False, nullable=True)
-    officer_initiated_calls=Column(db.Integer, unique=False, nullable=True)
+    officers_out_on_service=Column(db.Integer, unique=False, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)

@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, Response,abort
 from comport.utils import flash_errors
 from .models import Department, Extractor
-from comport.data.models import DemographicValue
+from comport.data.models import DemographicValue, DenominatorValue
 from flask.ext.login import login_required
 
 from comport.decorators import admin_or_department_required, extractor_auth_required
@@ -123,6 +123,54 @@ def delete_demographic_row(department_id, value_id):
 
     return redirect(url_for(
         'department.edit_demographics', department_id=department_id
+    ))
+
+@blueprint.route("/<int:department_id>/edit/denominators")
+@login_required
+@admin_or_department_required()
+def edit_denominators(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template(
+        "department/denominators.html",
+        department=department,
+        denominator_values= department.denominator_values
+        )
+
+@blueprint.route("/<int:department_id>/denominatorValue/create",methods=["POST"])
+@login_required
+@admin_or_department_required()
+def new_denominator_row(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+
+    DenominatorValue.create(
+        department_id=department_id,
+        month=int(request.form["month"]),
+        year=int(request.form["year"]),
+        officers_out_on_service=int(request.form["officersOutOnService"])
+        )
+
+    return redirect(url_for(
+        'department.edit_denominators', department_id=department_id
+    ))
+
+@blueprint.route("/<int:department_id>/denominatorValue/<int:value_id>/delete",methods=["POST"])
+@login_required
+@admin_or_department_required()
+def delete_denominator_row(department_id, value_id):
+    department = Department.get_by_id(department_id)
+    value = DenominatorValue.get_by_id(value_id)
+
+    if not department or not value:
+        abort(404)
+
+    value.delete()
+
+    return redirect(url_for(
+        'department.edit_denominators', department_id=department_id
     ))
 
 @blueprint.route("/<int:department_id>/edit/index",methods=["GET","POST"])

@@ -240,11 +240,24 @@ class Department(SurrogatePK, Model):
 
 
     def get_denominator_csv(self):
-        csv = "month,year,arrests,callsForService,officerInitiatedCalls\n"
-        denominator_values = self.denominator_values
-        for month in denominator_values:
-            csv += month.to_csv_row()
-        return csv
+        output = io.StringIO()
+
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        writer.writerow(["year","month","officers out on service"])
+
+        values = sorted(self.denominator_values, key = lambda x: (x.year, x.month))
+
+        for value in values:
+            row = [
+                value.year,
+                value.month,
+                value.officers_out_on_service
+            ]
+            writer.writerow(row)
+
+        return output.getvalue()
+
 
 class Extractor(User):
     __tablename__ = 'extractors'
