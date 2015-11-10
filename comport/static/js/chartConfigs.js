@@ -112,6 +112,7 @@ var configs = {
     addOther: true,
     },
 
+
   'uof-officer-injuries': {
     chartType: 'percent',
     filter: last12Months,
@@ -291,6 +292,39 @@ var configs = {
     dataFunc: officerComplaintsCount,
   },
 
+
+  'ois-by-inc-district': {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.precinct; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].precinct; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+    },
+
+
+    'ois-weapon-type': {
+      chartType: 'flagHistogram',
+      filter: last12Months,
+      keyFunc: function(d){return d.officerWeaponUsed; },
+      sortWith: function(d){ return -d.count; },
+      x: 'type',
+      xFunc: function(b){  return b[0].officerWeaponUsed; },
+      y: 'count',
+      yFunc: function(b){ return b.length; },
+      addOther: false,
+      },
+
+    'ois-race': {
+      filter: last12Months,
+      chartType: 'matrix',
+      dataFunc: raceMatrix,
+      xAxisTitle: "Resident",
+      yAxisTitle: "Officer",
+      },
 
 };
 

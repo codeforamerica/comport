@@ -210,4 +210,48 @@ We have done some initial analysis on this dataset, though there are many other 
             date_updated = None,
             date_edited = None
         ),
+
+        ChartBlock(
+            title ="Officer Involved Shooting Introduction",
+            caption ="",
+            slug ="ois-introduction",
+            dataset ="ois",
+            content ="""No content
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
+
+        ChartBlock(
+            title ="Officer Involved Shootings by District",
+            caption ="",
+            slug ="ois-by-inc-district",
+            dataset ="ois",
+            content ="""No content
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
+
+        ChartBlock(
+            title ="Officer Involved Shootings by Officer Weapon Used",
+            caption ="",
+            slug ="ois-weapon-type",
+            dataset ="ois",
+            content ="""No content
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
+
+        ChartBlock(
+            title ="Officer Involved Shootings by Officer and Resident Race",
+            caption ="",
+            slug ="ois-race",
+            dataset ="ois",
+            content ="""No content
+            """,
+            date_updated = None,
+            date_edited = None
+        ),
     ]

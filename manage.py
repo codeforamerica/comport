@@ -12,7 +12,7 @@ from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
 from comport.utils import random_string, parse_date, diff_month, parse_csv_date, parse_int
-from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue, DemographicValue
+from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue, DemographicValue, OfficerInvolvedShooting
 from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
 import json
 import glob
@@ -121,6 +121,38 @@ def load_test_data():
                     officer_injured =incident.get("OFF_INJURED", None),
                     officer_hospitalized =incident.get("OFF_HOSPITAL", None),
                     use_of_force_reason = incident.get("UOF_REASON", None),
+                    resident_race =incident.get("RACE", None),
+                    officer_race =incident.get("OFF_RACE", None),
+                    resident_sex =incident.get("SEX", None),
+                    officer_sex =incident.get("OFF_SEX", None),
+                    officer_identifier =officer_identifier,
+                    officer_years_of_service =incident.get("OFF_YR_EMPLOY", None),
+                    officer_age =incident.get("OFF_AGE", None),
+                    resident_age =incident.get("CIT_AGE", None),
+                    officer_condition =incident.get("OFF_COND_TYPE", None),
+                    resident_condition =incident.get("CIT_COND_TYPE", None)
+                )
+
+    for filename in glob.glob('data/testdata/ois/ois.csv'):
+        with open(filename, 'rt') as f:
+            reader = csv.DictReader(f)
+            for incident in reader:
+                officer_identifier = hashlib.md5((incident.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+                opaque_id = hashlib.md5((incident.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
+
+                OfficerInvolvedShooting.create(
+                    department_id =department.id,
+                    opaque_id =opaque_id,
+                    occured_date =parse_csv_date(incident.get("OCCURRED_DT", None)),
+                    division = incident.get("UDTEXT24A", None),
+                    precinct = incident.get("UDTEXT24B", None),
+                    shift = incident.get("UDTEXT24C", None),
+                    beat = incident.get("UDTEXT24D", None),
+                    disposition = incident.get("DISPOSITION", None),
+                    census_tract = None,
+                    officer_weapon_used =incident.get("WEAPON_TYPE", None),
+                    resident_weapon_used =incident.get("CIT_WEAPON_TYPE", None),
+                    service_type = incident.get("SERVICE_TYPE", None),
                     resident_race =incident.get("RACE", None),
                     officer_race =incident.get("OFF_RACE", None),
                     resident_sex =incident.get("SEX", None),

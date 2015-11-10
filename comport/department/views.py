@@ -60,6 +60,15 @@ def start_extractor(department_id):
             return redirect(url_for('department.department_dashboard',department_id=department.id))
 
 #<<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
+@blueprint.route("/<int:department_id>/edit/ois")
+@login_required
+@admin_or_department_required()
+def edit_ois(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=True)
+
 @blueprint.route("/<int:department_id>/edit/useofforce")
 @login_required
 @admin_or_department_required()
@@ -184,6 +193,15 @@ def edit_index(department_id):
     return render_template("department/site/index.html", department=department, chart_blocks=department.get_introduction_blocks(), editing=True)
 
 #<<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
+@blueprint.route("/<int:department_id>/preview/ois")
+@login_required
+@admin_or_department_required()
+def preview_ois(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False)
+
 @blueprint.route("/<int:department_id>/preview/useofforce")
 @login_required
 @admin_or_department_required()
@@ -291,9 +309,23 @@ def public_uof():
         abort(404)
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=False, published=True)
 
+@blueprint.route("/IMPD/officerinvolvedshootings")
+def public_ois():
+    department = Department.get_by_id(1)
+    if not department:
+        abort(404)
+    return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False, published=True)
+
 @blueprint.route('/IMPD/schema/useofforce')
 def public_uof_schema():
     department = Department.get_by_id(1)
     if not department:
         abort(404)
     return render_template("department/site/schema/useofforce.html", department=department, published=True)
+
+@blueprint.route('/IMPD/schema/officerinvolvedshootings')
+def public_ois_schema():
+    department = Department.get_by_id(1)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/ois.html", department=department, published=True)

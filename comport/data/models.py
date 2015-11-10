@@ -164,7 +164,7 @@ class OfficerInvolvedShooting(SurrogatePK, Model):
     beat = Column(db.String(255), unique=False, nullable=True)
     disposition = Column(db.String(255), unique=False, nullable=True)
     census_tract = Column(db.String(255), unique=False, nullable=True)
-    officer_force_type = Column(db.String(255), unique=False, nullable=True)
+    officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
     resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
