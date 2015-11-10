@@ -12,7 +12,7 @@ from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
 from comport.utils import random_string, parse_date, diff_month, parse_csv_date, parse_int
-from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue
+from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue, DemographicValue
 from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
 import json
 import glob
@@ -133,7 +133,7 @@ def load_test_data():
                     resident_condition =incident.get("CIT_COND_TYPE", None)
                 )
 
-    for filename in glob.glob('data/testdata/denominator/denominator.csv'):
+    for filename in glob.glob('data/testdata/denominators/denominators.csv'):
         with open(filename, 'rt') as f:
             reader = csv.DictReader(f)
             for month in reader:
@@ -142,6 +142,17 @@ def load_test_data():
                     month= month.get("month", None),
                     year= month.get("year", None),
                     officers_out_on_service=month.get("officers out on service", None)
+                )
+
+    for filename in glob.glob('data/testdata/demographics/demographics.csv'):
+        with open(filename, 'rt') as f:
+            reader = csv.DictReader(f)
+            for value in reader:
+                DemographicValue.create(
+                    department_id = department.id,
+                    race= value.get("race", None),
+                    count= value.get("count", None),
+                    department_value=value.get("cityOrDepartment", None) == "department"
                 )
 
 
