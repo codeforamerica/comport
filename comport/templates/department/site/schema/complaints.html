@@ -6,6 +6,13 @@
   <div class="col-md-12 schema-wrapper">
     <div class="schema-header">
       <h1>Dataset: Citizen Complaints</h1>
+
+
+      <a class="btn btn-default" href="https://data.indy.gov/dataset/IMPD-Citizen-Complaints/h8rn-gy8c">
+        View this data on the Indianapolis Regional Data Portal
+      </a>
+
+
       <form method="get" action="/department/{{department.id}}/complaints.csv">
         <button type="submit">Download this dataset</button>
       </form>
@@ -33,6 +40,16 @@
       <tr>
         <td>Occured Date</td>
         <td>The date that the incident occurred.</td>
+      </tr>
+      <tr>
+        <td>Service Type</td>
+        <td>The reason for the interaction, such as Traffic Stop or Call for Service.
+        </td>
+      </tr>
+      <tr>
+        <td>Source</td>
+        <td>Who received the complaint and whether it was categorized as formal or informal.
+        </td>
       </tr>
       <tr>
         <td>Division</td>
@@ -100,8 +117,8 @@
         <td>The number of years the officer had been employed by IMPD at the time of the incident.</td>
       </tr>
       <tr>
-        <td>Officer Indentifier</td>
-        <td>This is a hased identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+        <td>Officer Identifier</td>
+        <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
       </tr>
     </table>
   </div>
