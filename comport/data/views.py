@@ -148,7 +148,7 @@ def officer_involved_shooting():
                     resident_weapon_used =incident["residentWeaponUsed"],
                     resident_condition =incident["residentCondition"],
                     officer_identifier =incident["officerIdentifier"],
-                    officer_force_type =incident["officerForceType"],
+                    officer_weapon_used =incident["officerWeaponUsed"],
                     officer_race =incident["officerRace"],
                     officer_sex =incident["officerSex"],
                     officer_age = incident["officerAge"],
