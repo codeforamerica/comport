@@ -127,7 +127,11 @@ def officer_involved_shooting():
     updated_rows = 0
 
     for incident in j['data']:
-        found_incident = OfficerInvolvedShooting.query.filter_by(opaque_id=incident["opaqueId"],department_id=extractor.department_id).first()
+        found_incident = OfficerInvolvedShooting.query.filter_by(
+            opaque_id=incident["opaqueId"],
+            department_id=extractor.department_id,
+            officer_identifier =incident["officerIdentifier"]
+            ).first()
 
         occured_date = parse_date(incident["occuredDate"])
 
