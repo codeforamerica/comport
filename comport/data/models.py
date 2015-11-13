@@ -11,56 +11,9 @@ from comport.database import (
 from .csv_utils import csv_utils
 
 from datetime import datetime
-from titlecase import titlecase
+
+
 import types
-
-
-race_map = {
-    "b": "Black"
-}
-
-sex_map = {
-    "f": "Female",
-    "m": "Male"
-}
-
-def clean_keys(key):
-    return key.lower().strip() if key is not None else None
-
-def abbreviations(word, **kwargs):
-   if word.upper() in ('NW', 'SE', 'ED', 'DT', 'FTO', 'ND', 'SW', "DWI"):
-     return word.upper()
-
-def capitalize(value):
-    if value is None or isinstance(value, list):
-        return value
-    return titlecase(value.strip(), callback=abbreviations)
-
-def clean_incident(incident, args):
-    resident_race = clean_keys(args.pop("resident_race", None))
-    resident_sex = clean_keys(args.pop("resident_sex", None))
-    precinct = args.pop("precinct", None)
-    division = args.pop("division", None)
-    shift = args.pop("shift", None)
-    beat = args.pop("beat", None)
-
-    if resident_race is not None and resident_race in race_map:
-        resident_race = race_map[resident_race]
-        incident.resident_race = resident_race
-    else:
-        incident.resident_race = titlecase(resident_race)
-
-    if resident_sex is not None and resident_sex in sex_map:
-        resident_sex = sex_map[resident_sex]
-        incident.resident_sex = resident_sex
-    else:
-        incident.resident_sex = titlecase(resident_sex)
-
-    incident.precinct = capitalize(precinct)
-    incident.division = capitalize(division)
-    incident.shift = capitalize(shift)
-    incident.beat = capitalize(beat)
-    return incident
 
 class DenominatorValue(SurrogatePK, Model):
     __tablename__="denominator_values"
@@ -118,8 +71,7 @@ class UseOfForceIncident(SurrogatePK, Model):
     resident_condition = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
-        cleaned_incident = clean_incident(self, kwargs)
-        db.Model.__init__(cleaned_incident, **kwargs)
+        db.Model.__init__(self, **kwargs)
 
 
 class CitizenComplaint(SurrogatePK, Model):
@@ -147,8 +99,7 @@ class CitizenComplaint(SurrogatePK, Model):
     resident_age = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
-        cleaned_incident = clean_incident(self, kwargs)
-        db.Model.__init__(cleaned_incident, **kwargs)
+        db.Model.__init__(self, **kwargs)
 
 
 
@@ -180,5 +131,4 @@ class OfficerInvolvedShooting(SurrogatePK, Model):
 
 
     def __init__(self, **kwargs):
-        cleaned_incident = clean_incident(self, kwargs)
-        db.Model.__init__(cleaned_incident, **kwargs)
+        db.Model.__init__(self, **kwargs)
