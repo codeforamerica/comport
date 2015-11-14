@@ -21,8 +21,8 @@
         <button type="submit">Download Officer Demographic Information for the IMPD</button>
       </form>
 
-      <form method="get" action="/department/{{department.id}}/denominator.csv">
-        <button type="submit">Download Officer Call Information for the IMPD</button>
+      <form method="get" action="/department/{{department.id}}/officerCalls.csv">
+        <button type="submit">Download Officer Call Information<sup>*</sup> for the IMPD</button>
       </form>
     </div>
     <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p>
@@ -121,6 +121,11 @@
         <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
       </tr>
     </table>
+  </div>
+  <div class='row'>
+    <div class="col-md-12">
+      <p><sup>*</sup>Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.</p>
+    </div>
   </div>
   <div class='row'>
     <div class="col-md-12 disclaimer">

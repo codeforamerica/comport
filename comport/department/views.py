@@ -263,7 +263,7 @@ def ois_csv(department_id):
         abort(404)
     return Response(department.get_ois_csv(), mimetype="text/csv")
 
-@blueprint.route('/<int:department_id>/denominator.csv')
+@blueprint.route('/<int:department_id>/officerCalls.csv')
 def denominator_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
