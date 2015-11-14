@@ -36,7 +36,27 @@ def home():
                 return redirect(redirect_url)
         else:
             flash_errors(form)
-    return render_template("public/home.html", form=form)
+    return render_template("public/home.html", form=form, published=True)
+
+
+@blueprint.route("/login/", methods=["GET", "POST"])
+def login():
+    form = LoginForm(request.form)
+    # Handle logging in
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            login_user(form.user)
+            flash("You are logged in.", 'success')
+            if form.user.is_admin():
+                redirect_url = request.args.get("next") or url_for("admin.admin_dashboard")
+                return redirect(redirect_url)
+            else:
+
+                redirect_url = request.args.get("next") or url_for("department.department_dashboard", department_id=form.user.department_id)
+                return redirect(redirect_url)
+        else:
+            flash_errors(form)
+    return render_template("public/login.html", form=form, published=True)
 
 
 @blueprint.route('/logout/')
