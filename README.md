@@ -8,7 +8,7 @@ An ETL Toolkit to take Police Accountability data from the IA Pro Internal Affai
 Project Comport is in early development.
 
 ## Who made it?
-Project Comport is a project of the 2015 Inidanapolis Code for America [fellowship team](http://codeforamerica.org/governments/indianapolis).
+Project Comport is a project of the 2015 Indianapolis Code for America [fellowship team](http://codeforamerica.org/governments/indianapolis).
 
 ## How
 
