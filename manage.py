@@ -57,9 +57,9 @@ def make_admin_user():
 
 @manager.command
 def load_test_data():
-    department = Department.query.filter_by(name="IMPD").first()
+    department = Department.query.filter_by(name="Indianapolis Metropolitan Police Department", short_name="IMPD").first()
     if not department:
-        department = Department.create(name="IMPD")
+        department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD")
     if not User.query.filter_by(username="user").first():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
 
@@ -192,9 +192,9 @@ def load_test_data():
 
 @manager.command
 def make_test_data():
-    department = Department.query.filter_by(name="Busy Town Public Safety").first()
+    department = Department.query.filter_by(name="Busy Town Public Safety", short_name="BTPS").first()
     if not department:
-        department = Department.create(name="Busy Town Public Safety")
+        department = Department.create(name="Busy Town Public Safety", short_name="BTPS")
         Link.create(title="The Department's Policy on Force", url="www.example.com/policy/force.pdf", department_id=department.id, type="policy")
         Link.create(title="The Department's Training Policy on Force", url="www.example.com/training/force.pdf", department_id=department.id, type="training")
         Link.create(title="The Department's Outreach Strategy", url="www.example.com/outreach.pdf", department_id=department.id, type="outreach")
