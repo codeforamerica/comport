@@ -279,51 +279,51 @@ def demographics_csv(department_id):
 
 
 #<<<<<<<< PUBLIC ENDPOINTS >>>>>>>>>>
-@blueprint.route("/IMPD")
-def public_intro():
-    department = Department.get_by_id(1)
+@blueprint.route("/<short_name>/")
+def public_intro(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/index.html", chart_blocks=department.get_introduction_blocks(), department=department, editing=False, published=True)
 
-@blueprint.route("/IMPD/complaints")
-def public_complaints():
-    department = Department.get_by_id(1)
+@blueprint.route("/<short_name>/complaints/")
+def public_complaints(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False, published=True)
 
-@blueprint.route('/IMPD/schema/complaints')
-def public_complaints_schema():
-    department = Department.get_by_id(1)
+@blueprint.route('/<short_name>/schema/complaints/')
+def public_complaints_schema(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/schema/complaints.html", department=department, published=True)
 
-@blueprint.route("/IMPD/useofforce")
-def public_uof():
-    department = Department.get_by_id(1)
+@blueprint.route("/<short_name>/useofforce/")
+def public_uof(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=False, published=True)
 
-@blueprint.route("/IMPD/officerinvolvedshootings")
-def public_ois():
-    department = Department.get_by_id(1)
+@blueprint.route("/<short_name>/officerinvolvedshootings/")
+def public_ois(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False, published=True)
 
-@blueprint.route('/IMPD/schema/useofforce')
-def public_uof_schema():
-    department = Department.get_by_id(1)
+@blueprint.route('/<short_name>/schema/useofforce/')
+def public_uof_schema(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/schema/useofforce.html", department=department, published=True)
 
-@blueprint.route('/IMPD/schema/officerinvolvedshootings')
-def public_ois_schema():
-    department = Department.get_by_id(1)
+@blueprint.route('/<short_name>/schema/officerinvolvedshootings/')
+def public_ois_schema(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
     return render_template("department/site/schema/ois.html", department=department, published=True)
