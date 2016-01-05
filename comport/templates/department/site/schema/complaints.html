@@ -7,121 +7,420 @@
     <div class="schema-header">
       <h1>Dataset: Citizen Complaints</h1>
 
-
-      <a class="btn btn-default" href="https://data.indy.gov/dataset/IMPD-Citizen-Complaints/h8rn-gy8c">
-        View this data on the Indianapolis Regional Data Portal
-      </a>
-
+      {% if editing %}
+          <form method="post" action="/content/data-portal-link/{{department.id}}">
+            <div class="form-group">
+              <label for="chart_content">Link to external data portal:</label>
+              <textarea class="form-control" name="chart_content">{{ chart_blocks['data-portal-link'].content }}</textarea>
+              <input type="hidden" name="chart_title" value=""/>
+            </div>
+              <input type="submit" />
+           </form>
+         </br>
+      {% else %}
+        {{ markdown(chart_blocks['data-portal-link'].content) }}
+      {% endif %}
 
       <form method="get" action="/department/{{department.id}}/complaints.csv">
         <button type="submit">Download this dataset</button>
       </form>
 
       <form method="get" action="/department/{{department.id}}/demographics.csv">
-        <button type="submit">Download Officer Demographic Information for the IMPD</button>
+        <button type="submit">Download Officer Demographic Information for the {{ department.short_name}}</button>
       </form>
 
       <form method="get" action="/department/{{department.id}}/officerCalls.csv">
-        <button type="submit">Download Officer Call Information<sup>*</sup> for the IMPD</button>
+        <button type="submit">Download Officer Call Information<sup>*</sup> for the {{ department.short_name}}</button>
       </form>
     </div>
-    <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p>
 
+
+    {% if editing %}
+        <form method="post" action="/content/schema-complaints-introduction/{{department.id}}">
+          <div class="form-group">
+            <label for="chart_content">Introduction to the complaints schema page:</label>
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-introduction'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+            <input type="submit" />
+         </form>
+       </br>
+    {% else %}
+      {{ markdown(chart_blocks['schema-complaints-introduction'].content) }}
+    {% endif %}
+
+    {% if editing %}
     <h4>Fields included in this dataset and their definitions:</h4>
     <table class="table schema-table">
       <tr>
         <th>Field</th>
         <th>Information</th>
+        <th></th>
       </tr>
       <tr>
         <td>Id</td>
-        <td>This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.</td>
+        <form method="post" action="/content/schema-complaints-id/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-id'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
       <tr>
         <td>Occured Date</td>
-        <td>The date that the incident occurred.</td>
+        <form method="post" action="/content/schema-complaints-date/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-date'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
       <tr>
         <td>Service Type</td>
-        <td>The reason for the interaction, such as Traffic Stop or Call for Service.
-        </td>
+        <form method="post" action="/content/schema-complaints-service-type/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-service-type'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>Source</td>
-        <td>Who received the complaint and whether it was categorized as formal or informal.
-        </td>
+        <form method="post" action="/content/schema-complaints-source/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-source'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Division</td>
-        <td>This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.</td>
+        <form method="post" action="/content/schema-complaints-division/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-division'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>District</td>
-        <td>This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.</td>
+        <form method="post" action="/content/schema-complaints-district/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-district'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>Shift</td>
-        <td>This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.
-        </td>
+        <form method="post" action="/content/schema-complaints-shift/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-shift'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>Beat</td>
-        <td>Some shifts contain this secondary level of detail on the officer's assignment.
-        </td>
+        <form method="post" action="/content/schema-complaints-beat/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-beat'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Finding</td>
-        <td>Each complaint may contain multiple allegations, such as rudeness and inappropriate language. Each allegation receives separate findings. There are four possible findings:
-        <ul>
-          <li>Sustained means that the investigation agreed with the allegation in the complaint. When allegations are sustained, the Chief of Police will take the appropriate disciplinary action.</li>
-          <li>Not sustained means that the investigation did not find evidence to prove or disprove the complaint. If allegations are found to be not sustained, the officer's name is submitted to IMPD's Early Warning system.</li>
-          <li>Exonerated means the incident happened, but it was lawful and proper.</li>
-          <li>Unfounded means that the incident happened, however not as detailed in the complaint.</li>
-        </ul>
-        Complaints that are still being investigated will be blank in this column.</td>
+        <form method="post" action="/content/schema-complaints-finding/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-finding'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
       <tr>
         <td>Allegation Type</td>
-        <td>Allegations in complaints fall into a number of classes. Some classes of allegations are: Citizen Interactions, Bias Based Policing and Use of Force.</td>
+        <form method="post" action="/content/schema-complaints-allegation-type/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-allegation-type'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>Allegation</td>
-        <td>Allegations are tied to the regulations and standards which Officers are held to. Examples are: rude, demeaning and affronting language, and failure to provide name or badge number, which both fall under the allegation class of citizen interaction.</td>
+        <form method="post" action="/content/schema-complaints-allegation/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-allegation'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Resident Race</td>
-        <td>The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.</td>
+        <form method="post" action="/content/schema-complaints-resident-race/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-resident-race'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
       <tr>
         <td>Resident Sex</td>
-        <td>The resident's gender.</td>
+        <form method="post" action="/content/schema-complaints-resident-sex/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-resident-sex'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Resident Age</td>
-        <td>The resident's age at the time of the incident, if known.</td>
+        <form method="post" action="/content/schema-complaints-resident-age/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-resident-age'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Officer Race</td>
-        <td>The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.</td>
+        <form method="post" action="/content/schema-complaints-officer-race/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-officer-race'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
       <tr>
         <td>Officer Sex</td>
-        <td>The officer's gender.</td>
+        <form method="post" action="/content/schema-complaints-officer-sex/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-officer-sex'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
+
+
       <tr>
         <td>Officer Age</td>
-        <td>The officer's age at the time of the incident.</td>
+        <form method="post" action="/content/schema-complaints-officer-age/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-officer-age'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
+
       <tr>
         <td>Officer Years of Service</td>
-        <td>The number of years the officer had been employed by IMPD at the time of the incident.</td>
+        <form method="post" action="/content/schema-complaints-officer-tenure/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-officer-tenure'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
       <tr>
         <td>Officer Identifier</td>
-        <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+        <form method="post" action="/content/schema-complaints-officer-id/{{department.id}}">
+        <td>
+          <div class="form-group">
+            <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-officer-id'].content }}</textarea>
+            <input type="hidden" name="chart_title" value=""/>
+          </div>
+          <td>
+            <input type="submit" />
+          </td>
+         </form>
       </tr>
     </table>
-  </div>
+    </div>
+  {% else %}
+  <h4>Fields included in this dataset and their definitions:</h4>
+  <table class="table schema-table">
+    <tr>
+      <th>Field</th>
+      <th>Information</th>
+    </tr>
+    <tr>
+      <td>Id</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-id'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Occured Date</td>
+        <td>{{ markdown(chart_blocks['schema-complaints-date'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Service Type</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-service-type'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Source</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-source'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Division</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-division'].content) }}</td>
+    </tr>
+    <tr>
+      <td>District</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-district'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Shift</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-shift'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Beat</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-beat'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Finding</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-finding'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Allegation Type</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-allegation-type'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Allegation</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-allegation'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Resident Race</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-resident-race'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Resident Sex</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-resident-sex'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Resident Age</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-resident-age'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Officer Race</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-officer-race'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Officer Sex</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-officer-sex'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Officer Age</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-officer-age'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Officer Years of Service</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-officer-tenure'].content) }}</td>
+    </tr>
+    <tr>
+      <td>Officer Identifier</td>
+      <td>{{ markdown(chart_blocks['schema-complaints-officer-id'].content) }}</td>
+    </tr>
+  </table>
+</div>
+  {% endif %}
+
   <div class='row'>
     <div class="col-md-12">
       <p><sup>*</sup>Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.</p>

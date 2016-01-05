@@ -46,6 +46,9 @@ class Department(SurrogatePK, Model):
     def get_complaint_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints","all"]])
 
+    def get_complaint_schema_blocks(self):
+        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints-schema","schema","all"]])
+
     def get_introduction_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])
 
