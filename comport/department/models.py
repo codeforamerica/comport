@@ -38,13 +38,48 @@ class Department(SurrogatePK, Model):
                 self.chart_blocks.append(default_chart_block)
 
     def get_uof_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["use-of-force", "all"]])
+        block_keys = [
+            'uof-by-inc-district',
+            'uof-force-type',
+            'officer-demographics',
+            'uof-race',
+        ]
+        # find the first matching block for each key
+        return [
+            next(b for b in self.chart_blocks if b.slug == key)
+            for key in block_keys
+            ]
 
     def get_ois_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["ois", "all"]])
+        block_keys = [
+            'ois-by-inc-district',
+            'ois-weapon-type',
+            'officer-demographics',
+            'ois-race',
+        ]
+        # find the first matching block for each key
+        return [
+            next(b for b in self.chart_blocks if b.slug == key)
+            for key in block_keys
+            ]
 
     def get_complaint_blocks(self):
-        return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["complaints","all"]])
+        block_keys = [
+          'complaints-introduction',
+          'complaints-by-month',
+          'complaints-by-allegation',
+          'complaints-by-allegation-type',
+          'complaints-by-disposition',
+          'complaints-by-precinct',
+          'officer-demographics',
+          'complaints-by-demographic',
+          'complaints-by-officer',
+        ]
+        # find the first matching block for each key
+        return [
+            next(b for b in self.chart_blocks if b.slug == key)
+            for key in block_keys
+            ]
 
     def get_introduction_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])

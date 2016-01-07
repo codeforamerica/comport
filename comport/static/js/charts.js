@@ -61,7 +61,7 @@ function uniqueOfficerComplaints(rows){
     .key(function (d){ return d.id; });
   var officerComplaintMap = grouper.map(rows, d3.map);
   officerComplaintMap.forEach(function(offId, complaints){
-    newSet.push({ 
+    newSet.push({
       officerId: offId,
       complaintCount: complaints.keys().length,
       values: complaints
@@ -92,8 +92,8 @@ function raceKey( value ) {
 };
 
 function race(k){
-  return function(d){ 
-    return raceKey(d[k]); 
+  return function(d){
+    return raceKey(d[k]);
   };
 }
 
@@ -102,10 +102,10 @@ function uniqueResidentProxy(d){
 }
 
 function uniqueComplaintAboutOfficerByResidentProxy(d){
-   return [ 
-     d.residentAge, 
-     "year old", 
-     d.residentRace, 
+   return [
+     d.residentAge,
+     "year old",
+     d.residentRace,
      d.residentSex,
      "filed",
      d.id,
@@ -298,7 +298,7 @@ function addOtherCategory(data){
     return g.count;
   }).reduce(function (a,b) {
     return a + b;
-  }); 
+  });
   var otherTotal = 0;
 
   data.forEach(function(d, i) {
@@ -315,7 +315,7 @@ function addOtherCategory(data){
       return data[i];
     })
   })
-    
+
   var removed_count = 0;
   small_list.forEach(function(i){
     i -= removed_count;
@@ -382,7 +382,6 @@ function structureData(parsed_rows, config){
 
 drawFuncs = {
   'lineChart': lineChart,
-  'map': mapChart,
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
   'symmetricalFlags': symmetricalFlags,

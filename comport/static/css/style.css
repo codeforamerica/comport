@@ -94,6 +94,10 @@ p + p {
   margin-right: 51px;
 }
 
+.intro-text {
+  margin-top: 20px;
+}
+
 @media (min-width: 768px) {
   .navbar-header {
     margin-left: 3rem;
