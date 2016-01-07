@@ -256,10 +256,17 @@ We have done some initial analysis on this dataset, though there are many other 
         ),
         ChartBlock(
             title="",
-            slug='data-portal-link',
+            slug='data-portal-link-text',
             dataset='schema',
-            content="""None
-            """,
+            content="""View this data on the Indianapolis Regional Data Portal""",
+            date_updated=None,
+            date_edited=None
+            ),
+        ChartBlock(
+            title="",
+            slug='schema-complaints-data-portal-link-url',
+            dataset='complaints-schema',
+            content="""https://data.indy.gov/dataset/IMPD-Citizen-Complaints/h8rn-gy8c""",
             date_updated=None,
             date_edited=None
             ),
@@ -267,8 +274,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-introduction',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.""",
             date_updated=None,
             date_edited=None
             ),
@@ -276,8 +282,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-id',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.""",
             date_updated=None,
             date_edited=None
             ),
@@ -285,8 +290,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-date',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The date that the incident occurred.""",
             date_updated=None,
             date_edited=None
             ),
@@ -294,8 +298,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-service-type',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The reason for the interaction, such as Traffic Stop or Call for Service.""",
             date_updated=None,
             date_edited=None
             ),
@@ -303,8 +306,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-source',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Who received the complaint and whether it was categorized as formal or informal.""",
             date_updated=None,
             date_edited=None
             ),
@@ -312,8 +314,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-division',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.""",
             date_updated=None,
             date_edited=None
             ),
@@ -321,8 +322,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-district',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.""",
             date_updated=None,
             date_edited=None
             ),
@@ -330,8 +330,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-shift',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.""",
             date_updated=None,
             date_edited=None
             ),
@@ -339,8 +338,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-beat',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Some shifts contain this secondary level of detail on the officer's assignment.""",
             date_updated=None,
             date_edited=None
             ),
@@ -348,8 +346,12 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-finding',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Each complaint may contain multiple allegations, such as rudeness and inappropriate language. Each allegation receives separate findings. There are four possible findings:
+                + Sustained means that the investigation agreed with the allegation in the complaint. When allegations are sustained, the Chief of Police will take the appropriate disciplinary action.
+                + Not sustained means that the investigation did not find evidence to prove or disprove the complaint. If allegations are found to be not sustained, the officer's name is submitted to IMPD's Early Warning system.
+                + Exonerated means the incident happened, but it was lawful and proper.
+                + Unfounded means that the incident happened, however not as detailed in the complaint.
+                + Complaints that are still being investigated will be blank in this column.""",
             date_updated=None,
             date_edited=None
             ),
@@ -357,8 +359,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-allegation-type',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Allegations in complaints fall into a number of classes. Some classes of allegations are: Citizen Interactions, Bias Based Policing and Use of Force.""",
             date_updated=None,
             date_edited=None
             ),
@@ -366,8 +367,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-allegation',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""Allegations are tied to the regulations and standards which Officers are held to. Examples are: rude, demeaning and affronting language, and failure to provide name or badge number, which both fall under the allegation class of citizen interaction.""",
             date_updated=None,
             date_edited=None
             ),
@@ -375,8 +375,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-resident-race',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.""",
             date_updated=None,
             date_edited=None
             ),
@@ -384,8 +383,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-resident-sex',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The resident's gender.""",
             date_updated=None,
             date_edited=None
             ),
@@ -393,8 +391,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-resident-age',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The resident's age at the time of the incident, if known.""",
             date_updated=None,
             date_edited=None
             ),
@@ -402,8 +399,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-officer-race',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.""",
             date_updated=None,
             date_edited=None
             ),
@@ -411,8 +407,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-officer-sex',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The officer's gender.""",
             date_updated=None,
             date_edited=None
             ),
@@ -420,8 +415,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-officer-age',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The officer's age at the time of the incident.""",
             date_updated=None,
             date_edited=None
             ),
@@ -429,8 +423,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-officer-tenure',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""The number of years the officer had been employed by IMPD at the time of the incident.""",
             date_updated=None,
             date_edited=None
             ),
@@ -438,8 +431,7 @@ We have done some initial analysis on this dataset, though there are many other 
             title="",
             slug='schema-complaints-officer-id',
             dataset='complaints-schema',
-            content="""None
-            """,
+            content="""This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.""",
             date_updated=None,
             date_edited=None
             ),

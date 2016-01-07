@@ -8,17 +8,29 @@
       <h1>Dataset: Citizen Complaints</h1>
 
       {% if editing %}
-          <form method="post" action="/content/data-portal-link/{{department.id}}">
+          <form method="post" action="/content/data-portal-link-text/{{department.id}}">
             <div class="form-group">
-              <label for="chart_content">Link to external data portal:</label>
-              <textarea class="form-control" name="chart_content">{{ chart_blocks['data-portal-link'].content }}</textarea>
+              <label for="chart_content">Link to external data portal text:</label>
+              <textarea class="form-control" name="chart_content">{{ chart_blocks['data-portal-link-text'].content }}</textarea>
               <input type="hidden" name="chart_title" value=""/>
             </div>
               <input type="submit" />
            </form>
-         </br>
+          <form method="post" action="/content/data-portal-link-url/{{department.id}}">
+            <div class="form-group">
+              <label for="chart_content">Link to external data portal complaints url:</label>
+              <textarea class="form-control" name="chart_content">{{ chart_blocks['schema-complaints-data-portal-link-url'].content }}</textarea>
+              <input type="hidden" name="chart_title" value=""/>
+            </div>
+              <input type="submit" />
+           </form>
       {% else %}
-        {{ markdown(chart_blocks['data-portal-link'].content) }}
+
+            <a class="btn btn-default" href="{{chart_blocks['schema-complaints-data-portal-link-url'].content}}">
+              {{ chart_blocks['data-portal-link-text'].content }}
+            </a>
+
+
       {% endif %}
 
       <form method="get" action="/department/{{department.id}}/complaints.csv">
