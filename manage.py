@@ -19,6 +19,8 @@ import glob
 import csv
 import hashlib
 from datetime import datetime
+from testclient.JSON_test_client import JSONTestClient
+from testclient.mutators import MissingDataMutator,FuzzedDataMutator,KnownBadDataMutator,CasingMutator
 
 if os.environ.get("COMPORT_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -234,6 +236,23 @@ def add_new_blocks():
                 department.save()
     db.session.commit()
 
+
+@manager.command
+def test_client():
+    delete_everything()
+    department = Department.query.filter_by(name="Indianapolis Metropolitan Police Department", short_name="IMPD").first()
+    if not department:
+        department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD")
+    if not User.query.filter_by(username="user").first():
+        User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+
+    test_client = JSONTestClient()
+    # missing_data_mutator = MissingDataMutator(.1)
+    # fuzzed_data_mutator = FuzzedDataMutator(1)
+    # known_bad_data_mutator = KnownBadDataMutator()
+    casing_mutator = CasingMutator(1)
+
+    test_client.run(department, [casing_mutator])
 
 
 manager.add_command('server', Server())
