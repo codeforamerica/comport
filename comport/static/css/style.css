@@ -49,9 +49,6 @@ body {
 
 /* LAYOUT
  */
-/*
-p { margin-bottom: 0.5rem;
-    width: 32rem; }*/
 
 .aside, .lead {
   font-family: Merriweather, Georgia, serif;
@@ -80,46 +77,14 @@ p + p {
   width: 25px;
   height: 25px;
 }
-.navbar-nav {
-  font-size: 20px;
-  line-height: 50px;
-  font-weight: 400;
-}
 
-.navbar-brand {
-  font-size: 20px;
-  line-height: 50px;
-}
-.navbar-right{
-  margin-right: 51px;
-}
 
 .intro-text {
   margin-top: 20px;
 }
 
-@media (min-width: 768px) {
-  .navbar-header {
-    margin-left: 3rem;
-  }
-  .navbar-nav.navbar-right:last-child {
-    margin-right: 3rem;
-  }
-  .navbar-nav > li > a {
-    line-height: inherit;
-    padding: 0;
-  }
-  ul.navbar-nav > li + li {
-    margin-left: 1rem;
-  }
 
-  .navbar-brand {
-    height: auto;
-    padding: 0;
-  }
-  .navbar-text, .navbar-link {
-    margin: 0; padding: 0;
-  }
+@media (min-width: 768px) {
 }
 
 section {

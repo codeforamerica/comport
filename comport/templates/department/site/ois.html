@@ -9,7 +9,7 @@
     <a href="{{ url_for(
       'department.public_ois_schema', short_name=department.short_name.upper())
       }}" class="btn btn-primary btn-lg">
-      <i class="fa fa-file"></i>&nbsp;
+      <i class="fa fa-file"></i>&nbsp;&nbsp;
       Get officer involved shootings data
     </a>
 
@@ -19,7 +19,7 @@
 
 
   {% if editing %}
-  <div class="editing-form col-lg-6">
+  <div class="editing-form col-sm-6">
     <form method="post" action="/content/ois-introduction/{{department.id}}">
       <div class="form-group">
         <label for="chart_content">Content:</label>
@@ -32,7 +32,7 @@
 
   {% else %}
 
-  <div class="intro-text col-lg-5">
+  <div id="{{ chart_blocks[0].slug }}" class="intro-text col-sm-5">
     {{ markdown(chart_blocks[0].content) }}
   </div>  <!-- end col -->
   {% endif %}

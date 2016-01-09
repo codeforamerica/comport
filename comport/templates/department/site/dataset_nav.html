@@ -1,37 +1,39 @@
 
-<ul class="nav nav-tabs">
+<div class="row">
 
-  <li role="presentation" {%- if url_for(
-    'department.public_complaints', short_name=department.short_name.upper()
-    ) == request.path
-  %} class="active" {%- endif %}>
-    <a class="data_page_link" href="{{ url_for(
-    'department.public_complaints', short_name=department.short_name.upper()
-    ) }}">
-      Complaints
-    </a>
-  </li>
+    <ul class="nav nav-tabs nav-justified dataset_nav" role="navigation">
+      <li class="{% if url_for(
+            'department.public_complaints', short_name=department.short_name.upper()
+            ) == request.path
+          %} active{%- endif %}">
+        <a class="data_page_link" href="{{ url_for(
+            'department.public_complaints', short_name=department.short_name.upper()
+            ) }}">
+          Complaints
+        </a>
+      </li>
 
-  <li role="presentation" {%- if url_for(
-    'department.public_uof', short_name=department.short_name.upper()
-    ) == request.path
-  %} class="active" {%- endif %}>
-    <a class="data_page_link" href="{{ url_for(
-    'department.public_uof', short_name=department.short_name.upper()
-    ) }}">
-      Use of Force
-    </a>
-  </li>
+      <li class="{%- if url_for(
+            'department.public_uof', short_name=department.short_name.upper()
+            ) == request.path
+          %} active{%- endif %}">
+        <a class="data_page_link" href="{{ url_for(
+            'department.public_uof', short_name=department.short_name.upper()
+            ) }}">
+          Use of Force
+        </a>
+      </li>
 
-  <li role="presentation" {%- if url_for(
-    'department.public_ois', short_name=department.short_name.upper()
-    ) == request.path
-  %} class="active" {%- endif %}>
-    <a class="data_page_link" href="{{ url_for(
-    'department.public_ois', short_name=department.short_name.upper()
-    ) }}">
-      Officer Involved Shootings
-    </a>
-  </li>
+      <li class="{%- if url_for(
+            'department.public_ois', short_name=department.short_name.upper()
+            ) == request.path
+          %} active{%- endif %}">
+        <a class="data_page_link" href="{{ url_for(
+            'department.public_ois', short_name=department.short_name.upper()
+            ) }}">
+          Officer Involved Shootings
+        </a>
+      </li>
+    </ul>
 
-</ul>
+</div>  <!-- end row -->

@@ -8,37 +8,13 @@
 {% endblock css %}
 
 {% block content %}
-<div class="row">
-    <h1>{{department.name}}</h1>
-    {% include "department/site/dataset_nav.html" %}
-</div>
+  <div class="row">
+    <h1 class="col-xs-12">{{department.name}}</h1>
+  </div>
+  {% include "department/site/dataset_nav.html" %}
 
 {% block dataset_content %}
 
 {% endblock dataset_content %}
 
 {% endblock content %}
-
-{% block js %}
-<script type="text/javascript">
-var csv_url = '{{ url_for(".complaints_csv", department_id=department.id ) }}';
-var DEMOGRAPHICS = {{ department.serialize_demographics()|safe }};
-var charts = [
-  'complaints-by-month',
-  'complaints-by-allegation',
-  'complaints-by-allegation-type',
-  'complaints-by-disposition',
-  'complaints-by-precinct',
-  'officer-demographics',
-  'complaints-by-demographic',
-  'complaints-by-officer',
-];
-</script>
-<script type="text/javascript" src="/static/js/map.js"></script>
-<script type="text/javascript" src="/static/js/histogram.js"></script>
-<script type="text/javascript" src="/static/js/lineChart.js"></script>
-<script type="text/javascript" src="/static/js/matrixChart.js"></script>
-<script type="text/javascript" src="/static/js/charts.js"></script>
-<script type="text/javascript" src="/static/js/chartConfigs.js"></script>
-
-{% endblock js %}

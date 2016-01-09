@@ -9,7 +9,7 @@
     <a href="{{ url_for(
       'department.public_uof_schema', short_name=department.short_name.upper())
       }}" class="btn btn-primary btn-lg">
-      <i class="fa fa-file"></i>&nbsp;
+      <i class="fa fa-file"></i>&nbsp;&nbsp;
       Get use of force data
     </a>
 
@@ -32,7 +32,7 @@
 
   {% else %}
 
-  <div class="intro-text col-lg-5">
+  <div id="{{ chart_blocks[0].slug }}" class="intro-text col-lg-5">
     {{ markdown(chart_blocks[0].content) }}
   </div>  <!-- end col -->
   {% endif %}
