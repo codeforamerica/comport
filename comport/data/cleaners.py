@@ -41,6 +41,12 @@ class Cleaners:
         race_map = {
             "B": "Black"
         }
+
+        if not text:
+            return None
+
+        text = text.upper()
+
         if text in race_map:
             return titlecase(race_map[text])
         else:
@@ -52,6 +58,11 @@ class Cleaners:
             "M": "Male"
         }
 
+        if not text:
+            return None
+
+        text = text.upper()
+
         if text in sex_map:
             return titlecase(sex_map[text])
         else:
@@ -61,9 +72,20 @@ class Cleaners:
 
     def capitalize(value):
         def abbreviations(word, **kwargs):
-           if word.upper() in ('NW', 'SE', 'ED', 'DT', 'FTO', 'ND', 'SW', "DWI"):
+           if word.upper() in ('NW', 'SE', 'ED', 'DT', 'FTO', 'ND', 'SW', "DWI", "VBLETA", "ODE", "PC"):
              return word.upper()
 
         if value is None or isinstance(value, list):
             return value
-        return titlecase(value.strip(), callback=abbreviations)
+        return titlecase(value.strip().lower(), callback=abbreviations)
+
+    def capitalize_incident(incident):
+        keys_to_ignore = ["opaqueId", "officerYearsOfService"]
+
+        for key in list(incident.keys()):
+            if key in keys_to_ignore:
+                continue
+
+            incident[key] = Cleaners.capitalize(incident[key])
+
+        return incident
