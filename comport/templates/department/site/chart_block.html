@@ -1,5 +1,18 @@
-{% macro brick(chart_block, editing=False, department) %}
-<div class="row">
+{% macro chart_toc(blocks) %}
+
+<h3>Table of Contents</h3>
+<ul class="blocks">
+  {% for block in blocks %}
+  <li class="block">
+    <a href="#{{ block.slug }}">{{ block.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endmacro %}
+
+{% macro brick(chart_block, department, editing=False) %}
+<div class="row" id="{{ chart_block.slug }}">
     <div class="brick">
       {% if editing %}
           <form method="post" action="/content/{{chart_block.slug}}/{{department.id}}">

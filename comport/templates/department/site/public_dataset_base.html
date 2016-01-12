@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% from "department/site/chart_block.html" import brick, chart_toc %}
+{% from "department/site/horizontal_chart_block.html" import horizontal_brick %}
+
+{% block css %}
+  <link href="/static/css/charts.css" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+  <div class="row">
+    <h1 class="col-xs-12">{{department.name}}</h1>
+  </div>
+  {% include "department/site/dataset_nav.html" %}
+
+{% block dataset_content %}
+
+{% endblock dataset_content %}
+
+{% endblock content %}

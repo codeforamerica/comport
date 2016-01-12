@@ -1,57 +1,65 @@
-{% extends "layout.html" %}
+{% extends "department/site/public_dataset_base.html" %}
 
-{% from "department/site/chart_block.html" import brick %}
-{% from "department/site/horizontal_chart_block.html" import horizontal_brick %}
+{% block dataset_content %}
 
-{% block css %}
-  <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
-  <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
-  <link href="/static/css/charts.css" rel="stylesheet">
-{% endblock css %}
-
-{% block content %}
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <h1>{{department.name}}</h1>
+
+  <div class="col-lg-6">
     <h2>Use of Force</h2>
-    {% if editing %}
-        <form method="post" action="/content/uof-introduction/{{department.id}}">
-          <div class="form-group">
-            <label for="chart_content">Content:</label>
-            <textarea class="form-control" name="chart_content">{{ chart_blocks['uof-introduction'].content }}</textarea>
-            <input type="hidden" name="chart_title" value=""/>
-          </div>
-            <input type="submit" />
-         </form>
-       </br>
-    {% else %}
-      {{ markdown(chart_blocks['uof-introduction'].content) }}
-    {% endif %}
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    {{ brick( chart_blocks['uof-by-inc-district'] , editing, department) }}
-    {{ brick( chart_blocks['uof-force-type'] , editing, department) }}
-    {{ brick( chart_blocks['officer-demographics'] , editing, department) }}
-    {{ brick( chart_blocks['uof-race'] , editing, department) }}
-  </div>
-</div>
+    <a href="{{ url_for(
+      'department.public_uof_schema', short_name=department.short_name.upper())
+      }}" class="btn btn-primary btn-lg">
+      <i class="fa fa-file"></i>&nbsp;&nbsp;
+      Get use of force data
+    </a>
 
-{% endblock content %}
+    {{ chart_toc(blocks=chart_blocks) }}
+
+  </div>  <!-- end col -->
+
+
+  {% if editing %}
+  <div class="editing-form col-lg-6">
+    <form method="post" action="/content/uof-introduction/{{department.id}}">
+      <div class="form-group">
+        <label for="chart_content">Content:</label>
+        <textarea class="form-control" name="chart_content">{{ chart_blocks['uof-introduction'].content }}</textarea>
+        <input type="hidden" name="chart_title" value=""/>
+      </div>
+        <input type="submit" />
+     </form>
+  </div>  <!-- end col -->
+
+  {% else %}
+
+  <div id="{{ chart_blocks[0].slug }}" class="intro-text col-lg-5">
+    {{ markdown(chart_blocks[0].content) }}
+  </div>  <!-- end col -->
+  {% endif %}
+
+</div>  <!-- end row -->
+
+
+{% for block in chart_blocks %}
+{%- if "-introduction" not in block.slug %}
+{{ brick(block, department, editing) }}
+{%- endif %}
+{%- endfor %}
+
+{% endblock dataset_content %}
 
 {% block js %}
 <script type="text/javascript">
-var csv_url = '{{ url_for(".use_of_force_csv", department_id=department.id ) }}';
+var csv_url = '{{ url_for("department.use_of_force_csv", department_id=department.id ) }}';
 var DEMOGRAPHICS = {{ department.serialize_demographics()|safe }};
 var charts = [
-    'uof-by-inc-district',
-    'uof-force-type',
-    'officer-demographics',
-    'uof-race',
+{%- for b in chart_blocks %}
+{%- if "-introduction" not in b.slug %}
+  "{{ b.slug }}",
+{%- endif %}
+{%- endfor %}
 ];
 </script>
-<script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>
 <script type="text/javascript" src="/static/js/lineChart.js"></script>
 <script type="text/javascript" src="/static/js/matrixChart.js"></script>
