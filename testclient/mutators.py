@@ -5,7 +5,7 @@ from comport.utils import random_string, random_date
 class MissingDataMutator:
     do_not_mutate = ['opaqueId']
 
-    def __init__(self, percent):
+    def __init__(self, percent=1):
         self.percent = percent
 
     def drop_data(self, incident):
@@ -18,10 +18,26 @@ class MissingDataMutator:
     def mutate(self, incidents):
         return list(map(self.drop_data,incidents))
 
+class EmptyDataMutator:
+    do_not_mutate = ['opaqueId']
+
+    def __init__(self, percent=1):
+        self.percent = percent
+
+    def drop_data(self, incident):
+        for x in range(0, math.floor(len(incident) * self.percent)):
+            field_to_drop = random.choice(list(incident.keys()))
+            if field_to_drop not in self.do_not_mutate:
+                incident[field_to_drop] = random.choice(["", " "])
+        return incident
+
+    def mutate(self, incidents):
+        return list(map(self.drop_data,incidents))
+
 class FuzzedDataMutator:
     do_not_mutate = ['opaqueId','occuredDate']
 
-    def __init__(self, percent):
+    def __init__(self, percent=1):
         self.percent = percent
 
     def alter_data(self, incident):
@@ -52,7 +68,7 @@ class KnownBadDataMutator:
 class CasingMutator:
     do_not_mutate = ['opaqueId','occuredDate','officerYearsOfService']
 
-    def __init__(self, percent):
+    def __init__(self, percent=1):
         self.percent = percent
 
     def alter_data(self, incident):

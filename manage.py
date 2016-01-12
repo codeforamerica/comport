@@ -20,7 +20,7 @@ import csv
 import hashlib
 from datetime import datetime
 from testclient.JSON_test_client import JSONTestClient
-from testclient.mutators import MissingDataMutator,FuzzedDataMutator,KnownBadDataMutator,CasingMutator
+from testclient.mutators import MissingDataMutator,FuzzedDataMutator,KnownBadDataMutator,CasingMutator, EmptyDataMutator
 
 if os.environ.get("COMPORT_ENV") == 'prod':
     app = create_app(ProdConfig)
@@ -247,12 +247,13 @@ def test_client():
         User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
 
     test_client = JSONTestClient()
-    # missing_data_mutator = MissingDataMutator(.1)
-    # fuzzed_data_mutator = FuzzedDataMutator(1)
+    # missing_data_mutator = MissingDataMutator()
+    # fuzzed_data_mutator = FuzzedDataMutator()
     # known_bad_data_mutator = KnownBadDataMutator()
-    casing_mutator = CasingMutator(1)
+    empty_data_mutator = EmptyDataMutator()
+    # casing_mutator = CasingMutator()
 
-    test_client.run(department, [casing_mutator])
+    test_client.run(department, [empty_data_mutator])
 
 
 manager.add_command('server', Server())
