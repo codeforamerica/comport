@@ -64,8 +64,8 @@ var configs = {
 
   'uof-map': {
     chartType: 'map',
-    filter: function(b){
-      return last12Months(b).filter(function(d){
+    filter: function(b, config){
+      return last12Months(b, config).filter(function(d){
        if( d.censusTract ){ return true; } else { return false; }
       });
     },
@@ -168,6 +168,7 @@ var configs = {
     },
 
   'officer-demographics': {
+    hideDate: true,
     chartType: 'symmetricalFlags',
     dataFunc: function(){ return DEMOGRAPHICS; }
     },
@@ -197,8 +198,8 @@ var configs = {
 
   'complaints-by-year': {
     chartType: 'lineChart',
-    filter: function(rows){
-      return allegationsToComplaints(rows);
+    filter: function(rows, config){
+      return allegationsToComplaints(rows, config);
     },
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
@@ -213,8 +214,8 @@ var configs = {
 
   'complaints-by-month': {
     chartType: 'lineChart',
-    filter: function(rows){
-      return allegationsToComplaints(last12Months(rows));
+    filter: function(rows, config){
+      return allegationsToComplaints(last12Months(rows, config), config);
     },
     keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
     sortWith: function(d){ return d.month; },
@@ -334,7 +335,9 @@ d3.csv(
   function(error, rows){
     // parse the raw csv data
     var parsed_rows = parseData(rows);
+
     allRows = rows;
+    allRows.dateSpan = d3.extent(rows, function(d){ return d.date; });
 
     // deal with each chart configuration
     charts.forEach(function(name){
@@ -345,6 +348,7 @@ d3.csv(
       if( config.chartType ){
         // get class name for parent div
         config.parent = '.' + name;
+        config.brick = '#' + name;
         drawChart(parsed_rows, config);
       }
 
