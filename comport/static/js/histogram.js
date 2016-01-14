@@ -127,20 +127,15 @@ function flagHistogram(config, data){
 
   // set basic dimensions
   // we need a width, a height for each
-  var width,
-      font_size;
-
-  font_size = 14; // px
-  width = 8;
 
   // set y axis scale
   var yScale = d3.scale.linear()
     .domain([ 0,
         d3.max(data, function(d){ return d[config.y]; })
         ])
-    .range([0, font_size * width]);
+    .range([0, 70]);
 
-  var y = function(d){ return yScale(d[config.y]) };
+  var y = function(d){ return yScale(d[config.y]) + "%" };
 
   // draw containing table node
   var table = d3.select(config.parent)
@@ -174,7 +169,7 @@ function flagHistogram(config, data){
 
   var flagBars = flags.append("span")
     .attr("class", "hist-flag-bar")
-    .style("width", function (d){ return y(d) + "px"; });
+    .style("width", function (d){ return y(d); });
 
   var flagLabels = flags.append("span")
     .attr("class", "hist-flag-label")

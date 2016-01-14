@@ -4,7 +4,8 @@
   font-size: 0.8em;
   line-height: 1.1em;
   font-family: "Source Sans Pro", sans-serif;
-  overflow: auto;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .trend-line {
@@ -28,7 +29,8 @@
   stroke: #aaa;
 }
 
-.sym-flag-table { width: 100%; }
+.sym-flag-table, .mountainHistogram-table, .flagHistogram-table { width: 100%; }
+
 .sym-flag-table tr + tr {
   border-top: 1px solid #eee;
 }
@@ -63,9 +65,13 @@ td span + span {
   display: inline-block;
 }
 
-.hist-label {
-  max-width: 9em;
+td.hist-label {
+  width: 50%;
 }
+td.hist-flag {
+  width: 50%;
+}
+
 .hist-flag-bar {
   height: 1em;
   background-color: #205493;
@@ -92,7 +98,7 @@ td span + span {
 }
 
 .hist-flag-vert-bar {
-  width: 1.2em;
+  width: 1em;
   background-color: #205493;
   display: inline-block;
 }
@@ -100,8 +106,15 @@ td span + span {
 .hist-flag-vert {
   vertical-align: bottom;
 }
+.hist-flag-vert > span {
+  display: inline-block;
+}
+span.hist-flag-vert-label {
+  margin-bottom: .3em;
+}
 td.hist-flag-vert-label-month {
-  padding: 0.25em 0.14em .5em 0.14em;
+  padding-top: 0.25em;
+  padding-bottom: .5em;
 }
 td.hist-label-year {
   padding-top: 0.5em;
