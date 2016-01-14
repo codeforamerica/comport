@@ -1,13 +1,5 @@
 var allRows;
 
-function last12Months(rows){
-  // offset today by 12 d3-defined months in the past
-  var latestDate = d3.max(rows, function(d){ return d.date; })
-  var startDate = d3.time.month.offset(latestDate, -12);
-  return rows.filter(function(r){
-    return startDate < r.date;
-  });
-}
 
 function notEqual(a, b){
   if( a instanceof Date || b instanceof Date ){
@@ -198,8 +190,6 @@ function officerComplaintsCount(config, data){
     obj[config.y] = e.values;
     return obj;
   });
-
-
 }
 
 var experienceBuckets = d3.scale.quantize()
@@ -230,49 +220,6 @@ function nullify(value){
   } else {
     return value
   }
-}
-
-var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-var dateTimeKey = "occuredDate";
-
-function parseDate(dateTimeString){
-  return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
-}
-
-function parseData(rows){
-  // parses dates and nulls from the raw csv
-  rows.forEach(function(r){
-    var dateString = nullify(r[dateTimeKey]);
-    r.date = parseDate(dateString);
-  });
-  rows = rows.filter(function(d){
-    return d.date;
-  });
-  return rows;
-}
-
-function drawChart(rows, config){
-  // structure data for the particular chart
-  if( config.dataFunc ){
-    var data = config.dataFunc(config, rows);
-  } else {
-    var data = structureData(rows, config);
-  }
-
-  // get the correct function for drawing this chart
-  drawingFunction = drawFuncs[config.chartType];
-
-  // if we have no chart block in the database, just make the brick
-  if(config.noTemplate){
-    var brick = d3.select('[role=main]')
-      .append('div').attr("class", "brick");
-    brick.append("h4").attr("class", "brick-title")
-      .text(config.title);
-    config.parent = brick.append("div").attr("class", config.parent)[0][0];
-  }
-
-  // run the function to draw the chart
-  drawingFunction(config, data);
 }
 
 function addMissingYears(dataMap){
@@ -322,17 +269,39 @@ function addOtherCategory(data){
     data.splice(i, 1);
     removed_count += 1;
   });
-
 }
 
+function last12Months(rows, config){
+  // offset today by 12 d3-defined months in the past
+  var latestDate = d3.max(rows, function(d){ return d.date; })
+  var startDate = d3.time.month.offset(latestDate, -12);
+  config.dateSpan = [startDate, latestDate];
+  return rows.filter(function(r){
+    return startDate < r.date;
+  });
+}
+
+var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
+var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
+var dateTimeKey = "occuredDate";
+function parseDate(dateTimeString){
+  return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
+}
+
+function parseData(rows){
+  // parses dates and nulls from the raw csv
+  rows.forEach(function(r){
+    var dateString = nullify(r[dateTimeKey]);
+    r.date = parseDate(dateString);
+  });
+  rows = rows.filter(function(d){
+    return d.date;
+  });
+  return rows;
+}
 
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
-
-  // filter rows if necessary
-  if( config.filter ){
-    parsed_rows = config.filter(parsed_rows);
-  }
 
   // create a grouping machine that groups by key function
   var data_grouper = d3.nest()
@@ -378,6 +347,54 @@ function structureData(parsed_rows, config){
     addOtherCategory(structured_data)
   }
   return structured_data;
+}
+
+function drawChart(rows, config){
+
+  // filter rows if necessary
+  if( config.filter ){
+    rows = config.filter(rows, config);
+  }
+
+  // structure data for the particular chart
+  if( config.dataFunc ){
+    var data = config.dataFunc(config, rows);
+  } else {
+    var data = structureData(rows, config);
+  }
+  if( !config.dateSpan ){
+    config.dateSpan = allRows.dateSpan;
+  }
+
+  if( !config.hideDate ){
+    // add the date interval for this chart's data
+    $(config.brick).find('.brick-titleblock > h4').append(
+      ' <span class="brick-datespan">' +
+        '<span class="brick-datespan-start">' +
+          niceMonthYearFormat(config.dateSpan[0]) +
+        '</span>&nbsp;' +
+        '<span class="brick-datespan-separator">' +
+          '—' +
+        '</span>&nbsp;' +
+        '<span class="brick-datespan-end">' +
+          niceMonthYearFormat(config.dateSpan[1]) +
+        '</span>' +
+      '</span>');
+  }
+  // get the correct function for drawing this chart
+  drawingFunction = drawFuncs[config.chartType];
+
+  // if we have no chart block in the database, just make the brick
+  if(config.noTemplate){
+    var brick = d3.select('[role=main]')
+      .append('div').attr("class", "brick");
+    brick.append("h4").attr("class", "brick-title")
+      .text(config.title);
+    config.parent = brick.append("div").attr("class", config.parent)[0][0];
+  }
+
+  // run the function to draw the chart
+  drawingFunction(config, data);
 }
 
 drawFuncs = {

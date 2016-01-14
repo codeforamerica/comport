@@ -105,10 +105,20 @@ textarea {
   margin-top: 2em;
 }
 
-.brick-title {
+.brick-titleblock {
   border-bottom: 1px solid black;
   padding-bottom: 0.6em;
   margin-bottom: 1em;
+}
+span.brick-title {
+  margin-right: 1em;
+}
+.brick-datespan {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+.brick-datespan .month {
+  font-size: 0.9em;
 }
 
 /*Schema */
