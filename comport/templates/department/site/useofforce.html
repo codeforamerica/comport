@@ -4,7 +4,7 @@
 
 <div class="row">
 
-  <div class="col-lg-6">
+  <div class="col-xs-12 col-sm-5">
     <h2>Use of Force</h2>
     <a href="{{ url_for(
       'department.public_uof_schema', short_name=department.short_name.upper())
@@ -19,7 +19,7 @@
 
 
   {% if editing %}
-  <div class="editing-form col-lg-6">
+  <div class="editing-form col-xs-12 col-lg-6">
     <form method="post" action="/content/uof-introduction/{{department.id}}">
       <div class="form-group">
         <label for="chart_content">Content:</label>
@@ -29,20 +29,18 @@
         <input type="submit" />
      </form>
   </div>  <!-- end col -->
-
-  {% else %}
-
-  <div id="{{ chart_blocks[0].slug }}" class="intro-text col-lg-5">
-    {{ markdown(chart_blocks[0].content) }}
-  </div>  <!-- end col -->
   {% endif %}
+
+{{ brick(chart_blocks[1], department, editing, one_col=True) }}
 
 </div>  <!-- end row -->
 
 
 {% for block in chart_blocks %}
-{%- if "-introduction" not in block.slug %}
+{%- if "-introduction" not in block.slug and '-by-month' not in block.slug %}
+<div class="row">
 {{ brick(block, department, editing) }}
+</div>
 {%- endif %}
 {%- endfor %}
 

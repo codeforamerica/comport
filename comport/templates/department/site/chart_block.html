@@ -1,5 +1,4 @@
 {% macro chart_toc(blocks) %}
-
 <h3>Table of Contents</h3>
 <ul class="blocks">
   {% for block in blocks %}
@@ -8,39 +7,35 @@
   </li>
   {% endfor %}
 </ul>
-
 {% endmacro %}
 
-{% macro brick(chart_block, department, editing=False) %}
-<div class="row" id="{{ chart_block.slug }}">
-    <div class="brick">
-      {% if editing %}
-          <form method="post" action="/content/{{chart_block.slug}}/{{department.id}}">
-            <div class="form-group">
-              <label for="chart_title">Chart Title:</label>
-              <input type="text" class="form-control" name="chart_title" value="{{chart_block.title}}"/><br />
-            </div>
-              <div class="chart {{ chart_block.slug }}"></div>
-            <div class="form-group">
-              <label for="chart_content">Content:</label>
-              <textarea class="form-control" name="chart_content">{{ chart_block.content }}</textarea>
-            </div>
-              <input type="submit" />
-           </form>
-         </br>
-      {% else %}
-        <div class="brick-titleblock col-md-12">
+{% macro brick(chart_block, department, editing=False, one_col=False) %}
+  <div id="{{ chart_block.slug }}" class="brick col-xs-12 {% if one_col %}col-sm-7{% else %}col-sm-12{% endif %}">
+    {% if editing %}
+        <form method="post" action="/content/{{chart_block.slug}}/{{department.id}}">
+          <div class="form-group">
+            <label for="chart_title">Chart Title:</label>
+            <input type="text" class="form-control" name="chart_title" value="{{chart_block.title}}"/><br />
+          </div>
+            <div class="chart {{ chart_block.slug }}"></div>
+          <div class="form-group">
+            <label for="chart_content">Content:</label>
+            <textarea class="form-control" name="chart_content">{{ chart_block.content }}</textarea>
+          </div>
+            <input type="submit" />
+         </form>
+       </br>
+    {% else %}
+      <div class="brick-titleblock">
           <h4>
             <span class="brick-title">{{ chart_block.title }}</span>
           </h4>
         </div>
-        <div class="col-md-6">
-          <div class="chart {{ chart_block.slug }}"></div>
-        </div>
-        <div class="col-md-5">
-          <div class="content">{{ markdown(chart_block.content) }}</div>
-        </div>
-      {% endif %}
-  </div>
+
+      <div class="row">
+        <div class="chart {{ chart_block.slug }}{% if not one_col %} col-sm-6{% else %} col-sm-12{% endif %}"></div>
+        <div class="content{% if not one_col %} col-sm-5{% else %} col-sm-10{% endif %}">{{ markdown(chart_block.content) }}</div>
+      </div>
+    {% endif %}
 </div>
 {% endmacro %}
