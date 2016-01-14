@@ -46,7 +46,7 @@ th.sym-flag-col-header {
 .sym-flag-row-label { width: 15%; text-align: right; }
 
 td span + span {
-  margin-left: 1em;
+  margin-left: 0.5em;
 }
 
 
@@ -63,7 +63,7 @@ td span + span {
 }
 
 .hist-label {
-  max-width: 18em;
+  max-width: 13em;
 }
 .hist-flag-bar {
   height: 1em;
@@ -84,6 +84,33 @@ td span + span {
   border-top: 1px solid #eee;
 }
 
+
+/* mountainHistogram */
+.mountainHistogram-table {
+  text-align: center;
+}
+
+.hist-flag-vert-bar {
+  width: 1.2em;
+  background-color: #205493;
+  display: inline-block;
+}
+
+.hist-flag-vert {
+  vertical-align: bottom;
+}
+td.hist-flag-vert-label-month {
+  padding: 0.25em 0.14em .5em 0.14em;
+}
+td.hist-label-year {
+  padding-top: 0.5em;
+  border-top: 1px solid #aaa;
+}
+td.hist-label-year + td.hist-label-year {
+  border-left: 1px solid #aaa;
+}
+
+/* percents */
 .percent + .percent { margin-left: 2em; }
 .percent-amt { font-size: 2em; }
 .percent-symbol { font-size: 0.6em; }

@@ -401,6 +401,7 @@ drawFuncs = {
   'lineChart': lineChart,
   'percent': basicPercent,
   'flagHistogram': flagHistogram,
+  'mountainHistogram': mountainHistogram,
   'symmetricalFlags': symmetricalFlags,
   'matrix': matrixChart,
 }
