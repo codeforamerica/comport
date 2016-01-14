@@ -4,7 +4,7 @@
   font-size: 0.8em;
   line-height: 1.1em;
   font-family: "Source Sans Pro", sans-serif;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
 }
 
