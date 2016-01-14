@@ -282,7 +282,7 @@ function last12Months(rows, config){
 }
 
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-var niceMonthYearFormat = d3.time.format('<span class="month">%b</span> <span class="year">%Y</span>');
+var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
 var dateTimeKey = "occuredDate";
 function parseDate(dateTimeString){
   return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
@@ -368,14 +368,14 @@ function drawChart(rows, config){
 
   if( !config.hideDate ){
     // add the date interval for this chart's data
-    $(config.brick).find('.brick-title').append(
+    $(config.brick).find('.brick-titleblock > h4').append(
       ' <span class="brick-datespan">' +
         '<span class="brick-datespan-start">' +
           niceMonthYearFormat(config.dateSpan[0]) +
-        '</span> ' +
+        '</span>&nbsp;' +
         '<span class="brick-datespan-separator">' +
           '—' +
-        '</span> ' +
+        '</span>&nbsp;' +
         '<span class="brick-datespan-end">' +
           niceMonthYearFormat(config.dateSpan[1]) +
         '</span>' +

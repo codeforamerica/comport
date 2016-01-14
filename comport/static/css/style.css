@@ -110,14 +110,14 @@ textarea {
   padding-bottom: 0.6em;
   margin-bottom: 1em;
 }
+span.brick-title {
+  margin-right: 1em;
+}
 .brick-datespan {
-  font-family: "Source Sans Pro", sans-serif;
   font-size: 0.9em;
   font-weight: normal;
-  margin-left: 1em;
 }
 .brick-datespan .month {
-  text-transform: uppercase;
   font-size: 0.9em;
 }
 
