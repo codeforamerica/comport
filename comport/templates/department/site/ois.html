@@ -6,6 +6,13 @@
 
   <div class="col-lg-6">
     <h2>Officer Inolved Shootings</h2>
+
+    <p class="intro_text">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+
+    <!-- data button -->
     <a href="{{ url_for(
       'department.public_ois_schema', short_name=department.short_name.upper())
       }}" class="btn btn-primary btn-lg">
@@ -29,19 +36,17 @@
         <input type="submit" />
      </form>
   </div>  <!-- end col -->
-
-  {% else %}
-
-  <div id="{{ chart_blocks[0].slug }}" class="intro-text col-sm-5">
-    {{ markdown(chart_blocks[0].content) }}
-  </div>  <!-- end col -->
   {% endif %}
+
+{{ brick(chart_blocks[1], department, editing, one_col=True) }}
 
 </div>  <!-- end row -->
 
 {% for block in chart_blocks %}
-{%- if "-introduction" not in block.slug %}
+{%- if "-introduction" not in block.slug and '-by-month' not in block.slug %}
+<div class="row">
 {{ brick(block, department, editing) }}
+</div>
 {%- endif %}
 {%- endfor %}
 
