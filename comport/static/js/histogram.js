@@ -131,7 +131,7 @@ function flagHistogram(config, data){
       font_size;
 
   font_size = 14; // px
-  width = 9;
+  width = 8;
 
   // set y axis scale
   var yScale = d3.scale.linear()

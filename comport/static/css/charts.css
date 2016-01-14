@@ -4,6 +4,7 @@
   font-size: 0.8em;
   line-height: 1.1em;
   font-family: "Source Sans Pro", sans-serif;
+  overflow: auto;
 }
 
 .trend-line {
@@ -63,7 +64,7 @@ td span + span {
 }
 
 .hist-label {
-  max-width: 13em;
+  max-width: 10em;
 }
 .hist-flag-bar {
   height: 1em;
