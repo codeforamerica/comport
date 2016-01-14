@@ -95,16 +95,14 @@ textarea {
   resize: vertical;
 }
 
-.container-narrow{
+.container-narrow {
   margin: 0 auto;
   max-width: 700px;
 }
 
-/* Bricks/Blocks */
-.row + .row {
-  margin-top: 2em;
-}
+.brick { padding-top: 3em; }
 
+.brick .chart, .brick .content { margin-top: 1.5em; }
 .brick-title {
   border-bottom: 1px solid black;
   padding-bottom: 0.6em;

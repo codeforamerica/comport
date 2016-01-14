@@ -212,7 +212,7 @@ var configs = {
     },
 
   'complaints-by-month': {
-    chartType: 'lineChart',
+    chartType: 'mountainHistogram',
     filter: function(rows){
       return allegationsToComplaints(last12Months(rows));
     },
