@@ -2,32 +2,67 @@
 {% extends "layout.html" %}
 {% block content %}
 <!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <div class="display">
-      <h1>Change the conversation with transparency.</h1>
+<div id="splash">
+  <div class="row">
+    <div class="col-md-1 cfalogo">
+      <p> A Project of:
+        <a href="www.codeforamerica.org/governments/indianapolis">
+          <img src="../static/img/CfA_logo.jpg" alt="CFA Logo">
+        </a>
+      </p>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div id="tagline" class="display">
+        <h1>Change the conversation with transparency.</h1>
+      </div>
+      <p><strong>Comport</strong> is a tool for law enforcement agencies to open their data and be accountable to their citizens.</p>
+      <p>Law enforcement agencies can plug in existing internal affairs data, add contextual information about policies and programs, and quickly create an open data site. It is compatible with IA Pro, the industry-leading professional standards software.</p>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <p>
-    <strong>Comport</strong> is a tool for law enforcement agencies to open their data and be accountable to their citizens.
-    </p>
-
-      <p>Public safety teams can plug in existing internal affairs data, add contextual information about policies and programs, and quickly create an open data site. It is compatible with IA Pro, the industry-leading professional standards software.</p>
-
-      <p class="aside">Sharing this information can change the conversation with your community—from debating problems to discussing solutions.</p>
-
-      <p>Interested in participating in Comport's limited beta in 2016? Let us know.</p>
-
-      <p>
-      <a class="button_wrapper" href="/interest/">
-        <button class="action-button-huge" type="button">Find out more</button>
+       <!--  <p>Interested in participating in Comport's limited beta in 2016? Let us know.</p> -->
+    </div>
+  </div>
+  <div class="row aside">
+    <h3> Share information to change the conversation in your community from debating problems to discussing solutions.</h3>
+    <div id="dataset-spotlight" class="col-md-4">
+      <a href="/department/IMPD/complaints">
+        <img src="../static/img/complaints.png" alt="">
+        Complaints
       </a>
-      </p>
+    </div>
+    <div id="dataset-spotlight" class="col-md-4">
+      <a href="/department/IMPD/uof">
+        <img src="../static/img/uof.png">
+        Use of Force
+      </a>
+    </div>
+    <div id="dataset-spotlight" class="col-md-4">
+      <a href="department/IMPD/officerinvolvedshootings">
+      <img src="../static/img/ois.png">
+      Officer Involved Shootings
+    </a>
+    </div> 
+  </div>
+  <div class="row pilot">
+    <div class="col-md-6">
 
+      <p> A fellowship project built with:
+        <div>
+          <a href="/department/IMPD">
+            <img class="IndyDPS" src="../static/img/IndyDPSlogo.jpeg" >
+          </a>
+        </div>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <p>Interested in participating in Comport's limited beta in 2016? Let us know.</p>
+      <p>
+        <a class="button_wrapper" href="/interest/">
+          <button class="action-button-huge" type="button">Find out more</button>
+        </a>
+      </p>
+    </div>
   </div>
 </div>
 {% endblock %}

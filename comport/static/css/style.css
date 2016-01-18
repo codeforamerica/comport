@@ -99,6 +99,45 @@ textarea {
   margin: 0 auto;
   max-width: 700px;
 }
+/* Splash/Home */
+.cfalogo {
+    padding-left: 0;
+    width: 150px;
+}
+
+.cfalogo img {
+  height: 40px;
+  width: 80px;
+}
+
+#tagline {
+  padding: 0;
+  width: 100%;
+}
+
+#tagline h1 {
+  font-size: 38px;
+}
+
+#splash .row .display h1 {
+  margin-top: 0;
+}
+
+#dataset-spotlight img {
+  height: 70px;
+  width: 70px;
+}
+
+.pilot {
+  position: center;
+  margin-left: 35px;
+}
+.IndyDPS {
+  height: 90px;
+  width: 90px;
+  margin-left: 45px;
+  position: center;
+}
 
 /* Bricks/Blocks */
 .row + .row {
