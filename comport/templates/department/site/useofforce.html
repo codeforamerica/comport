@@ -9,7 +9,7 @@
 
     {% if not editing %}
     <p class="intro_text">
-      {{ markdown(chart_blocks[0].content) }}
+      {{ markdown(chart_blocks['introduction'].content) }}
     </p>
     {% endif %}
 
@@ -20,17 +20,17 @@
       Get use of force data
     </a>
 
-    {{ chart_toc(blocks=chart_blocks) }}
+    {{ chart_toc(chart_blocks=chart_blocks) }}
 
   </div>  <!-- end col -->
 
 
   {% if editing %}
   <div class="editing-form col-xs-12 col-lg-6">
-    <form method="post" action="/content/uof-introduction/{{department.id}}">
+    <form method="post" action="/content/{{ chart_blocks['introduction'].slug }}/{{department.id}}">
       <div class="form-group">
         <label for="chart_content">Content:</label>
-        <textarea class="form-control" name="chart_content">{{ chart_blocks['uof-introduction'].content }}</textarea>
+        <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
         <input type="hidden" name="chart_title" value=""/>
       </div>
         <input type="submit" />
@@ -38,17 +38,15 @@
   </div>  <!-- end col -->
   {% endif %}
 
-{{ brick(chart_blocks[1], department, editing, one_col=True) }}
+{{ brick(chart_blocks['first-block'], department, editing, one_col=True) }}
 
 </div>  <!-- end row -->
 
 
-{% for block in chart_blocks %}
-{%- if "-introduction" not in block.slug and '-by-month' not in block.slug %}
+{% for block in chart_blocks['blocks'] %}
 <div class="row">
 {{ brick(block, department, editing) }}
 </div>
-{%- endif %}
 {%- endfor %}
 
 {% endblock dataset_content %}
@@ -58,11 +56,10 @@
 var csv_url = '{{ url_for("department.use_of_force_csv", department_id=department.id ) }}';
 var DEMOGRAPHICS = {{ department.serialize_demographics()|safe }};
 var charts = [
-{%- for b in chart_blocks %}
-{%- if "-introduction" not in b.slug %}
-  "{{ b.slug }}",
-{%- endif %}
-{%- endfor %}
+  "{{chart_blocks['first-block'].slug}}",
+  {% for block in chart_blocks['blocks'] -%}
+  "{{ block.slug }}",
+  {%- endfor %}
 ];
 </script>
 <script type="text/javascript" src="/static/js/histogram.js"></script>

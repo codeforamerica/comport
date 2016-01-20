@@ -17,6 +17,7 @@ import csv
 import io
 import json
 
+
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
     id = Column(db.Integer, primary_key=True, index=True)
@@ -24,9 +25,11 @@ class Department(SurrogatePK, Model):
     short_name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", backref="department")
-    use_of_force_incidents = relationship("UseOfForceIncident", backref="department")
+    use_of_force_incidents = relationship(
+        "UseOfForceIncident", backref="department")
     citizen_complaints = relationship("CitizenComplaint", backref="department")
-    officer_involved_shootings = relationship("OfficerInvolvedShooting", backref="department")
+    officer_involved_shootings = relationship(
+        "OfficerInvolvedShooting", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     demographic_values = relationship("DemographicValue", backref="department")
@@ -38,18 +41,15 @@ class Department(SurrogatePK, Model):
                 self.chart_blocks.append(default_chart_block)
 
     def get_uof_blocks(self):
-        block_keys = [
-            'uof-by-inc-district',
-            'uof-force-type',
-            'officer-demographics',
-            'uof-race',
-        ]
-        # find the first matching block for each key
-        return [
-            next(b for b in self.chart_blocks if b.slug == key)
-            for key in block_keys
-            ]
-
+        return {
+            'introduction': self.get_block_by_slug('uof-introduction'),
+            'first-block': self.get_block_by_slug('uof-force-type'),
+            'blocks': self.get_blocks_by_slugs([
+                'uof-by-inc-district',
+                'officer-demographics',
+                'uof-race'
+            ])
+        }
     def get_ois_blocks(self):
         block_keys = [
             'ois-by-inc-district',
@@ -61,25 +61,25 @@ class Department(SurrogatePK, Model):
         return [
             next(b for b in self.chart_blocks if b.slug == key)
             for key in block_keys
-            ]
+        ]
 
     def get_complaint_blocks(self):
         block_keys = [
-          'complaints-introduction',
-          'complaints-by-month',
-          'complaints-by-allegation',
-          'complaints-by-allegation-type',
-          'complaints-by-disposition',
-          'complaints-by-precinct',
-          'officer-demographics',
-          'complaints-by-demographic',
-          'complaints-by-officer',
+            'complaints-introduction',
+            'complaints-by-month',
+            'complaints-by-allegation',
+            'complaints-by-allegation-type',
+            'complaints-by-disposition',
+            'complaints-by-precinct',
+            'officer-demographics',
+            'complaints-by-demographic',
+            'complaints-by-officer',
         ]
         # find the first matching block for each key
         return [
             next(b for b in self.chart_blocks if b.slug == key)
             for key in block_keys
-            ]
+        ]
 
     def get_introduction_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])
@@ -92,7 +92,8 @@ class Department(SurrogatePK, Model):
 
     def get_city_demographics(self):
         result = []
-        demographic_values = [v for v in self.demographic_values if not v.department_value]
+        demographic_values = [
+            v for v in self.demographic_values if not v.department_value]
 
         total = 0
 
@@ -104,10 +105,9 @@ class Department(SurrogatePK, Model):
                 "gender": value.gender,
                 "race": value.race,
                 "count": value.count,
-                "percent": "{0:.0f}%".format(value.count/total * 100)
+                "percent": "{0:.0f}%".format(value.count / total * 100)
             })
         return result
-
 
     def serialize_demographics(self):
         results = []
@@ -116,12 +116,18 @@ class Department(SurrogatePK, Model):
                 'race': v.race,
                 'count': v.count,
                 'entity': 'department' if v.department_value else 'city'
-                })
-        return json.dumps(results);
+            })
+        return json.dumps(results)
 
     def get_extractor(self):
-        extractors = list(filter(lambda u: u.type == "extractors" ,self.users))
+        extractors = list(filter(lambda u: u.type == "extractors", self.users))
         return extractors[0] if extractors else None
+
+    def get_block_by_slug(self, slug):
+        return next(b for b in self.chart_blocks if b.slug == slug)
+
+    def get_blocks_by_slugs(self, slugs):
+        return [b for b in self.chart_blocks if b.slug in slugs]
 
 
     def __repr__(self):
@@ -132,13 +138,13 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id","occuredDate","division","precinct","shift",
-        "beat","disposition","officerForceType",
-        "serviceType","arrestMade","arrestCharges","residentInjured",
-        "residentHospitalized","officerInjured",
-        "officerHospitalized","residentCondition","officerCondition","useOfForceReason",
-        "residentRace","officerRace","residentAge","officerAge","officerYearsOfService",
-        "officerIdentifier"])
+        writer.writerow(["id", "occuredDate", "division", "precinct", "shift",
+                         "beat", "disposition", "officerForceType",
+                         "serviceType", "arrestMade", "arrestCharges", "residentInjured",
+                         "residentHospitalized", "officerInjured",
+                         "officerHospitalized", "residentCondition", "officerCondition", "useOfForceReason",
+                         "residentRace", "officerRace", "residentAge", "officerAge", "officerYearsOfService",
+                         "officerIdentifier"])
 
         use_of_force_incidents = self.use_of_force_incidents
 
@@ -174,17 +180,16 @@ class Department(SurrogatePK, Model):
 
         return output.getvalue()
 
-
     def get_ois_csv(self):
         output = io.StringIO()
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id","occuredDate","division","precinct","shift",
-        "beat","disposition","officerWeaponUsed","residentWeaponUsed",
-        "serviceType","residentRace","residentSex","residentAge","officerRace",
-        "officerSex","officerAge","officerIdentifier","officerYearsOfService",
-        "officerCondition","residentCondition"])
+        writer.writerow(["id", "occuredDate", "division", "precinct", "shift",
+                         "beat", "disposition", "officerWeaponUsed", "residentWeaponUsed",
+                         "serviceType", "residentRace", "residentSex", "residentAge", "officerRace",
+                         "officerSex", "officerAge", "officerIdentifier", "officerYearsOfService",
+                         "officerCondition", "residentCondition"])
 
         officer_involved_shootings = self.officer_involved_shootings
         for incident in officer_involved_shootings:
@@ -220,11 +225,11 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id","occuredDate","serviceType", "source","division",
-        "district","shift","beat","finding","allegationType",
-        "allegation","censusTract","residentRace",
-        "residentSex","residentAge","officerRace","officerSex","officerAge",
-        "officerYearsOfService","officerIdentifier"])
+        writer.writerow(["id", "occuredDate", "serviceType", "source", "division",
+                         "district", "shift", "beat", "finding", "allegationType",
+                         "allegation", "censusTract", "residentRace",
+                         "residentSex", "residentAge", "officerRace", "officerSex", "officerAge",
+                         "officerYearsOfService", "officerIdentifier"])
 
         complaints = self.citizen_complaints
 
@@ -256,15 +261,15 @@ class Department(SurrogatePK, Model):
 
         return output.getvalue()
 
-
     def get_demographic_csv(self):
         output = io.StringIO()
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["race","count","cityOrDepartment"])
+        writer.writerow(["race", "count", "cityOrDepartment"])
 
-        values = sorted(self.demographic_values, key = lambda x: (x.department_value, x.race))
+        values = sorted(self.demographic_values,
+                        key=lambda x: (x.department_value, x.race))
 
         for value in values:
             cityOrDepartment = "department" if value.department_value else "city"
@@ -277,15 +282,15 @@ class Department(SurrogatePK, Model):
 
         return output.getvalue()
 
-
     def get_denominator_csv(self):
         output = io.StringIO()
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["year","month","officers out on service"])
+        writer.writerow(["year", "month", "officers out on service"])
 
-        values = sorted(self.denominator_values, key = lambda x: (x.year, x.month))
+        values = sorted(self.denominator_values,
+                        key=lambda x: (x.year, x.month))
 
         for value in values:
             row = [
@@ -306,8 +311,8 @@ class Extractor(User):
     last_contact = Column(db.DateTime)
 
     __mapper_args__ = {
-        'polymorphic_identity':'extractors',
-        'inherit_condition': (id==User.id)
+        'polymorphic_identity': 'extractors',
+        'inherit_condition': (id == User.id)
     }
 
     def generate_envs(self, password):
@@ -323,10 +328,11 @@ class Extractor(User):
         """ % (current_app.config["BASE_URL"], self.username, password, self.department_id,)
 
     def from_department_and_password(department, password):
-        extractor = Extractor.create(username='%s-extractor' % department.name.replace (" ", "_"), email='extractor@example.com', department_id=department.id, password=password)
+        extractor = Extractor.create(username='%s-extractor' % department.name.replace(
+            " ", "_"), email='extractor@example.com', department_id=department.id, password=password)
         extractor.roles.append(Role.create(name="extractor"))
         extractor.save()
 
         envs = extractor.generate_envs(password)
 
-        return (extractor,envs)
+        return (extractor, envs)
