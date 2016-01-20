@@ -51,35 +51,30 @@ class Department(SurrogatePK, Model):
             ])
         }
     def get_ois_blocks(self):
-        block_keys = [
-            'ois-by-inc-district',
-            'ois-weapon-type',
-            'officer-demographics',
-            'ois-race',
-        ]
-        # find the first matching block for each key
-        return [
-            next(b for b in self.chart_blocks if b.slug == key)
-            for key in block_keys
-        ]
+        return {
+            'introduction': self.get_block_by_slug('ois-introduction'),
+            'first-block': self.get_block_by_slug('ois-by-inc-district'),
+            'blocks': self.get_blocks_by_slugs([
+                'ois-weapon-type',
+                'officer-demographics',
+                'ois-race',
+            ])
+        }
 
     def get_complaint_blocks(self):
-        block_keys = [
-            'complaints-introduction',
-            'complaints-by-month',
-            'complaints-by-allegation',
-            'complaints-by-allegation-type',
-            'complaints-by-disposition',
-            'complaints-by-precinct',
-            'officer-demographics',
-            'complaints-by-demographic',
-            'complaints-by-officer',
-        ]
-        # find the first matching block for each key
-        return [
-            next(b for b in self.chart_blocks if b.slug == key)
-            for key in block_keys
-        ]
+        return {
+            'introduction': self.get_block_by_slug('complaints-introduction'),
+            'first-block': self.get_block_by_slug('complaints-by-month'),
+            'blocks': self.get_blocks_by_slugs([
+                'complaints-by-allegation',
+                'complaints-by-allegation-type',
+                'complaints-by-disposition',
+                'complaints-by-precinct',
+                'officer-demographics',
+                'complaints-by-demographic',
+                'complaints-by-officer',
+            ])
+        }
 
     def get_introduction_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])
