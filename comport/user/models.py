@@ -2,7 +2,6 @@
 import datetime as dt
 
 from flask_login import UserMixin
-
 from comport.extensions import bcrypt
 from comport.database import (
     Column,
@@ -53,6 +52,7 @@ class User(UserMixin, SurrogatePK, Model):
     active = Column(db.Boolean(), default=False)
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=True)
     type = Column(db.String(50))
+    departments = relationship("Department",secondary="user_department_relationship_table", back_populates="users")
 
     __mapper_args__ = {
         'polymorphic_on':type
