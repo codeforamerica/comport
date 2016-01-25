@@ -15,7 +15,7 @@ def flash_errors(form, category="warning"):
                   .format(getattr(form, field).label.text, error), category)
 
 def random_string(N):
-    return ''.join(choice(string.ascii_uppercase + string.digits) for _ in range(N))
+    return ''.join(choice(string.ascii_uppercase + string.digits + '     ') for _ in range(N))
 
 def factory_random_string(N):
     return ''.join(_random.choice(string.ascii_uppercase + string.digits) for _ in range(N))

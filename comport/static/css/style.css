@@ -95,7 +95,7 @@ textarea {
   resize: vertical;
 }
 
-.container-narrow{
+.container-narrow {
   margin: 0 auto;
   max-width: 700px;
 }
@@ -139,15 +139,23 @@ textarea {
   position: center;
 }
 
-/* Bricks/Blocks */
-.row + .row {
-  margin-top: 2em;
-}
+.brick { padding-top: 3em; }
 
-.brick-title {
+.brick .chart, .brick .content { margin-top: 1.5em; }
+.brick-titleblock {
   border-bottom: 1px solid black;
   padding-bottom: 0.6em;
   margin-bottom: 1em;
+}
+span.brick-title {
+  margin-right: 1em;
+}
+.brick-datespan {
+  font-size: 0.9em;
+  font-weight: normal;
+}
+.brick-datespan .month {
+  font-size: 0.9em;
 }
 
 /*Schema */

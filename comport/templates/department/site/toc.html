@@ -1,0 +1,13 @@
+{% macro chart_toc(chart_blocks) %}
+<h3>Table of Contents</h3>
+<ul class="blocks">
+  <li class="block">
+    <a href="#{{ chart_blocks['first-block'].slug }}">{{  chart_blocks['first-block'].title }}</a>
+  </li>
+  {% for block in chart_blocks['blocks'] %}
+  <li class="block">
+    <a href="#{{ block.slug }}">{{ block.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}

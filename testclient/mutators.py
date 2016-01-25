@@ -1,5 +1,6 @@
 import random
 import math
+from datetime import datetime, timedelta
 from comport.utils import random_string, random_date
 
 class MissingDataMutator:
@@ -76,6 +77,28 @@ class CasingMutator:
             field_to_drop = random.choice(list(incident.keys()))
             if field_to_drop not in self.do_not_mutate and incident[field_to_drop] is not None:
                 incident[field_to_drop] = ''.join(random.choice((str.upper,str.lower))(x) for x in incident[field_to_drop] )
+        return incident
+
+    def mutate(self, incidents):
+        return list(map(self.alter_data,incidents))
+
+class CondenisngDateMutator:
+
+    def alter_data(self, incident):
+        incident["occuredDate"] = random_date(datetime.now() - timedelta(weeks=52), datetime.now() - timedelta(weeks=26)).strftime("%Y-%m-%d 0:0:00")
+
+        return incident
+
+    def mutate(self, incidents):
+        return list(map(self.alter_data,incidents))
+
+class GapDateMutator:
+
+    def alter_data(self, incident):
+        if (random.random() > 1/12):
+            incident["occuredDate"] = random_date(datetime.now() - timedelta(weeks=52), datetime.now() - timedelta(weeks=26)).strftime("%Y-%m-%d 0:0:00")
+        else:
+            incident["occuredDate"] = random_date(datetime.now() - timedelta(weeks=1), datetime.now()).strftime("%Y-%m-%d 0:0:00")
         return incident
 
     def mutate(self, incidents):

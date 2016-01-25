@@ -58,24 +58,84 @@ function basicPercent(config, data){
 
 }
 
+function mountainHistogram(config, data){
+  // a histogram with vertical bars and a horizontal axis
+  var height = 5,
+      font_size = 14;
+  var yScale = d3.scale.linear()
+    .domain([0,
+      d3.max(data, function(d){ return d[config.y]})
+      ])
+    .range([0, font_size * height]);
+
+  var y = function(d){ return yScale(d[config.y]); };
+
+  var table = d3.select(config.parent)
+    .append("table")
+    .attr("class", "mountainHistogram-table");
+
+  var flagCells = table.append("tr")
+    .selectAll("td.hist-flag-vert")
+    .data(data).enter()
+    .append("td")
+    .attr("class", "hist-flag-vert");
+
+  var flagLabels = flagCells.append("span")
+    .attr("class", "hist-flag-vert-label")
+    .text(function(d){return d[config.y];});
+
+  flagCells.append("br");
+
+  var flagBars = flagCells.append("span")
+    .attr("class", "hist-flag-vert-bar")
+    .style("height", function (d){ return y(d) + "px"; })
+
+  var monthFormat = d3.time.format("%b");
+  var yearFormat = d3.time.format("%Y");
+  var monthCells = table.append("tr")
+    .selectAll("td.hist-label-month")
+    .data(data).enter()
+    .append("td")
+    .attr("class", "hist-flag-vert-label-month")
+    .text(function(d){
+      return monthFormat(d[config.x]);
+    });
+
+  var years =d3.nest()
+    .key(function(d){ return d; })
+    .rollup(function(yrs){
+      return {
+        year: yrs[0],
+        count: yrs.length
+      }
+    }).map(data.map(function(d){
+      return yearFormat(d[config.x]);
+    }), d3.map).values();
+
+  var yearCells = table.append("tr")
+    .selectAll("td.hist-label-year")
+    .data(years).enter()
+    .append("td")
+    .attr("class", "hist-label-year")
+    .attr("colspan", function(d){ return d.count; })
+    .text(function(d){ return d.year });
+
+
+}
+
 function flagHistogram(config, data){
 
   // set basic dimensions
   // we need a width, a height for each
-  var width,
-      font_size;
-
-  font_size = 14; // px
-  width = 12;
 
   // set y axis scale
   var yScale = d3.scale.linear()
     .domain([ 0,
         d3.max(data, function(d){ return d[config.y]; })
         ])
-    .range([0, font_size * width]);
+    .range([0, 70]);
 
-  var y = function(d){ return yScale(d[config.y]) };
+  var y = function(d){ return yScale(d[config.y]) + "%" };
 
   // draw containing table node
   var table = d3.select(config.parent)
@@ -109,7 +169,7 @@ function flagHistogram(config, data){
 
   var flagBars = flags.append("span")
     .attr("class", "hist-flag-bar")
-    .style("width", function (d){ return y(d) + "px"; });
+    .style("width", function (d){ return y(d); });
 
   var flagLabels = flags.append("span")
     .attr("class", "hist-flag-label")
