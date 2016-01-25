@@ -59,8 +59,14 @@ class User(UserMixin, SurrogatePK, Model):
     }
 
 
-    def __init__(self, username, email, password=None, **kwargs):
+    def __init__(self, username, email, is_admin=False, password=None, **kwargs):
         db.Model.__init__(self, username=username, email=email, **kwargs)
+
+        if is_admin:
+            admin_role = Role(name='admin')
+            admin_role.save()
+            self.roles.append(admin_role)
+
         if password:
             self.set_password(password)
         else:

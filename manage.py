@@ -244,7 +244,7 @@ def test_client():
     if not department:
         department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD")
     if not User.query.filter_by(username="user").first():
-        User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
+        User.create(username="user", email="email2@example.com",password="password",active=True, is_admin=True, department_id=department.id)
 
     test_client = JSONTestClient()
     # missing_data_mutator = MissingDataMutator()

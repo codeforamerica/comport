@@ -4,7 +4,7 @@ from comport.utils import flash_errors
 from flask.ext.login import login_required
 from .forms import NewDepartmentForm, NewInviteForm
 from comport.department.models import Department
-from comport.user.models import Invite_Code
+from comport.user.models import Invite_Code, User
 from comport.interest.models import Interested
 from comport.decorators import requires_roles
 import uuid
@@ -18,7 +18,9 @@ blueprint = Blueprint("admin", __name__, url_prefix='/admin',
 @requires_roles(["admin"])
 def admin_dashboard():
     interesteds=Interested.query.all()
-    return render_template("admin/dashboard.html", interesteds=interesteds)
+    invites=Invite_Code.query.filter_by(used=False)
+    users=User.query.filter_by(active=True)
+    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users)
 
 @blueprint.route("/department/new", methods=["GET", "POST"] )
 @login_required
