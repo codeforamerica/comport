@@ -142,7 +142,7 @@ IMPD trains on criminal law and its requirements pertaining to reasonable suspic
             caption ="",
             slug ="complaints-introduction",
             dataset ="complaints",
-            content ="""This page is an Alpha prototype and is subject to change. We're absolutely interested in feedback from all users. Please email us at [Indy@codeforamerica.org](Indy@codeforamerica.org) or check out our twitter at [@projectcomport](https://twitter.com/projectcomport). This open data project is the result of a partnership between the Indianapolis Department of Public Safety and Code for America. It opens data that CPCO and IMPD have been collecting internally, but that has not been shared publicly before.
+            content ="""This page is an Alpha prototype and is subject to change. We're absolutely interested in feedback from all users. Please email us at [Indy@codeforamerica.org](mailto:Indy@codeforamerica.org) or check out our twitter at [@projectcomport](https://twitter.com/projectcomport). This open data project is the result of a partnership between the Indianapolis Department of Public Safety and Code for America. It opens data that CPCO and IMPD have been collecting internally, but that has not been shared publicly before.
 
 **About the Citizens’ Police Complaint Office**
 
