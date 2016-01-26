@@ -240,12 +240,10 @@ def add_new_blocks():
 @manager.command
 def test_client():
     delete_everything()
-    department = Department.query.filter_by(name="Indianapolis Metropolitan Police Department", short_name="IMPD").first()
-    if not department:
-        department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD")
-    if not User.query.filter_by(username="user").first():
-        user = User.create(username="user", email="email2@example.com",password="password",active=True, is_admin=True, department_id=department.id)
-        user.departments.append(department)
+    department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD", load_defaults=True)
+    Department.create(name="Busy Town Police Department", short_name="BTPD", load_defaults=True)
+    user = User.create(username="user", email="email2@example.com",password="password",active=True, is_admin=True, department_id=department.id)
+    user.departments.append(department)
 
     test_client = JSONTestClient()
     # missing_data_mutator = MissingDataMutator()

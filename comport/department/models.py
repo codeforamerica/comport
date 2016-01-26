@@ -16,6 +16,7 @@ from comport.user.models import User, Role
 import csv
 import io
 import json
+import copy
 
 
 user_department_relationship_table=db.Table('user_department_relationship_table',
@@ -45,7 +46,8 @@ class Department(SurrogatePK, Model):
         db.Model.__init__(self, name=name, **kwargs)
         if load_defaults:
             for default_chart_block in ChartBlockDefaults.defaults:
-                self.chart_blocks.append(default_chart_block)
+                self.chart_blocks.append(copy.deepcopy(default_chart_block))
+            self.save()
 
     def get_uof_blocks(self):
         return {

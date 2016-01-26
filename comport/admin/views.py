@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from comport.utils import flash_errors
 from flask.ext.login import login_required
-from .forms import NewDepartmentForm, NewInviteForm
+from .forms import NewDepartmentForm, NewInviteForm, EditUserForm
 from comport.department.models import Department
 from comport.user.models import Invite_Code, User
 from comport.interest.models import Interested
@@ -51,9 +51,23 @@ def new_invite_code():
             flash_errors(form)
     return render_template("admin/newInvite.html", form=form)
 
-
-@blueprint.route("/invite/", methods=["GET"] )
+@blueprint.route("/user/<int:user_id>/edit", methods=["GET", "POST"] )
 @login_required
 @requires_roles(["admin"])
-def view_active_invites():
-    return render_template("admin/showInvites.html", invites=Invite_Code.query.filter_by(used=False))
+def edit_user(user_id):
+    user = User.get_by_id(user_id)
+    if not user:
+        abort(404)
+
+
+    form = EditUserForm(request.form, departments=[d.id for d in user.departments])
+    form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
+
+    if request.method == 'POST':
+        user.departments = [Department.get_by_id(int(d)) for d in form.departments.data ]
+        user.save()
+        flash('User updated.', 'info')
+        return redirect(url_for('admin.admin_dashboard'))
+
+
+    return render_template("admin/editUser.html", form=form)
