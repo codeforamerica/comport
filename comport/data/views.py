@@ -36,6 +36,7 @@ def heartbeat():
 def use_of_force():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
+    department_id = extractor.first_department().id
     j = request.json
     added_rows = 0
     updated_rows = 0
@@ -55,7 +56,7 @@ def use_of_force():
 
         found_incident = UseOfForceIncident.query.filter_by(
             opaque_id=incident["opaqueId"],
-            department_id=extractor.department_id,
+            department_id=department_id,
             officer_identifier=incident["officerIdentifier"],
             officer_force_type=officer_force_type
         ).first()
@@ -64,7 +65,7 @@ def use_of_force():
 
         if not found_incident:
             found_incident = UseOfForceIncident.create(
-                department_id=extractor.department_id,
+                department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 occured_date=occured_date,
                 division=division,
@@ -97,7 +98,7 @@ def use_of_force():
             added_rows += 1
             continue
 
-        found_incident.department_id = extractor.department_id,
+        found_incident.department_id = department_id,
         found_incident.opaque_id = incident["opaqueId"],
         found_incident.occured_date = occured_date,
         found_incident.division = division,
@@ -142,6 +143,7 @@ def use_of_force():
 def officer_involved_shooting():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
+    department_id = extractor.first_department().id
     j = request.json
     added_rows = 0
     updated_rows = 0
@@ -161,7 +163,7 @@ def officer_involved_shooting():
 
         found_incident = OfficerInvolvedShooting.query.filter_by(
             opaque_id=incident["opaqueId"],
-            department_id=extractor.department_id,
+            department_id=department_id,
             officer_identifier=incident["officerIdentifier"]
         ).first()
 
@@ -169,7 +171,7 @@ def officer_involved_shooting():
 
         if not found_incident:
             found_incident = OfficerInvolvedShooting.create(
-                department_id=extractor.department_id,
+                department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 service_type=incident["serviceType"],
                 occured_date=occured_date,
@@ -196,7 +198,7 @@ def officer_involved_shooting():
             added_rows += 1
             continue
 
-        found_incident.department_id = extractor.department_id,
+        found_incident.department_id = department_id,
         found_incident.opaque_id = incident["opaqueId"],
         found_incident.service_type = incident["serviceType"],
         found_incident.occured_date = occured_date,
@@ -233,6 +235,7 @@ def officer_involved_shooting():
 def complaints():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
+    department_id = extractor.first_department().id
     j = request.json
     added_rows = 0
     updated_rows = 0
@@ -250,7 +253,7 @@ def complaints():
             allegation_type=incident["allegationType"],
             allegation=incident["allegation"],
             officer_identifier=incident["officerIdentifier"],
-            department_id=extractor.department_id,
+            department_id=department_id,
             resident_race=resident_race,
             resident_sex=resident_sex,
             resident_age=incident["residentAge"]
@@ -265,14 +268,14 @@ def complaints():
                 allegation_type=incident["allegationType"],
                 allegation=incident["allegation"],
                 officer_identifier=incident["officerIdentifier"],
-                department_id=extractor.department_id
+                department_id=department_id
             ).first()
 
             if multiple_complaintant_check:
                 continue
 
             found_incident = CitizenComplaint.create(
-                department_id=extractor.department_id,
+                department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 occured_date=occured_date,
                 service_type=incident["serviceType"],
@@ -298,7 +301,7 @@ def complaints():
             added_rows += 1
             continue
 
-        found_incident.department_id = extractor.department_id,
+        found_incident.department_id = department_id,
         found_incident.opaque_id = incident["opaqueId"],
         found_incident.occured_date = occured_date,
         found_incident.division = incident["division"],

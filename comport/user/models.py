@@ -83,6 +83,15 @@ class User(UserMixin, SurrogatePK, Model):
             return role.name
         return "admin" in map(names, self.roles)
 
+    def has_department(self, department_id):
+
+        def department_ids(department):
+            return department.id
+
+        return department_id in map(department_ids, self.departments)
+
+    def first_department(self):
+        return self.departments[0]
 
     @property
     def full_name(self):

@@ -329,11 +329,12 @@ class Extractor(User):
             COMPORT_SQL_SERVER_DATABASE =
             COMPORT_SQL_SERVER_USERNAME =
             COMPORT_SQL_SERVER_PASSWORD =
-        """ % (current_app.config["BASE_URL"], self.username, password, self.department_id,)
+        """ % (current_app.config["BASE_URL"], self.username, password, self.first_department().id,)
 
     def from_department_and_password(department, password):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace(
-            " ", "_"), email='extractor@example.com', department_id=department.id, password=password)
+            " ", "_"), email='extractor@example.com', password=password)
+        extractor.departments.append(department)
         extractor.roles.append(Role.create(name="extractor"))
         extractor.save()
 

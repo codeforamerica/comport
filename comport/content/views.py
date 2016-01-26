@@ -13,14 +13,12 @@ blueprint = Blueprint("content", __name__, url_prefix='/content',
 @blueprint.route("/<string:chart_slug>/<int:department_id>", methods=["POST"])
 @login_required
 def edit_chart_block(department_id, chart_slug):
-    user_department_id = current_user.department_id
-
     block = ChartBlock.query.filter_by(department_id=department_id, slug=chart_slug).first()
 
     if not block:
         abort(404)
 
-    if user_department_id != department_id and not current_user.is_admin():
+    if not current_user.has_department(department_id) and not current_user.is_admin():
         abort(401)
 
     block.title = request.form["chart_title"]

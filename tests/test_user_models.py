@@ -15,14 +15,18 @@ class TestUserInheritance:
         department = DepartmentFactory()
         department.save()
 
-        extractor = Extractor.create(username='foobarbaz', email='foo2@bar.com', department_id=department.id)
+        extractor = Extractor.create(username='foobarbaz', email='foo2@bar.com')
+        extractor.departments.append(department)
+        extractor.save()
 
-        assert extractor.department_id == department.id
+
+        assert extractor.first_department().id == department.id
 
     def test_users_are_not_extractors(self):
         department = DepartmentFactory()
         department.save()
-        user = User(username='foo', email='foo@bar.com', department_id=department.id)
+        user = User(username='foo', email='foo@bar.com')
+        user.departments.append(department)
         user.save()
 
 

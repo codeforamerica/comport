@@ -22,7 +22,13 @@
               {{user.username}}
             </td>
             <td>
-              {{user.department.name}}
+              <ul>
+                {% for department in user.departments %}
+                <li>
+                  {{department.name}}
+                </li>
+                {% endfor%}
+              </ul>
             </td>
             <td>
               {{user.is_admin()}}
