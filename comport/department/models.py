@@ -16,6 +16,13 @@ from comport.user.models import User, Role
 import csv
 import io
 import json
+import copy
+
+
+user_department_relationship_table=db.Table('user_department_relationship_table',
+                             db.Column('department_id', db.Integer,db.ForeignKey('departments.id'), nullable=False),
+                             db.Column('user_id',db.Integer,db.ForeignKey('users.id'),nullable=False),
+                             db.PrimaryKeyConstraint('department_id', 'user_id') )
 
 
 class Department(SurrogatePK, Model):
@@ -24,7 +31,8 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     short_name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
-    users = relationship("User", backref="department")
+    users_old = relationship("User", backref="department")
+    users = relationship("User", secondary=user_department_relationship_table,back_populates="departments")
     use_of_force_incidents = relationship(
         "UseOfForceIncident", backref="department")
     citizen_complaints = relationship("CitizenComplaint", backref="department")
@@ -38,7 +46,8 @@ class Department(SurrogatePK, Model):
         db.Model.__init__(self, name=name, **kwargs)
         if load_defaults:
             for default_chart_block in ChartBlockDefaults.defaults:
-                self.chart_blocks.append(default_chart_block)
+                self.chart_blocks.append(copy.deepcopy(default_chart_block))
+            self.save()
 
     def get_uof_blocks(self):
         return {
@@ -320,11 +329,12 @@ class Extractor(User):
             COMPORT_SQL_SERVER_DATABASE =
             COMPORT_SQL_SERVER_USERNAME =
             COMPORT_SQL_SERVER_PASSWORD =
-        """ % (current_app.config["BASE_URL"], self.username, password, self.department_id,)
+        """ % (current_app.config["BASE_URL"], self.username, password, self.first_department().id,)
 
     def from_department_and_password(department, password):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace(
-            " ", "_"), email='extractor@example.com', department_id=department.id, password=password)
+            " ", "_"), email='extractor@example.com', password=password)
+        extractor.departments.append(department)
         extractor.roles.append(Role.create(name="extractor"))
         extractor.save()
 

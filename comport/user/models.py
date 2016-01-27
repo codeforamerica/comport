@@ -2,7 +2,6 @@
 import datetime as dt
 
 from flask_login import UserMixin
-
 from comport.extensions import bcrypt
 from comport.database import (
     Column,
@@ -53,14 +52,21 @@ class User(UserMixin, SurrogatePK, Model):
     active = Column(db.Boolean(), default=False)
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=True)
     type = Column(db.String(50))
+    departments = relationship("Department",secondary="user_department_relationship_table", back_populates="users")
 
     __mapper_args__ = {
         'polymorphic_on':type
     }
 
 
-    def __init__(self, username, email, password=None, **kwargs):
+    def __init__(self, username, email, is_admin=False, password=None, **kwargs):
         db.Model.__init__(self, username=username, email=email, **kwargs)
+
+        if is_admin:
+            admin_role = Role(name='admin')
+            admin_role.save()
+            self.roles.append(admin_role)
+
         if password:
             self.set_password(password)
         else:
@@ -77,6 +83,15 @@ class User(UserMixin, SurrogatePK, Model):
             return role.name
         return "admin" in map(names, self.roles)
 
+    def has_department(self, department_id):
+
+        def department_ids(department):
+            return department.id
+
+        return department_id in map(department_ids, self.departments)
+
+    def first_department(self):
+        return self.departments[0]
 
     @property
     def full_name(self):
