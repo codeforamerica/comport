@@ -32,7 +32,7 @@ class Department(SurrogatePK, Model):
     short_name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users_old = relationship("User", backref="department")
-    users = relationship("User", secondary=user_department_relationship_table,back_populates="departments")
+    users = relationship("User", secondary=user_department_relationship_table,backref="departments")
     use_of_force_incidents = relationship(
         "UseOfForceIncident", backref="department")
     citizen_complaints = relationship("CitizenComplaint", backref="department")
