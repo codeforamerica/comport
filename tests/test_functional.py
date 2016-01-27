@@ -76,7 +76,7 @@ class TestUserRoles:
 
     def test_department_access(self, user, testapp):
         department = Department.create(name="Busy Town Public Safety", load_defaults=False)
-        user.departments.append(department)
+        user.department_id = department.id
         user.save()
         TestLoggingIn.test_can_log_in_returns_200(self, user=user, testapp=testapp)
         res = testapp.get("/department/6").follow()

@@ -43,5 +43,3 @@ Flask-DebugToolbar==0.9.2
 # Templates
 Markdown==2.6.2
 titlecase==0.7.2
-
-requests==2.9.1

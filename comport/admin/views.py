@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from comport.utils import flash_errors
 from flask.ext.login import login_required
-from .forms import NewDepartmentForm, NewInviteForm, EditUserForm
+from .forms import NewDepartmentForm, NewInviteForm
 from comport.department.models import Department
-from comport.user.models import Invite_Code, User
+from comport.user.models import Invite_Code
 from comport.interest.models import Interested
 from comport.decorators import requires_roles
 import uuid
@@ -18,9 +18,7 @@ blueprint = Blueprint("admin", __name__, url_prefix='/admin',
 @requires_roles(["admin"])
 def admin_dashboard():
     interesteds=Interested.query.all()
-    invites=Invite_Code.query.filter_by(used=False)
-    users=User.query.filter_by(active=True)
-    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users)
+    return render_template("admin/dashboard.html", interesteds=interesteds)
 
 @blueprint.route("/department/new", methods=["GET", "POST"] )
 @login_required
@@ -51,23 +49,9 @@ def new_invite_code():
             flash_errors(form)
     return render_template("admin/newInvite.html", form=form)
 
-@blueprint.route("/user/<int:user_id>/edit", methods=["GET", "POST"] )
+
+@blueprint.route("/invite/", methods=["GET"] )
 @login_required
 @requires_roles(["admin"])
-def edit_user(user_id):
-    user = User.get_by_id(user_id)
-    if not user:
-        abort(404)
-
-
-    form = EditUserForm(request.form, departments=[d.id for d in user.departments])
-    form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
-
-    if request.method == 'POST':
-        user.departments = [Department.get_by_id(int(d)) for d in form.departments.data ]
-        user.save()
-        flash('User updated.', 'info')
-        return redirect(url_for('admin.admin_dashboard'))
-
-
-    return render_template("admin/editUser.html", form=form)
+def view_active_invites():
+    return render_template("admin/showInvites.html", invites=Invite_Code.query.filter_by(used=False))

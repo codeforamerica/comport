@@ -41,7 +41,7 @@ def user(db):
     department = DepartmentFactory()
     department.save()
     user = UserFactory(password='myprecious')
-    user.departments.append(department)
+    user.department_id = department.id
     user.save()
     db.session.commit()
     return user

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Active Invites</h1>
+  <br/>
+  <table class="table table-striped">
+    <tr>
+      <th>
+        Department
+      </th>
+      <th>
+      Invite Code
+      </th>
+    </tr>
+    {% for invite in invites %}
+        <tr>
+          <td>
+            {{invite.department.name}}
+          </td>
+          <td>
+            {{invite.code}}
+          </td>
+        </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
