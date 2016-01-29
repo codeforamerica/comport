@@ -42,6 +42,45 @@
       {% endfor %}
 
     </table>
+    <h2>Extractors</h2>
+    <table class="table table-striped">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Departments
+        </th>
+        <th>
+          Last Contact
+        </th>
+        <th>
+        </th>
+      </tr>
+      {% for extractor in extractors %}
+          <tr>
+            <td>
+              {{extractor.username}}
+            </td>
+            <td>
+              <ul>
+                {% for department in extractor.departments %}
+                <li>
+                  {{department.name}}
+                </li>
+                {% endfor%}
+              </ul>
+            </td>
+            <td>
+              {{extractor.last_contact}}
+            </td>
+            <td>
+              <a href='{{ url_for("admin.edit_extractor", extractor_id=extractor.id ) }}'>Edit</a>
+            </td>
+          </tr>
+      {% endfor %}
+
+    </table>
     <h2>Outstanding Invite Codes</h2>
     <table class="table table-striped">
       <tr>

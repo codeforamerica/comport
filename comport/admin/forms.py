@@ -30,6 +30,14 @@ class EditUserForm(Form):
         self.department = None
 
 
+class EditExtractorForm(Form):
+    departments = SelectMultipleField("Departments")
+
+    def __init__(self, *args, **kwargs):
+        super(EditExtractorForm, self).__init__(*args, **kwargs)
+        self.department = None
+
+
 
 class NewInviteForm(Form):
     department_id = SelectField("Department", coerce=int)

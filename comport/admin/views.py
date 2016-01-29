@@ -2,8 +2,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from comport.utils import flash_errors
 from flask.ext.login import login_required
-from .forms import NewDepartmentForm, NewInviteForm, EditUserForm
-from comport.department.models import Department
+from .forms import NewDepartmentForm, NewInviteForm, EditUserForm, EditExtractorForm
+from comport.department.models import Department, Extractor
 from comport.user.models import Invite_Code, User
 from comport.interest.models import Interested
 from comport.decorators import requires_roles
@@ -20,7 +20,8 @@ def admin_dashboard():
     interesteds=Interested.query.all()
     invites=Invite_Code.query.filter_by(used=False)
     users=User.query.filter_by(active=True)
-    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users)
+    extractors = Extractor.query.all()
+    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users, extractors=extractors)
 
 @blueprint.route("/department/new", methods=["GET", "POST"] )
 @login_required
@@ -59,7 +60,6 @@ def edit_user(user_id):
     if not user:
         abort(404)
 
-
     form = EditUserForm(request.form, departments=[d.id for d in user.departments])
     form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
 
@@ -88,3 +88,24 @@ def start_password_reset(user_id):
 
 
     return redirect(url_for('admin.edit_user',user_id=user_id))
+
+
+@blueprint.route("/extractor/<int:extractor_id>/edit", methods=["GET", "POST"] )
+@login_required
+@requires_roles(["admin"])
+def edit_extractor(extractor_id):
+    extractor = Extractor.get_by_id(extractor_id)
+    if not extractor:
+        abort(404)
+
+    form = EditExtractorForm(request.form, departments=[d.id for d in extractor.departments])
+    form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
+
+    if request.method == 'POST':
+        extractor.departments = [Department.get_by_id(int(d)) for d in form.departments.data ]
+        extractor.save()
+        flash('Extractor updated.', 'info')
+        return redirect(url_for('admin.admin_dashboard'))
+
+
+    return render_template("admin/editExtractor.html", form=form, extractor=extractor)
