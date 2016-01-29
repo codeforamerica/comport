@@ -5,6 +5,30 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 from .models import User, Invite_Code
 
+# -*- coding: utf-8 -*-
+from flask_wtf import Form
+from wtforms import TextField, PasswordField
+from wtforms.validators import DataRequired, Email, EqualTo, Length
+
+from .models import User, Invite_Code
+
+
+class PasswordResetForm(Form):
+    password = PasswordField('Password',
+                                validators=[DataRequired(), Length(min=6, max=40)])
+    confirm = PasswordField('Verify password',
+                [DataRequired(), EqualTo('password', message='Passwords must match')])
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+    def validate(self):
+        initial_validation = super(PasswordResetForm, self).validate()
+        if not initial_validation:
+            return False
+        return True
+
+
 
 class RegisterForm(Form):
     username = TextField('Username',

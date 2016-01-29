@@ -70,4 +70,21 @@ def edit_user(user_id):
         return redirect(url_for('admin.admin_dashboard'))
 
 
-    return render_template("admin/editUser.html", form=form)
+    return render_template("admin/editUser.html", form=form, user=user)
+
+@blueprint.route("/user/<int:user_id>/passwordReset", methods=["GET", "POST"] )
+@login_required
+@requires_roles(["admin"])
+def start_password_reset(user_id):
+    user = User.get_by_id(user_id)
+    if not user:
+        abort(404)
+
+    if request.method == 'POST':
+        user.password_reset_uuid = str(uuid.uuid4())
+        user.save()
+        flash('User password reset engaged.', 'info')
+        return redirect(url_for('admin.edit_user',user_id=user_id))
+
+
+    return redirect(url_for('admin.edit_user',user_id=user_id))

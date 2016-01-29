@@ -10,4 +10,14 @@
           </div>
           <p><input class="btn btn-default btn-submit" type="submit" value="Save"></p>
   </form>
+  {% if user.password_reset_uuid == None %}
+  <form action="/admin/user/{{user.id}}/passwordReset" method="post">
+    <button class="action-button-big" type="submit" name="submit" value="passwordReset">Reset Password</button>
+  </form>
+  {% else %}
+  <div class="alert alert-success" role="alert">
+    <p>Provide {{user.first_name}} with this link:</p>
+    <a href="{{url_for('public.password_reset', password_reset_uuid=user.password_reset_uuid, _external=True)}}">{{url_for('public.password_reset', password_reset_uuid=user.password_reset_uuid,  _external=True)}}</a>
+  </div>
+  {% endif %}
 {% endblock %}

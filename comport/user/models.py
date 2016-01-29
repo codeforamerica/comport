@@ -52,6 +52,7 @@ class User(UserMixin, SurrogatePK, Model):
     active = Column(db.Boolean(), default=False)
     department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=True)
     type = Column(db.String(50))
+    password_reset_uuid = Column(db.String(36), unique=True, nullable=True)
 
     __mapper_args__ = {
         'polymorphic_on':type
@@ -90,7 +91,10 @@ class User(UserMixin, SurrogatePK, Model):
         return department_id in map(department_ids, self.departments)
 
     def first_department(self):
-        return self.departments[0]
+        if len(self.departments) > 0:
+            return self.departments[0]
+        else:
+            return None
 
     @property
     def full_name(self):
