@@ -320,15 +320,9 @@ class Extractor(User):
 
     def generate_envs(self, password):
         return """
-            COMPORT_BASE_URL="%s"
             COMPORT_USERNAME="%s"
             COMPORT_PASSWORD="%s"
-            COMPORT_DEPARTMENT_ID="%s"
-            COMPORT_SQL_SERVER_URL =
-            COMPORT_SQL_SERVER_DATABASE =
-            COMPORT_SQL_SERVER_USERNAME =
-            COMPORT_SQL_SERVER_PASSWORD =
-        """ % (current_app.config["BASE_URL"], self.username, password, self.first_department().id,)
+        """ % (self.username, password,)
 
     def from_department_and_password(department, password):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace(

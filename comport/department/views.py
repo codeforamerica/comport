@@ -20,6 +20,8 @@ blueprint = Blueprint("department", __name__, url_prefix='/department',
 @admin_or_department_required()
 def department_dashboard(department_id):
     department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
     return render_template("department/dashboard.html", department=department, current_year=datetime.datetime.now().year)
 
 

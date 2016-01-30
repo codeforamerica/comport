@@ -2,11 +2,13 @@
 {% block content %}
 <h1>New Department</h1>
   <br/>
-  <form id="registerForm" class="form form-register" method="POST" action="" role="form">
+  <form id="newDepartmentForm" class="form form-register" method="POST" action="" role="form">
           {{ form.hidden_tag() }}
           <div class="form-group">
               {{form.department_name.label}}
               {{form.department_name(placeholder="Department Name", class_="form-control")}}
+              {{form.department_short_name.label}}
+              {{form.department_short_name(placeholder="Department Short Name", class_="form-control")}}
           </div>
           <p><input class="btn btn-default btn-submit" type="submit" value="Add"></p>
   </form>

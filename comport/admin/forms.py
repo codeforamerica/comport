@@ -5,6 +5,7 @@ from comport.department.models import Department
 
 class NewDepartmentForm(Form):
     department_name = TextField('Department Name', validators=[DataRequired()])
+    department_short_name = TextField('Department Short Name', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         super(NewDepartmentForm, self).__init__(*args, **kwargs)
@@ -18,6 +19,11 @@ class NewDepartmentForm(Form):
         self.department = Department.query.filter_by(name=self.department_name.data).first()
         if self.department:
             self.department_name.errors.append('Department name already registered.')
+            return False
+
+        self.department = Department.query.filter_by(short_name=self.department_short_name.data).first()
+        if self.department:
+            self.department_name.errors.append('Department short name already registered.')
             return False
 
         return True

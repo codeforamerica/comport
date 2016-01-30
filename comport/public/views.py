@@ -6,6 +6,7 @@ from flask.ext.login import login_user, login_required, logout_user
 
 from comport.extensions import login_manager
 from comport.user.models import User, Invite_Code
+from comport.department.models import Department
 from comport.public.forms import LoginForm
 from comport.user.forms import RegisterForm, PasswordResetForm
 from comport.utils import flash_errors
@@ -69,7 +70,7 @@ def register():
                         password=form.password.data,
                         active=True)
 
-        new_user.departments.append(Department.get_by_id(form.invite_code.department_id))
+        new_user.departments.append(Department.get_by_id(invite_code.department_id))
 
         flash("Thank you for registering. You can now log in.", 'success')
         return redirect(url_for('public.home'))

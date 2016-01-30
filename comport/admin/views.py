@@ -21,7 +21,8 @@ def admin_dashboard():
     invites=Invite_Code.query.filter_by(used=False)
     users=User.query.filter_by(active=True)
     extractors = Extractor.query.all()
-    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users, extractors=extractors)
+    departments = Department.query.all()
+    return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users, extractors=extractors, departments=departments)
 
 @blueprint.route("/department/new", methods=["GET", "POST"] )
 @login_required
@@ -30,7 +31,7 @@ def add_department():
     form = NewDepartmentForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
-            Department.create(name=form.department_name.data)
+            Department.create(name=form.department_name.data, short_name=form.department_short_name.data)
             flash('Department %s created.' % form.department_name.data, 'info')
             return redirect(url_for('admin.admin_dashboard'))
         else:
@@ -47,7 +48,7 @@ def new_invite_code():
         if form.validate_on_submit():
             invite = Invite_Code.create(department_id=form.department_id.data, code=str(uuid.uuid4()), used=False)
             flash('Invite Code for {0}: {1} created.'.format(invite.department.name, invite.code), 'info')
-            return redirect(url_for('admin.view_active_invites'))
+            return redirect(url_for('admin.admin_dashboard'))
         else:
             flash_errors(form)
     return render_template("admin/newInvite.html", form=form)

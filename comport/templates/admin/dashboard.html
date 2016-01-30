@@ -81,6 +81,33 @@
       {% endfor %}
 
     </table>
+    <h2>Departments</h2>
+    <table class="table table-striped">
+      <tr>
+        <th>
+          Name
+        </th>
+        <th>
+          Short Name
+        </th>
+        <th>
+        </th>
+      </tr>
+      {% for department in departments %}
+          <tr>
+            <td>
+              {{department.name}}
+            </td>
+            <td>
+              {{department.short_name}}
+            </td>
+            <td>
+              <a href='{{ url_for("department.department_dashboard", department_id=department.id ) }}'>Edit</a>
+            </td>
+          </tr>
+      {% endfor %}
+
+    </table>
     <h2>Outstanding Invite Codes</h2>
     <table class="table table-striped">
       <tr>
