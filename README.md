@@ -30,7 +30,6 @@ psql -c 'create database comport;'
 pip install -r requirements.txt
 pip install -r requirements/dev.txt
 python manage.py db upgrade
-python manage.py make_test_data
 python manage.py server
 ```
 
