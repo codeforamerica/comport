@@ -189,37 +189,6 @@ def load_test_data():
                     department_value=value.get("cityOrDepartment", None) == "department"
                 )
 
-
-
-
-@manager.command
-def make_test_data():
-    department = Department.query.filter_by(name="Busy Town Public Safety", short_name="BTPS").first()
-    if not department:
-        department = Department.create(name="Busy Town Public Safety", short_name="BTPS")
-        Link.create(title="The Department's Policy on Force", url="www.example.com/policy/force.pdf", department_id=department.id, type="policy")
-        Link.create(title="The Department's Training Policy on Force", url="www.example.com/training/force.pdf", department_id=department.id, type="training")
-        Link.create(title="The Department's Outreach Strategy", url="www.example.com/outreach.pdf", department_id=department.id, type="outreach")
-
-    if not User.query.filter_by(username="user").first():
-        User.create(username="user", email="email2@example.com",password="password",active=True, department_id=department.id)
-
-    for _ in range(100):
-        incident = UseOfForceIncidentFactory()
-        incident.department_id = department.id
-        incident.save()
-
-    for _ in range(100):
-        complaint = CitizenComplaintFactory()
-        complaint.department_id = department.id
-        complaint.save()
-
-    for _ in range(diff_month(datetime.now(),datetime(2012,1,1))):
-        denominator_value = DenominatorValueFactory()
-        denominator_value.department_id = department.id
-        denominator_value.save()
-
-
 @manager.command
 def delete_everything():
    db.reflect()
@@ -240,27 +209,22 @@ def add_new_blocks():
 @manager.command
 def test_client():
     delete_everything()
-    department = Department.create(name="Indianapolis Metropolitan Police Department", short_name="IMPD", load_defaults=True)
-    department2 = Department.create(name="Busy Town Police Department", short_name="BTPD", load_defaults=True)
+    department = Department.create(name="Busy Town Police Department", short_name="BTPD", load_defaults=True)
     user = User.create(username="user", email="email2@example.com",password="password",active=True, is_admin=True)
     user.departments.append(department)
     user.save()
 
-    user2=User.create(username="us2er", email="email4@example.com",password="password",active=True, is_admin=False)
-    user2.departments.append(department)
-    user2.departments.append(department2)
-    user2.save()
 
     test_client = JSONTestClient()
     # missing_data_mutator = MissingDataMutator()
-    fuzzed_data_mutator = FuzzedDataMutator()
+    # fuzzed_data_mutator = FuzzedDataMutator()
     # known_bad_data_mutator = KnownBadDataMutator()
     # empty_data_mutator = EmptyDataMutator()
     # casing_mutator = CasingMutator()
     # condenisng_date_mutator = CondenisngDateMutator()
     # gap_date_mutator = GapDateMutator()
 
-    test_client.run(department, [fuzzed_data_mutator])
+    test_client.run(department, [])
 
 
 manager.add_command('server', Server())
