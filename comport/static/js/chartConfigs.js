@@ -353,5 +353,17 @@ d3.csv(
       }
 
     });
+    markLoadTimeWithGoogleAnalytics();
   }
 );
+
+function markLoadTimeWithGoogleAnalytics(){
+  if (window.performance) {
+    // Gets the number of milliseconds since page load
+    // (and rounds the result since the value must be an integer).
+    var timeSincePageLoad = Math.round(performance.now());
+
+    // Sends the timing hit to Google Analytics.
+    ga('send', 'timing', 'Charts', 'drawn', timeSincePageLoad);
+  }
+}
