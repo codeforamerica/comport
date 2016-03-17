@@ -230,8 +230,8 @@ class Department(SurrogatePK, Model):
 
         writer.writerow(["id", "occuredDate", "serviceType", "source", "division",
                          "district", "shift", "beat", "finding", "allegationType",
-                         "allegation", "censusTract", "residentRace",
-                         "residentSex", "residentAge", "officerRace", "officerSex", "officerAge",
+                         "allegation", "residentRace", "residentSex", "residentAge",
+                         "officerRace", "officerSex", "officerAge",
                          "officerYearsOfService", "officerIdentifier"])
 
         complaints = self.citizen_complaints
@@ -250,7 +250,6 @@ class Department(SurrogatePK, Model):
                 complaint.disposition,
                 complaint.allegation_type,
                 complaint.allegation,
-                complaint.census_tract,
                 complaint.resident_race,
                 complaint.resident_sex,
                 complaint.resident_age,
