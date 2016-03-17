@@ -141,7 +141,7 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "precinct", "shift",
+        writer.writerow(["id", "occuredDate", "division", "district", "shift",
                          "beat", "disposition", "officerForceType",
                          "serviceType", "arrestMade", "arrestCharges", "residentInjured",
                          "residentHospitalized", "officerInjured",
