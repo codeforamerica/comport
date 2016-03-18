@@ -145,9 +145,10 @@ class Department(SurrogatePK, Model):
                          "beat", "disposition", "officerForceType",
                          "serviceType", "arrestMade", "arrestCharges", "residentInjured",
                          "residentHospitalized", "officerInjured",
-                         "officerHospitalized", "residentCondition", "officerCondition", "useOfForceReason",
-                         "residentRace", "officerRace", "residentAge", "officerAge", "officerYearsOfService",
-                         "officerIdentifier"])
+                         "officerHospitalized", "residentCondition", "officerCondition",
+                         "useOfForceReason", "residentRace", "officerRace",
+                         "residentAge", "officerAge", "residentSex", "officerSex",
+                         "officerYearsOfService", "officerIdentifier"])
 
         use_of_force_incidents = self.use_of_force_incidents
 
@@ -176,6 +177,8 @@ class Department(SurrogatePK, Model):
                 incident.officer_race,
                 incident.resident_age,
                 incident.officer_age,
+                incident.resident_sex,
+                incident.officer_sex,
                 incident.officer_years_of_service,
                 incident.officer_identifier
             ]
