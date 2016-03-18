@@ -23,7 +23,7 @@ class NewDepartmentForm(Form):
 
         self.department = Department.query.filter_by(short_name=self.department_short_name.data).first()
         if self.department:
-            self.department_name.errors.append('The department short name "{}" is already registered.'.format(self.department_short_name.data))
+            self.department_short_name.errors.append('The department short name "{}" is already registered.'.format(self.department_short_name.data))
             return False
 
         return True

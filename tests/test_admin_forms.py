@@ -42,4 +42,4 @@ class TestNewDepartmentForm:
         Department.create(name=test_name, short_name=test_short_name)
         form = NewDepartmentForm(department_name="Another Police Department", department_short_name=test_short_name)
         assert form.validate() is False
-        assert 'The department short name "{}" is already registered.'.format(test_short_name) in form.department_name.errors
+        assert 'The department short name "{}" is already registered.'.format(test_short_name) in form.department_short_name.errors
