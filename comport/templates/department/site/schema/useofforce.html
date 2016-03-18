@@ -60,6 +60,21 @@
         </td>
       </tr>
       <tr>
+        <td>Use of Force Reason</td>
+        <td>The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.</td>
+      </tr>
+      <tr>
+        <td>Officer Force Type</td>
+        <td>In Indianapolis, kinds of force are categorized as physical if the officer uses their body, less lethal if the officer uses a weapon that's commonly considered non-lethal, or lethal if the officer uses a firearm, knife or vehicle. The types of force counted are:
+          <ul>
+              <li>Physical: Elbow Strike, Fist Strike, Handcuffing, Joint/Pressure, Kick, Knee Strike, Leg Sweep, Other, Palm Strike, Take Down, Weight Leverage </li>
+              <li>Less Lethal: Baton, Bean Bag, BPS Gas, Burning CS, Clearout OC, CS Fogger, CS Grenade, CS/OC, Flash Bang, Other, Pepperball, Taser </li>
+              <li>Lethal: Handgun, Knife, Rifle, Shotgun, Sniper Rifle, Sub Machine Gun, Vehicle
+              <li>Canine Bite is the only use of force type that doesn’t fall within the three types. </li>
+           </ul>
+         </td>
+      </tr>
+      <tr>
         <td>Disposition</td>
         <td>If there was an investigation and ruling on the incident, it will be noted here.
         </td>
@@ -68,22 +83,6 @@
         <td>Service Type</td>
         <td>The reason for the interaction, such as Traffic Stop or Call for Service.
         </td>
-      </tr>
-      <tr>
-        <td>Use of Force Reason</td>
-        <td>The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.</td>
-      </tr>
-      <tr>
-        <td>Resident Race</td>
-        <td>The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.</td>
-      </tr>
-      <tr>
-        <td>Resident Sex</td>
-        <td>The resident's gender.</td>
-      </tr>
-      <tr>
-        <td>Resident Age</td>
-        <td>The resident's age at the time of the incident, if known.</td>
       </tr>
       <tr>
         <td>Arrest Made</td>
@@ -106,6 +105,11 @@
         </td>
       </tr>
        <tr>
+        <td>Resident Condition</td>
+        <td>Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.
+        </td>
+      </tr>
+       <tr>
         <td>Officer Injured</td>
         <td>TRUE if the officer was injured during the incident, FALSE if the officer was not injured.
         </td>
@@ -116,18 +120,21 @@
         </td>
       </tr>
        <tr>
-        <td>Resident Condition</td>
-        <td>Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.
-        </td>
-      </tr>
-       <tr>
         <td>Officer Condition</td>
         <td>Injuries the officer sustained, if any, such as Minor Bleeding.
         </td>
       </tr>
-       <tr>
-        <td>Officer Identifier</td>
-        <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
+      <tr>
+        <td>Resident Race</td>
+        <td>The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.</td>
+      </tr>
+      <tr>
+        <td>Resident Sex</td>
+        <td>The resident's gender.</td>
+      </tr>
+      <tr>
+        <td>Resident Age</td>
+        <td>The resident's age at the time of the incident, if known.</td>
       </tr>
       <tr>
         <td>Officer Race</td>
@@ -145,16 +152,9 @@
         <td>Officer Years of Service</td>
         <td>The number of years the officer had been employed by IMPD at the time of the incident.</td>
       </tr>
-      <tr>
-        <td>Officer Force Type</td>
-        <td>In Indianapolis, kinds of force are categorized as physical if the officer uses their body, less lethal if the officer uses a weapon that's commonly considered non-lethal, or lethal if the officer uses a firearm, knife or vehicle. The types of force counted are:
-	        <ul>
-	        	  <li>Physical: Elbow Strike, Fist Strike, Handcuffing, Joint/Pressure, Kick, Knee Strike, Leg Sweep, Other, Palm Strike, Take Down, Weight Leverage </li>
-	        	  <li>Less Lethal: Baton, Bean Bag, BPS Gas, Burning CS, Clearout OC, CS Fogger, CS Grenade, CS/OC, Flash Bang, Other, Pepperball, Taser </li>
-			        <li>Lethal: Handgun, Knife, Rifle, Shotgun, Sniper Rifle, Sub Machine Gun, Vehicle
-				      <li>Canine Bite is the only use of force type that doesn’t fall within the three types. </li>
-			     </ul>
-	 	     </td>
+       <tr>
+        <td>Officer Identifier</td>
+        <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.</td>
       </tr>
     </table>
   </div>
