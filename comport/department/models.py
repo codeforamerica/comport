@@ -141,7 +141,7 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "district", "shift", "beat",
+        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
                          "useOfForceReason", "officerForceType", "disposition",
                          "serviceType", "arrestMade", "arrestCharges", "residentInjured",
                          "residentHospitalized", "residentCondition", "officerInjured",
@@ -190,7 +190,7 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "district", "shift", "beat",
+        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
                          "disposition", "residentWeaponUsed", "officerWeaponUsed",
                          "serviceType", "residentCondition", "officerCondition",
                          "residentRace", "residentSex", "residentAge", "officerRace",
@@ -231,7 +231,7 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "district", "shift",
+        writer.writerow(["id", "occurredDate", "division", "district", "shift",
                          "beat", "serviceType", "source", "allegationType",
                          "allegation", "finding", "residentRace", "residentSex",
                          "residentAge", "officerRace", "officerSex", "officerAge",
