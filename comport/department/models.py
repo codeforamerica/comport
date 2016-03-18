@@ -141,13 +141,13 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "precinct", "shift",
-                         "beat", "disposition", "officerForceType",
+        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
+                         "useOfForceReason", "officerForceType", "disposition",
                          "serviceType", "arrestMade", "arrestCharges", "residentInjured",
-                         "residentHospitalized", "officerInjured",
-                         "officerHospitalized", "residentCondition", "officerCondition", "useOfForceReason",
-                         "residentRace", "officerRace", "residentAge", "officerAge", "officerYearsOfService",
-                         "officerIdentifier"])
+                         "residentHospitalized", "residentCondition", "officerInjured",
+                         "officerHospitalized", "officerCondition", "residentRace",
+                         "residentSex", "residentAge", "officerRace", "officerSex",
+                         "officerAge", "officerYearsOfService", "officerIdentifier"])
 
         use_of_force_incidents = self.use_of_force_incidents
 
@@ -160,21 +160,23 @@ class Department(SurrogatePK, Model):
                 incident.precinct,
                 incident.shift,
                 incident.beat,
-                incident.disposition,
+                incident.use_of_force_reason,
                 incident.officer_force_type,
+                incident.disposition,
                 incident.service_type,
                 incident.arrest_made,
                 incident.arrest_charges,
                 incident.resident_injured,
                 incident.resident_hospitalized,
+                incident.resident_condition,
                 incident.officer_injured,
                 incident.officer_hospitalized,
-                incident.resident_condition,
                 incident.officer_condition,
-                incident.use_of_force_reason,
                 incident.resident_race,
-                incident.officer_race,
+                incident.resident_sex,
                 incident.resident_age,
+                incident.officer_race,
+                incident.officer_sex,
                 incident.officer_age,
                 incident.officer_years_of_service,
                 incident.officer_identifier
@@ -188,11 +190,12 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "division", "precinct", "shift",
-                         "beat", "disposition", "officerWeaponUsed", "residentWeaponUsed",
-                         "serviceType", "residentRace", "residentSex", "residentAge", "officerRace",
-                         "officerSex", "officerAge", "officerIdentifier", "officerYearsOfService",
-                         "officerCondition", "residentCondition"])
+        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
+                         "disposition", "residentWeaponUsed", "officerWeaponUsed",
+                         "serviceType", "residentCondition", "officerCondition",
+                         "residentRace", "residentSex", "residentAge", "officerRace",
+                         "officerSex", "officerAge", "officerYearsOfService",
+                         "officerIdentifier"])
 
         officer_involved_shootings = self.officer_involved_shootings
         for incident in officer_involved_shootings:
@@ -205,19 +208,19 @@ class Department(SurrogatePK, Model):
                 incident.shift,
                 incident.beat,
                 incident.disposition,
-                incident.officer_weapon_used,
                 incident.resident_weapon_used,
+                incident.officer_weapon_used,
                 incident.service_type,
+                incident.resident_condition,
+                incident.officer_condition,
                 incident.resident_race,
                 incident.resident_sex,
                 incident.resident_age,
                 incident.officer_race,
                 incident.officer_sex,
                 incident.officer_age,
-                incident.officer_identifier,
                 incident.officer_years_of_service,
-                incident.officer_condition,
-                incident.resident_condition
+                incident.officer_identifier
             ]
             writer.writerow(values)
 
@@ -228,10 +231,10 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occuredDate", "serviceType", "source", "division",
-                         "district", "shift", "beat", "finding", "allegationType",
-                         "allegation", "censusTract", "residentRace",
-                         "residentSex", "residentAge", "officerRace", "officerSex", "officerAge",
+        writer.writerow(["id", "occurredDate", "division", "district", "shift",
+                         "beat", "serviceType", "source", "allegationType",
+                         "allegation", "finding", "residentRace", "residentSex",
+                         "residentAge", "officerRace", "officerSex", "officerAge",
                          "officerYearsOfService", "officerIdentifier"])
 
         complaints = self.citizen_complaints
@@ -241,16 +244,15 @@ class Department(SurrogatePK, Model):
             values = [
                 complaint.opaque_id,
                 occured_date,
-                complaint.service_type,
-                complaint.source,
                 complaint.division,
                 complaint.precinct,
                 complaint.shift,
                 complaint.beat,
-                complaint.disposition,
+                complaint.service_type,
+                complaint.source,
                 complaint.allegation_type,
                 complaint.allegation,
-                complaint.census_tract,
+                complaint.disposition,
                 complaint.resident_race,
                 complaint.resident_sex,
                 complaint.resident_age,
