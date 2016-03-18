@@ -283,7 +283,7 @@ function last12Months(rows, config){
 
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
-var dateTimeKey = "occuredDate";
+var dateTimeKey = "occurredDate";
 function parseDate(dateTimeString){
   return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
 }
