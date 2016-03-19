@@ -20,6 +20,7 @@ class BaseFactory(SQLAlchemyModelFactory):
 
 class DepartmentFactory(BaseFactory):
     name = Sequence(lambda n: "Department {0}".format(n))
+    short_name = Sequence(lambda n: "DPD{0}".format(n))
     load_defaults = False
 
     class Meta:

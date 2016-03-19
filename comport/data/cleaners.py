@@ -49,7 +49,7 @@ CAPITALIZE_LIST = [
     "PC"
 ]
 
-CAPITALIZE_IGNORE_LIST = [
+CAPITALIZE_IGNORE_KEYS_LIST = [
     "opaqueId",
     "officerYearsOfService"
 ]
@@ -100,7 +100,7 @@ class Cleaners:
 
     def capitalize_incident(incident):
         for key in list(incident.keys()):
-            if key in CAPITALIZE_IGNORE_LIST:
+            if key in CAPITALIZE_IGNORE_KEYS_LIST:
                 continue
 
             incident[key] = Cleaners.capitalize(incident[key])
