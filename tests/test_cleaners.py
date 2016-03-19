@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from comport.data.cleaners import Cleaners, RESIDENT_WEAPONS_LOOKUP, OFFICER_FORCE_TYPE_LOOKUP, RACE_LOOKUP, SEX_LOOKUP, CAPITALIZE_LIST, CAPITALIZE_IGNORE_LIST
+from comport.data.cleaners import Cleaners, RESIDENT_WEAPONS_LOOKUP, OFFICER_FORCE_TYPE_LOOKUP, RACE_LOOKUP, GENDER_LOOKUP, CAPITALIZE_LIST, CAPITALIZE_IGNORE_LIST
 
 class TestCleaners:
 
@@ -55,6 +55,6 @@ class TestCleaners:
     def test_known_genders_cleaned(self):
         ''' Cleaning known genders returns the expected value.
         '''
-        for gender in SEX_LOOKUP:
+        for gender in GENDER_LOOKUP:
             check_gender = Cleaners.sex(gender)
-            assert check_gender == SEX_LOOKUP[gender]
+            assert check_gender == GENDER_LOOKUP[gender]

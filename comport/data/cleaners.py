@@ -30,7 +30,7 @@ RACE_LOOKUP = {
     "B": "Black"
 }
 
-SEX_LOOKUP = {
+GENDER_LOOKUP = {
     "F": "Female",
     "M": "Male"
 }
@@ -84,8 +84,8 @@ class Cleaners:
 
         text = text.upper()
 
-        if text in SEX_LOOKUP:
-            return titlecase(SEX_LOOKUP[text])
+        if text in GENDER_LOOKUP:
+            return titlecase(GENDER_LOOKUP[text])
         else:
             return titlecase(text)
 
