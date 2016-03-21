@@ -83,29 +83,3 @@ class TestUserRoles:
 
         assert res.status_code == 200
         assert "You do not have sufficent permissions to do that" in res
-
-
-class TestRegistering:
-
-    def test_can_register(self, user, testapp):
-        department = Department.create(name="dept", load_defaults=False)
-        Invite_Code.create(department_id=department.id, code="code")
-
-        old_count = len(User.query.all())
-        # Goes to homepage
-        res = testapp.get("/")
-        # Clicks Create Account button
-        res = res.click("Create account")
-        # Fills out the form
-        form = res.forms["registerForm"]
-        form['username'] = 'foobar'
-        form['email'] = 'foo@bar.com'
-        form['password'] = 'secret'
-        form['confirm'] = 'secret'
-        form['invite_code'] = 'code'
-        # Submits
-        res = form.submit().follow()
-        assert res.status_code == 200
-        # A new user was created
-        assert len(User.query.all()) == old_count + 1
-        assert len(department.users) == 1
