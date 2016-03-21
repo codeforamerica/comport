@@ -10,7 +10,7 @@ from .factories import UserFactory, DepartmentFactory
 import uuid
 
 @pytest.mark.usefixtures('db')
-class TestExtactors:
+class TestExtractors:
     def test_extractors_from_department_and_password(self):
         department = DepartmentFactory()
         department.save()
