@@ -23,10 +23,10 @@ class TestHeartbeat:
         assert res.status_code == 401
 
     def test_valid_login_replies_with_request(self, testapp):
-        right_department = Department.create(name="good2", load_defaults=False)
+        right_department = Department.create(name="good2", short_name="GPD", load_defaults=False)
 
         Extractor.create(username='good4',email='good4@good.com',password="valid", department_id = right_department.id)
         testapp.authorization = ('Basic', ('good4', 'valid'))
 
-        res = testapp.post_json("/data/heartbeat", params={"json":"yep"},expect_errors=True )
+        res = testapp.post_json("/data/heartbeat", params={"json":"yep"})
         assert res.status_code == 200

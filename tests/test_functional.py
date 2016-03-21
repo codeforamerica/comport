@@ -16,7 +16,7 @@ class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):
         # Goes to homepage
-        res = testapp.get("/")
+        res = testapp.get("/login/")
         # Fills out login form in navbar
         form = res.forms['loginForm']
         form['username'] = user.username
@@ -26,7 +26,7 @@ class TestLoggingIn:
         assert res.status_code == 200
 
     def test_sees_alert_on_log_out(self, user, testapp):
-        res = testapp.get("/")
+        res = testapp.get("/login/")
         # Fills out login form in navbar
         form = res.forms['loginForm']
         form['username'] = user.username
@@ -39,7 +39,7 @@ class TestLoggingIn:
 
     def test_sees_error_message_if_password_is_incorrect(self, user, testapp):
         # Goes to homepage
-        res = testapp.get("/")
+        res = testapp.get("/login/")
         # Fills out login form, password incorrect
         form = res.forms['loginForm']
         form['username'] = user.username
@@ -51,7 +51,7 @@ class TestLoggingIn:
 
     def test_sees_error_message_if_username_doesnt_exist(self, user, testapp):
         # Goes to homepage
-        res = testapp.get("/")
+        res = testapp.get("/login/")
         # Fills out login form, password incorrect
         form = res.forms['loginForm']
         form['username'] = 'unknown'
@@ -75,7 +75,7 @@ class TestUserRoles:
         assert "Admin Dashboard" in res
 
     def test_department_access(self, user, testapp):
-        department = Department.create(name="Busy Town Public Safety", load_defaults=False)
+        department = Department.create(name="Busy Town Public Safety", short_name="BTPD", load_defaults=False)
         user.departments.append(department)
         user.save()
         TestLoggingIn.test_can_log_in_returns_200(self, user=user, testapp=testapp)
