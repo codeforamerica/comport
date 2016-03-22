@@ -4,29 +4,42 @@
 See: http://webtest.readthedocs.org/
 """
 import pytest
-from flask import url_for
-
 from comport.department.models import Department, Extractor
-from .factories import UserFactory
 
+@pytest.mark.usefixtures('db')
 class TestHeartbeat:
 
-    def test_non_existant_extractor_user_is_a_401(self, testapp):
-        testapp.authorization = ('Basic', ('bad', 'fake'))
-        res = testapp.post("/data/heartbeat", expect_errors=True)
-        assert res.status_code == 401
+    def test_reject_nonexistent_extractor_post(self, testapp):
+        ''' An extractor login that doesn't exist is rejected.
+        '''
+        testapp.authorization = ('Basic', ('extractor', 'nonexistent'))
+        response = testapp.post("/data/heartbeat", expect_errors=True)
+        assert response.status_code == 401
+        assert response.text == 'No extractor with that username!'
 
-    def test_bad_extractor_password_is_a_401(self, testapp):
-        Extractor.create(username='good',email='good@good.com',password="valid")
-        testapp.authorization = ('Basic', ('good', 'fake'))
-        res = testapp.post("/data/heartbeat", expect_errors=True)
-        assert res.status_code == 401
+    def test_reject_extractor_post_with_wrong_password(self, testapp):
+        ''' An extractor login with the wrong password is rejected.
+        '''
+        Extractor.create(username='extractor', email='extractor@example.com', password="password")
+        testapp.authorization = ('Basic', ('extractor', 'drowssap'))
+        response = testapp.post("/data/heartbeat", expect_errors=True)
+        assert response.status_code == 401
+        assert response.text == 'Extractor authorization failed!'
 
-    def test_valid_login_replies_with_request(self, testapp):
-        right_department = Department.create(name="good2", short_name="GPD", load_defaults=False)
+    def test_successful_extractor_post(self, testapp):
+        ''' Send a valid heartbeat post, get a valid response.
+        '''
+        # set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
 
-        Extractor.create(username='good4',email='good4@good.com',password="valid", department_id = right_department.id)
-        testapp.authorization = ('Basic', ('good4', 'valid'))
+        # set the correct authorization
+        testapp.authorization = ('Basic', ('extractor', 'password'))
 
-        res = testapp.post_json("/data/heartbeat", params={"json":"yep"})
-        assert res.status_code == 200
+        # post a sample json object to the heartbeat URL
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
+        # assert that we got the expected response
+        assert response.status_code == 200
+        assert response.json_body['nextMonth'] == 10
+        assert response.json_body['nextYear'] == 2006
+        assert response.json_body['received'] == {'heartbeat': 'heartbeat'}
