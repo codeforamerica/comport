@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import pytest
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department
 
+@pytest.mark.usefixtures('app')
 class TestNewDepartmentForm:
 
     def test_validate_success(self, db):
