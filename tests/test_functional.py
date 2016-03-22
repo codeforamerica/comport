@@ -83,3 +83,45 @@ class TestUserRoles:
 
         assert res.status_code == 200
         assert "You do not have sufficent permissions to do that" in res
+
+
+class TestRegistering:
+
+    def test_can_register(self, user, testapp):
+        ''' A new user can register.
+        '''
+        # The new user's credentials
+        test_username = 'cato'
+        test_email = 'cato@example.com'
+        test_password = 'pistol_and_ball'
+        test_invite_code = 'coffin_warehouses'
+
+        # create a department and an invite code
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        Invite_Code.create(department_id=department.id, code=test_invite_code)
+
+        # establish that the user doesn't exist yet
+        old_user_count = len(User.query.all())
+        assert len(department.users) == 0
+        assert User.query.filter_by(username=test_username).first() is None
+
+        # Goes to register page
+        res = testapp.get("/register/")
+        # Fills out the form
+        form = res.forms["registerForm"]
+        form['username'] = test_username
+        form['email'] = test_email
+        form['password'] = test_password
+        form['confirm'] = test_password
+        form['invite_code'] = test_invite_code
+        # Submits
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        # The new user was created
+        assert len(User.query.all()) == old_user_count + 1
+        assert len(department.users) == 1
+        check_user = User.query.filter_by(username=test_username).first()
+        assert check_user is not None
+        assert check_user.email == test_email
+        assert check_user.check_password(test_password) is True
