@@ -144,14 +144,13 @@ def officer_involved_shooting():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
     department_id = extractor.first_department().id
-    j = request.json
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
 
-    for incident in j['data']:
+    for incident in request_json['data']:
 
-        resident_weapon_used = Cleaners.resident_weapon_used(
-            incident["residentWeaponUsed"])
+        resident_weapon_used = Cleaners.resident_weapon_used(incident["residentWeaponUsed"])
         resident_sex = Cleaners.sex(incident["residentSex"])
         resident_race = Cleaners.race(incident["residentRace"])
         officer_sex = Cleaners.sex(incident["officerSex"])

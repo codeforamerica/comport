@@ -5,6 +5,7 @@ See: http://webtest.readthedocs.org/
 """
 import pytest
 from comport.department.models import Department, Extractor
+from testclient.JSON_test_client import JSONTestClient
 
 @pytest.mark.usefixtures('db')
 class TestHeartbeat:
@@ -43,3 +44,21 @@ class TestHeartbeat:
         assert response.json_body['nextMonth'] == 10
         assert response.json_body['nextYear'] == 2006
         assert response.json_body['received'] == {'heartbeat': 'heartbeat'}
+
+    def test_post_ois_data(self, testapp):
+        ''' New OIS data from the extractor is processed as expected.
+        '''
+        # Set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of OIS descriptions from the JSON test client
+        test_client = JSONTestClient()
+        ois_data = {'month': 0, 'year': 0, 'data': test_client.make_ois(count=1)}
+        # post the json to the OIS URL
+        response = testapp.post_json("/data/OIS", params=ois_data)
+        # assert that we got the expected reponse
+        assert response.status_code == 200
