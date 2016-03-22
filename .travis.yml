@@ -1,11 +1,14 @@
-# Config file for automatic testing at travis-ci.org
-
 language: python
-
 python:
-  - "3.3"
-  - "2.7"
-
+- '3.4'
 install: pip install -r requirements/dev.txt
-
-script: py.test tests
+script: py.test tests -x
+addons:
+  postgresql: '9.4'
+env:
+- TEST_DATABASE_URL="postgresql+psycopg2://postgres@localhost/comport_test"
+before_script:
+- psql -c 'create database comport_test;' -U postgres
+notifications:
+  slack:
+    secure: K7esmmPphiNVupc67nZSSHiQQ5iYc684x3M1ZJlvx18ihXO3w+4wCasvOWYgk8aRln/zDAGhSSW60ToyIyeVYMJ6kSAy+CFhhdHI/aMXtpfhlSkMHoLnqqPN/j9vUZetPHkThA/7idiveUvInbi5XY4PeTzPFcP+suLAB01/OYLLDtF8Ou+vZWFfGkTOMt/8HSngvX+RFvKrn6pV1MLf9D6rzIYsdEEqiIm/0OrpYGNoAOHYCigtvzW62Gtjgk+JzXJba2oX8B7qSbpWGlY0q1msNpSI8yOsMxNKybKSMwHsdIs2GVf4wq2ZZm2Cs6nT8U5eTzaCGAPd1a0rAOBhRYaeaUWrtHP0AKqGktcUKhtr5FNwAkt2XTeRp0/M5ehfvyrJ79ImmS5ok3W++uWWmrHPb1u3jDc3958aDs5mZDcazCG7+1nSWPYIU8fsVOis+e/6bcUDiUgFChFdZMqrl2Imp67sa/uJ/JdNAemVddyZfkWCH9ZotLX4kqWvVDl4/Y2JZBJErY7e1ilZf1nhrJvEFN8KAilpw9pQmLmvShM3Rx8UH5nRixB9ChTvBRtkDejLe4uC71xKcMPEQhV8zJAM3tTIZoi5i6w/A3iJOCJc4W9HuXyyMpKaOGwHCGWFRkXK5jMgZJzTuomTebyezsAEggIwOTUiGJt+tCrmnRs=

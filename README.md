@@ -1,5 +1,7 @@
 # Project Comport
 
+[![Build Status](https://travis-ci.org/codeforamerica/comport.svg?branch=master)](https://travis-ci.org/codeforamerica/comport)
+
 ## What is it?
 
 An ETL Toolkit to take Police Accountability data from the IA Pro Internal Affairs Software and produce publicly available and useful websites allowing better citizen oversight.
