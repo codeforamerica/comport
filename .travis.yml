@@ -7,3 +7,10 @@ python:
 install: pip install -r requirements/dev.txt
 # run tests
 script: py.test tests -x
+# set up the database
+addons:
+  postgresql: "9.4"
+env:
+  - TEST_DATABASE_URL="postgresql+psycopg2://postgres@localhost/comport_test"
+before_script:
+  - psql -c 'create database comport_test;' -U postgres
