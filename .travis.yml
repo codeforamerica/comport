@@ -1,11 +1,9 @@
 # Config file for automatic testing at travis-ci.org
-
 language: python
-
+# heroku's running the app on 3.4.3
 python:
-  - "3.3"
-  - "2.7"
-
+  - "3.4"
+# install dependencies
 install: pip install -r requirements/dev.txt
-
-script: py.test tests
+# run tests
+script: py.test tests -x
