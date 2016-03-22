@@ -106,9 +106,9 @@ class TestRegistering:
         assert User.query.filter_by(username=test_username).first() is None
 
         # Goes to register page
-        res = testapp.get("/register/")
+        response = testapp.get("/register/")
         # Fills out the form
-        form = res.forms["registerForm"]
+        form = response.forms["registerForm"]
         form['username'] = test_username
         form['email'] = test_email
         form['password'] = test_password
