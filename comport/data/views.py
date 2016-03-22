@@ -179,18 +179,17 @@ def officer_involved_shooting():
                 shift=shift,
                 beat=beat,
                 disposition=incident["disposition"],
-                resident_sex=resident_sex,
                 resident_race=resident_race,
+                resident_sex=resident_sex,
                 resident_age=incident["residentAge"],
                 resident_weapon_used=resident_weapon_used,
                 resident_condition=incident["residentCondition"],
                 officer_identifier=incident["officerIdentifier"],
-                officer_weapon_used=incident["officerWeaponUsed"],
+                officer_weapon_used=incident["officerForceType"],
                 officer_race=officer_race,
                 officer_sex=officer_sex,
                 officer_age=incident["officerAge"],
-                officer_years_of_service=parse_int(
-                    incident["officerYearsOfService"]),
+                officer_years_of_service=parse_int(incident["officerYearsOfService"]),
                 officer_condition=incident["officerCondition"],
                 census_tract=None
             )

@@ -5,7 +5,9 @@ See: http://webtest.readthedocs.org/
 """
 import pytest
 from comport.department.models import Department, Extractor
+from comport.data.models import OfficerInvolvedShooting
 from testclient.JSON_test_client import JSONTestClient
+from comport.data.cleaners import Cleaners
 
 @pytest.mark.usefixtures('db')
 class TestHeartbeat:
@@ -57,8 +59,34 @@ class TestHeartbeat:
 
         # Get a generated list of OIS descriptions from the JSON test client
         test_client = JSONTestClient()
-        ois_data = {'month': 0, 'year': 0, 'data': test_client.make_ois(count=1)}
+        ois_count = 1
+        ois_data = test_client.make_ois(count=ois_count)
         # post the json to the OIS URL
-        response = testapp.post_json("/data/OIS", params=ois_data)
+        response = testapp.post_json("/data/OIS", params={'month': 0, 'year': 0, 'data': ois_data})
+
         # assert that we got the expected reponse
         assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == ois_count
+
+        # check the ois incident in the database against the data that was sent
+        sent_ois = ois_data[0]
+        check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
+        assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
+        assert check_ois.division == Cleaners.capitalize(sent_ois['division'])
+        assert check_ois.precinct == Cleaners.capitalize(sent_ois['precinct'])
+        assert check_ois.shift == Cleaners.capitalize(sent_ois['shift'])
+        assert check_ois.beat == Cleaners.capitalize(sent_ois['beat'])
+        assert check_ois.disposition == sent_ois['disposition']
+        assert check_ois.resident_race == Cleaners.race(sent_ois['residentRace'])
+        assert check_ois.resident_sex == Cleaners.sex(sent_ois['residentSex'])
+        assert check_ois.resident_age == sent_ois['residentAge']
+        assert check_ois.resident_weapon_used == Cleaners.resident_weapon_used(sent_ois['residentWeaponUsed'])
+        assert check_ois.resident_condition == sent_ois['residentCondition']
+        assert check_ois.officer_identifier == sent_ois['officerIdentifier']
+        assert check_ois.officer_weapon_used == sent_ois['officerForceType']
+        assert check_ois.officer_race == Cleaners.race(sent_ois['officerRace'])
+        assert check_ois.officer_sex == Cleaners.sex(sent_ois['officerSex'])
+        assert check_ois.officer_age == sent_ois['officerAge']
+        assert check_ois.officer_years_of_service == sent_ois['officerYearsOfService']
+        assert check_ois.officer_condition == sent_ois['officerCondition']
