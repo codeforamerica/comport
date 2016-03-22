@@ -93,25 +93,26 @@ class JSONTestClient(object):
             allegation = self.generate_allegation()
             complaints.append({
                 "opaqueId": random_string(10),
+                "serviceType": self.generate_service_type(),
+                "source": self.generate_source(),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
                 "division": assignment[0],
                 "precinct": assignment[1],
                 "shift": assignment[2],
                 "beat": assignment[3],
-                "serviceType": self.generate_service_type(),
-                "source": self.generate_source(),
                 "allegationType": allegation[0],
                 "allegation": allegation[1],
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
+                "officerIdentifier": random_string(10),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
-                "officerIdentifier": random_string(10),
                 "officerYearsOfService": random.randint(0, 27)
             })
+
         return complaints
 
     def make_uof(self, count=1000):
@@ -121,6 +122,7 @@ class JSONTestClient(object):
             incidents.append({
                 "opaqueId": random_string(10),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "occuredTime": "",
                 "division": assignment[0],
                 "precinct": assignment[1],
                 "shift": assignment[2],
@@ -140,7 +142,7 @@ class JSONTestClient(object):
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier":  random_string(10),
+                "officerIdentifier": random_string(10),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
@@ -158,6 +160,7 @@ class JSONTestClient(object):
                 "opaqueId": random_string(10),
                 "serviceType": self.generate_service_type(),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "occuredTime": "",
                 "division": assignment[0],
                 "precinct": assignment[1],
                 "shift": assignment[2],
@@ -166,10 +169,10 @@ class JSONTestClient(object):
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
-                "residentWeaponUsed" : self.generate_cit_weapon_used(),
+                "residentWeaponUsed": self.generate_ois_resident_force_type(),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier":  random_string(10),
-                "officerWeaponUsed" : self.generate_ois_weapon_used(),
+                "officerIdentifier": random_string(10),
+                "officerForceType": self.generate_ois_officer_force_type(),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
@@ -577,11 +580,11 @@ class JSONTestClient(object):
             "Chemical spray", "Small Minor Scrapes", "Broken Tooth"
         ])
 
-    def generate_cit_weapon_used(self):
+    def generate_ois_resident_force_type(self):
         return random.choice(["Suspect - Handgun","Suspect - Misc Weapon",
         "Suspect - Unarmed","Suspect - Knife","Suspect - Rifle"])
 
-    def generate_ois_weapon_used(self):
+    def generate_ois_officer_force_type(self):
         return random.choice(["Duty Handgun","IMPD - Duty Handgun","IMPD - Shotgun",
             "IMPD - Patrol Rifle","Personal Patrol Rifle","Personal Shotgun"
         ])
