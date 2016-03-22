@@ -82,7 +82,7 @@ class TestUser:
         u.save()
         assert role in u.roles
 
-    def test__many_roles(self):
+    def test_many_roles(self):
         admin_role = Role(name='admin')
         admin_role.save()
         other_role = Role(name='other')

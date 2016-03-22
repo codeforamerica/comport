@@ -86,9 +86,9 @@ class JSONTestClient(object):
             if p.status_code != 200:
                 print("error: %s" % p.text.encode("utf-8", "ignore"))
 
-    def make_complaints(self):
+    def make_complaints(self, count=1000):
         complaints = []
-        for x in range(0, 1000):
+        for x in range(0, count):
             assignment = self.generate_assignment()
             allegation = self.generate_allegation()
             complaints.append({
@@ -114,9 +114,9 @@ class JSONTestClient(object):
             })
         return complaints
 
-    def make_uof(self):
+    def make_uof(self, count=1000):
         incidents = []
-        for x in range(0, 1000):
+        for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
                 "opaqueId": random_string(10),
@@ -150,9 +150,9 @@ class JSONTestClient(object):
 
         return incidents
 
-    def make_ois(self):
+    def make_ois(self, count=1000):
         incidents = []
-        for x in range(0, 1000):
+        for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
                 "opaqueId": random_string(10),

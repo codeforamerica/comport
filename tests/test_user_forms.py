@@ -33,7 +33,7 @@ class TestRegisterForm:
         assert 'Invite Code not recognized.' in form.invite_code.errors
 
     def test_validate_invite_code_used_already(self, user):
-        department = Department.create(name="dept", load_defaults=False)
+        department = Department.create(name="dept", short_name="DPD", load_defaults=False)
         Invite_Code.create(department_id=department.id, code="code1", used=True)
 
         form = RegisterForm(username='newusername', email='new2@test.test',
@@ -42,7 +42,7 @@ class TestRegisterForm:
         assert 'Invite Code has already been used.' in form.invite_code.errors
 
     def test_validate_success(self, db):
-        department = Department.create(name="dept", load_defaults=False)
+        department = Department.create(name="dept", short_name="DPD", load_defaults=False)
         Invite_Code.create(department_id=department.id, code="code")
         form = RegisterForm(username='newusername', email='new@test.test',
             password='example', confirm='example', invite_code="code")
