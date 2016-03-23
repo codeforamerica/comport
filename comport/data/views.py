@@ -43,16 +43,15 @@ def use_of_force():
 
     for incident in j['data']:
 
-        officer_force_type = Cleaners.officer_force_type(
-            incident["officerForceType"])
-        resident_sex = Cleaners.sex(incident["residentSex"])
-        resident_race = Cleaners.race(incident["residentRace"])
-        officer_sex = Cleaners.sex(incident["officerSex"])
-        officer_race = Cleaners.race(incident["officerRace"])
-        precinct = Cleaners.capitalize(incident["precinct"])
         division = Cleaners.capitalize(incident["division"])
+        precinct = Cleaners.capitalize(incident["precinct"])
         shift = Cleaners.capitalize(incident["shift"])
         beat = Cleaners.capitalize(incident["beat"])
+        officer_force_type = Cleaners.officer_force_type(incident["officerForceType"])
+        resident_race = Cleaners.race(incident["residentRace"])
+        resident_sex = Cleaners.sex(incident["residentSex"])
+        officer_race = Cleaners.race(incident["officerRace"])
+        officer_sex = Cleaners.sex(incident["officerSex"])
 
         found_incident = UseOfForceIncident.query.filter_by(
             opaque_id=incident["opaqueId"],
