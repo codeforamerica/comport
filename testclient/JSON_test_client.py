@@ -110,7 +110,7 @@ class JSONTestClient(object):
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": random.randint(0, 27)
+                "officerYearsOfService": str(random.randint(0, 27))
             })
 
         return complaints
@@ -146,7 +146,7 @@ class JSONTestClient(object):
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": random.randint(0, 27),
+                "officerYearsOfService": str(random.randint(0, 27)),
                 "officerCondition": self.generate_condition()
             })
 
