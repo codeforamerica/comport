@@ -46,7 +46,8 @@ CAPITALIZE_LIST = [
     "DWI",
     "VBLETA",
     "ODE",
-    "PC"
+    "PC",
+    "CPCO"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
