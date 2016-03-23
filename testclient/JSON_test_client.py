@@ -1,9 +1,5 @@
-import csv
 import requests
-import json
 import hashlib
-import glob
-from titlecase import titlecase
 from datetime import datetime
 from comport.department.models import Extractor
 from comport.utils import random_string, random_date
@@ -86,27 +82,36 @@ class JSONTestClient(object):
             if p.status_code != 200:
                 print("error: %s" % p.text.encode("utf-8", "ignore"))
 
+    def hash(self, text, key="bildad"):
+        ''' Return an MD5 hash of the combined text and key.
+        '''
+        if not text or not key:
+            return ""
+        m = hashlib.md5()
+        m.update((str(text) + key).encode('utf-8'))
+        return m.hexdigest()
+
     def make_complaints(self, count=1000):
         complaints = []
         for x in range(0, count):
             assignment = self.generate_assignment()
             allegation = self.generate_allegation()
             complaints.append({
-                "opaqueId": random_string(10),
+                "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
                 "source": self.generate_source(),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
-                "allegationType": allegation[0],
-                "allegation": allegation[1],
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
+                "allegationType": allegation["allegationType"],
+                "allegation": allegation["allegation"],
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
-                "officerIdentifier": random_string(10),
+                "officerIdentifier": self.hash(random_string(10)),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
@@ -120,13 +125,13 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
-                "opaqueId": random_string(10),
+                "opaqueId": self.hash(random_string(10)),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
                 "occuredTime": "",
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
                 "disposition": self.generate_disposition(),
                 "officerForceType": self.generate_officer_force_type(),
                 "useOfForceReason": self.generate_use_of_force_reason(),
@@ -142,7 +147,7 @@ class JSONTestClient(object):
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier": random_string(10),
+                "officerIdentifier": self.hash(random_string(10)),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
@@ -157,21 +162,21 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
-                "opaqueId": random_string(10),
+                "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
                 "occuredTime": "",
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
                 "residentWeaponUsed": self.generate_ois_resident_force_type(),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier": random_string(10),
+                "officerIdentifier": self.hash(random_string(10)),
                 "officerForceType": self.generate_ois_officer_force_type(),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
@@ -224,7 +229,7 @@ class JSONTestClient(object):
              ])
 
     def generate_allegation(self):
-        return random.choice([
+        allegation = random.choice([
             ['Use of Force', 'Unreasonable Force (Hands, Fists, Feet)'],
             ['Violation of Any Rule',
              'Failure to obey all orders, rules, regulations, policies, and SOPs'],
@@ -366,6 +371,7 @@ class JSONTestClient(object):
             ['Citizen Interaction', 'Failure to request interpreter'],
             [None, None]
         ])
+        return {"allegationType": allegation[0], "allegation": allegation[1]}
 
     def generate_source(self):
         return random.choice(["CPCO (Formal)", "CPCO (Informal)"])
@@ -377,7 +383,7 @@ class JSONTestClient(object):
         )
 
     def generate_assignment(self):
-        return random.choice([
+        assignment = random.choice([
             ["Chiefs Staff Division", "Court Liaison", "", ""],
             ["Investigative Division", "Crime Prevention", "C Shift", ""],
             ["Investigative Division", "Detective Bureau",
@@ -484,8 +490,8 @@ class JSONTestClient(object):
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None]
-        ]
-        )
+        ])
+        return {"division": assignment[0], "precinct": assignment[1], "shift": assignment[2], "beat": assignment[3]}
 
     def generate_officer_force_type(self):
         return random.choice(
@@ -581,10 +587,7 @@ class JSONTestClient(object):
         ])
 
     def generate_ois_resident_force_type(self):
-        return random.choice(["Suspect - Handgun","Suspect - Misc Weapon",
-        "Suspect - Unarmed","Suspect - Knife","Suspect - Rifle"])
+        return random.choice(["Suspect - Handgun", "Suspect - Misc Weapon", "Suspect - Unarmed", "Suspect - Knife", "Suspect - Rifle"])
 
     def generate_ois_officer_force_type(self):
-        return random.choice(["Duty Handgun","IMPD - Duty Handgun","IMPD - Shotgun",
-            "IMPD - Patrol Rifle","Personal Patrol Rifle","Personal Shotgun"
-        ])
+        return random.choice(["Duty Handgun", "IMPD - Duty Handgun", "IMPD - Shotgun", "IMPD - Patrol Rifle", "Personal Patrol Rifle", "Personal Shotgun"])
