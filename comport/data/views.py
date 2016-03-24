@@ -299,6 +299,8 @@ def complaints():
         found_incident.department_id = department_id,
         found_incident.opaque_id = incident["opaqueId"],
         found_incident.occured_date = occured_date,
+        found_incident.service_type = incident["serviceType"],
+        found_incident.source = incident["source"],
         found_incident.division = incident["division"],
         found_incident.precinct = incident["precinct"],
         found_incident.shift = incident["shift"],
