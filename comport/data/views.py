@@ -113,8 +113,7 @@ def use_of_force():
         found_incident.arrest_charges = incident["arrestCharges"],
         found_incident.resident_weapon_used = incident["residentWeaponUsed"],
         found_incident.resident_injured = incident["residentInjured"],
-        found_incident.resident_hospitalized = incident[
-            "residentHospitalized"],
+        found_incident.resident_hospitalized = incident["residentHospitalized"],
         found_incident.officer_injured = incident["officerInjured"],
         found_incident.officer_hospitalized = incident["officerHospitalized"],
         found_incident.resident_race = resident_race,
@@ -125,8 +124,7 @@ def use_of_force():
         found_incident.officer_race = officer_race,
         found_incident.officer_sex = officer_sex,
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service = incident[
-            "officerYearsOfService"],
+        found_incident.officer_years_of_service = incident["officerYearsOfService"],
         found_incident.officer_condition = incident["officerCondition"]
         found_incident.save()
         updated_rows += 1
@@ -204,8 +202,8 @@ def officer_involved_shooting():
         found_incident.shift = shift,
         found_incident.beat = beat,
         found_incident.disposition = incident["disposition"],
-        found_incident.resident_sex = resident_sex,
         found_incident.resident_race = resident_race,
+        found_incident.resident_sex = resident_sex,
         found_incident.resident_age = incident["residentAge"],
         found_incident.resident_weapon_used = resident_weapon_used,
         found_incident.resident_condition = incident["residentCondition"],
@@ -214,8 +212,7 @@ def officer_involved_shooting():
         found_incident.officer_race = officer_race,
         found_incident.officer_sex = officer_sex,
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service = parse_int(
-            incident["officerYearsOfService"]),
+        found_incident.officer_years_of_service = parse_int(incident["officerYearsOfService"]),
         found_incident.officer_condition = incident["officerCondition"],
         found_incident.census_tract = None
         found_incident.save()
@@ -316,8 +313,7 @@ def complaints():
         found_incident.officer_race = officer_race,
         found_incident.officer_sex = officer_sex,
         found_incident.officer_age = incident["officerAge"],
-        found_incident.officer_years_of_service = incident[
-            "officerYearsOfService"],
+        found_incident.officer_years_of_service = incident["officerYearsOfService"],
         found_incident.census_tract = None
         found_incident.save()
         updated_rows += 1
