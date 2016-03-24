@@ -91,6 +91,109 @@ class TestHeartbeat:
         assert check_complaint.officer_age == sent_complaint['officerAge']
         assert check_complaint.officer_years_of_service == sent_complaint['officerYearsOfService']
 
+    def test_update_complaint_data(self, testapp):
+        ''' Updated complaint data from the extractor is processed as expected.
+        '''
+        # Set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of complaint descriptions from the JSON test client
+        test_client = JSONTestClient()
+        complaint_data = test_client.get_prebaked_complaints(last=1)
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == 1
+
+        # Get the second pre-baked complaint
+        updated_complaint_data = test_client.get_prebaked_complaints(first=1, last=2)
+        # Swap in the opaque ID from the first complaint
+        updated_complaint_data[0]["opaqueId"] = complaint_data[0]["opaqueId"]
+        # The complaint won't be a match unless these fields are the same
+        updated_complaint_data[0]["allegationType"] = complaint_data[0]["allegationType"]
+        updated_complaint_data[0]["allegation"] = complaint_data[0]["allegation"]
+        updated_complaint_data[0]["officerIdentifier"] = complaint_data[0]["officerIdentifier"]
+        updated_complaint_data[0]["residentRace"] = complaint_data[0]["residentRace"]
+        updated_complaint_data[0]["residentSex"] = complaint_data[0]["residentSex"]
+        updated_complaint_data[0]["residentAge"] = complaint_data[0]["residentAge"]
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': updated_complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 1
+        assert response.json_body['added'] == 0
+
+        # There's only one complaint in the database.
+        all_complaints = CitizenComplaint.query.all()
+        assert len(all_complaints) == 1
+
+        # check the complaint incident in the database against the updated data that was sent
+        sent_complaint = Cleaners.capitalize_incident(updated_complaint_data[0])
+        check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
+        assert check_complaint.division == sent_complaint['division']
+        assert check_complaint.precinct == sent_complaint['precinct']
+        assert check_complaint.shift == sent_complaint['shift']
+        assert check_complaint.beat == sent_complaint['beat']
+        assert check_complaint.disposition == sent_complaint['disposition']
+        assert check_complaint.service_type == sent_complaint['serviceType']
+        assert check_complaint.source == sent_complaint['source']
+        assert check_complaint.allegation_type == sent_complaint['allegationType']
+        assert check_complaint.allegation == sent_complaint['allegation']
+        assert check_complaint.resident_race == Cleaners.race(sent_complaint['residentRace'])
+        assert check_complaint.resident_sex == Cleaners.sex(sent_complaint['residentSex'])
+        assert check_complaint.resident_age == sent_complaint['residentAge']
+        assert check_complaint.officer_identifier == sent_complaint['officerIdentifier']
+        assert check_complaint.officer_race == Cleaners.race(sent_complaint['officerRace'])
+        assert check_complaint.officer_sex == Cleaners.sex(sent_complaint['officerSex'])
+        assert check_complaint.officer_age == sent_complaint['officerAge']
+        assert check_complaint.officer_years_of_service == sent_complaint['officerYearsOfService']
+
+    def test_post_complaint_data_near_match_does_not_update(self, testapp):
+        ''' Complaint data with the same ID but different details creates a new record.
+        '''
+        # Set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of complaint descriptions from the JSON test client
+        test_client = JSONTestClient()
+        complaint_data = test_client.get_prebaked_complaints(last=1)
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == 1
+
+        # Get the second pre-baked complaint
+        updated_complaint_data = test_client.get_prebaked_complaints(first=1, last=2)
+        # Swap in the opaque ID from the first complaint
+        updated_complaint_data[0]["opaqueId"] = complaint_data[0]["opaqueId"]
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': updated_complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == 1
+
+        # There are two complaints in the database.
+        all_complaints = CitizenComplaint.query.all()
+        assert len(all_complaints) == 2
+
     def test_post_uof_data(self, testapp):
         ''' New UOF data from the extractor is processed as expected.
         '''
