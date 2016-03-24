@@ -60,7 +60,7 @@ class TestHeartbeat:
         # Get a generated list of complaint descriptions from the JSON test client
         test_client = JSONTestClient()
         complaint_count = 1
-        complaint_data = test_client.get_prebaked_complaints(count=complaint_count)
+        complaint_data = test_client.get_prebaked_complaints(last=complaint_count)
         # post the json to the complaint URL
         response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': complaint_data})
 
@@ -104,7 +104,7 @@ class TestHeartbeat:
         # Get a generated list of UOF descriptions from the JSON test client
         test_client = JSONTestClient()
         uof_count = 1
-        uof_data = test_client.get_prebaked_uof(count=uof_count)
+        uof_data = test_client.get_prebaked_uof(last=uof_count)
         # post the json to the UOF URL
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': uof_data})
 
@@ -156,7 +156,7 @@ class TestHeartbeat:
         # Get a generated list of OIS descriptions from the JSON test client
         test_client = JSONTestClient()
         ois_count = 1
-        ois_data = test_client.get_prebaked_ois(count=ois_count)
+        ois_data = test_client.get_prebaked_ois(last=ois_count)
         # post the json to the OIS URL
         response = testapp.post_json("/data/OIS", params={'month': 0, 'year': 0, 'data': ois_data})
 
