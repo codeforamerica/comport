@@ -1,9 +1,5 @@
-import csv
 import requests
-import json
 import hashlib
-import glob
-from titlecase import titlecase
 from datetime import datetime
 from comport.department.models import Extractor
 from comport.utils import random_string, random_date
@@ -86,32 +82,42 @@ class JSONTestClient(object):
             if p.status_code != 200:
                 print("error: %s" % p.text.encode("utf-8", "ignore"))
 
+    def hash(self, text, key="bildad"):
+        ''' Return an MD5 hash of the combined text and key.
+        '''
+        if not text or not key:
+            return ""
+        m = hashlib.md5()
+        m.update((str(text) + key).encode('utf-8'))
+        return m.hexdigest()
+
     def make_complaints(self, count=1000):
         complaints = []
         for x in range(0, count):
             assignment = self.generate_assignment()
             allegation = self.generate_allegation()
             complaints.append({
-                "opaqueId": random_string(10),
-                "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
+                "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
                 "source": self.generate_source(),
-                "allegationType": allegation[0],
-                "allegation": allegation[1],
+                "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
+                "allegationType": allegation["allegationType"],
+                "allegation": allegation["allegation"],
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
+                "officerIdentifier": self.hash(random_string(10)),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
-                "officerIdentifier": random_string(10),
-                "officerYearsOfService": random.randint(0, 27)
+                "officerYearsOfService": str(random.randint(0, 27))
             })
+
         return complaints
 
     def make_uof(self, count=1000):
@@ -119,12 +125,13 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
-                "opaqueId": random_string(10),
+                "opaqueId": self.hash(random_string(10)),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
+                "occuredTime": "",
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
                 "disposition": self.generate_disposition(),
                 "officerForceType": self.generate_officer_force_type(),
                 "useOfForceReason": self.generate_use_of_force_reason(),
@@ -140,11 +147,11 @@ class JSONTestClient(object):
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier":  random_string(10),
+                "officerIdentifier": self.hash(random_string(10)),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": random.randint(0, 27),
+                "officerYearsOfService": str(random.randint(0, 27)),
                 "officerCondition": self.generate_condition()
             })
 
@@ -155,21 +162,22 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
-                "opaqueId": random_string(10),
+                "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
                 "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
-                "division": assignment[0],
-                "precinct": assignment[1],
-                "shift": assignment[2],
-                "beat": assignment[3],
+                "occuredTime": "",
+                "division": assignment["division"],
+                "precinct": assignment["precinct"],
+                "shift": assignment["shift"],
+                "beat": assignment["beat"],
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
                 "residentAge": str(random.randint(15, 70)),
-                "residentWeaponUsed" : self.generate_cit_weapon_used(),
+                "residentWeaponUsed": self.generate_ois_resident_force_type(),
                 "residentCondition": self.generate_condition(),
-                "officerIdentifier":  random_string(10),
-                "officerWeaponUsed" : self.generate_ois_weapon_used(),
+                "officerIdentifier": self.hash(random_string(10)),
+                "officerForceType": self.generate_ois_officer_force_type(),
                 "officerRace": self.generate_race(),
                 "officerSex": self.generate_sex(),
                 "officerAge": str(random.randint(23, 50)),
@@ -221,7 +229,7 @@ class JSONTestClient(object):
              ])
 
     def generate_allegation(self):
-        return random.choice([
+        allegation = random.choice([
             ['Use of Force', 'Unreasonable Force (Hands, Fists, Feet)'],
             ['Violation of Any Rule',
              'Failure to obey all orders, rules, regulations, policies, and SOPs'],
@@ -363,6 +371,7 @@ class JSONTestClient(object):
             ['Citizen Interaction', 'Failure to request interpreter'],
             [None, None]
         ])
+        return {"allegationType": allegation[0], "allegation": allegation[1]}
 
     def generate_source(self):
         return random.choice(["CPCO (Formal)", "CPCO (Informal)"])
@@ -374,7 +383,7 @@ class JSONTestClient(object):
         )
 
     def generate_assignment(self):
-        return random.choice([
+        assignment = random.choice([
             ["Chiefs Staff Division", "Court Liaison", "", ""],
             ["Investigative Division", "Crime Prevention", "C Shift", ""],
             ["Investigative Division", "Detective Bureau",
@@ -481,8 +490,8 @@ class JSONTestClient(object):
             [None, None, None, None],
             [None, None, None, None],
             [None, None, None, None]
-        ]
-        )
+        ])
+        return {"division": assignment[0], "precinct": assignment[1], "shift": assignment[2], "beat": assignment[3]}
 
     def generate_officer_force_type(self):
         return random.choice(
@@ -577,11 +586,35 @@ class JSONTestClient(object):
             "Chemical spray", "Small Minor Scrapes", "Broken Tooth"
         ])
 
-    def generate_cit_weapon_used(self):
-        return random.choice(["Suspect - Handgun","Suspect - Misc Weapon",
-        "Suspect - Unarmed","Suspect - Knife","Suspect - Rifle"])
+    def generate_ois_resident_force_type(self):
+        return random.choice(["Suspect - Handgun", "Suspect - Misc Weapon", "Suspect - Unarmed", "Suspect - Knife", "Suspect - Rifle"])
 
-    def generate_ois_weapon_used(self):
-        return random.choice(["Duty Handgun","IMPD - Duty Handgun","IMPD - Shotgun",
-            "IMPD - Patrol Rifle","Personal Patrol Rifle","Personal Shotgun"
-        ])
+    def generate_ois_officer_force_type(self):
+        return random.choice(["Duty Handgun", "IMPD - Duty Handgun", "IMPD - Shotgun", "IMPD - Patrol Rifle", "Personal Patrol Rifle", "Personal Shotgun"])
+
+    def get_prebaked_complaints(self, first=0, last=5):
+        ''' Return at most five non-random complaints.
+        '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [{'opaqueId': 'd716e65e8efa304d7b80a36bbd55f664', 'officerRace': 'Other', 'shift': 'Auto Theft Unit', 'officerIdentifier': '90607ab31c2114e987f7e458680a8f15', 'occuredDate': '2014-08-20 0:0:00', 'officerAge': '32', 'precinct': 'Detective Bureau', 'officerSex': None, 'serviceType': None, 'division': 'Investigative Division', 'allegation': None, 'officerYearsOfService': '4', 'residentSex': 'Female', 'beat': 'Rotating', 'allegationType': None, 'residentAge': '56', 'source': 'CPCO (Informal)', 'residentRace': 'Black', 'disposition': 'Within policy'}, {'opaqueId': 'b078aa4a6c2b2c40febc1841e9e3fdf0', 'officerRace': 'Bi-Racial', 'shift': 'Day Beats', 'officerIdentifier': 'a6bc45622d6686b8d107a3b5663c426c', 'occuredDate': '2014-11-19 0:0:00', 'officerAge': '34', 'precinct': 'Second Precinct', 'officerSex': 'Male', 'serviceType': 'Code Inforcement', 'division': 'Operational Division', 'allegation': '', 'officerYearsOfService': '9', 'residentSex': 'Male', 'beat': 'Beat 20', 'allegationType': 'Neglect of Duty', 'residentAge': '36', 'source': 'CPCO (Formal)', 'residentRace': 'Hispanic', 'disposition': 'Unfounded/False'}, {'opaqueId': '950919eb39e0172d0029feb2db469d23', 'officerRace': None, 'shift': 'Auto Theft Unit', 'officerIdentifier': '6a98e68a80c7d07e17b15541d030769c', 'occuredDate': '2015-06-01 0:0:00', 'officerAge': '50', 'precinct': 'Detective Bureau', 'officerSex': 'Female', 'serviceType': 'Interviewing', 'division': 'Investigative Division', 'allegation': 'Failure to complete an incident report when necessary', 'officerYearsOfService': '27', 'residentSex': 'Male', 'beat': 'Rotating', 'allegationType': 'Citizen Interaction', 'residentAge': '51', 'source': 'CPCO (Informal)', 'residentRace': None, 'disposition': 'Not within Policy'}, {'opaqueId': '6155d7bdd819fa0a9c987a7f31fe03b4', 'officerRace': 'Black', 'shift': 'A Shift', 'officerIdentifier': 'ab83e472eed9f0c577bf022e28428920', 'occuredDate': '2014-01-17 0:0:00', 'officerAge': '47', 'precinct': 'First Precinct', 'officerSex': 'Male', 'serviceType': 'Interviewing', 'division': 'Operational Division', 'allegation': 'Taking official action in a personal dispute or incident involving a frilast or relative while off duty', 'officerYearsOfService': '18', 'residentSex': None, 'beat': 'X24 Zone', 'allegationType': 'Breach of Discipline', 'residentAge': '26', 'source': 'CPCO (Formal)', 'residentRace': 'White', 'disposition': None}, {'opaqueId': '6f334db17957ed14a8c72f982e2320c6', 'officerRace': 'Hispanic', 'shift': 'B Shift', 'officerIdentifier': 'b73d8ef8e3d890b8bea93eb0ddd7fb46', 'occuredDate': '2014-05-07 0:0:00', 'officerAge': '47', 'precinct': 'Crime Prevention', 'officerSex': None, 'serviceType': 'Interviewing', 'division': 'Operational Division', 'allegation': 'Mistreatment of person in custody', 'officerYearsOfService': '5', 'residentSex': None, 'beat': 'X27 Zone', 'allegationType': 'Use of Force', 'residentAge': '16', 'source': 'CPCO (Formal)', 'residentRace': 'Bi-Racial', 'disposition': 'Sustained'}][first:last]
+
+    def get_prebaked_uof(self, first=0, last=5):
+        ''' Return at most five non-random uof incidents.
+        '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [{'opaqueId': 'e61040650aeab567fa2ec83a89e8ff4a', 'officerAge': '50', 'residentHospitalized': False, 'precinct': None, 'useOfForceReason': 'Assaulting Citizen(s)', 'officerSex': 'Male', 'residentAge': '40', 'division': None, 'officerCondition': 'abraisons', 'officerYearsOfService': '27', 'residentWeaponUsed': 'Suspect - Unarmed', 'residentSex': 'Male', 'residentRace': 'Bi-Racial', 'occuredTime': '', 'residentCondition': 'redness and skin damage', 'residentInjured': None, 'officerRace': 'White ', 'shift': None, 'occuredDate': '2015-06-26 0:0:00', 'officerForceType': 'Body Weight Leverage', 'beat': None, 'serviceType': None, 'arrestMade': True, 'arrestCharges': 'Possession of Controlled Substance', 'officerInjured': None, 'officerIdentifier': 'a571abbed982bb06432c995d4095ed23', 'officerHospitalized': None, 'disposition': 'Unfounded/Exonerated'}, {'opaqueId': '66869c0f93eb973ac3a466130b344e1b', 'officerAge': '30', 'residentHospitalized': None, 'precinct': 'First Precinct', 'useOfForceReason': 'Combative Suspect', 'officerSex': 'Female', 'residentAge': '59', 'division': 'Operational Division', 'officerCondition': 'minor scrape', 'officerYearsOfService': '8', 'residentWeaponUsed': '', 'residentSex': 'Female', 'residentRace': 'Hispanic', 'occuredTime': '', 'residentCondition': 'head injury', 'residentInjured': True, 'officerRace': None, 'shift': 'A Shift', 'occuredDate': '2014-10-19 0:0:00', 'officerForceType': 'Personal CS/OC spray', 'beat': 'X20 Zone', 'serviceType': 'Arresting', 'arrestMade': False, 'arrestCharges': None, 'officerInjured': True, 'officerIdentifier': '88e632a5983b08d9ae472cf494349b53', 'officerHospitalized': True, 'disposition': 'Not Sustained'}, {'opaqueId': '51a82ea9f6365b5bf26521390fb62b24', 'officerAge': '31', 'residentHospitalized': True, 'precinct': 'First Precinct', 'useOfForceReason': None, 'officerSex': None, 'residentAge': '28', 'division': 'Operational Bureau', 'officerCondition': 'Unconsciousness', 'officerYearsOfService': '19', 'residentWeaponUsed': '', 'residentSex': 'Female', 'residentRace': 'White', 'occuredTime': '', 'residentCondition': 'complaint of pain', 'residentInjured': False, 'officerRace': 'Other', 'shift': 'C Shift', 'occuredDate': '2015-03-20 0:0:00', 'officerForceType': 'Physical-Joint/Pressure', 'beat': 'X25 Zone', 'serviceType': 'Interviewing', 'arrestMade': True, 'arrestCharges': 'Residential Entry', 'officerInjured': True, 'officerIdentifier': 'd049665fe632ae94dfb2253601e681ef', 'officerHospitalized': None, 'disposition': 'Sustained'}, {'opaqueId': '369e13f2efc0af97e3a57efc42c75480', 'officerAge': '29', 'residentHospitalized': False, 'precinct': 'Third Precinct', 'useOfForceReason': 'Fleeing', 'officerSex': 'Male', 'residentAge': '58', 'division': 'Operational Division', 'officerCondition': 'TASER PROBE HITS', 'officerYearsOfService': '25', 'residentWeaponUsed': '', 'residentSex': None, 'residentRace': 'Hispanic', 'occuredTime': '', 'residentCondition': 'complaint of pain', 'residentInjured': None, 'officerRace': None, 'shift': 'B Shift', 'occuredDate': '2014-05-01 0:0:00', 'officerForceType': 'Personal CS/OC spray', 'beat': 'X24 Zone', 'serviceType': 'Transporting', 'arrestMade': None, 'arrestCharges': 'Public Indecency', 'officerInjured': True, 'officerIdentifier': 'bf9304c06e6fa120aacad084a7db78f2', 'officerHospitalized': True, 'disposition': 'Within policy'}, {'opaqueId': 'a6d732ffd6130bc78dd7dd6376d23df1', 'officerAge': '45', 'residentHospitalized': None, 'precinct': 'Detective Bureau', 'useOfForceReason': None, 'officerSex': 'Female', 'residentAge': '55', 'division': 'Investigative Division', 'officerCondition': 'Small puncture from taser', 'officerYearsOfService': '25', 'residentWeaponUsed': '', 'residentSex': 'Female', 'residentRace': 'Hispanic', 'occuredTime': '', 'residentCondition': 'Taser prongs', 'residentInjured': False, 'officerRace': 'Asian', 'shift': 'Auto Theft Unit', 'occuredDate': '2014-07-22 0:0:00', 'officerForceType': 'Handgun', 'beat': 'Off Duty', 'serviceType': 'Transporting', 'arrestMade': False, 'arrestCharges': 'Public Intoxication (MB)', 'officerInjured': False, 'officerIdentifier': '981caf4ff6a430a44e6c0c957b31f281', 'officerHospitalized': False, 'disposition': 'Unfounded/Not Involved'}][first:last]
+
+    def get_prebaked_ois(self, first=0, last=5):
+        ''' Return at most five non-random ois incidents.
+        '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [{'opaqueId': 'f732197d9f28d25396873573e7067629', 'officerRace': 'White', 'shift': 'Auto Theft Unit', 'occuredDate': '2015-08-09 0:0:00', 'residentCondition': 'Puncture from Tazer prong', 'officerForceType': 'Duty Handgun', 'precinct': 'Detective Bureau', 'officerSex': 'Female', 'serviceType': 'Transporting', 'division': 'Investigative Division', 'officerAge': '36', 'officerCondition': 'pepper spray', 'officerYearsOfService': 27, 'residentWeaponUsed': 'Suspect - Unarmed', 'beat': 'Evenings', 'residentSex': 'Male', 'residentAge': '26', 'officerIdentifier': '5182b3dd18fa4e745678a2f529bf62c7', 'residentRace': None, 'occuredTime': '', 'disposition': 'Sustained'}, {'opaqueId': '9bc285abcf5741d826387ecb994a62d0', 'officerRace': 'Asian', 'shift': 'C Shift', 'occuredDate': '2015-03-30 0:0:00', 'residentCondition': 'BLEEDING FROM PRIOR FIGHT', 'officerForceType': 'Duty Handgun', 'precinct': 'First Precinct', 'officerSex': 'Male', 'serviceType': None, 'division': 'Operational Bureau', 'officerAge': '32', 'officerCondition': 'oc sprayed', 'officerYearsOfService': 13, 'residentWeaponUsed': 'Suspect - Handgun', 'beat': 'X25 Zone', 'residentSex': None, 'residentAge': '24', 'officerIdentifier': 'd0318d57ca5ff55d27ff7cfb4575cd0a', 'residentRace': 'Asian', 'occuredTime': '', 'disposition': 'Inactivated'}, {'opaqueId': '665db18373624c41d004ea5c4e3df8f9', 'officerRace': 'White', 'shift': 'A Shift', 'occuredDate': '2015-02-20 0:0:00', 'residentCondition': 'Taser Prong entry points', 'officerForceType': 'Duty Handgun', 'precinct': 'Second Precinct', 'officerSex': 'Male', 'serviceType': 'Code Inforcement', 'division': 'Operational Division', 'officerAge': '49', 'officerCondition': 'Major Scrapes', 'officerYearsOfService': 25, 'residentWeaponUsed': 'Suspect - Knife', 'beat': 'Beat 17', 'residentSex': 'Male', 'residentAge': '19', 'officerIdentifier': 'f9a4d4c2050981619f6a296b7eb73793', 'residentRace': None, 'occuredTime': '', 'disposition': 'Unfounded/Unwarranted'}, {'opaqueId': 'e14b23c8b5a1d03901291061b611b62e', 'officerRace': 'Unknown', 'shift': 'A Shift', 'occuredDate': '2014-06-07 0:0:00', 'residentCondition': 'abrassion', 'officerForceType': 'IMPD - Shotgun', 'precinct': 'Fourth Precinct', 'officerSex': None, 'serviceType': 'Code Inforcement', 'division': 'Operational Division', 'officerAge': '42', 'officerCondition': 'Shoulder Pain', 'officerYearsOfService': 1, 'residentWeaponUsed': 'Suspect - Misc Weapon', 'beat': 'X24 Zone', 'residentSex': 'Female', 'residentAge': '46', 'officerIdentifier': '796a086d9da3d9a7eecb9289bc9e88c5', 'residentRace': 'Black', 'occuredTime': '', 'disposition': 'Informational Purpose On'}, {'opaqueId': 'b77f4e3b867fa02078acb95aff11001b', 'officerRace': None, 'shift': 'A Shift', 'occuredDate': '2015-02-15 0:0:00', 'residentCondition': 'Swelling', 'officerForceType': 'IMPD - Duty Handgun', 'precinct': 'First Precinct', 'officerSex': None, 'serviceType': 'Arresting', 'division': 'Operational Division', 'officerAge': '47', 'officerCondition': 'prongs from taser cartridge', 'officerYearsOfService': 15, 'residentWeaponUsed': 'Suspect - Rifle', 'beat': 'X20 Zone', 'residentSex': None, 'residentAge': '22', 'officerIdentifier': '3ae9c4d0fb769fa5f295ecdad855b48a', 'residentRace': 'White ', 'occuredTime': '', 'disposition': 'Partially Sustained'}][first:last]
