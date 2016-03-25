@@ -3,13 +3,9 @@
 
 See: http://webtest.readthedocs.org/
 """
-import pytest
 from flask import url_for
-
-
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
-from .factories import UserFactory
 
 
 class TestLoggingIn:

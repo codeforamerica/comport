@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, redirect, url_for, render_template, flash, request, abort
-from comport.utils import flash_errors
+from flask import Blueprint, redirect, url_for, request, abort
 from flask_login import current_user
 from flask.ext.login import login_required
 

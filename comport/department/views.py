@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, redirect, url_for, flash, send_file, Response,abort
-from comport.utils import flash_errors
+from flask import Blueprint, render_template, request, redirect, url_for, flash, Response, abort
 from .models import Department, Extractor
 from comport.data.models import DemographicValue, DenominatorValue
 from flask.ext.login import login_required
 
-from comport.decorators import admin_or_department_required, extractor_auth_required
+from comport.decorators import admin_or_department_required
 import uuid
 import datetime
-import json
-import io
 
 blueprint = Blueprint("department", __name__, url_prefix='/department',
                       static_folder="../static")
 
-#<<<<<<<< ADMIN ENDPOINTS >>>>>>>>>>
+# <<<<<<<< ADMIN ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>")
 @login_required
 @admin_or_department_required()
@@ -52,9 +49,9 @@ def start_extractor(department_id):
             extractor.next_month = request.form["month"]
             extractor.save()
             flash("Extractor started", "info")
-            return redirect(url_for('department.department_dashboard',department_id=department.id))
+            return redirect(url_for('department.department_dashboard', department_id=department.id))
 
-#<<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
+# <<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>/edit/ois")
 @login_required
 @admin_or_department_required()
@@ -92,10 +89,10 @@ def edit_demographics(department_id):
     return render_template(
         "department/demographics.html",
         department=department,
-        department_values= department.get_raw_department_demographics(),
-        city_values= department.get_raw_city_demographics())
+        department_values=department.get_raw_department_demographics(),
+        city_values=department.get_raw_city_demographics())
 
-@blueprint.route("/<int:department_id>/demographicValue/create",methods=["POST"])
+@blueprint.route("/<int:department_id>/demographicValue/create", methods=["POST"])
 @login_required
 @admin_or_department_required()
 def new_demographic_row(department_id):
@@ -107,13 +104,13 @@ def new_demographic_row(department_id):
         department_id=department_id,
         race=request.form["race"],
         count=int(request.form["count"]),
-        department_value=request.form["department_or_city"]=="department")
+        department_value=request.form["department_or_city"] == "department")
 
     return redirect(url_for(
         'department.edit_demographics', department_id=department_id
     ))
 
-@blueprint.route("/<int:department_id>/demographicValue/<int:value_id>/delete",methods=["POST"])
+@blueprint.route("/<int:department_id>/demographicValue/<int:value_id>/delete", methods=["POST"])
 @login_required
 @admin_or_department_required()
 def delete_demographic_row(department_id, value_id):
@@ -139,10 +136,10 @@ def edit_denominators(department_id):
     return render_template(
         "department/denominators.html",
         department=department,
-        denominator_values= department.denominator_values
-        )
+        denominator_values=department.denominator_values
+    )
 
-@blueprint.route("/<int:department_id>/denominatorValue/create",methods=["POST"])
+@blueprint.route("/<int:department_id>/denominatorValue/create", methods=["POST"])
 @login_required
 @admin_or_department_required()
 def new_denominator_row(department_id):
@@ -155,13 +152,13 @@ def new_denominator_row(department_id):
         month=int(request.form["month"]),
         year=int(request.form["year"]),
         officers_out_on_service=int(request.form["officersOutOnService"])
-        )
+    )
 
     return redirect(url_for(
         'department.edit_denominators', department_id=department_id
     ))
 
-@blueprint.route("/<int:department_id>/denominatorValue/<int:value_id>/delete",methods=["POST"])
+@blueprint.route("/<int:department_id>/denominatorValue/<int:value_id>/delete", methods=["POST"])
 @login_required
 @admin_or_department_required()
 def delete_denominator_row(department_id, value_id):
@@ -177,7 +174,7 @@ def delete_denominator_row(department_id, value_id):
         'department.edit_denominators', department_id=department_id
     ))
 
-@blueprint.route("/<int:department_id>/edit/index",methods=["GET","POST"])
+@blueprint.route("/<int:department_id>/edit/index", methods=["GET", "POST"])
 @login_required
 @admin_or_department_required()
 def edit_index(department_id):
@@ -187,7 +184,7 @@ def edit_index(department_id):
 
     return render_template("department/site/index.html", department=department, chart_blocks=department.get_introduction_blocks(), editing=True)
 
-#<<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
+# <<<<<<<< PREVIEW ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<int:department_id>/preview/ois")
 @login_required
 @admin_or_department_required()
@@ -225,7 +222,7 @@ def preview_index(department_id):
     return render_template("department/site/index.html", chart_blocks=department.get_introduction_blocks(), department=department, editing=False)
 
 
-#<<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
+# <<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/schema/complaints')
 @login_required
 @admin_or_department_required()
@@ -236,7 +233,7 @@ def use_of_force_schema(department_id):
     return render_template("department/site/schema/complaints.html", department=department)
 
 
-#<<<<<<<< DATA ENDPOINTS >>>>>>>>>>
+# <<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
 def use_of_force_csv(department_id):
     department = Department.get_by_id(department_id)
@@ -273,7 +270,7 @@ def demographics_csv(department_id):
     return Response(department.get_demographic_csv(), mimetype="text/csv")
 
 
-#<<<<<<<< PUBLIC ENDPOINTS >>>>>>>>>>
+# <<<<<<<< PUBLIC ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<short_name>/")
 def public_intro(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()

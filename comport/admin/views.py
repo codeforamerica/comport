@@ -17,14 +17,14 @@ blueprint = Blueprint("admin", __name__, url_prefix='/admin',
 @login_required
 @requires_roles(["admin"])
 def admin_dashboard():
-    interesteds=Interested.query.all()
-    invites=Invite_Code.query.filter_by(used=False)
-    users=User.query.filter_by(active=True)
+    interesteds = Interested.query.all()
+    invites = Invite_Code.query.filter_by(used=False)
+    users = User.query.filter_by(active=True)
     extractors = Extractor.query.all()
     departments = Department.query.all()
     return render_template("admin/dashboard.html", interesteds=interesteds, invites=invites, users=users, extractors=extractors, departments=departments)
 
-@blueprint.route("/department/new", methods=["GET", "POST"] )
+@blueprint.route("/department/new", methods=["GET", "POST"])
 @login_required
 @requires_roles(["admin"])
 def add_department():
@@ -38,12 +38,12 @@ def add_department():
             flash_errors(form)
     return render_template("admin/newDepartment.html", form=form)
 
-@blueprint.route("/invite/new", methods=["GET", "POST"] )
+@blueprint.route("/invite/new", methods=["GET", "POST"])
 @login_required
 @requires_roles(["admin"])
 def new_invite_code():
     form = NewInviteForm(request.form)
-    form.department_id.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
+    form.department_id.choices = [(d.id, d.name) for d in Department.query.order_by('name')]
     if request.method == 'POST':
         if form.validate_on_submit():
             invite = Invite_Code.create(department_id=form.department_id.data, code=str(uuid.uuid4()), used=False)
@@ -53,7 +53,7 @@ def new_invite_code():
             flash_errors(form)
     return render_template("admin/newInvite.html", form=form)
 
-@blueprint.route("/user/<int:user_id>/edit", methods=["GET", "POST"] )
+@blueprint.route("/user/<int:user_id>/edit", methods=["GET", "POST"])
 @login_required
 @requires_roles(["admin"])
 def edit_user(user_id):
@@ -62,18 +62,17 @@ def edit_user(user_id):
         abort(404)
 
     form = EditUserForm(request.form, departments=[d.id for d in user.departments])
-    form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
+    form.departments.choices = [(d.id, d.name) for d in Department.query.order_by('name')]
 
     if request.method == 'POST':
-        user.departments = [Department.get_by_id(int(d)) for d in form.departments.data ]
+        user.departments = [Department.get_by_id(int(d)) for d in form.departments.data]
         user.save()
         flash('User updated.', 'info')
         return redirect(url_for('admin.admin_dashboard'))
 
-
     return render_template("admin/editUser.html", form=form, user=user)
 
-@blueprint.route("/user/<int:user_id>/passwordReset", methods=["GET", "POST"] )
+@blueprint.route("/user/<int:user_id>/passwordReset", methods=["GET", "POST"])
 @login_required
 @requires_roles(["admin"])
 def start_password_reset(user_id):
@@ -85,13 +84,12 @@ def start_password_reset(user_id):
         user.password_reset_uuid = str(uuid.uuid4())
         user.save()
         flash('User password reset engaged.', 'info')
-        return redirect(url_for('admin.edit_user',user_id=user_id))
+        return redirect(url_for('admin.edit_user', user_id=user_id))
+
+    return redirect(url_for('admin.edit_user', user_id=user_id))
 
 
-    return redirect(url_for('admin.edit_user',user_id=user_id))
-
-
-@blueprint.route("/extractor/<int:extractor_id>/edit", methods=["GET", "POST"] )
+@blueprint.route("/extractor/<int:extractor_id>/edit", methods=["GET", "POST"])
 @login_required
 @requires_roles(["admin"])
 def edit_extractor(extractor_id):
@@ -100,13 +98,12 @@ def edit_extractor(extractor_id):
         abort(404)
 
     form = EditExtractorForm(request.form, departments=[d.id for d in extractor.departments])
-    form.departments.choices =  [(d.id, d.name) for d in Department.query.order_by('name')]
+    form.departments.choices = [(d.id, d.name) for d in Department.query.order_by('name')]
 
     if request.method == 'POST':
-        extractor.departments = [Department.get_by_id(int(d)) for d in form.departments.data ]
+        extractor.departments = [Department.get_by_id(int(d)) for d in form.departments.data]
         extractor.save()
         flash('Extractor updated.', 'info')
         return redirect(url_for('admin.admin_dashboard'))
-
 
     return render_template("admin/editExtractor.html", form=form, extractor=extractor)

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, url_for, redirect
+from flask import Blueprint, render_template, url_for, redirect, flash, request
 from flask.ext.login import login_required
 from flask_login import current_user
+from comport.public.forms import LoginForm
 
 blueprint = Blueprint("user", __name__, url_prefix='/users',
                       static_folder="../static")
@@ -10,6 +11,7 @@ blueprint = Blueprint("user", __name__, url_prefix='/users',
 @blueprint.route("/")
 @login_required
 def home():
+    form = LoginForm(request.form)
     if current_user.is_admin():
         redirect_url = url_for("admin.admin_dashboard")
         return redirect(redirect_url)

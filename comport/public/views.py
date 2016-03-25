@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import (Blueprint, request, render_template, flash, url_for, abort,
-                    redirect, session)
+from flask import (Blueprint, request, render_template, flash, url_for, abort, redirect)
 from flask.ext.login import login_user, login_required, logout_user
 
 from comport.extensions import login_manager
@@ -10,7 +9,6 @@ from comport.department.models import Department
 from comport.public.forms import LoginForm
 from comport.user.forms import RegisterForm, PasswordResetForm
 from comport.utils import flash_errors
-from comport.database import db
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
@@ -65,10 +63,12 @@ def register():
         invite_code.used = True
         invite_code.save()
 
-        new_user = User.create(username=form.username.data,
-                        email=form.email.data,
-                        password=form.password.data,
-                        active=True)
+        new_user = User.create(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data,
+            active=True
+        )
 
         new_user.departments.append(Department.get_by_id(invite_code.department_id))
 

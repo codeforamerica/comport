@@ -44,7 +44,6 @@ class EditExtractorForm(Form):
         self.department = None
 
 
-
 class NewInviteForm(Form):
     department_id = SelectField("Department", coerce=int)
 

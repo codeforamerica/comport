@@ -19,7 +19,6 @@ class TestUserInheritance:
         extractor.departments.append(department)
         extractor.save()
 
-
         assert extractor.first_department().id == department.id
 
     def test_users_are_not_extractors(self):
@@ -28,7 +27,6 @@ class TestUserInheritance:
         user = User(username='foo', email='foo@bar.com')
         user.departments.append(department)
         user.save()
-
 
         assert Extractor.get_by_id(user.id) == None
         assert Extractor.query.filter_by(username=user.username).first() == None
@@ -65,8 +63,7 @@ class TestUser:
         assert user.check_password('myprecious')
 
     def test_check_password(self):
-        user = User.create(username="foo", email="foo@bar.com",
-                    password="foobarbaz123")
+        user = User.create(username="foo", email="foo@bar.com", password="foobarbaz123")
         assert user.check_password('foobarbaz123') is True
         assert user.check_password("barfoobaz") is False
 

@@ -1,7 +1,7 @@
 from functools import wraps
 from flask_login import current_user
-from flask import flash, redirect,request, abort
-from comport.department.models import Extractor, Department
+from flask import flash, redirect, request
+from comport.department.models import Extractor
 
 def requires_roles(required_roles):
     '''
