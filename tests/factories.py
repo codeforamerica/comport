@@ -9,7 +9,7 @@ from comport.data.models import UseOfForceIncident, DenominatorValue, CitizenCom
 from comport.database import db
 from comport.utils import factory_random_string
 from datetime import datetime
-from dateutil.relativedelta import *
+from dateutil.relativedelta import relativedelta
 import random
 
 class BaseFactory(SQLAlchemyModelFactory):
@@ -37,9 +37,7 @@ class UserFactory(BaseFactory):
 
 class DenominatorValueFactory(BaseFactory):
     month = Sequence(lambda n: datetime(2012, 1, 1) + relativedelta(months=n))
-    officers_out_on_service=FuzzyInteger(200,500)
-    calls_for_service=FuzzyInteger(500,1500)
-    officer_initiated_calls=FuzzyInteger(500,1500)
+    officers_out_on_service = FuzzyInteger(200, 500)
 
     class Meta:
         model = DenominatorValue
