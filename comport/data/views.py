@@ -272,9 +272,9 @@ def complaints():
             found_incident = CitizenComplaint.create(
                 department_id=department_id,
                 opaque_id=incident["opaqueId"],
-                occured_date=occured_date,
                 service_type=incident["serviceType"],
                 source=incident["source"],
+                occured_date=occured_date,
                 division=incident["division"],
                 precinct=incident["precinct"],
                 shift=incident["shift"],
@@ -298,9 +298,9 @@ def complaints():
 
         found_incident.department_id = department_id
         found_incident.opaque_id = incident["opaqueId"]
-        found_incident.occured_date = occured_date
         found_incident.service_type = incident["serviceType"]
         found_incident.source = incident["source"]
+        found_incident.occured_date = occured_date
         found_incident.division = incident["division"]
         found_incident.precinct = incident["precinct"]
         found_incident.shift = incident["shift"]
