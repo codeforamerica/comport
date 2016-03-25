@@ -42,4 +42,4 @@ def diff_month(d1, d2):
     return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 def coalesce_date(date):
-    return "" if date == None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
+    return "" if date is None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')
