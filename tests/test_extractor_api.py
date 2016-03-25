@@ -157,6 +157,47 @@ class TestHeartbeat:
         assert check_complaint.officer_age == sent_complaint['officerAge']
         assert check_complaint.officer_years_of_service == sent_complaint['officerYearsOfService']
 
+    def test_skip_multiple_complaint_data(self, testapp):
+        ''' Multiple complaint data from the extractor is skipped.
+        '''
+        # Set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of complaint descriptions from the JSON test client
+        test_client = JSONTestClient()
+        complaint_data = test_client.get_prebaked_complaints(last=1)
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == 1
+
+        # Get the second pre-baked complaint
+        multiple_complaint_data = test_client.get_prebaked_complaints(first=1, last=2)
+        # Swap in the opaque ID from the first complaint
+        multiple_complaint_data[0]["opaqueId"] = complaint_data[0]["opaqueId"]
+        # The complaint will be skipped as a 'multiple' if these fields are the same
+        multiple_complaint_data[0]["allegationType"] = complaint_data[0]["allegationType"]
+        multiple_complaint_data[0]["allegation"] = complaint_data[0]["allegation"]
+        multiple_complaint_data[0]["officerIdentifier"] = complaint_data[0]["officerIdentifier"]
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': multiple_complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == 0
+
+        # There is one complaint in the database.
+        all_complaints = CitizenComplaint.query.all()
+        assert len(all_complaints) == 1
+
     def test_post_complaint_data_near_match_does_not_update(self, testapp):
         ''' Complaint data with the same ID but different details creates a new record.
         '''
