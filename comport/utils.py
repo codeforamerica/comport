@@ -39,7 +39,7 @@ def random_date(start, end):
         seconds=randint(0, int((end - start).total_seconds())))
 
 def diff_month(d1, d2):
-    return (d1.year - d2.year)*12 + d1.month - d2.month
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 def coalesce_date(date):
     return "" if date == None else datetime.strftime(date, '%Y-%m-%d %H:%M:%S')

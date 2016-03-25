@@ -12,10 +12,7 @@ from comport.extensions import (
     migrate,
     debug_toolbar,
 )
-from comport import (
-        public, user, admin, department, data, content, interest,
-        template_globals
-        )
+from comport import (public, user, admin, department, data, content, interest, template_globals)
 from flask_sslify import SSLify
 import logging
 import sys
@@ -105,7 +102,6 @@ def register_logging(app):
         # )
         # app.logger.addHandler(file_handler)
         # app.logger.setLevel(logging.DEBUG)
-
 
     else:
         # log to console for dev

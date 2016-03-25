@@ -65,10 +65,12 @@ def register():
         invite_code.used = True
         invite_code.save()
 
-        new_user = User.create(username=form.username.data,
-                        email=form.email.data,
-                        password=form.password.data,
-                        active=True)
+        new_user = User.create(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data,
+            active=True
+        )
 
         new_user.departments.append(Department.get_by_id(invite_code.department_id))
 

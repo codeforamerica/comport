@@ -18,12 +18,12 @@ import io
 import json
 import copy
 
-
-user_department_relationship_table=db.Table('user_department_relationship_table',
-                             db.Column('department_id', db.Integer,db.ForeignKey('departments.id'), nullable=False),
-                             db.Column('user_id',db.Integer,db.ForeignKey('users.id'),nullable=False),
-                             db.PrimaryKeyConstraint('department_id', 'user_id') )
-
+user_department_relationship_table = db.Table(
+    'user_department_relationship_table',
+    db.Column('department_id', db.Integer, db.ForeignKey('departments.id'), nullable=False),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
+    db.PrimaryKeyConstraint('department_id', 'user_id')
+)
 
 class Department(SurrogatePK, Model):
     __tablename__ = 'departments'
@@ -31,7 +31,7 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     short_name = Column(db.String(80), unique=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
-    users = relationship("User", secondary=user_department_relationship_table,backref="departments")
+    users = relationship("User", secondary=user_department_relationship_table, backref="departments")
     use_of_force_incidents = relationship(
         "UseOfForceIncident", backref="department")
     citizen_complaints = relationship("CitizenComplaint", backref="department")
@@ -58,6 +58,7 @@ class Department(SurrogatePK, Model):
                 'uof-race'
             ])
         }
+
     def get_ois_blocks(self):
         return {
             'introduction': self.get_block_by_slug('ois-introduction'),
@@ -131,7 +132,6 @@ class Department(SurrogatePK, Model):
 
     def get_blocks_by_slugs(self, slugs):
         return [b for b in self.chart_blocks if b.slug in slugs]
-
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)

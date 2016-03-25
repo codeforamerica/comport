@@ -14,10 +14,8 @@ from .models import User, Invite_Code
 
 
 class PasswordResetForm(Form):
-    password = PasswordField('Password',
-                                validators=[DataRequired(), Length(min=6, max=40)])
-    confirm = PasswordField('Verify password',
-                [DataRequired(), EqualTo('password', message='Passwords must match')])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=40)])
+    confirm = PasswordField('Verify password', [DataRequired(), EqualTo('password', message='Passwords must match')])
 
     def __init__(self, *args, **kwargs):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
@@ -29,16 +27,11 @@ class PasswordResetForm(Form):
         return True
 
 
-
 class RegisterForm(Form):
-    username = TextField('Username',
-                    validators=[DataRequired(), Length(min=3, max=25)])
-    email = TextField('Email',
-                    validators=[DataRequired(), Email(), Length(min=6, max=40)])
-    password = PasswordField('Password',
-                                validators=[DataRequired(), Length(min=6, max=40)])
-    confirm = PasswordField('Verify password',
-                [DataRequired(), EqualTo('password', message='Passwords must match')])
+    username = TextField('Username', validators=[DataRequired(), Length(min=3, max=25)])
+    email = TextField('Email', validators=[DataRequired(), Email(), Length(min=6, max=40)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=40)])
+    confirm = PasswordField('Verify password', [DataRequired(), EqualTo('password', message='Passwords must match')])
 
     invite_code = TextField('Invite Code', validators=[DataRequired()])
 

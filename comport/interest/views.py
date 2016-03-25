@@ -17,12 +17,12 @@ def home():
     if request.method == 'POST':
         if form.validate_on_submit():
             Interested.create(
-                name = form.name.data,
-                agency = form.agency.data,
-                location = form.location.data,
-                phone = form.phone.data,
-                email = form.email.data,
-                comments = form.comments.data)
+                name=form.name.data,
+                agency=form.agency.data,
+                location=form.location.data,
+                phone=form.phone.data,
+                email=form.email.data,
+                comments=form.comments.data)
             flash("Thank you. We will be in contact shortly.", 'success')
             return redirect(url_for('public.home'))
         else:

@@ -28,7 +28,6 @@ class TestExtractors:
         department.save()
         assert (" " in department.name) is True
 
-
         password = str(uuid.uuid4())
 
         extractor, envs = Extractor.from_department_and_password(department=department, password=password)

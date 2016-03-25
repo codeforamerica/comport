@@ -37,7 +37,6 @@ class Invite_Code(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
 
-
 class User(UserMixin, SurrogatePK, Model):
 
     __tablename__ = 'users'
@@ -50,14 +49,13 @@ class User(UserMixin, SurrogatePK, Model):
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
     active = Column(db.Boolean(), default=False)
-    department_id = Column(db.Integer, db.ForeignKey('departments.id'),nullable=True)
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=True)
     type = Column(db.String(50))
     password_reset_uuid = Column(db.String(36), unique=True, nullable=True)
 
     __mapper_args__ = {
-        'polymorphic_on':type
+        'polymorphic_on': type
     }
-
 
     def __init__(self, username, email, is_admin=False, password=None, **kwargs):
         db.Model.__init__(self, username=username, email=email, **kwargs)
