@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from flask_script import Manager, Shell, Server, prompt_bool, prompt_pass
+from flask_script import Manager, Shell, Server, prompt_pass
 from flask_migrate import MigrateCommand, upgrade
 from comport.content.defaults import ChartBlockDefaults
 
@@ -11,16 +11,12 @@ from comport.user.models import User, Role
 from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
-from comport.utils import random_string, parse_date, diff_month, parse_csv_date, parse_int
+from comport.utils import parse_csv_date
 from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue, DemographicValue, OfficerInvolvedShooting
-from tests.factories import UseOfForceIncidentFactory, DenominatorValueFactory, CitizenComplaintFactory
-import json
 import glob
 import csv
 import hashlib
-from datetime import datetime
 from testclient.JSON_test_client import JSONTestClient
-from testclient.mutators import MissingDataMutator,FuzzedDataMutator,KnownBadDataMutator,CasingMutator, EmptyDataMutator, CondenisngDateMutator, GapDateMutator
 
 if os.environ.get("COMPORT_ENV") == 'prod':
     app = create_app(ProdConfig)

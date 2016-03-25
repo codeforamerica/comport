@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage and signup."""
-from flask import (Blueprint, request, render_template, flash, url_for,
-                    redirect, session)
+from flask import (Blueprint, request, render_template, flash, url_for, redirect)
 
-from comport.extensions import login_manager
 from comport.interest.models import Interested
 from comport.interest.forms import InterestForm
 from comport.utils import flash_errors
-from comport.database import db
 
 blueprint = Blueprint('interest', __name__, url_prefix='/interest', static_folder="../static")
 

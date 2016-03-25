@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-import datetime as dt
-
 import pytest
-
-from comport.user.models import User, Role
 from comport.content.models import ChartBlock
-from comport.department.models import Extractor, Department
-from .factories import UserFactory, DepartmentFactory
+from comport.department.models import Extractor
+from .factories import DepartmentFactory
 import uuid
 
 @pytest.mark.usefixtures('db')

@@ -1,19 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime as dt
-from comport.database import (
-    Column,
-    db,
-    Model,
-    ReferenceCol,
-    relationship,
-    SurrogatePK,
-)
-from .csv_utils import csv_utils
-
-from datetime import datetime
-
-
-import types
+from comport.database import (Column, db, Model, SurrogatePK)
 
 class DenominatorValue(SurrogatePK, Model):
     __tablename__ = "denominator_values"

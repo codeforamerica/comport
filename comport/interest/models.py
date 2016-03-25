@@ -1,12 +1,4 @@
-import datetime as dt
-from comport.database import (
-    Column,
-    db,
-    Model,
-    ReferenceCol,
-    relationship,
-    SurrogatePK,
-)
+from comport.database import (Column, db, Model, SurrogatePK)
 
 class Interested(SurrogatePK, Model):
     __tablename__ = 'interesteds'

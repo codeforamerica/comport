@@ -3,14 +3,7 @@ import datetime as dt
 
 from flask_login import UserMixin
 from comport.extensions import bcrypt
-from comport.database import (
-    Column,
-    db,
-    Model,
-    ReferenceCol,
-    relationship,
-    SurrogatePK,
-)
+from comport.database import (Column, db, Model, ReferenceCol, relationship, SurrogatePK)
 
 
 class Role(SurrogatePK, Model):

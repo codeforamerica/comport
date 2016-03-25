@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
-import datetime as dt
-from comport.database import (
-    Column,
-    db,
-    Model,
-    ReferenceCol,
-    relationship,
-    SurrogatePK,
-)
+from comport.database import (Column, db, Model, relationship, SurrogatePK)
 from comport.content.defaults import ChartBlockDefaults
 
-from flask import current_app
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
 import csv

@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime as dt
-from comport.database import (
-    Column,
-    db,
-    Model,
-    ReferenceCol,
-    relationship,
-    SurrogatePK,
-)
+from comport.database import (Column, db, Model, SurrogatePK)
 
 class ChartBlock(SurrogatePK, Model):
     __tablename__ = 'chart_blocks'

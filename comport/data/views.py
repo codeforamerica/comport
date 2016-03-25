@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from comport.utils import flash_errors
-from flask.ext.login import login_required
+from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting

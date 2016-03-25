@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import pytest
-
 from comport.public.forms import LoginForm
 from comport.user.forms import RegisterForm
-from .factories import UserFactory
 from comport.department.models import Department
 from comport.user.models import Invite_Code
 

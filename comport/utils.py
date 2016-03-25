@@ -2,7 +2,7 @@
 """Helper utilities and decorators."""
 from flask import flash
 import string
-from random import randint, random, choice
+from random import randint, choice
 from datetime import datetime, timedelta
 from factory.fuzzy import _random
 

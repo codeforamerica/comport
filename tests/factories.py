@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from factory import Sequence, PostGenerationMethodCall, LazyAttribute
-from factory.fuzzy import FuzzyText, FuzzyNaiveDateTime, FuzzyChoice, BaseFuzzyAttribute, _random, FuzzyInteger
+from factory.fuzzy import FuzzyText, FuzzyNaiveDateTime, FuzzyChoice, FuzzyInteger
 from factory.alchemy import SQLAlchemyModelFactory
 
 from comport.user.models import User
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncident, DenominatorValue, CitizenComplaint
 from comport.database import db
-from comport.utils import random_date, factory_random_string
-from datetime import date, datetime, timedelta
+from comport.utils import factory_random_string
+from datetime import datetime
 from dateutil.relativedelta import *
 import random
 
