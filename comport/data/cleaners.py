@@ -95,7 +95,7 @@ class Cleaners:
             if word.upper() in CAPITALIZE_LIST:
                 return word.upper()
 
-        if value is None or isinstance(value, list):
+        if type(value) is not str:
             return value
         return titlecase(value.strip().lower(), callback=abbreviations)
 
