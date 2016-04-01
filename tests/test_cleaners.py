@@ -70,6 +70,19 @@ class TestCleaners:
         result = Cleaners.capitalize(send)
         assert check == result
 
+    def test_captilization_handles_non_strings(self):
+        ''' Non-strings passed to capitalize aren't altered.
+        '''
+        send_int = 23
+        send_float = 32.01
+        send_list = ["I", "thought", "I", "would", "sail"]
+        result_int = Cleaners.capitalize(send_int)
+        result_float = Cleaners.capitalize(send_float)
+        result_list = Cleaners.capitalize(send_list)
+        assert send_int == result_int
+        assert send_float == result_float
+        assert send_list == result_list
+
     def test_incident_capitalization(self):
         ''' Incident descriptions are title-cased with expected exceptions.
         '''
