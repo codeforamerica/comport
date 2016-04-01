@@ -41,21 +41,27 @@ def use_of_force():
 
     for incident in j['data']:
 
-        division = Cleaners.capitalize(incident["division"])
-        precinct = Cleaners.capitalize(incident["precinct"])
-        shift = Cleaners.capitalize(incident["shift"])
-        beat = Cleaners.capitalize(incident["beat"])
-        officer_force_type = Cleaners.officer_force_type(incident["officerForceType"])
-        resident_race = Cleaners.race(incident["residentRace"])
-        resident_sex = Cleaners.sex(incident["residentSex"])
-        officer_race = Cleaners.race(incident["officerRace"])
-        officer_sex = Cleaners.sex(incident["officerSex"])
+        # capitalize the location
+        incident["division"] = Cleaners.capitalize(incident["division"])
+        incident["precinct"] = Cleaners.capitalize(incident["precinct"])
+        incident["shift"] = Cleaners.capitalize(incident["shift"])
+        incident["beat"] = Cleaners.capitalize(incident["beat"])
+        # clean force type, race, gender
+        incident["officerForceType"] = Cleaners.officer_force_type(incident["officerForceType"])
+        incident["residentRace"] = Cleaners.race(incident["residentRace"])
+        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
+        incident["officerRace"] = Cleaners.race(incident["officerRace"])
+        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
+        # make sure values that might've been sent as integers are strings
+        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
+        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
 
         found_incident = UseOfForceIncident.query.filter_by(
             opaque_id=incident["opaqueId"],
             department_id=department_id,
             officer_identifier=incident["officerIdentifier"],
-            officer_force_type=officer_force_type
+            officer_force_type=incident["officerForceType"]
         ).first()
 
         occured_date = parse_date(incident["occuredDate"])
@@ -65,13 +71,13 @@ def use_of_force():
                 department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 occured_date=occured_date,
-                division=division,
-                precinct=precinct,
-                shift=shift,
-                beat=beat,
+                division=incident["division"],
+                precinct=incident["precinct"],
+                shift=incident["shift"],
+                beat=incident["beat"],
                 disposition=incident["disposition"],
                 census_tract=None,
-                officer_force_type=officer_force_type,
+                officer_force_type=incident["officerForceType"],
                 use_of_force_reason=incident["useOfForceReason"],
                 service_type=incident["serviceType"],
                 arrest_made=incident["arrestMade"],
@@ -81,13 +87,13 @@ def use_of_force():
                 resident_hospitalized=incident["residentHospitalized"],
                 officer_injured=incident["officerInjured"],
                 officer_hospitalized=incident["officerHospitalized"],
-                resident_race=resident_race,
-                resident_sex=resident_sex,
+                resident_race=incident["residentRace"],
+                resident_sex=incident["residentSex"],
                 resident_age=incident["residentAge"],
                 resident_condition=incident["residentCondition"],
                 officer_identifier=incident["officerIdentifier"],
-                officer_race=officer_race,
-                officer_sex=officer_sex,
+                officer_race=incident["officerRace"],
+                officer_sex=incident["officerSex"],
                 officer_age=incident["officerAge"],
                 officer_years_of_service=incident["officerYearsOfService"],
                 officer_condition=incident["officerCondition"]
@@ -98,13 +104,13 @@ def use_of_force():
         found_incident.department_id = department_id
         found_incident.opaque_id = incident["opaqueId"]
         found_incident.occured_date = occured_date
-        found_incident.division = division
-        found_incident.precinct = precinct
-        found_incident.shift = shift
-        found_incident.beat = beat
+        found_incident.division = incident["division"]
+        found_incident.precinct = incident["precinct"]
+        found_incident.shift = incident["shift"]
+        found_incident.beat = incident["beat"]
         found_incident.disposition = incident["disposition"]
         found_incident.census_tract = None
-        found_incident.officer_force_type = officer_force_type
+        found_incident.officer_force_type = incident["officerForceType"]
         found_incident.use_of_force_reason = incident["useOfForceReason"]
         found_incident.service_type = incident["serviceType"]
         found_incident.arrest_made = incident["arrestMade"]
@@ -114,13 +120,13 @@ def use_of_force():
         found_incident.resident_hospitalized = incident["residentHospitalized"]
         found_incident.officer_injured = incident["officerInjured"]
         found_incident.officer_hospitalized = incident["officerHospitalized"]
-        found_incident.resident_race = resident_race
-        found_incident.resident_sex = resident_sex
+        found_incident.resident_race = incident["residentRace"]
+        found_incident.resident_sex = incident["residentSex"]
         found_incident.resident_age = incident["residentAge"]
         found_incident.resident_condition = incident["residentCondition"]
         found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_race = officer_race
-        found_incident.officer_sex = officer_sex
+        found_incident.officer_race = incident["officerRace"]
+        found_incident.officer_sex = incident["officerSex"]
         found_incident.officer_age = incident["officerAge"]
         found_incident.officer_years_of_service = incident["officerYearsOfService"]
         found_incident.officer_condition = incident["officerCondition"]
@@ -145,15 +151,22 @@ def officer_involved_shooting():
 
     for incident in request_json['data']:
 
-        resident_weapon_used = Cleaners.resident_weapon_used(incident["residentWeaponUsed"])
-        resident_sex = Cleaners.sex(incident["residentSex"])
-        resident_race = Cleaners.race(incident["residentRace"])
-        officer_sex = Cleaners.sex(incident["officerSex"])
-        officer_race = Cleaners.race(incident["officerRace"])
-        precinct = Cleaners.capitalize(incident["precinct"])
-        division = Cleaners.capitalize(incident["division"])
-        shift = Cleaners.capitalize(incident["shift"])
-        beat = Cleaners.capitalize(incident["beat"])
+        # capitalize the location
+        incident["division"] = Cleaners.capitalize(incident["division"])
+        incident["precinct"] = Cleaners.capitalize(incident["precinct"])
+        incident["shift"] = Cleaners.capitalize(incident["shift"])
+        incident["beat"] = Cleaners.capitalize(incident["beat"])
+        # clean weapon, race, gender
+        incident["residentWeaponUsed"] = Cleaners.resident_weapon_used(incident["residentWeaponUsed"])
+        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
+        incident["residentRace"] = Cleaners.race(incident["residentRace"])
+        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
+        incident["officerRace"] = Cleaners.race(incident["officerRace"])
+        # make sure values that might've been sent as integers are strings
+        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
+        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
+        # and values that might've been sent as strings are integers
+        incident["officerYearsOfService"] = Cleaners.string_to_integer(incident["officerYearsOfService"])
 
         found_incident = OfficerInvolvedShooting.query.filter_by(
             opaque_id=incident["opaqueId"],
@@ -169,20 +182,20 @@ def officer_involved_shooting():
                 opaque_id=incident["opaqueId"],
                 service_type=incident["serviceType"],
                 occured_date=occured_date,
-                division=division,
-                precinct=precinct,
-                shift=shift,
-                beat=beat,
+                division=incident["division"],
+                precinct=incident["precinct"],
+                shift=incident["shift"],
+                beat=incident["beat"],
                 disposition=incident["disposition"],
-                resident_race=resident_race,
-                resident_sex=resident_sex,
+                resident_race=incident["residentRace"],
+                resident_sex=incident["residentSex"],
                 resident_age=incident["residentAge"],
-                resident_weapon_used=resident_weapon_used,
+                resident_weapon_used=incident["residentWeaponUsed"],
                 resident_condition=incident["residentCondition"],
                 officer_identifier=incident["officerIdentifier"],
                 officer_weapon_used=incident["officerForceType"],
-                officer_race=officer_race,
-                officer_sex=officer_sex,
+                officer_race=incident["officerRace"],
+                officer_sex=incident["officerSex"],
                 officer_age=incident["officerAge"],
                 officer_years_of_service=parse_int(incident["officerYearsOfService"]),
                 officer_condition=incident["officerCondition"],
@@ -195,20 +208,20 @@ def officer_involved_shooting():
         found_incident.opaque_id = incident["opaqueId"]
         found_incident.service_type = incident["serviceType"]
         found_incident.occured_date = occured_date
-        found_incident.division = division
-        found_incident.precinct = precinct
-        found_incident.shift = shift
-        found_incident.beat = beat
+        found_incident.division = incident["division"]
+        found_incident.precinct = incident["precinct"]
+        found_incident.shift = incident["shift"]
+        found_incident.beat = incident["beat"]
         found_incident.disposition = incident["disposition"]
-        found_incident.resident_race = resident_race
-        found_incident.resident_sex = resident_sex
+        found_incident.resident_race = incident["residentRace"]
+        found_incident.resident_sex = incident["residentSex"]
         found_incident.resident_age = incident["residentAge"]
-        found_incident.resident_weapon_used = resident_weapon_used
+        found_incident.resident_weapon_used = incident["residentWeaponUsed"]
         found_incident.resident_condition = incident["residentCondition"]
         found_incident.officer_identifier = incident["officerIdentifier"]
         found_incident.officer_weapon_used = incident["officerForceType"]
-        found_incident.officer_race = officer_race
-        found_incident.officer_sex = officer_sex
+        found_incident.officer_race = incident["officerRace"]
+        found_incident.officer_sex = incident["officerSex"]
         found_incident.officer_age = incident["officerAge"]
         found_incident.officer_years_of_service = parse_int(incident["officerYearsOfService"])
         found_incident.officer_condition = incident["officerCondition"]
@@ -236,10 +249,14 @@ def complaints():
         # capitalize all the fields in the incident
         incident = Cleaners.capitalize_incident(incident)
         # clean sex & race
-        resident_sex = Cleaners.sex(incident["residentSex"])
-        resident_race = Cleaners.race(incident["residentRace"])
-        officer_sex = Cleaners.sex(incident["officerSex"])
-        officer_race = Cleaners.race(incident["officerRace"])
+        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
+        incident["residentRace"] = Cleaners.race(incident["residentRace"])
+        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
+        incident["officerRace"] = Cleaners.race(incident["officerRace"])
+        # make sure values that might've been sent as integers are strings
+        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
+        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
 
         found_incident = CitizenComplaint.query.filter_by(
             opaque_id=incident["opaqueId"],
@@ -247,8 +264,8 @@ def complaints():
             allegation=incident["allegation"],
             officer_identifier=incident["officerIdentifier"],
             department_id=department_id,
-            resident_race=resident_race,
-            resident_sex=resident_sex,
+            resident_race=incident["residentRace"],
+            resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"]
         ).first()
 
@@ -280,12 +297,12 @@ def complaints():
                 allegation_type=incident["allegationType"],
                 allegation=incident["allegation"],
                 disposition=incident["disposition"],
-                resident_race=resident_race,
-                resident_sex=resident_sex,
+                resident_race=incident["residentRace"],
+                resident_sex=incident["residentSex"],
                 resident_age=incident["residentAge"],
                 officer_identifier=incident["officerIdentifier"],
-                officer_race=officer_race,
-                officer_sex=officer_sex,
+                officer_race=incident["officerRace"],
+                officer_sex=incident["officerSex"],
                 officer_age=incident["officerAge"],
                 officer_years_of_service=incident["officerYearsOfService"],
                 census_tract=None
@@ -306,12 +323,12 @@ def complaints():
         found_incident.allegation_type = incident["allegationType"]
         found_incident.allegation = incident["allegation"]
         found_incident.disposition = incident["disposition"]
-        found_incident.resident_race = resident_race
-        found_incident.resident_sex = resident_sex
+        found_incident.resident_race = incident["residentRace"]
+        found_incident.resident_sex = incident["residentSex"]
         found_incident.resident_age = incident["residentAge"]
         found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_race = officer_race
-        found_incident.officer_sex = officer_sex
+        found_incident.officer_race = incident["officerRace"]
+        found_incident.officer_sex = incident["officerSex"]
         found_incident.officer_age = incident["officerAge"]
         found_incident.officer_years_of_service = incident["officerYearsOfService"]
         found_incident.census_tract = None
