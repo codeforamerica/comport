@@ -246,6 +246,10 @@ def complaints():
     updated_rows = 0
 
     for incident in j['data']:
+        # make sure values that might've been sent as integers are strings
+        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
+        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
         # capitalize all the fields in the incident
         incident = Cleaners.capitalize_incident(incident)
         # clean sex & race
@@ -253,10 +257,6 @@ def complaints():
         incident["residentRace"] = Cleaners.race(incident["residentRace"])
         incident["officerSex"] = Cleaners.sex(incident["officerSex"])
         incident["officerRace"] = Cleaners.race(incident["officerRace"])
-        # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
-        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
-        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
 
         found_incident = CitizenComplaint.query.filter_by(
             opaque_id=incident["opaqueId"],
