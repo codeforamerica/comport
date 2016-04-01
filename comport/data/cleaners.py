@@ -90,6 +90,33 @@ class Cleaners:
         else:
             return titlecase(text)
 
+    def number_to_string(value):
+        ''' If it's a number, turn the passed value into a string, everything else is returned as-is.
+        '''
+        type_value = type(value)
+        if type_value == int or type_value == float:
+            return str(value)
+        return value
+
+    def string_to_integer(value):
+        ''' Strings and floats are turned to integers, integers are returned as-is, everything else is None.
+        '''
+        if type(value) == str:
+            try:
+                value_int = int(value)
+            except ValueError:
+                try:
+                    value_int = int(float(value))
+                except ValueError:
+                    value_int = None
+
+            return value_int
+        if type(value) == int:
+            return value
+        if type(value) == float:
+            return int(value)
+        return None
+
     def capitalize(value):
         def abbreviations(word, **kwargs):
             if word.upper() in CAPITALIZE_LIST:

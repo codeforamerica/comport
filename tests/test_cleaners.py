@@ -102,3 +102,35 @@ class TestCleaners:
         # values of keys in the list should not be titlecased
         for key in CAPITALIZE_IGNORE_KEYS_LIST:
             assert result[key] == in_sentence
+
+    def test_number_to_string(self):
+        ''' Numbers are turned into strings.
+        '''
+        in_int = 85
+        in_float = 82.12
+        in_string = "big frame, small spirit!"
+        in_list = ["hands", "by", "the", "halyards"]
+        in_none = None
+        assert Cleaners.number_to_string(in_int) == str(in_int)
+        assert Cleaners.number_to_string(in_float) == str(in_float)
+        assert Cleaners.number_to_string(in_string) == in_string
+        assert Cleaners.number_to_string(in_list) == in_list
+        assert Cleaners.number_to_string(in_none) is None
+
+    def test_string_to_integer(self):
+        ''' Strings are turned into integers.
+        '''
+        in_string_success_int = '85'
+        in_string_success_float = '33.34'
+        in_int = 85
+        in_float = 82.12
+        in_string_fail = 'whaleman'
+        in_list = ["hands", "by", "the", "halyards"]
+        in_none = None
+        assert Cleaners.string_to_integer(in_string_success_int) == int(in_string_success_int)
+        assert Cleaners.string_to_integer(in_string_success_float) == int(float(in_string_success_float))
+        assert Cleaners.string_to_integer(in_int) == in_int
+        assert Cleaners.string_to_integer(in_float) == int(in_float)
+        assert Cleaners.string_to_integer(in_string_fail) is None
+        assert Cleaners.string_to_integer(in_list) is None
+        assert Cleaners.string_to_integer(in_none) is None
