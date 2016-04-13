@@ -38,24 +38,25 @@ def use_of_force():
     j = request.json
     added_rows = 0
     updated_rows = 0
+    cleaner = Cleaners()
 
     for incident in j['data']:
 
         # capitalize the location
-        incident["division"] = Cleaners.capitalize(incident["division"])
-        incident["precinct"] = Cleaners.capitalize(incident["precinct"])
-        incident["shift"] = Cleaners.capitalize(incident["shift"])
-        incident["beat"] = Cleaners.capitalize(incident["beat"])
+        incident["division"] = cleaner.capitalize(incident["division"])
+        incident["precinct"] = cleaner.capitalize(incident["precinct"])
+        incident["shift"] = cleaner.capitalize(incident["shift"])
+        incident["beat"] = cleaner.capitalize(incident["beat"])
         # clean force type, race, gender
-        incident["officerForceType"] = Cleaners.officer_force_type(incident["officerForceType"])
-        incident["residentRace"] = Cleaners.race(incident["residentRace"])
-        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
-        incident["officerRace"] = Cleaners.race(incident["officerRace"])
-        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
+        incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
+        incident["residentRace"] = cleaner.race(incident["residentRace"])
+        incident["residentSex"] = cleaner.sex(incident["residentSex"])
+        incident["officerRace"] = cleaner.race(incident["officerRace"])
+        incident["officerSex"] = cleaner.sex(incident["officerSex"])
         # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
-        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
-        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
+        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
+        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
 
         found_incident = UseOfForceIncident.query.filter_by(
             opaque_id=incident["opaqueId"],
@@ -148,25 +149,26 @@ def officer_involved_shooting():
     request_json = request.json
     added_rows = 0
     updated_rows = 0
+    cleaner = Cleaners()
 
     for incident in request_json['data']:
 
         # capitalize the location
-        incident["division"] = Cleaners.capitalize(incident["division"])
-        incident["precinct"] = Cleaners.capitalize(incident["precinct"])
-        incident["shift"] = Cleaners.capitalize(incident["shift"])
-        incident["beat"] = Cleaners.capitalize(incident["beat"])
+        incident["division"] = cleaner.capitalize(incident["division"])
+        incident["precinct"] = cleaner.capitalize(incident["precinct"])
+        incident["shift"] = cleaner.capitalize(incident["shift"])
+        incident["beat"] = cleaner.capitalize(incident["beat"])
         # clean weapon, race, gender
-        incident["residentWeaponUsed"] = Cleaners.resident_weapon_used(incident["residentWeaponUsed"])
-        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
-        incident["residentRace"] = Cleaners.race(incident["residentRace"])
-        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
-        incident["officerRace"] = Cleaners.race(incident["officerRace"])
+        incident["residentWeaponUsed"] = cleaner.resident_weapon_used(incident["residentWeaponUsed"])
+        incident["residentSex"] = cleaner.sex(incident["residentSex"])
+        incident["residentRace"] = cleaner.race(incident["residentRace"])
+        incident["officerSex"] = cleaner.sex(incident["officerSex"])
+        incident["officerRace"] = cleaner.race(incident["officerRace"])
         # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
-        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
+        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
+        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
         # and values that might've been sent as strings are integers
-        incident["officerYearsOfService"] = Cleaners.string_to_integer(incident["officerYearsOfService"])
+        incident["officerYearsOfService"] = cleaner.string_to_integer(incident["officerYearsOfService"])
 
         found_incident = OfficerInvolvedShooting.query.filter_by(
             opaque_id=incident["opaqueId"],
@@ -244,19 +246,20 @@ def complaints():
     j = request.json
     added_rows = 0
     updated_rows = 0
+    cleaner = Cleaners()
 
     for incident in j['data']:
         # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = Cleaners.number_to_string(incident["residentAge"])
-        incident["officerAge"] = Cleaners.number_to_string(incident["officerAge"])
-        incident["officerYearsOfService"] = Cleaners.number_to_string(incident["officerYearsOfService"])
+        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
+        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
         # capitalize all the fields in the incident
-        incident = Cleaners.capitalize_incident(incident)
+        incident = cleaner.capitalize_incident(incident)
         # clean sex & race
-        incident["residentSex"] = Cleaners.sex(incident["residentSex"])
-        incident["residentRace"] = Cleaners.race(incident["residentRace"])
-        incident["officerSex"] = Cleaners.sex(incident["officerSex"])
-        incident["officerRace"] = Cleaners.race(incident["officerRace"])
+        incident["residentSex"] = cleaner.sex(incident["residentSex"])
+        incident["residentRace"] = cleaner.race(incident["residentRace"])
+        incident["officerSex"] = cleaner.sex(incident["officerSex"])
+        incident["officerRace"] = cleaner.race(incident["officerRace"])
 
         found_incident = CitizenComplaint.query.filter_by(
             opaque_id=incident["opaqueId"],
