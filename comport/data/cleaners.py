@@ -55,20 +55,20 @@ CAPITALIZE_IGNORE_KEYS_LIST = [
     "officerYearsOfService"
 ]
 
-class Cleaners:
+class Cleaners(object):
 
-    def resident_weapon_used(val):
+    def resident_weapon_used(self, val):
         if val in RESIDENT_WEAPONS_LOOKUP:
             return RESIDENT_WEAPONS_LOOKUP[val]
         else:
             return val
 
-    def officer_force_type(text):
+    def officer_force_type(self, text):
         if text is not None and text in OFFICER_FORCE_TYPE_LOOKUP:
             return OFFICER_FORCE_TYPE_LOOKUP[text]
         return text
 
-    def race(text):
+    def race(self, text):
         if not text:
             return None
 
@@ -79,7 +79,7 @@ class Cleaners:
         else:
             return titlecase(text)
 
-    def sex(text):
+    def sex(self, text):
         if not text:
             return None
 
@@ -90,7 +90,7 @@ class Cleaners:
         else:
             return titlecase(text)
 
-    def number_to_string(value):
+    def number_to_string(self, value):
         ''' If it's a number, turn the passed value into a string, everything else is returned as-is.
         '''
         type_value = type(value)
@@ -98,7 +98,7 @@ class Cleaners:
             return str(value)
         return value
 
-    def string_to_integer(value):
+    def string_to_integer(self, value):
         ''' Strings and floats are turned to integers, integers are returned as-is, everything else is None.
         '''
         if type(value) == str:
@@ -117,7 +117,7 @@ class Cleaners:
             return int(value)
         return None
 
-    def capitalize(value):
+    def capitalize(self, value):
         def abbreviations(word, **kwargs):
             if word.upper() in CAPITALIZE_LIST:
                 return word.upper()
@@ -126,11 +126,11 @@ class Cleaners:
             return value
         return titlecase(value.strip().lower(), callback=abbreviations)
 
-    def capitalize_incident(incident):
+    def capitalize_incident(self, incident):
         for key in list(incident.keys()):
             if key in CAPITALIZE_IGNORE_KEYS_LIST:
                 continue
 
-            incident[key] = Cleaners.capitalize(incident[key])
+            incident[key] = self.capitalize(incident[key])
 
         return incident

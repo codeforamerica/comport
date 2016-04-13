@@ -70,7 +70,8 @@ class TestHeartbeat:
         assert response.json_body['added'] == complaint_count
 
         # check the complaint incident in the database against the data that was sent
-        sent_complaint = Cleaners.capitalize_incident(complaint_data[0])
+        cleaner = Cleaners()
+        sent_complaint = cleaner.capitalize_incident(complaint_data[0])
         check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
@@ -82,14 +83,14 @@ class TestHeartbeat:
         assert check_complaint.source == sent_complaint['source']
         assert check_complaint.allegation_type == sent_complaint['allegationType']
         assert check_complaint.allegation == sent_complaint['allegation']
-        assert check_complaint.resident_race == Cleaners.race(sent_complaint['residentRace'])
-        assert check_complaint.resident_sex == Cleaners.sex(sent_complaint['residentSex'])
-        assert check_complaint.resident_age == Cleaners.number_to_string(sent_complaint['residentAge'])
+        assert check_complaint.resident_race == cleaner.race(sent_complaint['residentRace'])
+        assert check_complaint.resident_sex == cleaner.sex(sent_complaint['residentSex'])
+        assert check_complaint.resident_age == cleaner.number_to_string(sent_complaint['residentAge'])
         assert check_complaint.officer_identifier == sent_complaint['officerIdentifier']
-        assert check_complaint.officer_race == Cleaners.race(sent_complaint['officerRace'])
-        assert check_complaint.officer_sex == Cleaners.sex(sent_complaint['officerSex'])
-        assert check_complaint.officer_age == Cleaners.number_to_string(sent_complaint['officerAge'])
-        assert check_complaint.officer_years_of_service == Cleaners.number_to_string(sent_complaint['officerYearsOfService'])
+        assert check_complaint.officer_race == cleaner.race(sent_complaint['officerRace'])
+        assert check_complaint.officer_sex == cleaner.sex(sent_complaint['officerSex'])
+        assert check_complaint.officer_age == cleaner.number_to_string(sent_complaint['officerAge'])
+        assert check_complaint.officer_years_of_service == cleaner.number_to_string(sent_complaint['officerYearsOfService'])
 
     def test_post_mistyped_complaint_data(self, testapp):
         ''' New complaint data from the extractor with wrongly typed data is processed as expected.
@@ -120,7 +121,8 @@ class TestHeartbeat:
         assert response.json_body['added'] == complaint_count
 
         # check the complaint incident in the database against the data that was sent
-        sent_complaint = Cleaners.capitalize_incident(complaint_data[0])
+        cleaner = Cleaners()
+        sent_complaint = cleaner.capitalize_incident(complaint_data[0])
         check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
@@ -132,14 +134,14 @@ class TestHeartbeat:
         assert check_complaint.source == sent_complaint['source']
         assert check_complaint.allegation_type == sent_complaint['allegationType']
         assert check_complaint.allegation == sent_complaint['allegation']
-        assert check_complaint.resident_race == Cleaners.race(sent_complaint['residentRace'])
-        assert check_complaint.resident_sex == Cleaners.sex(sent_complaint['residentSex'])
-        assert check_complaint.resident_age == Cleaners.number_to_string(sent_complaint['residentAge'])
+        assert check_complaint.resident_race == cleaner.race(sent_complaint['residentRace'])
+        assert check_complaint.resident_sex == cleaner.sex(sent_complaint['residentSex'])
+        assert check_complaint.resident_age == cleaner.number_to_string(sent_complaint['residentAge'])
         assert check_complaint.officer_identifier == sent_complaint['officerIdentifier']
-        assert check_complaint.officer_race == Cleaners.race(sent_complaint['officerRace'])
-        assert check_complaint.officer_sex == Cleaners.sex(sent_complaint['officerSex'])
-        assert check_complaint.officer_age == Cleaners.number_to_string(sent_complaint['officerAge'])
-        assert check_complaint.officer_years_of_service == Cleaners.number_to_string(sent_complaint['officerYearsOfService'])
+        assert check_complaint.officer_race == cleaner.race(sent_complaint['officerRace'])
+        assert check_complaint.officer_sex == cleaner.sex(sent_complaint['officerSex'])
+        assert check_complaint.officer_age == cleaner.number_to_string(sent_complaint['officerAge'])
+        assert check_complaint.officer_years_of_service == cleaner.number_to_string(sent_complaint['officerYearsOfService'])
 
     def test_update_complaint_data(self, testapp):
         ''' Updated complaint data from the extractor is processed as expected.
@@ -186,7 +188,8 @@ class TestHeartbeat:
         assert len(all_complaints) == 1
 
         # check the complaint incident in the database against the updated data that was sent
-        sent_complaint = Cleaners.capitalize_incident(updated_complaint_data[0])
+        cleaner = Cleaners()
+        sent_complaint = cleaner.capitalize_incident(updated_complaint_data[0])
         check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
@@ -198,14 +201,14 @@ class TestHeartbeat:
         assert check_complaint.source == sent_complaint['source']
         assert check_complaint.allegation_type == sent_complaint['allegationType']
         assert check_complaint.allegation == sent_complaint['allegation']
-        assert check_complaint.resident_race == Cleaners.race(sent_complaint['residentRace'])
-        assert check_complaint.resident_sex == Cleaners.sex(sent_complaint['residentSex'])
-        assert check_complaint.resident_age == Cleaners.number_to_string(sent_complaint['residentAge'])
+        assert check_complaint.resident_race == cleaner.race(sent_complaint['residentRace'])
+        assert check_complaint.resident_sex == cleaner.sex(sent_complaint['residentSex'])
+        assert check_complaint.resident_age == cleaner.number_to_string(sent_complaint['residentAge'])
         assert check_complaint.officer_identifier == sent_complaint['officerIdentifier']
-        assert check_complaint.officer_race == Cleaners.race(sent_complaint['officerRace'])
-        assert check_complaint.officer_sex == Cleaners.sex(sent_complaint['officerSex'])
-        assert check_complaint.officer_age == Cleaners.number_to_string(sent_complaint['officerAge'])
-        assert check_complaint.officer_years_of_service == Cleaners.number_to_string(sent_complaint['officerYearsOfService'])
+        assert check_complaint.officer_race == cleaner.race(sent_complaint['officerRace'])
+        assert check_complaint.officer_sex == cleaner.sex(sent_complaint['officerSex'])
+        assert check_complaint.officer_age == cleaner.number_to_string(sent_complaint['officerAge'])
+        assert check_complaint.officer_years_of_service == cleaner.number_to_string(sent_complaint['officerYearsOfService'])
 
     def test_skip_multiple_complaint_data(self, testapp):
         ''' Multiple complaint data from the extractor is skipped.
@@ -308,15 +311,16 @@ class TestHeartbeat:
         assert response.json_body['added'] == uof_count
 
         # check the uof incident in the database against the data that was sent
+        cleaner = Cleaners()
         sent_uof = uof_data[0]
         check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == Cleaners.capitalize(sent_uof['division'])
-        assert check_uof.precinct == Cleaners.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == Cleaners.capitalize(sent_uof['shift'])
-        assert check_uof.beat == Cleaners.capitalize(sent_uof['beat'])
+        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
+        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
+        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
+        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
         assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == Cleaners.officer_force_type(sent_uof['officerForceType'])
+        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
         assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
         assert check_uof.service_type == sent_uof['serviceType']
         assert check_uof.arrest_made == sent_uof['arrestMade']
@@ -326,15 +330,15 @@ class TestHeartbeat:
         assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
         assert check_uof.officer_injured == sent_uof['officerInjured']
         assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == Cleaners.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == Cleaners.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == Cleaners.number_to_string(sent_uof['residentAge'])
+        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
+        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
+        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
         assert check_uof.resident_condition == sent_uof['residentCondition']
         assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == Cleaners.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == Cleaners.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == Cleaners.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == Cleaners.number_to_string(sent_uof['officerYearsOfService'])
+        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
+        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
+        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
+        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
         assert check_uof.officer_condition == sent_uof['officerCondition']
 
     def test_post_mistyped_uof_data(self, testapp):
@@ -366,15 +370,16 @@ class TestHeartbeat:
         assert response.json_body['added'] == uof_count
 
         # check the uof incident in the database against the data that was sent
+        cleaner = Cleaners()
         sent_uof = uof_data[0]
         check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == Cleaners.capitalize(sent_uof['division'])
-        assert check_uof.precinct == Cleaners.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == Cleaners.capitalize(sent_uof['shift'])
-        assert check_uof.beat == Cleaners.capitalize(sent_uof['beat'])
+        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
+        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
+        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
+        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
         assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == Cleaners.officer_force_type(sent_uof['officerForceType'])
+        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
         assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
         assert check_uof.service_type == sent_uof['serviceType']
         assert check_uof.arrest_made == sent_uof['arrestMade']
@@ -384,15 +389,15 @@ class TestHeartbeat:
         assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
         assert check_uof.officer_injured == sent_uof['officerInjured']
         assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == Cleaners.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == Cleaners.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == Cleaners.number_to_string(sent_uof['residentAge'])
+        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
+        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
+        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
         assert check_uof.resident_condition == sent_uof['residentCondition']
         assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == Cleaners.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == Cleaners.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == Cleaners.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == Cleaners.number_to_string(sent_uof['officerYearsOfService'])
+        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
+        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
+        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
+        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
         assert check_uof.officer_condition == sent_uof['officerCondition']
 
     def test_update_uof_data(self, testapp):
@@ -436,15 +441,16 @@ class TestHeartbeat:
         assert len(all_uof) == 1
 
         # check the uof incident in the database against the updated data that was sent
+        cleaner = Cleaners()
         sent_uof = updated_uof_data[0]
         check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == Cleaners.capitalize(sent_uof['division'])
-        assert check_uof.precinct == Cleaners.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == Cleaners.capitalize(sent_uof['shift'])
-        assert check_uof.beat == Cleaners.capitalize(sent_uof['beat'])
+        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
+        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
+        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
+        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
         assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == Cleaners.officer_force_type(sent_uof['officerForceType'])
+        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
         assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
         assert check_uof.service_type == sent_uof['serviceType']
         assert check_uof.arrest_made == sent_uof['arrestMade']
@@ -454,15 +460,15 @@ class TestHeartbeat:
         assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
         assert check_uof.officer_injured == sent_uof['officerInjured']
         assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == Cleaners.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == Cleaners.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == Cleaners.number_to_string(sent_uof['residentAge'])
+        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
+        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
+        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
         assert check_uof.resident_condition == sent_uof['residentCondition']
         assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == Cleaners.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == Cleaners.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == Cleaners.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == Cleaners.number_to_string(sent_uof['officerYearsOfService'])
+        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
+        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
+        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
+        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
         assert check_uof.officer_condition == sent_uof['officerCondition']
 
     def test_post_uof_data_near_match_does_not_update(self, testapp):
@@ -525,25 +531,26 @@ class TestHeartbeat:
         assert response.json_body['added'] == ois_count
 
         # check the ois incident in the database against the data that was sent
+        cleaner = Cleaners()
         sent_ois = ois_data[0]
         check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
-        assert check_ois.division == Cleaners.capitalize(sent_ois['division'])
-        assert check_ois.precinct == Cleaners.capitalize(sent_ois['precinct'])
-        assert check_ois.shift == Cleaners.capitalize(sent_ois['shift'])
-        assert check_ois.beat == Cleaners.capitalize(sent_ois['beat'])
+        assert check_ois.division == cleaner.capitalize(sent_ois['division'])
+        assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
+        assert check_ois.shift == cleaner.capitalize(sent_ois['shift'])
+        assert check_ois.beat == cleaner.capitalize(sent_ois['beat'])
         assert check_ois.disposition == sent_ois['disposition']
-        assert check_ois.resident_race == Cleaners.race(sent_ois['residentRace'])
-        assert check_ois.resident_sex == Cleaners.sex(sent_ois['residentSex'])
-        assert check_ois.resident_age == Cleaners.number_to_string(sent_ois['residentAge'])
-        assert check_ois.resident_weapon_used == Cleaners.resident_weapon_used(sent_ois['residentWeaponUsed'])
+        assert check_ois.resident_race == cleaner.race(sent_ois['residentRace'])
+        assert check_ois.resident_sex == cleaner.sex(sent_ois['residentSex'])
+        assert check_ois.resident_age == cleaner.number_to_string(sent_ois['residentAge'])
+        assert check_ois.resident_weapon_used == cleaner.resident_weapon_used(sent_ois['residentWeaponUsed'])
         assert check_ois.resident_condition == sent_ois['residentCondition']
         assert check_ois.officer_identifier == sent_ois['officerIdentifier']
         assert check_ois.officer_weapon_used == sent_ois['officerForceType']
-        assert check_ois.officer_race == Cleaners.race(sent_ois['officerRace'])
-        assert check_ois.officer_sex == Cleaners.sex(sent_ois['officerSex'])
-        assert check_ois.officer_age == Cleaners.number_to_string(sent_ois['officerAge'])
-        assert check_ois.officer_years_of_service == Cleaners.string_to_integer(sent_ois['officerYearsOfService'])
+        assert check_ois.officer_race == cleaner.race(sent_ois['officerRace'])
+        assert check_ois.officer_sex == cleaner.sex(sent_ois['officerSex'])
+        assert check_ois.officer_age == cleaner.number_to_string(sent_ois['officerAge'])
+        assert check_ois.officer_years_of_service == cleaner.string_to_integer(sent_ois['officerYearsOfService'])
         assert check_ois.officer_condition == sent_ois['officerCondition']
 
     def test_post_mistyped_ois_data(self, testapp):
@@ -576,25 +583,26 @@ class TestHeartbeat:
         assert response.json_body['added'] == ois_count
 
         # check the ois incident in the database against the data that was sent
+        cleaner = Cleaners()
         sent_ois = ois_data[0]
         check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
-        assert check_ois.division == Cleaners.capitalize(sent_ois['division'])
-        assert check_ois.precinct == Cleaners.capitalize(sent_ois['precinct'])
-        assert check_ois.shift == Cleaners.capitalize(sent_ois['shift'])
-        assert check_ois.beat == Cleaners.capitalize(sent_ois['beat'])
+        assert check_ois.division == cleaner.capitalize(sent_ois['division'])
+        assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
+        assert check_ois.shift == cleaner.capitalize(sent_ois['shift'])
+        assert check_ois.beat == cleaner.capitalize(sent_ois['beat'])
         assert check_ois.disposition == sent_ois['disposition']
-        assert check_ois.resident_race == Cleaners.race(sent_ois['residentRace'])
-        assert check_ois.resident_sex == Cleaners.sex(sent_ois['residentSex'])
-        assert check_ois.resident_age == Cleaners.number_to_string(sent_ois['residentAge'])
-        assert check_ois.resident_weapon_used == Cleaners.resident_weapon_used(sent_ois['residentWeaponUsed'])
+        assert check_ois.resident_race == cleaner.race(sent_ois['residentRace'])
+        assert check_ois.resident_sex == cleaner.sex(sent_ois['residentSex'])
+        assert check_ois.resident_age == cleaner.number_to_string(sent_ois['residentAge'])
+        assert check_ois.resident_weapon_used == cleaner.resident_weapon_used(sent_ois['residentWeaponUsed'])
         assert check_ois.resident_condition == sent_ois['residentCondition']
         assert check_ois.officer_identifier == sent_ois['officerIdentifier']
         assert check_ois.officer_weapon_used == sent_ois['officerForceType']
-        assert check_ois.officer_race == Cleaners.race(sent_ois['officerRace'])
-        assert check_ois.officer_sex == Cleaners.sex(sent_ois['officerSex'])
-        assert check_ois.officer_age == Cleaners.number_to_string(sent_ois['officerAge'])
-        assert check_ois.officer_years_of_service == Cleaners.string_to_integer(sent_ois['officerYearsOfService'])
+        assert check_ois.officer_race == cleaner.race(sent_ois['officerRace'])
+        assert check_ois.officer_sex == cleaner.sex(sent_ois['officerSex'])
+        assert check_ois.officer_age == cleaner.number_to_string(sent_ois['officerAge'])
+        assert check_ois.officer_years_of_service == cleaner.string_to_integer(sent_ois['officerYearsOfService'])
         assert check_ois.officer_condition == sent_ois['officerCondition']
 
     def test_update_ois_data(self, testapp):
@@ -637,25 +645,26 @@ class TestHeartbeat:
         assert len(all_ois) == 1
 
         # check the ois incident in the database against the updated data that was sent
+        cleaner = Cleaners()
         sent_ois = updated_ois_data[0]
         check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
-        assert check_ois.division == Cleaners.capitalize(sent_ois['division'])
-        assert check_ois.precinct == Cleaners.capitalize(sent_ois['precinct'])
-        assert check_ois.shift == Cleaners.capitalize(sent_ois['shift'])
-        assert check_ois.beat == Cleaners.capitalize(sent_ois['beat'])
+        assert check_ois.division == cleaner.capitalize(sent_ois['division'])
+        assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
+        assert check_ois.shift == cleaner.capitalize(sent_ois['shift'])
+        assert check_ois.beat == cleaner.capitalize(sent_ois['beat'])
         assert check_ois.disposition == sent_ois['disposition']
-        assert check_ois.resident_race == Cleaners.race(sent_ois['residentRace'])
-        assert check_ois.resident_sex == Cleaners.sex(sent_ois['residentSex'])
-        assert check_ois.resident_age == Cleaners.number_to_string(sent_ois['residentAge'])
-        assert check_ois.resident_weapon_used == Cleaners.resident_weapon_used(sent_ois['residentWeaponUsed'])
+        assert check_ois.resident_race == cleaner.race(sent_ois['residentRace'])
+        assert check_ois.resident_sex == cleaner.sex(sent_ois['residentSex'])
+        assert check_ois.resident_age == cleaner.number_to_string(sent_ois['residentAge'])
+        assert check_ois.resident_weapon_used == cleaner.resident_weapon_used(sent_ois['residentWeaponUsed'])
         assert check_ois.resident_condition == sent_ois['residentCondition']
         assert check_ois.officer_identifier == sent_ois['officerIdentifier']
         assert check_ois.officer_weapon_used == sent_ois['officerForceType']
-        assert check_ois.officer_race == Cleaners.race(sent_ois['officerRace'])
-        assert check_ois.officer_sex == Cleaners.sex(sent_ois['officerSex'])
-        assert check_ois.officer_age == Cleaners.number_to_string(sent_ois['officerAge'])
-        assert check_ois.officer_years_of_service == Cleaners.string_to_integer(sent_ois['officerYearsOfService'])
+        assert check_ois.officer_race == cleaner.race(sent_ois['officerRace'])
+        assert check_ois.officer_sex == cleaner.sex(sent_ois['officerSex'])
+        assert check_ois.officer_age == cleaner.number_to_string(sent_ois['officerAge'])
+        assert check_ois.officer_years_of_service == cleaner.string_to_integer(sent_ois['officerYearsOfService'])
         assert check_ois.officer_condition == sent_ois['officerCondition']
 
     def test_post_ois_data_near_match_does_not_update(self, testapp):
