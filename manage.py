@@ -5,7 +5,6 @@ from flask_script import Manager, Shell, Server, prompt_pass
 from flask_migrate import MigrateCommand, upgrade
 from comport.content.defaults import ChartBlockDefaults
 
-
 from comport.app import create_app
 from comport.user.models import User, Role
 from comport.department.models import Department, Extractor
@@ -18,16 +17,26 @@ import csv
 import hashlib
 from testclient.JSON_test_client import JSONTestClient
 
+# set environment variables from the .env file
+if os.path.exists('.env'):
+    for line in open('.env'):
+        var = [item.strip() for item in line.strip().split('=')]
+        if len(var) == 2:
+            os.environ[var[0]] = var[1]
+
+# pick a configuration object
 if os.environ.get("COMPORT_ENV") == 'prod':
-    app = create_app(ProdConfig)
+    config_object = ProdConfig
 else:
-    app = create_app(DevConfig)
+    config_object = DevConfig
+
+# create the app
+app = create_app(config_object)
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 TEST_PATH = os.path.join(HERE, 'tests')
 
 manager = Manager(app)
-
 
 def _make_context():
     """Return context dict for a shell session so you can access

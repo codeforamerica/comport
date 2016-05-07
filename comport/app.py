@@ -27,7 +27,12 @@ def create_app(config_object=ProdConfig):
     """
     app = Flask(__name__)
     sslify = SSLify(app)
+
+    # set config from the passed object
     app.config.from_object(config_object)
+    # set additional config values from environ
+    app.config['SLACK_WEBHOOK_URL'] = os.environ['SLACK_WEBHOOK_URL']
+
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)

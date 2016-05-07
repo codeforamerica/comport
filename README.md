@@ -35,8 +35,15 @@ python manage.py db upgrade
 python manage.py server
 ```
 
-
 **NOTE**: The app's configuration lives in [`settings.py`](https://github.com/codeforamerica/comport/blob/master/comport/settings.py). When different configurations (such as `DevConfig`) are referenced in the next sections, they are contained in that file.
+
+If you want to send a notification to a Slack instance on certain events, copy the `env.sample` file to `.env`:
+
+```
+cp env.sample .env
+```
+
+[Set up an Incoming Webhooks integration on Slack](https://my.slack.com/services/new/incoming-webhook) and save the value of **Webhook URL** as `SLACK_WEBHOOK_URL` in `.env`. This will work when you're running Comport locally. To set the variable when the application is running on Heroku, [follow these instructions](https://devcenter.heroku.com/articles/config-vars).
 
 #### Testing
 
