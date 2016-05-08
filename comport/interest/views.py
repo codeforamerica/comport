@@ -21,7 +21,7 @@ def home():
                 email=form.email.data,
                 comments=form.comments.data)
             # send a slack notification
-            send_slack_message('New Interest Form Submission!', '\n'.join([item for item in [form.name.data, form.agency.data, form.location.data, form.phone.data, form.email.data, form.comments.data] if item]))
+            send_slack_message('New Interest Form Submission!', [form.name.data, form.agency.data, form.location.data, form.phone.data, form.email.data, form.comments.data])
             flash("Thank you. We will be in contact shortly.", 'success')
             return redirect(url_for('public.home'))
         else:
