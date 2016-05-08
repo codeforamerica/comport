@@ -25,7 +25,13 @@ def heartbeat():
     extractor.save()
 
     heartbeat_response = json.dumps({"received": request.json})
-    slack_body_lines = ['For: {}'.format(extractor.first_department().name)]
+    slack_body_lines = []
+    extractor_department = extractor.first_department()
+    if extractor_department:
+        slack_body_lines.append('For: {}'.format(extractor_department.name))
+    else:
+        slack_body_lines.append('Username: {}'.format(username))
+
     slack_date_line = 'No extraction start date in reply.'
 
     if extractor.next_month and extractor.next_year:
