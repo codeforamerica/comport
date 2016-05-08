@@ -1,11 +1,26 @@
 # -*- coding: utf-8 -*-
 """Helper utilities and decorators."""
-from flask import flash
+from flask import flash, current_app
+import requests
+import json
 import string
 from random import randint, choice
 from datetime import datetime, timedelta
 from factory.fuzzy import _random
 
+def send_slack_message(title='', body=''):
+    ''' Send a slack webhook with the passed message
+    '''
+    # Only send if a Slack webhook URL has been set
+    webhook_url = current_app.config.get('SLACK_WEBHOOK_URL')
+    if webhook_url:
+        if title:
+            title = '*{}*\n'.format(title)
+        pretext = '{title}{body}'.format(title=title, body=body)
+        payload_values = dict(text=pretext)
+        payload = json.dumps(payload_values)
+        headers = {'Content-type': 'application/json'}
+        requests.post(webhook_url, data=payload, headers=headers)
 
 def flash_errors(form, category="warning"):
     """Flash all errors for a form."""
