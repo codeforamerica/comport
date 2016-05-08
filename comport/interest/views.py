@@ -4,7 +4,7 @@ from flask import (Blueprint, request, render_template, flash, url_for, redirect
 
 from comport.interest.models import Interested
 from comport.interest.forms import InterestForm
-from comport.utils import flash_errors
+from comport.utils import flash_errors, send_slack_message
 
 blueprint = Blueprint('interest', __name__, url_prefix='/interest', static_folder="../static")
 
@@ -20,6 +20,8 @@ def home():
                 phone=form.phone.data,
                 email=form.email.data,
                 comments=form.comments.data)
+            # send a slack notification
+            send_slack_message('New Interest Form Submission!', '\n'.join([item for item in [form.name.data, form.agency.data, form.location.data, form.phone.data, form.email.data, form.comments.data] if item]))
             flash("Thank you. We will be in contact shortly.", 'success')
             return redirect(url_for('public.home'))
         else:
