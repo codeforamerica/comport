@@ -31,7 +31,7 @@ def create_app(config_object=ProdConfig):
     # set config from the passed object
     app.config.from_object(config_object)
     # set additional config values from environ
-    app.config['SLACK_WEBHOOK_URL'] = os.environ['SLACK_WEBHOOK_URL']
+    app.config['SLACK_WEBHOOK_URL'] = os.environ.get('SLACK_WEBHOOK_URL')
 
     register_extensions(app)
     register_blueprints(app)
