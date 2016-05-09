@@ -28,6 +28,8 @@ if os.path.exists('.env'):
 if os.environ.get("COMPORT_ENV") == 'prod':
     config_object = ProdConfig
 else:
+    # No Slack webhook URL for testing
+    del(os.environ['SLACK_WEBHOOK_URL'])
     config_object = DevConfig
 
 # create the app
