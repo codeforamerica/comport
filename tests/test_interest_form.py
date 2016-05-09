@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import pytest
 from comport.interest.forms import InterestForm
-from comport.interest.models import Interested
+from flask import current_app
+import responses
+import json
 
 @pytest.mark.usefixtures('app')
 class TestInterestForm:
 
-    def test_validate_success(self, db):
+    def test_validate_success(self):
         ''' The form validates when properly filled out.
         '''
         form = InterestForm(name="Jean Weaver", agency="Clinton Police Department", location="Clinton, OK", phone="580-970-3338", email="jean.weaver@example.com", comments="I'm interested in Comport as an open-source tool!")
@@ -59,3 +61,27 @@ class TestInterestForm:
         '''
         form = InterestForm(name="Jean Weaver", agency="Clinton Police Department", location="Clinton, OK", phone="580-970-3338", email="jean.weaver@example.com", comments=None)
         assert form.validate() is True
+
+    @responses.activate
+    def test_interest_form_post_triggers_slack_notification(self, testapp):
+        ''' A valid interest form post triggers a Slack notification.
+        '''
+
+        # set a fake Slack webhook URL
+        fake_webhook_url = 'http://webhook.example.com/'
+        current_app.config['SLACK_WEBHOOK_URL'] = fake_webhook_url
+
+        # create a mock to receive POST requests to that URL
+        responses.add(responses.POST, fake_webhook_url, status=200)
+
+        # post an interest form submission
+        testapp.post("/interest/", params=dict(name="Jean Weaver", agency="Clinton Police Department", location="Clinton, OK", phone="580-970-3338", email="jean.weaver@example.com", comments="I'm interested in Comport as an open-source tool!"))
+
+        # test the captured post payload
+        post_body = json.loads(responses.calls[0].request.body)
+        assert 'New Interest Form Submission!' in post_body['text']
+
+        # delete the fake Slack webhook URL
+        del(current_app.config['SLACK_WEBHOOK_URL'])
+        # reset the mock
+        responses.reset()
