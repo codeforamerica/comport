@@ -3,7 +3,8 @@ from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting
-from comport.utils import parse_date, parse_int
+from comport.utils import parse_date, parse_int, send_slack_message
+
 from .cleaners import Cleaners
 
 import json
@@ -23,10 +24,24 @@ def heartbeat():
     extractor.last_contact = datetime.now()
     extractor.save()
 
-    if extractor.next_month and extractor.next_year:
-        return json.dumps({"received": request.json, "nextMonth": extractor.next_month, "nextYear": extractor.next_year})
+    heartbeat_response = json.dumps({"received": request.json})
+    slack_body_lines = []
+    extractor_department = extractor.first_department()
+    if extractor_department:
+        slack_body_lines.append('For: {}'.format(extractor_department.name))
+    else:
+        slack_body_lines.append('Username: {}'.format(username))
 
-    return json.dumps({"received": request.json})
+    slack_date_line = 'No extraction start date in reply.'
+
+    if extractor.next_month and extractor.next_year:
+        heartbeat_response = json.dumps({"received": request.json, "nextMonth": extractor.next_month, "nextYear": extractor.next_year})
+        slack_date_line = 'Replied with extraction start date: {}/{}'.format(extractor.next_month, extractor.next_year)
+
+    slack_body_lines.append(slack_date_line)
+    send_slack_message('Comport Pinged by Extractor!', slack_body_lines)
+
+    return heartbeat_response
 
 
 @blueprint.route("/UOF", methods=['POST'])
