@@ -4,10 +4,13 @@
 See: http://webtest.readthedocs.org/
 """
 import pytest
+import responses
+import json
 from comport.department.models import Department, Extractor
 from comport.data.models import OfficerInvolvedShooting, UseOfForceIncident, CitizenComplaint
 from testclient.JSON_test_client import JSONTestClient
 from comport.data.cleaners import Cleaners
+from flask import current_app
 
 @pytest.mark.usefixtures('db')
 class TestHeartbeat:
@@ -46,6 +49,36 @@ class TestHeartbeat:
         assert response.json_body['nextMonth'] == 10
         assert response.json_body['nextYear'] == 2006
         assert response.json_body['received'] == {'heartbeat': 'heartbeat'}
+
+    @responses.activate
+    def test_extractor_post_triggers_slack_notification(self, testapp):
+        ''' A valid heartbeat post triggers a Slack notification
+        '''
+        # set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
+
+        # set the correct authorization
+        testapp.authorization = ('Basic', ('extractor', 'password'))
+
+        # set a fake Slack webhook URL
+        fake_webhook_url = 'http://webhook.example.com/'
+        current_app.config['SLACK_WEBHOOK_URL'] = fake_webhook_url
+
+        # create a mock to receive POST requests to that URL
+        responses.add(responses.POST, fake_webhook_url, status=200)
+
+        # post a sample json object to the heartbeat URL
+        testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
+
+        # test the captured post payload
+        post_body = json.loads(responses.calls[0].request.body)
+        assert 'Comport Pinged by Extractor!' in post_body['text']
+
+        # delete the fake Slack webhook URL
+        del(current_app.config['SLACK_WEBHOOK_URL'])
+        # reset the mock
+        responses.reset()
 
     def test_post_complaint_data(self, testapp):
         ''' New complaint data from the extractor is processed as expected.

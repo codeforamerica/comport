@@ -4,6 +4,7 @@
 # Testing
 pytest>=2.6.3
 webtest
+responses==0.5.1
 
 # Management script
 Flask-Script
