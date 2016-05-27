@@ -55,13 +55,18 @@ And create and populate the project database (use [postgres.app](http://postgres
 ```bash
 psql -c 'create database comport;'
 python manage.py db upgrade
-python manage.py server
 ```
 
 [Bower](http://bower.io/) is used to install front-end dependencies. [Install node and npm](https://nodejs.org/), then use npm to [install bower](http://bower.io/#install-bower). When Bower's installed, use it to install Comport's front-end dependencies:
 
 ```bash
 bower install
+```
+
+Finally, start the server:
+
+```bash
+python manage.py server
 ```
 
 **NOTE**: The app's configuration lives in [`settings.py`](https://github.com/codeforamerica/comport/blob/master/comport/settings.py). When different configurations (such as `DevConfig`) are referenced in the next sections, they are contained in that file.
