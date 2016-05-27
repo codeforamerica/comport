@@ -223,15 +223,16 @@ def test_client():
     user.save()
 
     test_client = JSONTestClient()
-    # missing_data_mutator = MissingDataMutator()
-    # fuzzed_data_mutator = FuzzedDataMutator()
-    # known_bad_data_mutator = KnownBadDataMutator()
-    # empty_data_mutator = EmptyDataMutator()
-    # casing_mutator = CasingMutator()
-    # condenisng_date_mutator = CondenisngDateMutator()
-    # gap_date_mutator = GapDateMutator()
+    mutations = []
+    # mutations.append(MissingDataMutator())
+    # mutations.append(FuzzedDataMutator())
+    # mutations.append(KnownBadDataMutator())
+    # mutations.append(EmptyDataMutator())
+    # mutations.append(CasingMutator())
+    # mutations.append(CondenisngDateMutator())
+    # mutations.append(GapDateMutator())
 
-    test_client.run(department, [])
+    test_client.run(department, mutations)
 
 
 manager.add_command('server', Server())
