@@ -15,24 +15,53 @@ Project Comport is a project of the 2015 Indianapolis Code for America [fellowsh
 ## How
 
 #### Core Dependencies
-Project Comport is a [Flask](http://flask.pocoo.org/) app. It uses [Postgres](http://www.postgresql.org/) for a database and uses [bower](http://bower.io/) to manage most of its front end dependencies. Big thanks to the [cookiecutter-flask](https://github.com/sloria/cookiecutter-flask) project for a nice kickstart.
-
-It is highly recommended that you use use [virtualenv](https://readthedocs.org/projects/virtualenv/) (and [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/) for convenience). For a how-to on getting set up, please consult this [howto](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md). Additionally, you'll need node to install bower (see this [howto](https://github.com/codeforamerica/howto/blob/master/Node.js.md) for more on Node), and it is recommended that you use [postgres.app](http://postgresapp.com/) to handle your Postgres (assuming you are developing on OSX).
+Project Comport is a [Flask](http://flask.pocoo.org/) app. It uses [Postgres](http://www.postgresql.org/) for a database and uses [bower](http://bower.io/) to manage its front end dependencies. Big thanks to the [cookiecutter-flask](https://github.com/sloria/cookiecutter-flask) project for a nice kickstart.
 
 #### Installation and setup
 
 ##### Quick local installation
 
-First, create a python 3 virtualenv and activate it. Then:
+First, clone the repo and change into the project directory.
 
 ```bash
 git clone git@github.com:codeforamerica/comport.git
-# create the 'comport' database
-psql -c 'create database comport;'
-pip install -r requirements.txt
+cd comport
+```
+
+Create a Python 3 virtual environment with [virtualenv](https://virtualenv.pypa.io/en/stable/) and (optionally) [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) and activate it. Read these [detailed installation and usage instructions](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for those two tools if you don't have them installed already.
+
+With virtualenv only:
+
+``` bash
+virtualenv --no-site-packages -p python3 venv
+source venv/bin/activate
+```
+
+With virtualenvwrapper:
+
+``` bash
+mkvirtualenv --no-site-packages -p python3 comport
+workon comport
+```
+
+Then install the required packages:
+
+```bash
 pip install -r requirements/dev.txt
+```
+
+And create and populate the project database (use [postgres.app](http://postgresapp.com/) if you're developing on OS X):
+
+```bash
+psql -c 'create database comport;'
 python manage.py db upgrade
 python manage.py server
+```
+
+[Bower](http://bower.io/) is used to install front-end dependencies. [Install node and npm](https://nodejs.org/), then use npm to [install bower](http://bower.io/#install-bower). When Bower's installed, use it to install Comport's front-end dependencies:
+
+```bash
+bower install
 ```
 
 **NOTE**: The app's configuration lives in [`settings.py`](https://github.com/codeforamerica/comport/blob/master/comport/settings.py). When different configurations (such as `DevConfig`) are referenced in the next sections, they are contained in that file.
