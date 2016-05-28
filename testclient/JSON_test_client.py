@@ -1,6 +1,7 @@
 import requests
 import hashlib
-from datetime import datetime
+import datetime
+from dateutil.relativedelta import relativedelta
 from comport.department.models import Extractor
 from comport.utils import random_string, random_date
 import random
@@ -15,15 +16,19 @@ class JSONTestClient(object):
             department=department, password=password)
         comport_username = extractor.username
         comport_password = password
+        end_date = datetime.datetime.now()
+        start_date = end_date - relativedelta(months=18)
 
         data = []
 
-        complaints = self.make_complaints()
+        complaints = self.make_complaints(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
             complaints = mutator.mutate(complaints)
 
         data.extend(complaints)
+
+        print("* Adding {} fake complaints...".format(len(complaints)))
 
         for i in range(0, len(data), 100):
             chunk = data[i:i + 100]
@@ -31,7 +36,7 @@ class JSONTestClient(object):
 
             url = baseurl + "data/complaints"
 
-            print(payload)
+            print("- complaints {}-{}".format(i, i + len(chunk)))
 
             p = requests.post(url, auth=(comport_username,
                                          comport_password), json=payload)
@@ -40,12 +45,14 @@ class JSONTestClient(object):
 
         data = []
 
-        use_of_force_incidents = self.make_uof()
+        use_of_force_incidents = self.make_uof(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
             use_of_force_incidents = mutator.mutate(use_of_force_incidents)
 
         data.extend(use_of_force_incidents)
+
+        print("* Adding {} fake uof...".format(len(use_of_force_incidents)))
 
         for i in range(0, len(data), 100):
             chunk = data[i:i + 100]
@@ -53,7 +60,7 @@ class JSONTestClient(object):
 
             url = baseurl + "data/UOF"
 
-            print(payload)
+            print("- uof {}-{}".format(i, i + len(chunk)))
 
             p = requests.post(url, auth=(comport_username,
                                          comport_password), json=payload)
@@ -62,12 +69,14 @@ class JSONTestClient(object):
 
         data = []
 
-        ois_incidents = self.make_ois()
+        ois_incidents = self.make_ois(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
             ois_incidents = mutator.mutate(ois_incidents)
 
         data.extend(ois_incidents)
+
+        print("* Adding {} fake ois...".format(len(ois_incidents)))
 
         for i in range(0, len(data), 100):
             chunk = data[i:i + 100]
@@ -75,7 +84,7 @@ class JSONTestClient(object):
 
             url = baseurl + "data/OIS"
 
-            print(payload)
+            print("- ois {}-{}".format(i, i + len(chunk)))
 
             p = requests.post(url, auth=(comport_username,
                                          comport_password), json=payload)
@@ -91,16 +100,28 @@ class JSONTestClient(object):
         m.update((str(text) + key).encode('utf-8'))
         return m.hexdigest()
 
-    def make_complaints(self, count=1000):
+    def make_complaints(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+        # make a smaller pool of officers so that it's possible to have more than one complaint per officer
+        officers = []
+        officer_count = round(count * .33)
+        for x in range(0, count):
+            officers.append({
+                "officerIdentifier": self.hash(random_string(10)),
+                "officerRace": self.generate_race(),
+                "officerSex": self.generate_sex(),
+                "officerAge": str(random.randint(23, 50)),
+                "officerYearsOfService": str(random.randint(0, 27))
+            })
+
         complaints = []
         for x in range(0, count):
             assignment = self.generate_assignment()
             allegation = self.generate_allegation()
-            complaints.append({
+            new_complaint = {
                 "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
                 "source": self.generate_source(),
-                "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
                 "division": assignment["division"],
                 "precinct": assignment["precinct"],
                 "shift": assignment["shift"],
@@ -110,23 +131,20 @@ class JSONTestClient(object):
                 "disposition": self.generate_disposition(),
                 "residentRace": self.generate_race(),
                 "residentSex": self.generate_sex(),
-                "residentAge": str(random.randint(15, 70)),
-                "officerIdentifier": self.hash(random_string(10)),
-                "officerRace": self.generate_race(),
-                "officerSex": self.generate_sex(),
-                "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": str(random.randint(0, 27))
-            })
+                "residentAge": str(random.randint(15, 70))
+            }
+            new_complaint.update(random.choice(officers))
+            complaints.append(new_complaint)
 
         return complaints
 
-    def make_uof(self, count=1000):
+    def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
                 "opaqueId": self.hash(random_string(10)),
-                "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
                 "occuredTime": "",
                 "division": assignment["division"],
                 "precinct": assignment["precinct"],
@@ -157,14 +175,14 @@ class JSONTestClient(object):
 
         return incidents
 
-    def make_ois(self, count=1000):
+    def make_ois(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
         for x in range(0, count):
             assignment = self.generate_assignment()
             incidents.append({
                 "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_service_type(),
-                "occuredDate": random_date(datetime(2014, 1, 1), datetime(2016, 1, 1)).strftime("%Y-%m-%d 0:0:00"),
+                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
                 "occuredTime": "",
                 "division": assignment["division"],
                 "precinct": assignment["precinct"],
