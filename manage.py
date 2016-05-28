@@ -4,7 +4,7 @@ import os
 import datetime
 from dateutil.relativedelta import relativedelta
 from random import randint
-from flask_script import Manager, Shell, Server, prompt_pass
+from flask_script import Manager, Shell, Server, prompt_pass, prompt_bool
 from flask_migrate import MigrateCommand, upgrade
 from comport.content.defaults import ChartBlockDefaults
 
@@ -221,6 +221,9 @@ def add_new_blocks():
 def test_client():
     ''' Erase the database and load in a full suite of test data
     '''
+    if not prompt_bool("Are you sure you want to destroy and recreate Comport's database?"):
+        return
+
     delete_everything()
 
     # create a fake PD and admin user
