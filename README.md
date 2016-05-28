@@ -79,6 +79,22 @@ cp env.sample .env
 
 [Set up an Incoming Webhooks integration on Slack](https://my.slack.com/services/new/incoming-webhook) and save the value of **Webhook URL** as `SLACK_WEBHOOK_URL` in `.env`. This will work when you're running Comport locally. To set the variable when the application is running on Heroku, [follow these instructions](https://devcenter.heroku.com/articles/config-vars).
 
+#### Generating Fake Data
+
+To generate some fake incident data, first start the server.
+
+```bash
+python manage.py server
+```
+
+Then, in another terminal, run the command below.
+
+*WARNING: This command will destroy and re-build the application's database from scratch, erasing departments, users, incidents, etc.*
+
+```bash
+python manage.py test_client
+```
+
 #### Testing
 
 In order to run the tests, you will need to create a test database. You can follow the same procedures outlined in the install section. By default, the database should be named `comport_test`:
