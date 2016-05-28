@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import datetime
+from dateutil.relativedelta import relativedelta
+from random import randint
 from flask_script import Manager, Shell, Server, prompt_pass
 from flask_migrate import MigrateCommand, upgrade
 from comport.content.defaults import ChartBlockDefaults
@@ -216,12 +219,58 @@ def add_new_blocks():
 
 @manager.command
 def test_client():
+    ''' Erase the database and load in a full suite of test data
+    '''
     delete_everything()
-    department = Department.create(name="Busy Town Police Department", short_name="BTPD", load_defaults=True)
-    user = User.create(username="user", email="email2@example.com", password="password", active=True, is_admin=True)
+
+    # create a fake PD and admin user
+    department = Department.create(name="Izquierda Metropolitan Police Department", short_name="IMPD", load_defaults=True)
+    user = User.create(username="user", email="user@example.com", password="password", active=True, is_admin=True)
     user.departments.append(department)
     user.save()
 
+    # create some fake officer out on service data
+    date_now = datetime.datetime.now()
+    date_step = date_now - relativedelta(months=30)
+    while date_step.year < date_now.year or date_step.month < date_now.month:
+        DenominatorValue.create(
+            department_id=department.id,
+            month=date_step.month,
+            year=date_step.year,
+            officers_out_on_service=(100000 + (randint(0, 46000) - 23000))
+        )
+        date_step = date_step + relativedelta(months=1)
+
+    # create some fake demographic data
+    demo_template = [
+        dict(race="Asian", city_factor=0.0194, dept_factor=0.0013),
+        dict(race="Black", city_factor=0.2452, dept_factor=0.1402),
+        dict(race="Hispanic", city_factor=0.0861, dept_factor=0.0253),
+        dict(race="Other", city_factor=0.0699, dept_factor=0.0101),
+        dict(race="White", city_factor=0.5794, dept_factor=0.8231)
+    ]
+
+    # for the city
+    city_population = 100000 + round(100000 * ((randint(0, 16) / 100) - .08))
+    for value in demo_template:
+        DemographicValue.create(
+            department_id=department.id,
+            race=value["race"],
+            count=round(city_population * value["city_factor"]),
+            department_value=False
+        )
+
+    # for the department
+    dept_population = 1500 + round(1500 * ((randint(0, 16) / 100) - .08))
+    for value in demo_template:
+        DemographicValue.create(
+            department_id=department.id,
+            race=value["race"],
+            count=round(dept_population * value["dept_factor"]),
+            department_value=True
+        )
+
+    # create a JSON test client and run it
     test_client = JSONTestClient()
     mutations = []
     # mutations.append(MissingDataMutator())
