@@ -19,7 +19,8 @@ def department_dashboard(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/dashboard.html", department=department, current_year=datetime.datetime.now().year)
+    current_date = datetime.datetime.now()
+    return render_template("department/dashboard.html", department=department, current_month=current_date.month, current_year=current_date.year)
 
 
 @blueprint.route("/<int:department_id>/activate", methods=['POST'])
@@ -43,12 +44,12 @@ def start_extractor(department_id):
     if not department:
         abort(404)
     if request.method == 'POST':
-        if request.form['submit'] == 'Start':
+        if request.form['submit'] == 'Set':
             extractor = department.get_extractor()
             extractor.next_year = request.form["year"]
             extractor.next_month = request.form["month"]
             extractor.save()
-            flash("Extractor started", "info")
+            flash("Extractor start date set to {}/{}".format(extractor.next_month, extractor.next_year), "info")
             return redirect(url_for('department.department_dashboard', department_id=department.id))
 
 # <<<<<<<< EDIT ENDPOINTS >>>>>>>>>>
