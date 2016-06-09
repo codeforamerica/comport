@@ -19,10 +19,13 @@
           <div>
             <h4>Set Extraction Start Date</h4>
             The next time the extractor pings this application, it will be told to pull data starting at this date.
+            <br/><em>
             {% if department.get_extractor().next_month and department.get_extractor().next_year %}
-            <em> (Currently set to {{department.get_extractor().next_month}}/{{department.get_extractor().next_year}})</em><br/>
+            (Currently set to {{department.get_extractor().next_month}}/{{department.get_extractor().next_year}})
+            {% else %}
+            (No extraction start date is set)
             {% endif %}
-            <br/>
+            </em><br/><br/>
             <label for="startMonth">Month</label>
             <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12" value="{{current_month}}" required>
             <label for="startYear">Year</label>
