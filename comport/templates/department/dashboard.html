@@ -4,35 +4,47 @@
   <div class="col-md-4">
     <div class="row">
       <div class="col-md-12">
-        <h4>Setup Extraction</h4>
         {% if department.get_extractor() == None %}
           <form action="{{department.id}}/activate" method="post">
-            <button class="action-button-big" type="submit" name="submit" value="Activate">Activate</button>
+            <button class="action-button-big" type="submit" name="submit" value="Activate">Create An Extractor Account</button>
           </form>
+          The extractor will use this account to post new data to the application.
         {% endif %}
       </div>
     </div>
     {% if department.get_extractor() != None %}
     <div class="row">
       <div class="col-md-12">
-        <form class="form-inline" action="{{department.id}}/start" method="post">
+        <form id="extractionStartForm" class="form-inline" action="{{department.id}}/start" method="post">
           <div>
-            <h4>Start Extraction</h4>
+            <h4>Set Extraction Start Date</h4>
+            The next time the extractor pings this application, it will be told to pull data starting at this date.
+            <br/><em>
+            {% if department.get_extractor().next_month and department.get_extractor().next_year %}
+            (Currently set to {{department.get_extractor().next_month}}/{{department.get_extractor().next_year}})
+            {% else %}
+            (No extraction start date is set)
+            {% endif %}
+            </em><br/><br/>
             <label for="startMonth">Month</label>
-            <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12">
+            <input class="form-control" id="startMonth" type="number" name="month" min="1" max="12" value="{{current_month}}" required>
             <label for="startYear">Year</label>
-            <input class="form-control" id="startYear" type="number" name="year" min="2000" max={{current_year}}>
-            <input class="form-control" type="submit" name="submit" value="Start">
+            <input class="form-control" id="startYear" type="number" name="year" min="2000" max="{{current_year}}" value="{{current_year}}" required>
+            <input class="form-control" type="submit" name="submit" value="Set">
           </div>
         </form>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <h4>Last Heard From:</h4>
+        <hr>
+        {% if department.get_extractor().last_contact %}
         <div>
-          {{department.get_extractor().last_contact}}
+          The extractor was last heard from on:<br/><b>{{department.get_extractor().last_contact.strftime('%A, %B %d, %Y, %I:%M %p')}}</b>
         </div>
+        {% else %}
+          The extractor hasn't made contact yet.
+        {% endif %}
       </div>
     </div>
     {% endif %}
@@ -95,6 +107,7 @@
     </table>
   </div>
 </div>
+<hr>
 <div class="row">
   <div class="col-md-4">
     <a href="{{department.id}}/edit/demographics">Edit Demographic Information</a>
