@@ -34,9 +34,12 @@ def heartbeat():
 
     slack_date_line = 'No extraction start date in reply.'
 
-    if extractor.next_month and extractor.next_year:
-        heartbeat_response = json.dumps({"received": request.json, "nextMonth": extractor.next_month, "nextYear": extractor.next_year})
-        slack_date_line = 'Replied with extraction start date: {}/{}'.format(extractor.next_month, extractor.next_year)
+    now = datetime.now()
+    next_month = extractor.next_month if extractor.next_month else now.month
+    next_year = extractor.next_year if extractor.next_year else now.year
+
+    heartbeat_response = json.dumps({"received": request.json, "nextMonth": next_month, "nextYear": next_year})
+    slack_date_line = 'Replied with extraction start date: {}/{}'.format(next_month, next_year)
 
     slack_body_lines.append(slack_date_line)
     send_slack_message('Comport Pinged by Extractor!', slack_body_lines)
