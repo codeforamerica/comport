@@ -79,3 +79,7 @@ Temporary Items
 data/testdata/*
 
 .env
+
+comport/static/libs/jQuery/*
+
+venv/
