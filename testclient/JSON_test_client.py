@@ -21,6 +21,33 @@ class JSONTestClient(object):
 
         data = []
 
+        # Assaults on officers mock data generation
+        assaults = self.make_assaults(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
+
+        for mutator in mutators:
+            assaults = mutator.mutate(assaults)
+
+        data.extend(assaults)
+
+        print("* Adding {} fake assaults...".format(len(assaults)))
+
+        for i in range(0, len(data), 100):
+            chunk = data[i:i + 100]
+            payload = {'data': chunk}
+
+            url = baseurl + "data/assaults"
+
+            print("- assaults {}-{}".format(i, i + len(chunk)))
+
+            p = requests.post(url, auth=(comport_username,
+                                         comport_password), json=payload)
+            if p.status_code != 200:
+                # print("error: %s" % p.text.encode("utf-8", "ignore"))
+                print(p.status_code)
+
+        data = []
+
+        # Complaints on officers mock data generation
         complaints = self.make_complaints(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -45,6 +72,7 @@ class JSONTestClient(object):
 
         data = []
 
+        # Generating mock use of force data
         use_of_force_incidents = self.make_uof(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -69,6 +97,7 @@ class JSONTestClient(object):
 
         data = []
 
+        # Generating mock officer involved shooting data
         ois_incidents = self.make_ois(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -137,6 +166,36 @@ class JSONTestClient(object):
             complaints.append(new_complaint)
 
         return complaints
+
+    def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+        # make a smaller pool of officers so that it's possible to have more than one assault per officer
+        officers = []
+        officer_count = round(count * .33)
+        for x in range(0, count):
+            officers.append({
+                "officerIdentifier": self.hash(random_string(10))
+            })
+
+        assaults = []
+        for x in range(0, count):
+            assignment = self.generate_assault_assignment()
+            force_type = self.generate_assault_force_type()
+            service_type = self.generate_assault_service_type()
+            new_assault = {
+                "opaqueId": self.hash(random_string(10)),
+                "serviceType": self.generate_assault_service_type(),
+                "forceType": force_type,
+                "assignment": assignment,
+                "arrestMade": self.generate_bool(),
+                "officerInjured": self.generate_bool(),
+                "officerKilled": self.generate_bool(),
+                "reportFiled": self.generate_bool()
+            }
+            new_assault.update(random.choice(officers))
+            assaults.append(new_assault)
+
+        return assaults
+
 
     def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
@@ -245,6 +304,43 @@ class JSONTestClient(object):
              "Within policy",
              None
              ])
+
+    def generate_assault_force_type(self):
+        force_type = random.choice([
+            'HANDS FIST FEET ETC',
+            'OTHER DANGEROUS WEAPON',
+            'FIREARM',
+            'KNIFE OR CUTTING INSTRUMENT'
+        ])
+        return force_type
+
+    def generate_assault_assignment(self):
+        assignment = random.choice([
+            'ONE MAN VEHICLE ASSISTED',
+            'OTHER ASSISTED',
+            'OTHER ALONE',
+            'ONE MAN VEHICLE ALONE',
+            'DETECTIVE OR SPECIAL ASSIGN ALONE',
+            'TWO MAN VEHICLE',
+            'DETECTIVE OR SPECIAL ASSIGN ASSISTED'
+        ])
+        return assignment
+
+    def generate_assault_service_type(self):
+        service_type = random.choice([
+            'Handling, custody of prisoners',
+            'Invest Suspicious persons or circumstances',
+            'Mentally deranged',
+            'All other',
+            'Traffic pursuits and stops',
+            'Attempting other arrests',
+            'Ambush no warning',
+            'Responding to Disturbance calls (man with gun etc)',
+            'Civil disorder (riot, mass disobedience)',
+            'Burglaries in progress or pursuing burglars',
+            'Robberies in progress or pursuing robbers'
+        ])
+        return service_type
 
     def generate_allegation(self):
         allegation = random.choice([
