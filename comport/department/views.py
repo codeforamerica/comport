@@ -249,6 +249,13 @@ def complaints_csv(department_id):
         abort(404)
     return Response(department.get_complaint_csv(), mimetype="text/csv")
 
+@blueprint.route('/<int:department_id>/assaults.csv')
+def assaults_csv(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return Response(department.get_assaults_csv(), mimetype="text/csv")
+
 @blueprint.route('/<int:department_id>/ois.csv')
 def ois_csv(department_id):
     department = Department.get_by_id(department_id)
@@ -292,6 +299,20 @@ def public_complaints_schema(short_name):
     if not department:
         abort(404)
     return render_template("department/site/schema/complaints.html", department=department, published=True)
+
+@blueprint.route("/<short_name>/assaultsonofficers/")
+def public_assaults(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
+    if not department:
+        abort(404)
+    return render_template("department/site/assaults.html", department=department, chart_blocks=department.get_assaults_blocks(), editing=False, published=True)
+
+@blueprint.route('/<short_name>/schema/assaultsonofficers/')
+def public_assaults_schema(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/assaults.html", department=department, published=True)
 
 @blueprint.route("/<short_name>/useofforce/")
 def public_uof(short_name):
