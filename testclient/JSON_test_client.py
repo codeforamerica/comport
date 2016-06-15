@@ -619,6 +619,7 @@ class JSONTestClient(object):
         return [
             {
                 'opaqueId': '90607ab31c2114e987f7e458680a8f15',
+                'officerIdentifier': '3ae9c4d0fb769fa5f295ecdad855b48b',
                 'serviceType': 'Handling, Custody Of Prisoners',
                 'forceType': 'Firearm',
                 'assignment': 'One Man Vehical',
@@ -629,6 +630,7 @@ class JSONTestClient(object):
             },
             {
                 'opaqueId': '32423104dsfadf90607ab31c211',
+                'officerIdentifier': '796a086d9da3d9a7eecb9289bc9e88c6',
                 'serviceType': 'Mentally Deranged',
                 'forceType': 'Hands Fist Feet Etc',
                 'assignment': 'One Man Vehicle Assisted',
@@ -639,6 +641,7 @@ class JSONTestClient(object):
             },
             {
                 'opaqueId': 'ab83e472eed9f0c577bf022e28428920',
+                'officerIdentifier': 'f9a4d4c2050981619f6a296b7eb73794',
                 'serviceType': 'Invest Suspicious Persons Or Circumstances',
                 'forceType': 'Other Dangerous Weapon',
                 'assignment': 'One Alone',
@@ -649,6 +652,7 @@ class JSONTestClient(object):
             },
             {
                 'opaqueId': '0ab83e472eed9f0c577bf022e28428920',
+                'officerIdentifier': 'd0318d57ca5ff55d27ff7cfb4575cd0b',
                 'serviceType': 'Traffic Pursuits And Stops',
                 'forceType': 'Hands Fist Feet Etc',
                 'assignment': 'One Man Vehicle Assisted',
@@ -659,6 +663,7 @@ class JSONTestClient(object):
             },
             {
                 'opaqueId': '950919eb39e0172d0029feb2db469d23',
+                'officerIdentifier': '5182b3dd18fa4e745678a2f529bf62c8',
                 'serviceType': 'Ambush No Warning',
                 'forceType': 'Other Dangerous Weapon',
                 'assignment': 'One Man Vehicle',

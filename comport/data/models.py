@@ -63,6 +63,7 @@ class AssaultOnOfficer(SurrogatePK, Model):
     __tablename__ = 'assaults_on_officers'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
+    officer_identifier = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     force_type = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)

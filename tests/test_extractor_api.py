@@ -8,7 +8,7 @@ import responses
 import json
 from datetime import datetime
 from comport.department.models import Department, Extractor
-from comport.data.models import OfficerInvolvedShooting, UseOfForceIncident, CitizenComplaint
+from comport.data.models import OfficerInvolvedShooting, UseOfForceIncident, CitizenComplaint, AssaultOnOfficer
 from testclient.JSON_test_client import JSONTestClient
 from comport.data.cleaners import Cleaners
 from flask import current_app
@@ -113,22 +113,22 @@ class TestHeartbeat:
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
 
-        # Get a generated list of complaint descriptions from the JSON test client
+        # Get a generated list of assault descriptions from the JSON test client
         test_client = JSONTestClient()
-        complaint_count = 1
-        complaint_data = test_client.get_prebaked_assaults(last=complaint_count)
-        # post the json to the complaint URL
-        response = testapp.post_json("/data/assaults", params={'month': 0, 'year': 0, 'data': complaint_data})
+        assault_count = 1
+        assault_data = test_client.get_prebaked_assaults(last=assault_count)
+        # post the json to the assault URL
+        response = testapp.post_json("/data/assaults", params={'month': 0, 'year': 0, 'data': assault_data})
 
         # assert that we got the expected reponse
         assert response.status_code == 200
         assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == complaint_count
+        assert response.json_body['added'] == assault_count
 
-        # check the complaint incident in the database against the data that was sent
+        # check the assault incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_assault = cleaner.capitalize_incident(assault_data[0])
-        check_assault = AssaultOnOfficer.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        check_assault = AssaultOnOfficer.query.filter_by(opaque_id=sent_assault['opaqueId']).first()
         assert check_assault.service_type == sent_assault['serviceType']
         assert check_assault.force_type == sent_assault['forceType']
         assert check_assault.assignment == sent_assault['assignment']
