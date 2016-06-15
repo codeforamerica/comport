@@ -3,10 +3,48 @@
 
 See: http://webtest.readthedocs.org/
 """
+import pytest
 from flask import url_for
+from comport.content.models import ChartBlock
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
 
+@pytest.mark.usefixtures('db')
+class TestPagesRespond:
+
+    def test_assaults_front_page_exists(self, testapp):
+        # create a department and an invite code
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # create & append chart blocks with the expected slugs
+        assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaultss-introduction", content="AAAAAAAAAAAAAA")
+        assaults_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="assaultss-by-month", content="AAAAAAAAAAAAAA")
+        assaults_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="assaultss-by-allegation", content="AAAAAAAAAAAAAA")
+        assaults_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="assaultss-by-allegation-type", content="AAAAAAAAAAAAAA")
+        assaults_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="assaultss-by-disposition", content="AAAAAAAAAAAAAA")
+        assaults_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="assaultss-by-precinct", content="AAAAAAAAAAAAAA")
+        assaults_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics", content="AAAAAAAAAAAAAA")
+        assaults_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="assaultss-by-demographic", content="AAAAAAAAAAAAAA")
+        assaults_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="assaultss-by-officer", content="AAAAAAAAAAAAAA")
+
+        department.chart_blocks.append(assaults_intro)
+        department.chart_blocks.append(assaults_bm)
+        department.chart_blocks.append(assaults_bya)
+        department.chart_blocks.append(assaults_byat)
+        department.chart_blocks.append(assaults_bdis)
+        department.chart_blocks.append(assaults_bpre)
+        department.chart_blocks.append(assaults_od)
+        department.chart_blocks.append(assaults_bde)
+        department.chart_blocks.append(assaults_bof)
+        department.save()
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/SPD/assaultsonofficers/")
+
+        assaults_blocks = department.get_assaults_blocks()
+
+        assert assaults_blocks['introduction'] == assaults_intro
+        assert response.status_code == 200
 
 class TestLoggingIn:
 
