@@ -610,6 +610,65 @@ class JSONTestClient(object):
     def generate_ois_officer_force_type(self):
         return random.choice(["Duty Handgun", "IMPD - Duty Handgun", "IMPD - Shotgun", "IMPD - Patrol Rifle", "Personal Patrol Rifle", "Personal Shotgun"])
 
+    def get_prebaked_assaults(self, first=0, last=0):
+        ''' Return at most five non-random assaults '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [
+            {
+                'opaqueId': '90607ab31c2114e987f7e458680a8f15',
+                'serviceType': 'Handling, Custody Of Prisoners',
+                'forceType': 'Firearm',
+                'assignment': 'One Man Vehical',
+                'arrestMade': True,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': '32423104dsfadf90607ab31c211',
+                'serviceType': 'Mentally Deranged',
+                'forceType': 'Hands Fist Feet Etc',
+                'assignment': 'One Man Vehicle Assisted',
+                'arrestMade': True,
+                'officerInjured': True,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': 'ab83e472eed9f0c577bf022e28428920',
+                'serviceType': 'Invest Suspicious Persons Or Circumstances',
+                'forceType': 'Other Dangerous Weapon',
+                'assignment': 'One Alone',
+                'arrestMade': False,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': '0ab83e472eed9f0c577bf022e28428920',
+                'serviceType': 'Traffic Pursuits And Stops',
+                'forceType': 'Hands Fist Feet Etc',
+                'assignment': 'One Man Vehicle Assisted',
+                'arrestMade': True,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': True
+            },
+            {
+                'opaqueId': '950919eb39e0172d0029feb2db469d23',
+                'serviceType': 'Ambush No Warning',
+                'forceType': 'Other Dangerous Weapon',
+                'assignment': 'One Man Vehicle',
+                'arrestMade': False,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            }
+        ][first:last]
+
     def get_prebaked_complaints(self, first=0, last=5):
         ''' Return at most five non-random complaints.
         '''

@@ -103,6 +103,40 @@ class TestHeartbeat:
         # reset the mock
         responses.reset()
 
+    def test_post_assaults_data(self, testapp):
+        ''' New assaults data from the extractor is processed as expected.
+        '''
+        # Set up the extractor
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of complaint descriptions from the JSON test client
+        test_client = JSONTestClient()
+        complaint_count = 1
+        complaint_data = test_client.get_prebaked_assaults(last=complaint_count)
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/assaults", params={'month': 0, 'year': 0, 'data': complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == complaint_count
+
+        # check the complaint incident in the database against the data that was sent
+        cleaner = Cleaners()
+        sent_assault = cleaner.capitalize_incident(assault_data[0])
+        check_assault = AssaultOnOfficer.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        assert check_assault.service_type == sent_assault['serviceType']
+        assert check_assault.force_type == sent_assault['forceType']
+        assert check_assault.assignment == sent_assault['assignment']
+        assert check_assault.arrest_made == sent_assault['arrestMade']
+        assert check_assault.officer_injured == sent_assault['officerInjured']
+        assert check_assault.officer_killed == sent_assault['officerKilled']
+        assert check_assault.report_filed == sent_assault['reportFiled']
+
     def test_post_complaint_data(self, testapp):
         ''' New complaint data from the extractor is processed as expected.
         '''

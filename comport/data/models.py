@@ -59,6 +59,20 @@ class UseOfForceIncident(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
+class AssaultOnOfficer(SurrogatePK, Model):
+    __tablename__ = 'assaults_on_officers'
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False)
+    service_type = Column(db.String(255), unique=False, nullable=True)
+    force_type = Column(db.String(255), unique=False, nullable=True)
+    assignment = Column(db.String(255), unique=False, nullable=True)
+    arrest_made = Column(db.Boolean, nullable=True)
+    officer_injured = Column(db.Boolean, nullable=True)
+    officer_killed = Column(db.Boolean, nullable=True)
+    report_filed = Column(db.Boolean, nullable=True)
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
 
 class CitizenComplaint(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints'
