@@ -36,6 +36,15 @@ class TestPagesRespond:
         assert assaults_blocks['introduction'] == assaults_intro
         assert response.status_code == 200
 
+    def test_assaults_schema_page_exists(self, testapp):
+        # create a department and an invite code
+        Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/SPD/schema/assaultsonofficers/")
+
+        assert response.status_code == 200
+
 class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):
