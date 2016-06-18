@@ -257,7 +257,7 @@ def complaints_csv(department_id):
         abort(404)
     return Response(department.get_complaint_csv(), mimetype="text/csv")
 
-@blueprint.route('/<int:department_id>/assaults.csv')
+@blueprint.route('/<int:department_id>/assaultsonofficers.csv')
 def assaults_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:

@@ -26,8 +26,8 @@ class Department(SurrogatePK, Model):
     use_of_force_incidents = relationship(
         "UseOfForceIncident", backref="department")
     citizen_complaints = relationship("CitizenComplaint", backref="department")
-    officer_involved_shootings = relationship(
-        "OfficerInvolvedShooting", backref="department")
+    officer_involved_shootings = relationship("OfficerInvolvedShooting", backref="department")
+    assaults_on_officers = relationship("AssaultOnOfficer", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     demographic_values = relationship("DemographicValue", backref="department")
@@ -262,6 +262,32 @@ class Department(SurrogatePK, Model):
                 complaint.officer_age,
                 complaint.officer_years_of_service,
                 complaint.officer_identifier
+            ]
+            writer.writerow(values)
+
+        return output.getvalue()
+
+    def get_assaults_csv(self):
+        output = io.StringIO()
+
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        writer.writerow(["id", "officerIdentifier", "serviceType", "forceType", "assignment",
+                         "arrestMade", "officerInjured", "officerKilled", "reportFiled"])
+
+        incidents = self.assaults_on_officers
+
+        for incident in incidents:
+            values = [
+                incident.opaque_id,
+                incident.officer_identifier,
+                incident.service_type,
+                incident.force_type,
+                incident.assignment,
+                incident.arrest_made,
+                incident.officer_injured,
+                incident.officer_killed,
+                incident.report_filed
             ]
             writer.writerow(values)
 

@@ -47,10 +47,10 @@ class TestPagesRespond:
 
     def test_assaults_csv_endpoint_exists(self, testapp):
         # create a department and an invite code
-        Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # make a resquest to specific front page
-        response = testapp.get("/department/SPD/assaultsonofficers.csv")
+        response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
 
         assert response.status_code == 200
 
