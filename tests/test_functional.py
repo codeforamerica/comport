@@ -13,7 +13,7 @@ from comport.department.models import Department
 class TestPagesRespond:
 
     def test_assaults_front_page_exists(self, testapp):
-        # create a department and an invite code
+        # create a department
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
@@ -37,7 +37,7 @@ class TestPagesRespond:
         assert response.status_code == 200
 
     def test_assaults_schema_page_exists(self, testapp):
-        # create a department and an invite code
+        # create a department
         Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # make a resquest to specific front page
@@ -46,11 +46,20 @@ class TestPagesRespond:
         assert response.status_code == 200
 
     def test_assaults_csv_endpoint_exists(self, testapp):
-        # create a department and an invite code
+        # create a department
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_assaults_edit_page_exists(self, testapp):
+        # create a department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
 
         assert response.status_code == 200
 
