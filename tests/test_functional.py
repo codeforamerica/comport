@@ -55,8 +55,32 @@ class TestPagesRespond:
         assert response.status_code == 200
 
     def test_assaults_edit_page_exists(self, testapp):
-        # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        # set up the department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+
+        # create & append chart blocks with the expected slugs
+        assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction", content="AAAAAAAAAAAAAA")
+        assaults_bst = ChartBlock(title="BYSERVICETYPE", dataset="byservicetype", slug="assaults-by-service-type", content="AAAAAAAAAAAAAA")
+        assaults_bft = ChartBlock(title="BYFORCETYPE", dataset="byforcetype", slug="assaults-by-force-type", content="AAAAAAAAAAAAAA")
+        assaults_bof = ChartBlock(title="BYOFFICER", dataset="byofficer", slug="assaults-by-officer", content="AAAAAAAAAAAAAA")
+
+        department.chart_blocks.append(assaults_intro)
+        department.chart_blocks.append(assaults_bst)
+        department.chart_blocks.append(assaults_bft)
+        department.chart_blocks.append(assaults_bof)
+        department.save()
+
+        # set up a user
+        user = User.create(username="moby", email="moby@example.com", password="password")
+        user.departments.append(department)
+        user.active = True
+        user.save()
+        # login
+        response = testapp.get("/login/")
+        form = response.forms['loginForm']
+        form['username'] = user.username
+        form['password'] = 'password'
+        response = form.submit().follow()
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
