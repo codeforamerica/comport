@@ -80,6 +80,15 @@ def edit_complaints(department_id):
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=True)
 
+@blueprint.route("/<int:department_id>/edit/assaultsonofficers")
+@login_required
+@admin_or_department_required()
+def edit_assaultsonofficers(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/assaults.html", department=department, chart_blocks=department.get_assaults_blocks(), editing=True)
+
 @blueprint.route("/<int:department_id>/edit/demographics")
 @login_required
 @admin_or_department_required()
