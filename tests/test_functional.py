@@ -57,6 +57,17 @@ class TestConditionalAccess:
         department = Department.create(name="Good Police Department", short_name="GPD", is_public=False, load_defaults=False)
         assert not department.is_public
 
+    def test_department_not_logged_in_unauthorized(self, testapp, assaults_department):
+        # set up department
+        department, _ = assaults_department
+        department.is_public = False
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/GPD/assaultsonofficers/")
+
+        assert response.status_code == 403
+
+
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
 
