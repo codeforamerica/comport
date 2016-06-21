@@ -86,6 +86,18 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
+    def test_assaults_preview_page_exists(self, testapp, assaults_department):
+        # get a department from the fixture
+        department, _ = assaults_department
+
+        # set up a user
+        self.log_in_user(testapp, department)
+
+        # make a request to the assaults preview page
+        response = testapp.get("/department/{}/preview/assaultsonofficers/")
+        assert response.status_code == 200
+
+
 class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):
