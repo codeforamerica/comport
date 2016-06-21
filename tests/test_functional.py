@@ -12,9 +12,10 @@ from comport.department.models import Department
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
 
-    def test_assaults_front_page_exists(self, testapp):
+    @pytest.fixture
+    def assaults_department(self):
         # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction", content="AAAAAAAAAAAAAA")
@@ -27,9 +28,14 @@ class TestPagesRespond:
         department.chart_blocks.append(assaults_bft)
         department.chart_blocks.append(assaults_bof)
         department.save()
+        return department, assaults_intro
+
+    def test_assaults_front_page_exists(self, testapp, assaults_department):
+        # get a department and intro block from the fixture
+        department, assaults_intro = assaults_department
 
         # make a resquest to specific front page
-        response = testapp.get("/department/SPD/assaultsonofficers/")
+        response = testapp.get("/department/GPD/assaultsonofficers/")
 
         assaults_blocks = department.get_assaults_blocks()
 
@@ -54,21 +60,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_assaults_edit_page_exists(self, testapp):
-        # set up the department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
-
-        # create & append chart blocks with the expected slugs
-        assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction", content="AAAAAAAAAAAAAA")
-        assaults_bst = ChartBlock(title="BYSERVICETYPE", dataset="byservicetype", slug="assaults-by-service-type", content="AAAAAAAAAAAAAA")
-        assaults_bft = ChartBlock(title="BYFORCETYPE", dataset="byforcetype", slug="assaults-by-force-type", content="AAAAAAAAAAAAAA")
-        assaults_bof = ChartBlock(title="BYOFFICER", dataset="byofficer", slug="assaults-by-officer", content="AAAAAAAAAAAAAA")
-
-        department.chart_blocks.append(assaults_intro)
-        department.chart_blocks.append(assaults_bst)
-        department.chart_blocks.append(assaults_bft)
-        department.chart_blocks.append(assaults_bof)
-        department.save()
+    def test_assaults_edit_page_exists(self, testapp, assaults_department):
+        # get a department and intro block from the fixture
+        department, _ = assaults_department
 
         # set up a user
         user = User.create(username="moby", email="moby@example.com", password="password")
