@@ -3,11 +3,14 @@
 
 See: http://webtest.readthedocs.org/
 """
+import io
+import csv
 import pytest
 from flask import url_for
 from comport.content.models import ChartBlock
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
+from comport.data.models import UseOfForceIncident
 
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
@@ -97,6 +100,23 @@ class TestPagesRespond:
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
 
         assert response.status_code == 200
+
+    def test_csv_filtered_by_dept(self, testapp):
+        # create a department
+        department1 = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department2 = Department.create(name="Random Police Department", short_name="RPD", load_defaults=False)
+
+        UseOfForceIncident.create(opaque_id="123ABC", department_id=department1.id)
+        UseOfForceIncident.create(opaque_id="123XYZ", department_id=department2.id)
+
+        response1 = testapp.get("/department/{}/uof.csv".format(department1.id))
+        response2 = testapp.get("/department/{}/uof.csv".format(department2.id))
+
+        incidents1 = list(csv.DictReader(io.StringIO(response1.text)))
+        incidents2 = list(csv.DictReader(io.StringIO(response2.text)))
+
+        assert len(incidents1) == 1 and len(incidents2) == 1
+        assert incidents1[0]['id'] == '123ABC' and incidents2[0]['id'] == '123XYZ'
 
     def test_assaults_edit_page_exists(self, testapp, assaults_department):
         # get a department from the fixture
