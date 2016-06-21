@@ -30,6 +30,20 @@ class TestPagesRespond:
         department.save()
         return department, assaults_intro
 
+    def log_in_user(self, testapp, department):
+        # set up a user
+        user = User.create(username="user", email="user@example.com", password="password")
+        user.departments.append(department)
+        user.active = True
+        user.save()
+        # login
+        response = testapp.get("/login/")
+        form = response.forms['loginForm']
+        form['username'] = user.username
+        form['password'] = 'password'
+        response = form.submit().follow()
+        return user
+
     def test_assaults_front_page_exists(self, testapp, assaults_department):
         # get a department and intro block from the fixture
         department, assaults_intro = assaults_department
@@ -61,20 +75,11 @@ class TestPagesRespond:
         assert response.status_code == 200
 
     def test_assaults_edit_page_exists(self, testapp, assaults_department):
-        # get a department and intro block from the fixture
+        # get a department from the fixture
         department, _ = assaults_department
 
         # set up a user
-        user = User.create(username="moby", email="moby@example.com", password="password")
-        user.departments.append(department)
-        user.active = True
-        user.save()
-        # login
-        response = testapp.get("/login/")
-        form = response.forms['loginForm']
-        form['username'] = user.username
-        form['password'] = 'password'
-        response = form.submit().follow()
+        self.log_in_user(testapp, department)
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
