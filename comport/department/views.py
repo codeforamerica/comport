@@ -251,6 +251,15 @@ def use_of_force_schema(department_id):
         abort(404)
     return render_template("department/site/schema/complaints.html", department=department)
 
+@blueprint.route('/<int:department_id>/preview/schema/assaultsonofficers')
+@login_required
+@admin_or_department_required()
+def assaults_schema_preview(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/assaults.html", department=department)
+
 @blueprint.route('/<int:department_id>/schema/assaultsonofficers')
 @login_required
 @admin_or_department_required()
