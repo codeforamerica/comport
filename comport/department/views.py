@@ -222,6 +222,15 @@ def preview_complaints(department_id):
         abort(404)
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False)
 
+@blueprint.route("/<int:department_id>/preview/assaultsonofficers")
+@login_required
+@admin_or_department_required()
+def preview_assaults(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/assaults.html", department=department, chart_blocks=department.get_assaults_blocks(), editing=False)
+
 @blueprint.route("/<int:department_id>/preview/index")
 @login_required
 @admin_or_department_required()

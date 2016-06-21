@@ -94,7 +94,7 @@ class TestPagesRespond:
         self.log_in_user(testapp, department)
 
         # make a request to the assaults preview page
-        response = testapp.get("/department/{}/preview/assaultsonofficers/")
+        response = testapp.get("/department/{}/preview/assaultsonofficers".format(department.id))
         assert response.status_code == 200
 
 
