@@ -251,6 +251,24 @@ def complaints_schema_preview(department_id):
         abort(404)
     return render_template("department/site/schema/complaints.html", department=department)
 
+@blueprint.route('/<int:department_id>/preview/schema/useofforce')
+@login_required
+@admin_or_department_required()
+def useofforce_schema_preview(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/useofforce.html", department=department)
+
+@blueprint.route('/<int:department_id>/preview/schema/ois')
+@login_required
+@admin_or_department_required()
+def ois_schema_preview(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/ois.html", department=department)
+
 @blueprint.route('/<int:department_id>/preview/schema/assaultsonofficers')
 @login_required
 @admin_or_department_required()
