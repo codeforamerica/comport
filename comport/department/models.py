@@ -21,6 +21,7 @@ class Department(SurrogatePK, Model):
     id = Column(db.Integer, primary_key=True, index=True)
     name = Column(db.String(80), unique=True, nullable=False)
     short_name = Column(db.String(80), unique=True, nullable=False)
+    is_public = Column(db.Boolean, default=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", secondary=user_department_relationship_table, backref="departments")
     use_of_force_incidents = relationship(
