@@ -44,6 +44,18 @@ class TestPagesRespond:
         response = form.submit().follow()
         return user
 
+    def test_complaints_schema_preview_page_exists(self, testapp):
+        # create a department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # set up a user
+        self.log_in_user(testapp, department)
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
+
+        assert response.status_code == 200
+
     def test_assaults_front_page_exists(self, testapp, assaults_department):
         # get a department and intro block from the fixture
         department, assaults_intro = assaults_department

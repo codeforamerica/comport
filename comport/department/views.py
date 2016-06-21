@@ -242,10 +242,10 @@ def preview_index(department_id):
 
 
 # <<<<<<<< SCHEMA ENDPOINTS >>>>>>>>>>
-@blueprint.route('/<int:department_id>/schema/complaints')
+@blueprint.route('/<int:department_id>/preview/schema/complaints')
 @login_required
 @admin_or_department_required()
-def use_of_force_schema(department_id):
+def complaints_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
