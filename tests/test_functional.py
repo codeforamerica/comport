@@ -12,47 +12,55 @@ from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncident
 
+@pytest.fixture
+def assaults_department():
+    # create a department
+    department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+
+    # create & append chart blocks with the expected slugs
+    assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction", content="AAAAAAAAAAAAAA")
+    assaults_bst = ChartBlock(title="BYSERVICETYPE", dataset="byservicetype", slug="assaults-by-service-type", content="AAAAAAAAAAAAAA")
+    assaults_bft = ChartBlock(title="BYFORCETYPE", dataset="byforcetype", slug="assaults-by-force-type", content="AAAAAAAAAAAAAA")
+    assaults_bof = ChartBlock(title="BYOFFICER", dataset="byofficer", slug="assaults-by-officer", content="AAAAAAAAAAAAAA")
+
+    department.chart_blocks.append(assaults_intro)
+    department.chart_blocks.append(assaults_bst)
+    department.chart_blocks.append(assaults_bft)
+    department.chart_blocks.append(assaults_bof)
+    department.save()
+    return department, assaults_intro
+
+def log_in_user(testapp, department):
+    # set up a user
+    user = User.create(username="user", email="user@example.com", password="password")
+    user.departments.append(department)
+    user.active = True
+    user.save()
+    # login
+    response = testapp.get("/login/")
+    form = response.forms['loginForm']
+    form['username'] = user.username
+    form['password'] = 'password'
+    response = form.submit().follow()
+    return user
+
+@pytest.mark.usefixtures('db')
+class TestConditionalAccess:
+
+    def test_department_can_be_set_private(self):
+        # get a department and intro block from the fixture
+        department = Department.create(name="Good Police Department", short_name="GPD", is_public=False, load_defaults=False)
+        assert not department.public
+
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
-
-    @pytest.fixture
-    def assaults_department(self):
-        # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
-
-        # create & append chart blocks with the expected slugs
-        assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction", content="AAAAAAAAAAAAAA")
-        assaults_bst = ChartBlock(title="BYSERVICETYPE", dataset="byservicetype", slug="assaults-by-service-type", content="AAAAAAAAAAAAAA")
-        assaults_bft = ChartBlock(title="BYFORCETYPE", dataset="byforcetype", slug="assaults-by-force-type", content="AAAAAAAAAAAAAA")
-        assaults_bof = ChartBlock(title="BYOFFICER", dataset="byofficer", slug="assaults-by-officer", content="AAAAAAAAAAAAAA")
-
-        department.chart_blocks.append(assaults_intro)
-        department.chart_blocks.append(assaults_bst)
-        department.chart_blocks.append(assaults_bft)
-        department.chart_blocks.append(assaults_bof)
-        department.save()
-        return department, assaults_intro
-
-    def log_in_user(self, testapp, department):
-        # set up a user
-        user = User.create(username="user", email="user@example.com", password="password")
-        user.departments.append(department)
-        user.active = True
-        user.save()
-        # login
-        response = testapp.get("/login/")
-        form = response.forms['loginForm']
-        form['username'] = user.username
-        form['password'] = 'password'
-        response = form.submit().follow()
-        return user
 
     def test_complaints_schema_preview_page_exists(self, testapp):
         # create a department
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # set up a user
-        self.log_in_user(testapp, department)
+        log_in_user(testapp, department)
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
@@ -85,7 +93,7 @@ class TestPagesRespond:
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
         # set up a user
-        self.log_in_user(testapp, department)
+        log_in_user(testapp, department)
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/preview/schema/assaultsonofficers".format(department.id))
@@ -123,7 +131,7 @@ class TestPagesRespond:
         department, _ = assaults_department
 
         # set up a user
-        self.log_in_user(testapp, department)
+        log_in_user(testapp, department)
 
         # make a resquest to specific front page
         response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
@@ -135,7 +143,7 @@ class TestPagesRespond:
         department, _ = assaults_department
 
         # set up a user
-        self.log_in_user(testapp, department)
+        log_in_user(testapp, department)
 
         # make a request to the assaults preview page
         response = testapp.get("/department/{}/preview/assaultsonofficers".format(department.id))
