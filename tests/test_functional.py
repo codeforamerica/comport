@@ -47,10 +47,15 @@ def log_in_user(testapp, department):
 @pytest.mark.usefixtures('db')
 class TestConditionalAccess:
 
+    def test_department_is_public_by_default(self):
+        # create a department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        assert department.is_public
+
     def test_department_can_be_set_private(self):
-        # get a department and intro block from the fixture
+        # create a department
         department = Department.create(name="Good Police Department", short_name="GPD", is_public=False, load_defaults=False)
-        assert not department.public
+        assert not department.is_public
 
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
