@@ -255,4 +255,45 @@ We have done some initial analysis on this dataset, though there are many other 
             date_updated=None,
             date_edited=None
         ),
+
+        ChartBlock(
+            title="Introduction to Assaults Data",
+            caption="",
+            slug="assaults-introduction",
+            dataset="assaults",
+            content="""TK""",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Assaults By Service Type",
+            caption="",
+            slug="assaults-by-service-type",
+            dataset="assaults",
+            content="""TK""",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Assaults By Force Type",
+            caption="",
+            slug="assaults-by-force-type",
+            dataset="assaults",
+            content="""TK""",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Assaults by Officer",
+            caption="",
+            slug="assaults-by-officer",
+            dataset="assaults",
+            content="""TK""",
+            date_updated=None,
+            date_edited=None
+        )
+
     ]

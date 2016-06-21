@@ -21,6 +21,33 @@ class JSONTestClient(object):
 
         data = []
 
+        # Assaults on officers mock data generation
+        assaults = self.make_assaults(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
+
+        for mutator in mutators:
+            assaults = mutator.mutate(assaults)
+
+        data.extend(assaults)
+
+        print("* Adding {} fake assaults...".format(len(assaults)))
+
+        for i in range(0, len(data), 100):
+            chunk = data[i:i + 100]
+            payload = {'data': chunk}
+
+            url = baseurl + "data/assaults"
+
+            print("- assaults {}-{}".format(i, i + len(chunk)))
+
+            p = requests.post(url, auth=(comport_username,
+                                         comport_password), json=payload)
+            if p.status_code != 200:
+                # print("error: %s" % p.text.encode("utf-8", "ignore"))
+                print(p.status_code)
+
+        data = []
+
+        # Complaints on officers mock data generation
         complaints = self.make_complaints(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -45,6 +72,7 @@ class JSONTestClient(object):
 
         data = []
 
+        # Generating mock use of force data
         use_of_force_incidents = self.make_uof(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -69,6 +97,7 @@ class JSONTestClient(object):
 
         data = []
 
+        # Generating mock officer involved shooting data
         ois_incidents = self.make_ois(count=(900 + random.randint(0, 200)), start_date=start_date, end_date=end_date)
 
         for mutator in mutators:
@@ -137,6 +166,36 @@ class JSONTestClient(object):
             complaints.append(new_complaint)
 
         return complaints
+
+    def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+        # make a smaller pool of officers so that it's possible to have more than one assault per officer
+        officers = []
+        officer_count = round(count * .33)
+        for x in range(0, count):
+            officers.append({
+                "officerIdentifier": self.hash(random_string(10))
+            })
+
+        assaults = []
+        for x in range(0, count):
+            assignment = self.generate_assault_assignment()
+            force_type = self.generate_assault_force_type()
+            service_type = self.generate_assault_service_type()
+            new_assault = {
+                "opaqueId": self.hash(random_string(10)),
+                "serviceType": self.generate_assault_service_type(),
+                "forceType": force_type,
+                "assignment": assignment,
+                "arrestMade": self.generate_bool(),
+                "officerInjured": self.generate_bool(),
+                "officerKilled": self.generate_bool(),
+                "reportFiled": self.generate_bool()
+            }
+            new_assault.update(random.choice(officers))
+            assaults.append(new_assault)
+
+        return assaults
+
 
     def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
@@ -245,6 +304,43 @@ class JSONTestClient(object):
              "Within policy",
              None
              ])
+
+    def generate_assault_force_type(self):
+        force_type = random.choice([
+            'HANDS FIST FEET ETC',
+            'OTHER DANGEROUS WEAPON',
+            'FIREARM',
+            'KNIFE OR CUTTING INSTRUMENT'
+        ])
+        return force_type
+
+    def generate_assault_assignment(self):
+        assignment = random.choice([
+            'ONE MAN VEHICLE ASSISTED',
+            'OTHER ASSISTED',
+            'OTHER ALONE',
+            'ONE MAN VEHICLE ALONE',
+            'DETECTIVE OR SPECIAL ASSIGN ALONE',
+            'TWO MAN VEHICLE',
+            'DETECTIVE OR SPECIAL ASSIGN ASSISTED'
+        ])
+        return assignment
+
+    def generate_assault_service_type(self):
+        service_type = random.choice([
+            'Handling, custody of prisoners',
+            'Invest Suspicious persons or circumstances',
+            'Mentally deranged',
+            'All other',
+            'Traffic pursuits and stops',
+            'Attempting other arrests',
+            'Ambush no warning',
+            'Responding to Disturbance calls (man with gun etc)',
+            'Civil disorder (riot, mass disobedience)',
+            'Burglaries in progress or pursuing burglars',
+            'Robberies in progress or pursuing robbers'
+        ])
+        return service_type
 
     def generate_allegation(self):
         allegation = random.choice([
@@ -609,6 +705,70 @@ class JSONTestClient(object):
 
     def generate_ois_officer_force_type(self):
         return random.choice(["Duty Handgun", "IMPD - Duty Handgun", "IMPD - Shotgun", "IMPD - Patrol Rifle", "Personal Patrol Rifle", "Personal Shotgun"])
+
+    def get_prebaked_assaults(self, first=0, last=0):
+        ''' Return at most five non-random assaults '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [
+            {
+                'opaqueId': '90607ab31c2114e987f7e458680a8f15',
+                'officerIdentifier': '3ae9c4d0fb769fa5f295ecdad855b48b',
+                'serviceType': 'Handling, Custody Of Prisoners',
+                'forceType': 'Firearm',
+                'assignment': 'One Man Vehical',
+                'arrestMade': True,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': '32423104dsfadf90607ab31c211',
+                'officerIdentifier': '796a086d9da3d9a7eecb9289bc9e88c6',
+                'serviceType': 'Mentally Deranged',
+                'forceType': 'Hands Fist Feet Etc',
+                'assignment': 'One Man Vehicle Assisted',
+                'arrestMade': True,
+                'officerInjured': True,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': 'ab83e472eed9f0c577bf022e28428920',
+                'officerIdentifier': 'f9a4d4c2050981619f6a296b7eb73794',
+                'serviceType': 'Invest Suspicious Persons Or Circumstances',
+                'forceType': 'Other Dangerous Weapon',
+                'assignment': 'One Alone',
+                'arrestMade': False,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            },
+            {
+                'opaqueId': '0ab83e472eed9f0c577bf022e28428920',
+                'officerIdentifier': 'd0318d57ca5ff55d27ff7cfb4575cd0b',
+                'serviceType': 'Traffic Pursuits And Stops',
+                'forceType': 'Hands Fist Feet Etc',
+                'assignment': 'One Man Vehicle Assisted',
+                'arrestMade': True,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': True
+            },
+            {
+                'opaqueId': '950919eb39e0172d0029feb2db469d23',
+                'officerIdentifier': '5182b3dd18fa4e745678a2f529bf62c8',
+                'serviceType': 'Ambush No Warning',
+                'forceType': 'Other Dangerous Weapon',
+                'assignment': 'One Man Vehicle',
+                'arrestMade': False,
+                'officerInjured': False,
+                'officerKilled': False,
+                'reportFiled': False
+            }
+        ][first:last]
 
     def get_prebaked_complaints(self, first=0, last=5):
         ''' Return at most five non-random complaints.

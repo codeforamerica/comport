@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12 schema-wrapper">
+    <div class="schema-header">
+      <h1>Dataset: Assaults on Officers</h1>
+
+
+      <a class="btn btn-default" href="https://data.indy.gov/dataset/IMPD-Citizen-Complaints/h8rn-gy8c">
+        View this data on the Indianapolis Regional Data Portal
+      </a>
+
+
+      <form method="get" action="/department/{{department.id}}/assaultsonofficers.csv">
+        <button type="submit">Download this dataset</button>
+      </form>
+
+      <form method="get" action="/department/{{department.id}}/demographics.csv">
+        <button type="submit">Download Officer Demographic Information for the IMPD</button>
+      </form>
+
+      <form method="get" action="/department/{{department.id}}/officerCalls.csv">
+        <button type="submit">Download Officer Call Information<sup>*</sup> for the IMPD</button>
+      </form>
+    </div>
+    <p>TK</p>
+
+    <h4>Fields included in this dataset and their definitions:</h4>
+    <table class="table schema-table">
+      <tr>
+        <th>Field</th>
+        <th>Information</th>
+      </tr>
+      <tr>
+        <td>Id</td>
+        <td>This is a hashed unique identifier for a given incident.</td>
+      </tr>
+      <tr>
+        <td>Officer Identifier</td>
+        <td>This is a hashed identifier used to identify the officer within this data, for example to see if an officer has been involved in multiple assaults.</td>
+      </tr>
+      <tr>
+        <td>Service Type</td>
+        <td>The reason for the interaction, such as Traffic Stop or Call for Service.
+        </td>
+      </tr>
+      <tr>
+        <td>Force Type</td>
+        <td>The type of weapon used against the officer.</td>
+      </tr>
+      <tr>
+        <td>Assignment</td>
+        <td>The type of vehicle the officers were in.
+        </td>
+      </tr>
+      <tr>
+        <td>Arrest Made</td>
+        <td>True if the person assaulting the officer was arrested.
+        </td>
+      </tr>
+      <tr>
+        <td>Officer Injured</td>
+        <td>True if officer was injured during the incident.
+        </td>
+      </tr>
+      <tr>
+        <td>Officer Killed</td>
+        <td>True if officer was killed during the incident.
+        </td>
+      </tr>
+      <tr>
+        <td>Report Filed</td>
+        <td>True if a report was filed about the incident.
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class='row'>
+    <div class="col-md-12">
+      <p><sup>*</sup>Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.</p>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-md-12 disclaimer">
+      <p>DISCLAIMER OF LIABILITY: The City voluntarily provides the data on this website as a service to the public. The City retains ownership of any data or documents that originate with City, and the data may not be sold, published, or exchanged for commercial purposes. The City no representation, either implied or expressed, as to the content, accuracy, or completeness of any of the data provided at this website.  The City makes this data available on an “as is” basis and explicitly disclaims any representations and warranties.</p>
+
+      <p>RESERVATION OF RIGHTS: The City reserves the right to discontinue availability of content on this website at any time and for any reason.  The City also reserves the right to claim or seek to protect any intellectual property rights in any of the information, images, software, or processes displayed or used at this website. The data provided on this website does not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have in any of the information, images, software, or processes displayed or used at this website.</p>
+
+      <p>INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock content %}
+{% block footer %}
+    <small>
+    <ul class="company">
+      <li>© Team Indy</li>
+    </ul>
+
+      <ul class="footer-nav">
+        <li><a href="/department/id/site/disclaimer">Disclaimer</a></li>
+        <li><a href="mailto:Indy@CodeForAmerica.org">Contact</a></li>
+      </ul>
+
+    </small>
+
+{% endblock footer %}

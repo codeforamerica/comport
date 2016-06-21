@@ -2,7 +2,7 @@
 from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting
+from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting, AssaultOnOfficer
 from comport.utils import parse_date, parse_int, send_slack_message
 
 from .cleaners import Cleaners
@@ -353,6 +353,64 @@ def complaints():
         found_incident.officer_age = incident["officerAge"]
         found_incident.officer_years_of_service = incident["officerYearsOfService"]
         found_incident.census_tract = None
+        found_incident.save()
+        updated_rows += 1
+
+    extractor.next_month = None
+    extractor.next_year = None
+    extractor.save()
+    return json.dumps({"added": added_rows, "updated": updated_rows})
+
+@blueprint.route("/assaults", methods=['POST'])
+@extractor_auth_required()
+def assaults():
+    username = request.authorization.username
+    extractor = Extractor.query.filter_by(username=username).first()
+    department_id = extractor.first_department().id
+    j = request.json
+    added_rows = 0
+    updated_rows = 0
+    cleaner = Cleaners()
+
+    for incident in j['data']:
+        # capitalize all the fields in the incident
+        incident = cleaner.capitalize_incident(incident)
+
+        found_incident = AssaultOnOfficer.query.filter_by(
+            department_id=department_id,
+            opaque_id=incident["opaqueId"],
+            officer_identifier=incident["officerIdentifier"]
+        ).first()
+
+        if not found_incident:
+
+            found_incident = AssaultOnOfficer.create(
+                department_id=department_id,
+                opaque_id=incident["opaqueId"],
+                officer_identifier=incident["officerIdentifier"],
+                service_type=incident["serviceType"],
+                force_type=incident["forceType"],
+                assignment=incident['assignment'],
+                arrest_made=incident['arrestMade'],
+                officer_injured=incident['officerInjured'],
+                officer_killed=incident['officerKilled'],
+                report_filed=incident['reportFiled']
+            )
+
+            added_rows += 1
+            continue
+
+        found_incident.department_id = department_id
+        found_incident.opaque_id = incident["opaqueId"]
+        found_incident.officer_identifier = incident["officerIdentifier"]
+        found_incident.service_type = incident["serviceType"]
+        found_incident.force_type = incident["forceType"]
+        found_incident.force_type = incident["forceType"]
+        found_incident.assignment = incident["assignment"]
+        found_incident.arrest_made = incident["arrestMade"]
+        found_incident.officer_injured = incident["officerInjured"]
+        found_incident.officer_killed = incident["officerKilled"]
+        found_incident.report_filed = incident["reportFiled"]
         found_incident.save()
         updated_rows += 1
 
