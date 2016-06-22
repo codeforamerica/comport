@@ -63,10 +63,22 @@ class TestConditionalAccess:
         department.is_public = False
 
         # make a resquest to specific front page
-        response = testapp.get("/department/GPD/assaultsonofficers/")
+        response = testapp.get("/department/GPD/assaultsonofficers/", status=403)
 
         assert response.status_code == 403
 
+    def test_department_logged_in_authorized(self, testapp, assaults_department):
+        # set up department
+        department, _ = assaults_department
+        department.is_public = False
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/GPD/assaultsonofficers/", status=200)
+
+        assert response.status_code == 200
 
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
