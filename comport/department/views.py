@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, Response, abort
 from .models import Department, Extractor
 from comport.data.models import DemographicValue, DenominatorValue
+from flask_login import current_user
 from flask.ext.login import login_required
 
 from comport.decorators import admin_or_department_required
@@ -356,6 +357,8 @@ def public_complaints_schema(short_name):
 @blueprint.route("/<short_name>/assaultsonofficers/")
 def public_assaults(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
+    if not department.is_public and not current_user.is_authenticated():
+        abort(403)
     if not department:
         abort(404)
     return render_template("department/site/assaults.html", department=department, chart_blocks=department.get_assaults_blocks(), editing=False, published=True)
