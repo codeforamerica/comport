@@ -1,7 +1,23 @@
 from functools import wraps
 from flask_login import current_user
-from flask import flash, redirect, request
-from comport.department.models import Extractor
+from flask import flash, redirect, request, abort
+from comport.department.models import Extractor, Department
+
+def authorized_access_only():
+    ''' Decorates views that require authentication if the department is not public
+    '''
+    def check_authorized(view_function):
+        @wraps(view_function)
+        def decorated_function(*args, **kwargs):
+            try:
+                department = Department.query.filter_by(short_name=kwargs["short_name"].upper()).first()
+            except KeyError:
+                department = Department.query.filter_by(id=kwargs["department_id"]).first()
+            if not department.is_public and not current_user.is_authenticated():
+                abort(403)
+            return view_function(*args, **kwargs)
+        return decorated_function
+    return check_authorized
 
 def requires_roles(required_roles):
     '''
