@@ -159,11 +159,28 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
+    def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
+        # create a department
+        department1 = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department2 = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=False)
+
+        # set up a user
+        log_in_user(testapp, department1)
+
+        # make a request to specific front page
+        redirect_response = testapp.get("/department/{}".format(department2.id))
+        # redirect_response = testapp.get("/department/GPD/assaultsonofficers/")
+        assert redirect_response.status_code == 302
+        response = redirect_response.follow()
+
+        assert response.status_code == 200
+        assert "You do not have sufficient permissions to do that" in response
+
     def test_assaults_front_page_exists(self, testapp, preconfigured_department):
         # get a department and intro block from the fixture
         department, assaults_intro = preconfigured_department
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/GPD/assaultsonofficers/")
 
         assaults_blocks = department.get_assaults_blocks()
