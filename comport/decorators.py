@@ -9,7 +9,10 @@ def authorized_access_only():
     def check_authorized(view_function):
         @wraps(view_function)
         def decorated_function(*args, **kwargs):
-            department = Department.query.filter_by(short_name=kwargs["short_name"].upper()).first()
+            try:
+                department = Department.query.filter_by(short_name=kwargs["short_name"].upper()).first()
+            except KeyError:
+                department = Department.query.filter_by(id=kwargs["department_id"]).first()
             if not department.is_public and not current_user.is_authenticated():
                 abort(403)
             return view_function(*args, **kwargs)
