@@ -289,6 +289,7 @@ def assaults_on_officers_schema(department_id):
 
 # <<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
+@authorized_access_only()
 def use_of_force_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -296,6 +297,7 @@ def use_of_force_csv(department_id):
     return Response(department.get_uof_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/complaints.csv')
+@authorized_access_only()
 def complaints_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -303,6 +305,7 @@ def complaints_csv(department_id):
     return Response(department.get_complaint_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/assaultsonofficers.csv')
+@authorized_access_only()
 def assaults_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -310,6 +313,7 @@ def assaults_csv(department_id):
     return Response(department.get_assaults_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/ois.csv')
+@authorized_access_only()
 def ois_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -317,6 +321,7 @@ def ois_csv(department_id):
     return Response(department.get_ois_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/officerCalls.csv')
+@authorized_access_only()
 def denominator_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -324,6 +329,7 @@ def denominator_csv(department_id):
     return Response(department.get_denominator_csv(), mimetype="text/csv")
 
 @blueprint.route('/<int:department_id>/demographics.csv')
+@authorized_access_only()
 def demographics_csv(department_id):
     department = Department.get_by_id(department_id)
     if not department:
@@ -333,6 +339,7 @@ def demographics_csv(department_id):
 
 # <<<<<<<< PUBLIC ENDPOINTS >>>>>>>>>>
 @blueprint.route("/<short_name>/")
+@authorized_access_only()
 def public_intro(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -340,6 +347,7 @@ def public_intro(short_name):
     return render_template("department/site/index.html", chart_blocks=department.get_introduction_blocks(), department=department, editing=False, published=True)
 
 @blueprint.route("/<short_name>/complaints/")
+@authorized_access_only()
 def public_complaints(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -347,6 +355,7 @@ def public_complaints(short_name):
     return render_template("department/site/complaints.html", department=department, chart_blocks=department.get_complaint_blocks(), editing=False, published=True)
 
 @blueprint.route('/<short_name>/schema/complaints/')
+@authorized_access_only()
 def public_complaints_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -362,6 +371,7 @@ def public_assaults(short_name):
     return render_template("department/site/assaults.html", department=department, chart_blocks=department.get_assaults_blocks(), editing=False, published=True)
 
 @blueprint.route('/<short_name>/schema/assaultsonofficers/')
+@authorized_access_only()
 def public_assaults_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -369,6 +379,7 @@ def public_assaults_schema(short_name):
     return render_template("department/site/schema/assaults.html", department=department, published=True)
 
 @blueprint.route("/<short_name>/useofforce/")
+@authorized_access_only()
 def public_uof(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -376,6 +387,7 @@ def public_uof(short_name):
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=False, published=True)
 
 @blueprint.route("/<short_name>/officerinvolvedshootings/")
+@authorized_access_only()
 def public_ois(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -383,6 +395,7 @@ def public_ois(short_name):
     return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False, published=True)
 
 @blueprint.route('/<short_name>/schema/useofforce/')
+@authorized_access_only()
 def public_uof_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
@@ -390,6 +403,7 @@ def public_uof_schema(short_name):
     return render_template("department/site/schema/useofforce.html", department=department, published=True)
 
 @blueprint.route('/<short_name>/schema/officerinvolvedshootings/')
+@authorized_access_only()
 def public_ois_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
