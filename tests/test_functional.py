@@ -75,7 +75,7 @@ class TestConditionalAccess:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/GPD/assaultsonofficers/", status=200)
 
         assert response.status_code == 200
