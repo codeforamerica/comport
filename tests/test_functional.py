@@ -312,7 +312,7 @@ class TestUserRoles:
         res = testapp.get("/department/6").follow()
 
         assert res.status_code == 200
-        assert "You do not have sufficent permissions to do that" in res
+        assert "You do not have sufficient permissions to do that" in res
 
 
 class TestRegistering:

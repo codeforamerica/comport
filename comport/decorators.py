@@ -30,7 +30,7 @@ def requires_roles(required_roles):
             def names(role):
                 return role.name
             if not all(r in map(names, current_user.roles) for r in required_roles):
-                flash('You do not have sufficent permissions to do that', 'alert alert-danger')
+                flash('You do not have sufficient permissions to do that', 'alert alert-danger')
                 return redirect(request.args.get('next') or '/')
             return view_function(*args, **kwargs)
         return decorated_function
@@ -46,7 +46,7 @@ def admin_or_department_required():
         def decorated_function(*args, **kwargs):
             if current_user.has_department(kwargs["department_id"]) or current_user.is_admin():
                 return view_function(*args, **kwargs)
-            flash('You do not have sufficent permissions to do that', 'alert alert-danger')
+            flash('You do not have sufficient permissions to do that', 'alert alert-danger')
             return redirect(request.args.get('next') or '/')
         return decorated_function
     return check_department
