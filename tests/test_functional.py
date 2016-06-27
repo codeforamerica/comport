@@ -227,6 +227,34 @@ class TestConditionalAccess:
         testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
 
+    def test_only_department_user_can_access_non_public_datasets(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+        department.is_public_citizen_complaints = False
+        department.is_public_use_of_force_incidents = False
+        department.is_public_officer_involved_shootings = False
+        department.is_public_assaults_on_officers = False
+
+        # log in under a different department, datasets should not be accessible
+        bad_department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=False)
+        log_in_user(testapp, bad_department)
+
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/complaints.csv".format(department.id), status=403)
+
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/uof.csv".format(department.id), status=403)
+
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/ois.csv".format(department.id), status=403)
+
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=403)
+
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
 
