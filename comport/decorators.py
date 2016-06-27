@@ -3,7 +3,7 @@ from flask_login import current_user
 from flask import flash, redirect, request, abort
 from comport.department.models import Extractor, Department
 
-def authorized_access_only():
+def authorized_access_only(dataset=None):
     ''' Decorates views that require authentication if the department is not public
     '''
     def check_authorized(view_function):
@@ -13,7 +13,14 @@ def authorized_access_only():
                 department = Department.query.filter_by(short_name=kwargs["short_name"].upper()).first()
             except KeyError:
                 department = Department.query.filter_by(id=kwargs["department_id"]).first()
-            if not department.is_public and not current_user.is_authenticated():
+            dataset_is_public = True
+            if dataset:
+                try:
+                    dataset_is_public = getattr(department, "is_public_{}".format(dataset))
+                except ValueError:
+                    dataset_is_public = True
+
+            if (not department.is_public or not dataset_is_public) and not current_user.is_authenticated():
                 abort(403)
             return view_function(*args, **kwargs)
         return decorated_function
