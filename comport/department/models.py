@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from comport.database import (Column, db, Model, relationship, SurrogatePK)
 from comport.content.defaults import ChartBlockDefaults
-
+from flask import abort
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
 import csv
@@ -130,7 +130,13 @@ class Department(SurrogatePK, Model):
         return extractors[0] if extractors else None
 
     def get_block_by_slug(self, slug):
-        return next(b for b in self.chart_blocks if b.slug == slug)
+        next_block = None
+        try:
+            next_block = next(b for b in self.chart_blocks if b.slug == slug)
+        except StopIteration:
+            abort(500)
+
+        return next_block
 
     def get_blocks_by_slugs(self, slugs):
         return [b for b in self.chart_blocks if b.slug in slugs]
