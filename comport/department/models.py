@@ -22,6 +22,10 @@ class Department(SurrogatePK, Model):
     name = Column(db.String(80), unique=True, nullable=False)
     short_name = Column(db.String(80), unique=True, nullable=False)
     is_public = Column(db.Boolean, default=True, nullable=False)
+    is_public_use_of_force_incidents = Column(db.Boolean, default=True, nullable=False)
+    is_public_citizen_complaints = Column(db.Boolean, default=True, nullable=False)
+    is_public_officer_involved_shootings = Column(db.Boolean, default=True, nullable=False)
+    is_public_assaults_on_officers = Column(db.Boolean, default=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", secondary=user_department_relationship_table, backref="departments")
     use_of_force_incidents = relationship(
