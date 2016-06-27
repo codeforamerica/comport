@@ -176,6 +176,19 @@ class TestPagesRespond:
         assert department.is_public_citizen_complaints is False
         assert department.is_public_use_of_force_incidents is False
 
+    def test_visit_private_dataset_throws_unauth(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+        department.is_public_assaults_on_officers = False
+
+        response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=302)
+
+        assert response.status_code == 302
+        response = response.follow()
+
+        assert response.status_code == 200
+        assert 'You do not have sufficient permissions to do that' in response
+
     def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
         # create a department
         department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
