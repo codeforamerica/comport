@@ -15,10 +15,10 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    op.add_column('departments', sa.Column('is_public_assaults_on_officers', sa.Boolean(), nullable=False))
-    op.add_column('departments', sa.Column('is_public_citizen_complaints', sa.Boolean(), nullable=False))
-    op.add_column('departments', sa.Column('is_public_officer_involved_shootings', sa.Boolean(), nullable=False))
-    op.add_column('departments', sa.Column('is_public_use_of_force_incidents', sa.Boolean(), nullable=False))
+    op.add_column('departments', sa.Column('is_public_assaults_on_officers', sa.Boolean(), server_default=sa.true(), nullable=False))
+    op.add_column('departments', sa.Column('is_public_citizen_complaints', sa.Boolean(), server_default=sa.true(), nullable=False))
+    op.add_column('departments', sa.Column('is_public_officer_involved_shootings', sa.Boolean(), server_default=sa.true(), nullable=False))
+    op.add_column('departments', sa.Column('is_public_use_of_force_incidents', sa.Boolean(), server_default=sa.true(), nullable=False))
 
 
 def downgrade():
