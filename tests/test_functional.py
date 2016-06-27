@@ -166,13 +166,11 @@ class TestConditionalAccess:
         department, _ = preconfigured_department
         department.is_public_assaults_on_officers = False
 
-        response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=302)
-
-        assert response.status_code == 302
-        response = response.follow()
-
-        assert response.status_code == 200
-        assert 'You do not have sufficient permissions to do that' in response
+        # we can access all the datasets except assaults
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=403)
 
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
