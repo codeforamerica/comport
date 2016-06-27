@@ -164,12 +164,8 @@ class TestPagesRespond:
         department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
 
         # make a request to a non-public front page
-        redirect_response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name))
-        assert redirect_response.status_code == 302
-        response = redirect_response.follow()
-
-        assert response.status_code == 200
-        assert "You do not have sufficient permissions to do that" in response
+        redirect_response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=500)
+        assert redirect_response.status_code == 500
 
     def test_assaults_front_page_exists(self, testapp, preconfigured_department):
         # get a department and intro block from the fixture
