@@ -159,6 +159,23 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
+    def test_can_change_dataset_public(self):
+        # create a department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        assert hasattr(department, "is_public_assaults_on_officers")
+        assert hasattr(department, "is_public_officer_involved_shootings")
+        assert hasattr(department, "is_public_citizen_complaints")
+        assert hasattr(department, "is_public_use_of_force_incidents")
+        department.is_public_assaults_on_officers = False
+        department.is_public_officer_involved_shootings = False
+        department.is_public_citizen_complaints = False
+        department.is_public_use_of_force_incidents = False
+        department.save()
+        assert department.is_public_assaults_on_officers is False
+        assert department.is_public_officer_involved_shootings is False
+        assert department.is_public_citizen_complaints is False
+        assert department.is_public_use_of_force_incidents is False
+
     def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
         # create a department
         department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
