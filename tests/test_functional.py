@@ -144,21 +144,6 @@ class TestConditionalAccess:
         testapp.get("/department/{}/ois.csv".format(department.id), status=200)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
 
-@pytest.mark.usefixtures('db')
-class TestPagesRespond:
-
-    def test_complaints_schema_preview_page_exists(self, testapp):
-        # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
-
-        # set up a user
-        log_in_user(testapp, department)
-
-        # make a resquest to specific front page
-        response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
-
-        assert response.status_code == 200
-
     def test_can_change_dataset_public(self):
         # create a department
         department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
@@ -188,6 +173,21 @@ class TestPagesRespond:
 
         assert response.status_code == 200
         assert 'You do not have sufficient permissions to do that' in response
+
+@pytest.mark.usefixtures('db')
+class TestPagesRespond:
+
+    def test_complaints_schema_preview_page_exists(self, testapp):
+        # create a department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a resquest to specific front page
+        response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
+
+        assert response.status_code == 200
 
     def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
         # create a department
