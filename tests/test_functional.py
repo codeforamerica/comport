@@ -164,13 +164,68 @@ class TestConditionalAccess:
     def test_visit_private_dataset_throws_unauth(self, testapp, preconfigured_department):
         # create a department
         department, _ = preconfigured_department
-        department.is_public_assaults_on_officers = False
 
         # we can access all the datasets except assaults
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/complaints.csv".format(department.id), status=200)
+
         testapp.get("/department/{}/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/uof.csv".format(department.id), status=200)
+
         testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/ois.csv".format(department.id), status=200)
+
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
+        testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
+
+        # set each dataset is_public to false, and verify that they're no longer accessible
+
+        department.is_public_citizen_complaints = False
+
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/complaints.csv".format(department.id), status=403)
+
+        department.is_public_use_of_force_incidents = False
+
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/uof.csv".format(department.id), status=403)
+
+        department.is_public_officer_involved_shootings = False
+
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/ois.csv".format(department.id), status=403)
+
+        department.is_public_assaults_on_officers = False
+
         testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=403)
+
+        # log in, try again, and they should all be accessible again
+        log_in_user(testapp, department)
+
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/complaints.csv".format(department.id), status=200)
+
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/uof.csv".format(department.id), status=200)
+
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/ois.csv".format(department.id), status=200)
+
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
+        testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
 
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
