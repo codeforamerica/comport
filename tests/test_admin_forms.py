@@ -107,8 +107,13 @@ class TestAdminEditForms:
         assert 'editDisclaimer' in response.forms
 
         # assert that the field forms are there (as defined in conftest.py)
-        assert 'editId' in response.forms
-        assert 'editOccuredDate' in response.forms
-        assert 'editDivision' in response.forms
-        assert 'editDistrict' in response.forms
-        assert 'editShift' in response.forms
+        assert 'editIdTitle' in response.forms
+        assert 'editIdContent' in response.forms
+        assert 'editOccuredDateTitle' in response.forms
+        assert 'editOccuredDateContent' in response.forms
+        assert 'editDivisionTitle' in response.forms
+        assert 'editDivisionContent' in response.forms
+        assert 'editDistrictTitle' in response.forms
+        assert 'editDistrictContent' in response.forms
+        assert 'editShiftTitle' in response.forms
+        assert 'editShiftContent' in response.forms
