@@ -51,6 +51,37 @@
         <th>Field</th>
         <th>Information</th>
       </tr>
+
+      {% for block in chart_blocks['blocks'] %}
+      <tr>
+      {% if not editing %}
+        <td>{{ markdown(block.title) }}</td>
+        <td>{{ markdown(block.content) }}</td>
+      {% else %}
+        <!-- Title -->
+        <td>
+          <form id="edit{{ block.slug|replace("complaints-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}Title" method="post" action="/content/{{ block.slug }}/{{department.id}}">
+            <div class="form-group">
+              <textarea class="form-control" name="chart_content">{{ block.title }}</textarea>
+              <input type="hidden" name="chart_title" value=""/>
+              <input type="submit" />
+            </div>
+          </form>
+        </td>
+        <!-- Content -->
+        <td>
+          <form id="edit{{ block.slug|replace("complaints-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}Content" method="post" action="/content/{{ block.slug }}/{{department.id}}">
+            <div class="form-group">
+              <textarea class="form-control" name="chart_content">{{ block.content }}</textarea>
+              <input type="hidden" name="chart_title" value=""/>
+              <input type="submit" />
+            </div>
+          </form>
+        </td>
+      {% endif %}
+      </tr>
+      {%- endfor %}
+
       <tr>
         <td>Id</td>
         <td>This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.</td>
