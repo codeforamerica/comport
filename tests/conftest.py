@@ -83,6 +83,21 @@ def preconfigured_department():
     department.chart_blocks.append(complaint_bde)
     department.chart_blocks.append(complaint_bof)
 
+    complaint_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
+    complaint_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="complaints-schema-footer")
+    complaint_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="complaints-schema-disclaimer")
+
+    field_block_slugs = ['id', 'occured-date', 'division', 'district', 'shift']
+    field_blocks = []
+    for slug in field_block_slugs:
+        field_blocks.append(ChartBlock(title="FIELD{}".format(slug.replace("-", "").upper()), dataset=slug.replace("-", ""), slug="complaints-schema-field-{}".format(slug)))
+
+    department.chart_blocks.append(complaint_schema_intro)
+    department.chart_blocks.append(complaint_schema_footer)
+    department.chart_blocks.append(complaint_schema_disclaimer)
+    for block in field_blocks:
+        department.chart_blocks.append(block)
+
     # create & append use of force chart blocks with the expected slugs
     uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction", content="CCCCCCCCCCCCCC")
     uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-force-type", content="CCCCCCCCCCCCCC")
