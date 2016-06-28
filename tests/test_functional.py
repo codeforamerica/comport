@@ -208,9 +208,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_complaints_schema_preview_page_exists(self, testapp):
+    def test_complaints_schema_preview_page_exists(self, testapp, preconfigured_department):
         # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department, _ = preconfigured_department
 
         # set up a user
         log_in_user(testapp, department)

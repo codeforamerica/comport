@@ -83,14 +83,14 @@ def preconfigured_department():
     department.chart_blocks.append(complaint_bde)
     department.chart_blocks.append(complaint_bof)
 
-    complaint_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
-    complaint_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="complaints-schema-footer")
-    complaint_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="complaints-schema-disclaimer")
+    complaint_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction", content="CCCCCCCCCCCCC")
+    complaint_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="complaints-schema-footer", content="CCCCCCCCCCCCC")
+    complaint_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="complaints-schema-disclaimer", content="CCCCCCCCCCCCC")
 
     field_block_slugs = ['id', 'occured-date', 'division', 'district', 'shift']
     field_blocks = []
     for slug in field_block_slugs:
-        field_blocks.append(ChartBlock(title="FIELD{}".format(slug.replace("-", "").upper()), dataset=slug.replace("-", ""), slug="complaints-schema-field-{}".format(slug)))
+        field_blocks.append(ChartBlock(title="FIELD{}".format(slug.replace("-", "").upper()), dataset=slug.replace("-", ""), slug="complaints-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
 
     department.chart_blocks.append(complaint_schema_intro)
     department.chart_blocks.append(complaint_schema_footer)

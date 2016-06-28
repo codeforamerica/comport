@@ -249,7 +249,7 @@ def complaints_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/schema/complaints.html", department=department)
+    return render_template("department/site/schema/complaints.html", department=department, chart_blocks=department.get_complaint_schema_blocks())
 
 @blueprint.route('/<int:department_id>/edit/schema/complaints')
 @login_required
@@ -369,7 +369,7 @@ def public_complaints_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
-    return render_template("department/site/schema/complaints.html", department=department, published=True)
+    return render_template("department/site/schema/complaints.html", department=department, chart_blocks=department.get_complaint_schema_blocks(), published=True)
 
 @blueprint.route("/<short_name>/assaultsonofficers/")
 @authorized_access_only(dataset="assaults_on_officers")

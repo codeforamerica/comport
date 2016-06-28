@@ -25,7 +25,26 @@
         <button type="submit">Download Officer Call Information<sup>*</sup> for the IMPD</button>
       </form>
     </div>
-    <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p>
+
+    <!-- Intro -->
+    {% if not editing %}
+    <p>
+      {{ markdown(chart_blocks['introduction'].content) }}
+    </p>
+    <!-- <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p> -->
+    {% else %}
+    <div class="editing-form col-xs-12 col-sm-6">
+      <form id="editIntro" method="post" action="/content/{{ chart_blocks['introduction'].slug }}/{{department.id}}">
+        <div class="form-group">
+          <label for="chart_content">Content:</label>
+          <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
+          <input type="hidden" name="chart_title" value=""/>
+        </div>
+        <input type="submit" />
+      </form>
+    </div>  <!-- end col -->
+    {% endif %}
+
 
     <h4>Fields included in this dataset and their definitions:</h4>
     <table class="table schema-table">
@@ -122,11 +141,15 @@
       </tr>
     </table>
   </div>
+
+  <!-- footer -->
   <div class='row'>
     <div class="col-md-12">
       <p><sup>*</sup>Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.</p>
     </div>
   </div>
+
+  <!-- disclaimer -->
   <div class='row'>
     <div class="col-md-12 disclaimer">
       <p>DISCLAIMER OF LIABILITY: The City voluntarily provides the data on this website as a service to the public. The City retains ownership of any data or documents that originate with City, and the data may not be sold, published, or exchanged for commercial purposes. The City no representation, either implied or expressed, as to the content, accuracy, or completeness of any of the data provided at this website.  The City makes this data available on an “as is” basis and explicitly disclaims any representations and warranties.</p>

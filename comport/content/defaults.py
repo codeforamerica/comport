@@ -294,6 +294,86 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""TK""",
             date_updated=None,
             date_edited=None
+        ),
+
+        ChartBlock(
+            title="INTRO",
+            dataset="intros",
+            slug="complaints-schema-introduction",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="FIELDID",
+            dataset="fid",
+            slug="complaints-schema-field-id",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="OCCURREDDATE",
+            dataset="fod",
+            slug="complaints-schema-field-occurred-date",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="DIVISION",
+            dataset="div",
+            slug="complaints-schema-field-division",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="DISTRICT",
+            dataset="dis",
+            slug="complaints-schema-field-district",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="SHIFT",
+            dataset="shift",
+            slug="complaints-schema-field-shift",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="FOOTER",
+            dataset="footer",
+            slug="complaints-schema-footer",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="DISCLAIMER",
+            dataset="disclaimer",
+            slug="complaints-schema-disclaimer",
+            content="TK",
+            caption="",
+            date_updated=None,
+            date_edited=None
         )
 
     ]

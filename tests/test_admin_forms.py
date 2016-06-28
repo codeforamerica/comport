@@ -86,7 +86,7 @@ class TestStartExtractorForm:
         assert extractor.next_month == submit_month
         assert extractor.next_year == submit_year
 
-@pytest.mark.usefixtures('app')
+@pytest.mark.usefixtures('db')
 class TestAdminEditForms:
 
     def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
