@@ -10,20 +10,7 @@ from flask import url_for
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncident
-
-def log_in_user(testapp, department):
-    # set up a user
-    user = User.create(username="user", email="user@example.com", password="password")
-    user.departments.append(department)
-    user.active = True
-    user.save()
-    # login
-    response = testapp.get("/login/")
-    form = response.forms['loginForm']
-    form['username'] = user.username
-    form['password'] = 'password'
-    response = form.submit().follow()
-    return user
+from .utils import log_in_user
 
 @pytest.mark.usefixtures('db')
 class TestConditionalAccess:

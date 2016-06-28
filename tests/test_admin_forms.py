@@ -2,6 +2,7 @@
 import pytest
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
+from .utils import log_in_user
 
 @pytest.mark.usefixtures('app')
 class TestNewDepartmentForm:
@@ -84,3 +85,21 @@ class TestStartExtractorForm:
         # the new date was set
         assert extractor.next_month == submit_month
         assert extractor.next_year == submit_year
+
+@pytest.mark.usefixtures('app')
+class TestAdminEditForms:
+
+    def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        form = response.forms['editIntro']
+        assert form is not None
