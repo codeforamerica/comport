@@ -31,12 +31,11 @@
     <p>
       {{ markdown(chart_blocks['introduction'].content) }}
     </p>
-    <!-- <p> Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.</p> -->
     {% else %}
     <div class="editing-form col-xs-12 col-sm-6">
       <form id="editIntro" method="post" action="/content/{{ chart_blocks['introduction'].slug }}/{{department.id}}">
         <div class="form-group">
-          <label for="chart_content">Content:</label>
+          <label for="chart_content">Intro:</label>
           <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
           <input type="hidden" name="chart_title" value=""/>
         </div>
@@ -142,23 +141,45 @@
     </table>
   </div>
 
-  <!-- footer -->
+  <!-- Footer -->
+  {% if not editing %}
   <div class='row'>
     <div class="col-md-12">
-      <p><sup>*</sup>Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.</p>
+      <p>{{ markdown(chart_blocks['footer'].content) }}</p>
     </div>
   </div>
+  {% else %}
+  <div class="editing-form col-xs-12 col-sm-6">
+    <form id="editFooter" method="post" action="/content/{{ chart_blocks['footer'].slug }}/{{department.id}}">
+      <div class="form-group">
+        <label for="chart_content">Footer:</label>
+        <textarea class="form-control" name="chart_content">{{ chart_blocks['footer'].content }}</textarea>
+        <input type="hidden" name="chart_title" value=""/>
+      </div>
+      <input type="submit" />
+    </form>
+  </div>  <!-- end col -->
+  {% endif %}
 
   <!-- disclaimer -->
-  <div class='row'>
+  {% if not editing %}
+    <div class='row'>
     <div class="col-md-12 disclaimer">
-      <p>DISCLAIMER OF LIABILITY: The City voluntarily provides the data on this website as a service to the public. The City retains ownership of any data or documents that originate with City, and the data may not be sold, published, or exchanged for commercial purposes. The City no representation, either implied or expressed, as to the content, accuracy, or completeness of any of the data provided at this website.  The City makes this data available on an “as is” basis and explicitly disclaims any representations and warranties.</p>
-
-      <p>RESERVATION OF RIGHTS: The City reserves the right to discontinue availability of content on this website at any time and for any reason.  The City also reserves the right to claim or seek to protect any intellectual property rights in any of the information, images, software, or processes displayed or used at this website. The data provided on this website does not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have in any of the information, images, software, or processes displayed or used at this website.</p>
-
-      <p>INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.</p>
+      <p>{{ markdown(chart_blocks['disclaimer'].content) }}</p>
     </div>
   </div>
+  {% else %}
+  <div class="editing-form col-xs-12 col-sm-6">
+    <form id="editDisclaimer" method="post" action="/content/{{ chart_blocks['disclaimer'].slug }}/{{department.id}}">
+      <div class="form-group">
+        <label for="chart_content">Disclaimer:</label>
+        <textarea class="form-control" name="chart_content">{{ chart_blocks['disclaimer'].content }}</textarea>
+        <input type="hidden" name="chart_title" value=""/>
+      </div>
+      <input type="submit" />
+    </form>
+  </div>  <!-- end col -->
+  {% endif %}
 </div>
 
 
