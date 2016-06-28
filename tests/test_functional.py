@@ -274,15 +274,15 @@ class TestConditionalAccess:
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
 
-    def test_complaints_schema_edit_page_exists(self, testapp):
+    def test_complaints_schema_edit_page_exists(self, testapp, preconfigured_department):
         # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department, _ = preconfigured_department
 
         # set up a user
         log_in_user(testapp, department)
 
         # make a request to specific front page
-        response = testapp.get("/department/{}/preview/edit/schema/complaints".format(department.id))
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
 
         assert response.status_code == 200
 

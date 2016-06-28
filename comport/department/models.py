@@ -81,6 +81,21 @@ class Department(SurrogatePK, Model):
             ])
         }
 
+    def get_complaint_schema_blocks(self):
+        return {
+            'introduction': self.get_block_by_slug('complaints-introduction'),
+            'first-block': self.get_block_by_slug('complaints-by-month'),
+            'blocks': self.get_blocks_by_slugs([
+                'complaints-by-allegation',
+                'complaints-by-allegation-type',
+                'complaints-by-disposition',
+                'complaints-by-precinct',
+                'officer-demographics',
+                'complaints-by-demographic',
+                'complaints-by-officer',
+            ])
+        }
+
     def get_assaults_blocks(self):
         return {
             'introduction': self.get_block_by_slug('assaults-introduction'),
