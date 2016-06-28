@@ -93,6 +93,43 @@ class TestExtractors:
         assert complaint_blocks['blocks'][5] == complaint_bde
         assert complaint_blocks['blocks'][6] == complaint_bof
 
+    def test_get_complaint_schema_blocks(self):
+        ''' Set and get complaint schema chart blocks.
+        '''
+        department = DepartmentFactory()
+        department.save()
+
+        # create & append chart blocks with the expected slugs
+        complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
+        complaint_id = ChartBlock(title="FIELDID", dataset="fid", slug="complaints-schema-field-id")
+        complaint_od = ChartBlock(title="OCCURREDDATE", dataset="fod", slug="complaints-schema-field-occurred-date")
+        complaint_div = ChartBlock(title="DIVISION", dataset="div", slug="complaints-schema-field-division")
+        complaint_dis = ChartBlock(title="DISTRICT", dataset="dis", slug="complaints-schema-field-district")
+        complaint_shift = ChartBlock(title="SHIFT", dataset="shift", slug="complaints-schema-field-shift")
+        complaint_footer = ChartBlock(title="FOOTER", dataset="footer", slug="complaints-schema-footer")
+        complaint_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="complaints-schema-disclaimer")
+
+        department.chart_blocks.append(complaint_intro)
+        department.chart_blocks.append(complaint_id)
+        department.chart_blocks.append(complaint_od)
+        department.chart_blocks.append(complaint_div)
+        department.chart_blocks.append(complaint_dis)
+        department.chart_blocks.append(complaint_shift)
+        department.chart_blocks.append(complaint_footer)
+        department.chart_blocks.append(complaint_disclaimer)
+        department.save()
+
+        # verify that the blocks are returned in the expected structure
+        complaint_blocks = department.get_complaint_schema_blocks()
+        assert complaint_blocks['introduction'] == complaint_intro
+        assert complaint_blocks['footer'] == complaint_footer
+        assert complaint_blocks['disclaimer'] == complaint_disclaimer
+        assert complaint_id in complaint_blocks['blocks']
+        assert complaint_od in complaint_blocks['blocks']
+        assert complaint_div in complaint_blocks['blocks']
+        assert complaint_dis in complaint_blocks['blocks']
+        assert complaint_shift in complaint_blocks['blocks']
+
     def test_get_uof_blocks(self):
         ''' Set and get uof chart blocks.
         '''
