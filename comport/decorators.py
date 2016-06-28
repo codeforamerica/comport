@@ -20,8 +20,14 @@ def authorized_access_only(dataset=None):
                 except ValueError:
                     dataset_is_public = True
 
-            if (not department.is_public or not dataset_is_public) and not current_user.is_authenticated():
+            if current_user.is_authenticated():
+                user_has_dept_access = current_user.has_department(department.id) or current_user.is_admin()
+            else:
+                user_has_dept_access = False
+
+            if (not department.is_public or not dataset_is_public) and (not current_user.is_authenticated() or not user_has_dept_access):
                 abort(403)
+
             return view_function(*args, **kwargs)
         return decorated_function
     return check_authorized
