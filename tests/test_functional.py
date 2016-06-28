@@ -121,6 +121,8 @@ class TestConditionalAccess:
         testapp.get("/department/{}/uof.csv".format(department.id), status=403)
         testapp.get("/department/{}/ois.csv".format(department.id), status=403)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=403)
+        testapp.get("/department/{}/officerCalls.csv".format(department.id), status=403)
+        testapp.get("/department/{}/demographics.csv".format(department.id), status=403)
 
     def test_department_logged_in_authorized(self, testapp, preconfigured_department):
         # set up department
@@ -143,8 +145,22 @@ class TestConditionalAccess:
         testapp.get("/department/{}/uof.csv".format(department.id), status=200)
         testapp.get("/department/{}/ois.csv".format(department.id), status=200)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
+        testapp.get("/department/{}/officerCalls.csv".format(department.id), status=200)
+        testapp.get("/department/{}/demographics.csv".format(department.id), status=200)
 
-    def test_can_change_dataset_public(self):
+    def test_datset_is_public_by_default(self):
+        # create a department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        assert hasattr(department, "is_public_assaults_on_officers")
+        assert hasattr(department, "is_public_officer_involved_shootings")
+        assert hasattr(department, "is_public_citizen_complaints")
+        assert hasattr(department, "is_public_use_of_force_incidents")
+        assert department.is_public_assaults_on_officers is True
+        assert department.is_public_officer_involved_shootings is True
+        assert department.is_public_citizen_complaints is True
+        assert department.is_public_use_of_force_incidents is True
+
+    def test_dataset_can_be_set_private(self):
         # create a department
         department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
         assert hasattr(department, "is_public_assaults_on_officers")
@@ -265,7 +281,7 @@ class TestPagesRespond:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
 
         assert response.status_code == 200
@@ -294,7 +310,7 @@ class TestPagesRespond:
         # create a department
         Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/SPD/schema/assaultsonofficers/")
 
         assert response.status_code == 200
@@ -306,8 +322,26 @@ class TestPagesRespond:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/assaultsonofficers".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_demographics_csv_endpoint_exists(self, testapp):
+        # create a department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/demographics.csv".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_officer_calls_csv_endpoint_exists(self, testapp):
+        # create a department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/officerCalls.csv".format(department.id))
 
         assert response.status_code == 200
 
@@ -315,7 +349,7 @@ class TestPagesRespond:
         # create a department
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
 
         assert response.status_code == 200
@@ -344,7 +378,7 @@ class TestPagesRespond:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a resquest to specific front page
+        # make a request to specific front page
         response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
 
         assert response.status_code == 200
