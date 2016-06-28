@@ -101,5 +101,6 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
         assert response.status_code == 200
 
-        form = response.forms['editIntro']
-        assert form is not None
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
