@@ -101,6 +101,14 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
         assert response.status_code == 200
 
+        # assert that the intro, footer, disclaimer forms are there
         assert 'editIntro' in response.forms
         assert 'editFooter' in response.forms
         assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editId' in response.forms
+        assert 'editOccuredDate' in response.forms
+        assert 'editDivision' in response.forms
+        assert 'editDistrict' in response.forms
+        assert 'editShift' in response.forms
