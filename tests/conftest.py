@@ -87,10 +87,11 @@ def preconfigured_department():
     complaint_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="complaints-schema-footer", content="CCCCCCCCCCCCC")
     complaint_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="complaints-schema-disclaimer", content="CCCCCCCCCCCCC")
 
+    # define the field blocks
     field_block_slugs = ['id', 'occured-date', 'division', 'district', 'shift']
     field_blocks = []
     for slug in field_block_slugs:
-        field_blocks.append(ChartBlock(title="FIELD{}".format(slug.replace("-", "").upper()), dataset=slug.replace("-", ""), slug="complaints-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
+        field_blocks.append(ChartBlock(title="{}".format(slug.replace("-", " ").upper()), dataset=slug.replace("-", ""), slug="complaints-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
 
     department.chart_blocks.append(complaint_schema_intro)
     department.chart_blocks.append(complaint_schema_footer)
