@@ -83,16 +83,10 @@ class Department(SurrogatePK, Model):
 
     def get_complaint_schema_blocks(self):
         return {
-            'introduction': self.get_block_by_slug('complaints-introduction'),
-            'blocks': self.get_blocks_by_slugs([
-                'complaints-by-allegation',
-                'complaints-by-allegation-type',
-                'complaints-by-disposition',
-                'complaints-by-precinct',
-                'officer-demographics',
-                'complaints-by-demographic',
-                'complaints-by-officer',
-            ])
+            'introduction': self.get_block_by_slug('complaints-schema-introduction'),
+            'footer': self.get_block_by_slug('complaints-schema-footer'),
+            'disclaimer': self.get_block_by_slug('complaints-schema-disclaimer'),
+            'blocks': self.get_blocks_by_slug_startswith('complaints-schema-field-')
         }
 
     def get_assaults_blocks(self):
@@ -158,6 +152,9 @@ class Department(SurrogatePK, Model):
 
     def get_blocks_by_slugs(self, slugs):
         return [b for b in self.chart_blocks if b.slug in slugs]
+
+    def get_blocks_by_slug_startswith(self, partial_slug):
+        return [b for b in self.chart_blocks if b.slug.startswith(partial_slug)]
 
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
