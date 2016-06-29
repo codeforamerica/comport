@@ -2,6 +2,7 @@
 import pytest
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
+from comport.content.models import ChartBlock
 from .utils import log_in_user
 
 @pytest.mark.usefixtures('app')
@@ -107,13 +108,34 @@ class TestAdminEditForms:
         assert 'editDisclaimer' in response.forms
 
         # assert that the field forms are there (as defined in conftest.py)
-        assert 'editIdTitle' in response.forms
-        assert 'editIdContent' in response.forms
-        assert 'editOccuredDateTitle' in response.forms
-        assert 'editOccuredDateContent' in response.forms
-        assert 'editDivisionTitle' in response.forms
-        assert 'editDivisionContent' in response.forms
-        assert 'editDistrictTitle' in response.forms
-        assert 'editDistrictContent' in response.forms
-        assert 'editShiftTitle' in response.forms
-        assert 'editShiftContent' in response.forms
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
+    def test_editing_schema_field_value(self, preconfigured_department, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
