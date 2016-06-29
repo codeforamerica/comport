@@ -25,7 +25,7 @@ def edit_chart_block(department_id, chart_slug):
 
     block.save()
 
-    if 'edit' in request.referrer:
+    if request.referrer and 'edit' in request.referrer:
         new_path = urlparse(request.referrer.replace('/edit/', '/preview/')).path
     else:
         new_path = url_for(
