@@ -307,50 +307,197 @@ We have done some initial analysis on this dataset, though there are many other 
         ),
 
         ChartBlock(
-            title="FIELDID",
-            dataset="fid",
+            title="Id",
+            dataset="",
             slug="complaints-schema-field-id",
-            content="TK",
+            content="This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.",
             caption="",
             date_updated=None,
             date_edited=None
         ),
 
         ChartBlock(
-            title="OCCURREDDATE",
-            dataset="fod",
+            title="Occurred Date",
+            dataset="",
             slug="complaints-schema-field-occurred-date",
-            content="TK",
+            content="The date that the incident occurred.",
             caption="",
             date_updated=None,
             date_edited=None
         ),
 
         ChartBlock(
-            title="DIVISION",
-            dataset="div",
+            title="Division",
+            dataset="",
             slug="complaints-schema-field-division",
-            content="TK",
+            content="This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.",
             caption="",
             date_updated=None,
             date_edited=None
         ),
 
         ChartBlock(
-            title="DISTRICT",
-            dataset="dis",
+            title="District",
+            dataset="",
             slug="complaints-schema-field-district",
-            content="TK",
+            content="This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
             date_edited=None
         ),
 
         ChartBlock(
-            title="SHIFT",
-            dataset="shift",
+            title="Shift",
+            dataset="",
             slug="complaints-schema-field-shift",
-            content="TK",
+            content="This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Beat",
+            dataset="",
+            slug="complaints-schema-field-beat",
+            content="Some shifts contain this secondary level of detail on the officer's assignment.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Service Type",
+            dataset="",
+            slug="complaints-schema-field-service-type",
+            content="The reason for the interaction, such as Traffic Stop or Call for Service.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Source",
+            dataset="",
+            slug="complaints-schema-field-source",
+            content="Who received the complaint and whether it was categorized as formal or informal.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Allegation Type",
+            dataset="",
+            slug="complaints-schema-field-allegation-type",
+            content="Allegations in complaints fall into a number of classes. Some classes of allegations are: Citizen Interactions, Bias Based Policing and Use of Force.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Allegation",
+            dataset="",
+            slug="complaints-schema-field-allegation",
+            content="Allegations are tied to the regulations and standards which Officers are held to. Examples are: rude, demeaning and affronting language, and failure to provide name or badge number, which both fall under the allegation class of citizen interaction.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Finding",
+            dataset="",
+            slug="complaints-schema-field-finding",
+            content='''Each complaint may contain multiple allegations, such as rudeness and inappropriate language. Each allegation receives separate findings. There are four possible findings:
+
+- Sustained means that the investigation agreed with the allegation in the complaint. When allegations are sustained, the Chief of Police will take the appropriate disciplinary action.
+- Not sustained means that the investigation did not find evidence to prove or disprove the complaint. If allegations are found to be not sustained, the officer's name is submitted to IMPD's Early Warning system.
+- Exonerated means the incident happened, but it was lawful and proper.
+- Unfounded means that the incident happened, however not as detailed in the complaint.
+
+Complaints that are still being investigated will be blank in this column.''',
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Race",
+            dataset="",
+            slug="complaints-schema-field-resident-race",
+            content="The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Sex",
+            dataset="",
+            slug="complaints-schema-field-resident-sex",
+            content="The resident's gender.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Age",
+            dataset="",
+            slug="complaints-schema-field-resident-age",
+            content="The resident's age at the time of the incident, if known.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Race",
+            dataset="",
+            slug="complaints-schema-field-officer-race",
+            content="The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Sex",
+            dataset="",
+            slug="complaints-schema-field-officer-sex",
+            content="The officer's gender.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Age",
+            dataset="",
+            slug="complaints-schema-field-officer-age",
+            content="The officer's age at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Years of Service",
+            dataset="",
+            slug="complaints-schema-field-officer-years-of-service",
+            content="The number of years the officer had been employed by IMPD at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Identifier",
+            dataset="",
+            slug="complaints-schema-field-officer-identifier",
+            content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.",
             caption="",
             date_updated=None,
             date_edited=None
