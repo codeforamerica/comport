@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
+from urllib.parse import urlparse
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
 from comport.content.models import ChartBlock
@@ -139,3 +140,29 @@ class TestAdminEditForms:
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 
+    def test_submitting_schema_edit_form_redirects_to_preview(self, preconfigured_department, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        # submit new title & content
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit()
+
+        # the response should be a redirect
+        assert response.status_code == 302
+        # the location of the redirect should be the preview page
+        parsed = urlparse(response.location)
+        assert parsed.path == "/department/{}/preview/schema/complaints".format(department.id)
