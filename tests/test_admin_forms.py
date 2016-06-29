@@ -91,6 +91,78 @@ class TestStartExtractorForm:
 @pytest.mark.usefixtures('db')
 class TestAdminEditForms:
 
+    def test_ois_schema_edit_forms_exist(self, preconfigured_department, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
+    def test_useofforce_schema_edit_forms_exist(self, preconfigured_department, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
+    def test_assaults_schema_edit_forms_exist(self, preconfigured_department, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
     def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
@@ -115,7 +187,7 @@ class TestAdminEditForms:
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
 
-    def test_editing_schema_field_value(self, preconfigured_department, testapp):
+    def test_editing_complaints_schema_field_value(self, preconfigured_department, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
         department, _ = preconfigured_department
@@ -137,6 +209,81 @@ class TestAdminEditForms:
         assert response.status_code == 200
 
         checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_assaults_schema_field_value(self, preconfigured_department, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_ois_schema_field_value(self, preconfigured_department, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="ois-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_useofforce_schema_field_value(self, preconfigured_department, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="useofforce-schema-field-shift").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 

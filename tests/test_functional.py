@@ -208,6 +208,42 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
+    def test_assaults_schema_edit_page_exists(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_ois_schema_edit_page_exists(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_useofforce_schema_edit_page_exists(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
+
+        assert response.status_code == 200
+
     def test_complaints_schema_preview_page_exists(self, testapp, preconfigured_department):
         # create a department
         department, _ = preconfigured_department
@@ -217,6 +253,30 @@ class TestPagesRespond:
 
         # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_useofforce_schema_preview_page_exists(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/preview/schema/useofforce".format(department.id))
+
+        assert response.status_code == 200
+
+    def test_ois_schema_preview_page_exists(self, testapp, preconfigured_department):
+        # create a department
+        department, _ = preconfigured_department
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/preview/schema/ois".format(department.id))
 
         assert response.status_code == 200
 
