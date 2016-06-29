@@ -2,7 +2,7 @@
 from flask import Blueprint, redirect, url_for, request, abort
 from flask_login import current_user
 from flask.ext.login import login_required
-
+from urllib.parse import urlparse
 from .models import ChartBlock
 
 
@@ -25,6 +25,11 @@ def edit_chart_block(department_id, chart_slug):
 
     block.save()
 
-    return redirect(url_for(
-        'department.department_dashboard', department_id=department_id
-    ))
+    if 'edit' in request.referrer:
+        new_path = urlparse(request.referrer.replace('/edit/', '/preview/')).path
+    else:
+        new_path = url_for(
+            'department.department_dashboard', department_id=department_id
+        )
+
+    return redirect(new_path)
