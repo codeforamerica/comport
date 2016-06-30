@@ -297,7 +297,7 @@ We have done some initial analysis on this dataset, though there are many other 
         ),
 
         ChartBlock(
-            title="INTRO",
+            title="Intro",
             dataset="intros",
             slug="complaints-schema-introduction",
             content="Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.",
@@ -525,6 +525,130 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             caption="",
             date_updated=None,
             date_edited=None
-        )
+        ),
 
+        ChartBlock(
+            title="Intro",
+            dataset="intros",
+            slug="assaults-schema-introduction",
+            content="This is Assaults on Officers intro text.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Id",
+            dataset="",
+            slug="assaults-schema-field-id",
+            content="This is a hashed unique identifier for a given incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+
+        ChartBlock(
+            title="Officer Identifier",
+            dataset="",
+            slug="assaults-schema-field-officer-identifier",
+            content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has been involved in multiple assaults.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Service Type",
+            dataset="",
+            slug="assaults-schema-field-service-type",
+            content="The reason for the interaction, such as Traffic Stop or Call for Service.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Force Type",
+            dataset="",
+            slug="assaults-schema-field-force-type",
+            content="The type of weapon used against the officer.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Assignment",
+            dataset="",
+            slug="assaults-schema-field-assignment",
+            content="The type of vehicle the officers were in.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Arrest Made",
+            dataset="",
+            slug="assaults-schema-field-arrest-made",
+            content="True if the person assaulting the officer was arrested.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Injured",
+            dataset="",
+            slug="assaults-schema-field-officer-injured",
+            content="True if officer was injured during the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Killed",
+            dataset="",
+            slug="assaults-schema-field-officer-killed",
+            content="True if officer was killed during the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Report Filed",
+            dataset="",
+            slug="assaults-schema-field-beat",
+            content="True if a report was filed about the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="FOOTER",
+            dataset="footer",
+            slug="assaults-schema-footer",
+            content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="DISCLAIMER",
+            dataset="disclaimer",
+            slug="assaults-schema-disclaimer",
+            content='''DISCLAIMER OF LIABILITY: The City voluntarily provides the data on this website as a service to the public. The City retains ownership of any data or documents that originate with City, and the data may not be sold, published, or exchanged for commercial purposes. The City no representation, either implied or expressed, as to the content, accuracy, or completeness of any of the data provided at this website.  The City makes this data available on an “as is” basis and explicitly disclaims any representations and warranties.
+
+RESERVATION OF RIGHTS: The City reserves the right to discontinue availability of content on this website at any time and for any reason.  The City also reserves the right to claim or seek to protect any intellectual property rights in any of the information, images, software, or processes displayed or used at this website. The data provided on this website does not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have in any of the information, images, software, or processes displayed or used at this website.
+
+INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
+            caption="",
+            date_updated=None,
+            date_edited=None
+        )
     ]
