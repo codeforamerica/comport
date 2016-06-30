@@ -89,6 +89,14 @@ class Department(SurrogatePK, Model):
             'blocks': self.get_blocks_by_slug_startswith('complaints-schema-field-')
         }
 
+    def get_uof_schema_blocks(self):
+        return {
+            'introduction': self.get_block_by_slug('uof-schema-introduction'),
+            'footer': self.get_block_by_slug('uof-schema-footer'),
+            'disclaimer': self.get_block_by_slug('uof-schema-disclaimer'),
+            'blocks': self.get_blocks_by_slug_startswith('uof-schema-field-')
+        }
+
     def get_assaults_blocks(self):
         return {
             'introduction': self.get_block_by_slug('assaults-introduction'),
@@ -150,6 +158,7 @@ class Department(SurrogatePK, Model):
         return extractors[0] if extractors else None
 
     def get_block_by_slug(self, slug):
+        import pdb; pdb.set_trace()
         next_block = None
         try:
             next_block = next(b for b in self.chart_blocks if b.slug == slug)
