@@ -128,6 +128,22 @@ def preconfigured_department():
     department.chart_blocks.append(uof_od)
     department.chart_blocks.append(uof_race)
 
+    uof_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-schema-introduction", content="CCCCCCCCCCCCC")
+    uof_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="uof-schema-footer", content="CCCCCCCCCCCCC")
+    uof_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="uof-schema-disclaimer", content="CCCCCCCCCCCCC")
+
+    # define the field blocks
+    field_block_slugs = ['id', 'occurred-date', 'division', 'district', 'shift', 'beat', 'use-of-force-reason', 'office-force-type', 'disposition', 'service-type', 'arrest-made', 'arrest-charges', 'resident-injured', 'resident-hospitalized', 'resident-condition', 'officer-injured', 'officer-hospitalized', 'officer-condition', 'resident-race', 'resident-sex', 'resident-age', 'officer-race', 'officer-sex', 'officer-age', 'officer-years-of-service', 'officer-identifier']
+    field_blocks = []
+    for slug in field_block_slugs:
+        field_blocks.append(ChartBlock(title="{}".format(slug.replace("-", " ").upper()), dataset=slug.replace("-", ""), slug="uof-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
+
+    department.chart_blocks.append(uof_schema_intro)
+    department.chart_blocks.append(uof_schema_footer)
+    department.chart_blocks.append(uof_schema_disclaimer)
+    for block in field_blocks:
+        department.chart_blocks.append(block)
+
     # create & append officer involved shooting chart blocks with the expected slugs
     ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction", content="DDDDDDDDDDDDDDD")
     ois_bid = ChartBlock(title="BYINCDISTRICT", dataset="bid", slug="ois-by-inc-district", content="DDDDDDDDDDDDDDD")

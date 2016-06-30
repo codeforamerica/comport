@@ -158,7 +158,6 @@ class Department(SurrogatePK, Model):
         return extractors[0] if extractors else None
 
     def get_block_by_slug(self, slug):
-        import pdb; pdb.set_trace()
         next_block = None
         try:
             next_block = next(b for b in self.chart_blocks if b.slug == slug)
