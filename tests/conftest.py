@@ -157,5 +157,22 @@ def preconfigured_department():
     department.chart_blocks.append(ois_od)
     department.chart_blocks.append(ois_race)
 
+    # add ois schema blocks with expected slugs
+    ois_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-schema-introduction", content="CCCCCCCCCCCCC")
+    ois_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="ois-schema-footer", content="CCCCCCCCCCCCC")
+    ois_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="ois-schema-disclaimer", content="CCCCCCCCCCCCC")
+
+    # define the field blocks
+    field_block_slugs = ['id', 'occurred-date', 'division', 'district', 'shift', 'beat', 'disposition', 'resident-weapon-used', 'officer-weapon-used', 'service-type', 'resident-condition', 'officer-condition', 'resident-race', 'resident-sex', 'resident-age', 'officer-race', 'officer-sex', 'officer-age', 'officer-years-of-service', 'officer-identifier']
+    field_blocks = []
+    for slug in field_block_slugs:
+        field_blocks.append(ChartBlock(title="{}".format(slug.replace("-", " ").upper()), dataset=slug.replace("-", ""), slug="ois-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
+
+    department.chart_blocks.append(ois_schema_intro)
+    department.chart_blocks.append(ois_schema_footer)
+    department.chart_blocks.append(ois_schema_disclaimer)
+    for block in field_blocks:
+        department.chart_blocks.append(block)
+
     department.save()
     return department, assaults_intro

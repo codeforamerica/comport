@@ -278,6 +278,15 @@ def useofforce_schema_edit(department_id):
         abort(404)
     return render_template("department/site/schema/useofforce.html", department=department, chart_blocks=department.get_uof_schema_blocks(), editing=True)
 
+@blueprint.route('/<int:department_id>/edit/schema/ois')
+@login_required
+@admin_or_department_required()
+def ois_schema_edit(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/ois.html", department=department, chart_blocks=department.get_ois_schema_blocks(), editing=True)
+
 @blueprint.route('/<int:department_id>/preview/schema/ois')
 @login_required
 @admin_or_department_required()
