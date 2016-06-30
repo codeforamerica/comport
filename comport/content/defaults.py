@@ -948,5 +948,250 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             caption="",
             date_updated=None,
             date_edited=None
+        ),
+
+        ChartBlock(
+            title="Intro",
+            dataset="intros",
+            slug="ois-schema-introduction",
+            content="Please Note: IMPD started using a new database and process for collecting this data in Summer 2014. Entries prior to July 2014 were entered in to the database from an older paper form, so they may not be consistent with entries after Summer 2014.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Footer",
+            dataset="footer",
+            slug="ois-schema-footer",
+            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Disclaimer",
+            dataset="disclaimer",
+            slug="ois-schema-disclaimer",
+            content='''DISCLAIMER OF LIABILITY: The City voluntarily provides the data on this website as a service to the public. The City retains ownership of any data or documents that originate with City, and the data may not be sold, published, or exchanged for commercial purposes. The City no representation, either implied or expressed, as to the content, accuracy, or completeness of any of the data provided at this website. The City makes this data available on an “as is” basis and explicitly disclaims any representations and warranties.
+
+RESERVATION OF RIGHTS: The City reserves the right to discontinue availability of content on this website at any time and for any reason. The City also reserves the right to claim or seek to protect any intellectual property rights in any of the information, images, software, or processes displayed or used at this website. The data provided on this website does not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have in any of the information, images, software, or processes displayed or used at this website.
+
+INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify, hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Footer",
+            dataset="footer",
+            slug="ois-schema-footer",
+            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Id",
+            dataset="",
+            slug="ois-schema-field-id",
+            content="This is a hashed unique identifier for a given incident. Incidents may contain multiple uses of force. When that is the case, there will be multiple entries for one incident number.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Occurred Date",
+            dataset="",
+            slug="ois-schema-field-occurred-date",
+            content="The date that the incident occurred.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Division",
+            dataset="",
+            slug="ois-schema-field-division",
+            content="This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="District",
+            dataset="",
+            slug="ois-schema-field-district",
+            content="This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Shift",
+            dataset="",
+            slug="ois-schema-field-shift",
+            content="This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Beat",
+            dataset="",
+            slug="ois-schema-field-beat",
+            content="Some shifts contain this secondary level of detail on the officer's assignment.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Disposition",
+            dataset="",
+            slug="ois-schema-field-disposition",
+            content="If there was an investigation and ruling on the incident, it will be noted here.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Weapon Used",
+            dataset="",
+            slug="ois-schema-field-resident-weapon-used",
+            content="The weapon the resident had at the time of the incident, if any.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Weapon Used",
+            dataset="",
+            slug="ois-schema-field-officer-weapon-used",
+            content="The firearm type the officer used in the incident, and whether it was a duty or personal weapon.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Service Type",
+            dataset="",
+            slug="ois-schema-field-service-type",
+            content="The reason for the interaction, such as Traffic Stop or Call for Service.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Condition",
+            dataset="",
+            slug="ois-schema-field-resident-condition",
+            content="Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Condition",
+            dataset="",
+            slug="ois-schema-field-officer-condition",
+            content="Injuries the officer sustained, if any, such as Minor Bleeding.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Race",
+            dataset="",
+            slug="ois-schema-field-resident-race",
+            content="The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Sex",
+            dataset="",
+            slug="ois-schema-field-resident-sex",
+            content="The resident's gender.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Resident Age",
+            dataset="",
+            slug="ois-schema-field-resident-age",
+            content="The resident's age at the time of the incident, if known.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Race",
+            dataset="",
+            slug="ois-schema-field-officer-race",
+            content="The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Sex",
+            dataset="",
+            slug="ois-schema-field-officer-sex",
+            content="The officer's gender.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+
+        ChartBlock(
+            title="Officer Age",
+            dataset="",
+            slug="ois-schema-field-officer-age",
+            content="The officer's age at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Years of Service",
+            dataset="",
+            slug="ois-schema-field-officer-years-of-service",
+            content="The number of years the officer had been employed by IMPD at the time of the incident.",
+            caption="",
+            date_updated=None,
+            date_edited=None
+        ),
+
+        ChartBlock(
+            title="Officer Identifier",
+            dataset="",
+            slug="ois-schema-field-officer-identifier",
+            content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.",
+            caption="",
+            date_updated=None,
+            date_edited=None
         )
     ]

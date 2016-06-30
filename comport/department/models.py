@@ -97,6 +97,14 @@ class Department(SurrogatePK, Model):
             'blocks': self.get_blocks_by_slug_startswith('uof-schema-field-')
         }
 
+    def get_ois_schema_blocks(self):
+        return {
+            'introduction': self.get_block_by_slug('ois-schema-introduction'),
+            'footer': self.get_block_by_slug('ois-schema-footer'),
+            'disclaimer': self.get_block_by_slug('ois-schema-disclaimer'),
+            'blocks': self.get_blocks_by_slug_startswith('ois-schema-field-')
+        }
+
     def get_assaults_blocks(self):
         return {
             'introduction': self.get_block_by_slug('assaults-introduction'),
