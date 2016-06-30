@@ -133,7 +133,7 @@ def preconfigured_department():
     uof_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="uof-schema-disclaimer", content="CCCCCCCCCCCCC")
 
     # define the field blocks
-    field_block_slugs = ['id', 'occurred-date', 'division', 'district', 'shift', 'beat', 'use-of-force-reason', 'office-force-type', 'disposition', 'service-type', 'arrest-made', 'arrest-charges', 'resident-injured', 'resident-hospitalized', 'resident-condition', 'officer-injured', 'officer-hospitalized', 'officer-condition', 'resident-race', 'resident-sex', 'resident-age', 'officer-race', 'officer-sex', 'officer-age', 'officer-years-of-service', 'officer-identifier']
+    field_block_slugs = ['id', 'occurred-date', 'division', 'district', 'shift', 'beat', 'use-of-force-reason', 'officer-force-type', 'disposition', 'service-type', 'arrest-made', 'arrest-charges', 'resident-injured', 'resident-hospitalized', 'resident-condition', 'officer-injured', 'officer-hospitalized', 'officer-condition', 'resident-race', 'resident-sex', 'resident-age', 'officer-race', 'officer-sex', 'officer-age', 'officer-years-of-service', 'officer-identifier']
     field_blocks = []
     for slug in field_block_slugs:
         field_blocks.append(ChartBlock(title="{}".format(slug.replace("-", " ").upper()), dataset=slug.replace("-", ""), slug="uof-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
