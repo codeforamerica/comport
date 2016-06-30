@@ -134,10 +134,31 @@ class TestAdminEditForms:
 
         # assert that the field forms are there (as defined in conftest.py)
         assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
         assert 'editDivisionTitleAndContent' in response.forms
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
+        assert 'editBeatTitleAndContent' in response.forms
+        assert 'editUseOfForceReasonTitleAndContent' in response.forms
+        assert 'editOfficerForceTypeTitleAndContent' in response.forms
+        assert 'editDispositionTitleAndContent' in response.forms
+        assert 'editServiceTypeTitleAndContent' in response.forms
+        assert 'editArrestMadeTitleAndContent' in response.forms
+        assert 'editArrestChargesTitleAndContent' in response.forms
+        assert 'editResidentInjuredTitleAndContent' in response.forms
+        assert 'editResidentHospitalizedTitleAndContent' in response.forms
+        assert 'editResidentConditionTitleAndContent' in response.forms
+        assert 'editOfficerInjuredTitleAndContent' in response.forms
+        assert 'editOfficerHospitalizedTitleAndContent' in response.forms
+        assert 'editOfficerConditionTitleAndContent' in response.forms
+        assert 'editResidentRaceTitleAndContent' in response.forms
+        assert 'editResidentSexTitleAndContent' in response.forms
+        assert 'editResidentAgeTitleAndContent' in response.forms
+        assert 'editOfficerRaceTitleAndContent' in response.forms
+        assert 'editOfficerSexTitleAndContent' in response.forms
+        assert 'editOfficerAgeTitleAndContent' in response.forms
+        assert 'editOfficerYearsOfServiceTitleAndContent' in response.forms
+        assert 'editOfficerIdentifierTitleAndContent' in response.forms
 
     def test_assaults_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
