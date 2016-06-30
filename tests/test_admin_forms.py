@@ -94,7 +94,7 @@ class TestAdminEditForms:
     def test_ois_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -110,7 +110,7 @@ class TestAdminEditForms:
 
         # assert that the field forms are there (as defined in conftest.py)
         assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
         assert 'editDivisionTitleAndContent' in response.forms
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
@@ -118,7 +118,7 @@ class TestAdminEditForms:
     def test_useofforce_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -163,7 +163,7 @@ class TestAdminEditForms:
     def test_assaults_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -190,7 +190,7 @@ class TestAdminEditForms:
     def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -206,7 +206,7 @@ class TestAdminEditForms:
 
         # assert that the field forms are there (as defined in conftest.py)
         assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccuredDateTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
         assert 'editDivisionTitleAndContent' in response.forms
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
@@ -264,7 +264,7 @@ class TestAdminEditForms:
     def test_editing_ois_schema_field_value(self, preconfigured_department, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -289,7 +289,7 @@ class TestAdminEditForms:
     def test_editing_useofforce_schema_field_value(self, preconfigured_department, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -314,7 +314,7 @@ class TestAdminEditForms:
     def test_submitting_schema_edit_form_redirects_to_preview(self, preconfigured_department, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)

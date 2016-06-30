@@ -919,7 +919,7 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
         ChartBlock(
             title="Report Filed",
             dataset="",
-            slug="assaults-schema-field-beat",
+            slug="assaults-schema-field-report-filed",
             content="True if a report was filed about the incident.",
             caption="",
             date_updated=None,
