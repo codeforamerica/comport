@@ -285,7 +285,7 @@ def assaults_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/schema/assaults.html", department=department)
+    return render_template("department/site/schema/assaults.html", department=department, chart_blocks=department.get_assaults_schema_blocks())
 
 @blueprint.route('/<int:department_id>/edit/schema/assaultsonofficers')
 @login_required
@@ -295,15 +295,6 @@ def assaults_schema_edit(department_id):
     if not department:
         abort(404)
     return render_template("department/site/schema/assaults.html", department=department, chart_blocks=department.get_assaults_schema_blocks(), editing=True)
-
-@blueprint.route('/<int:department_id>/schema/assaultsonofficers')
-@login_required
-@admin_or_department_required()
-def assaults_on_officers_schema(department_id):
-    department = Department.get_by_id(department_id)
-    if not department:
-        abort(404)
-    return render_template("department/site/schema/assaults.html", department=department)
 
 # <<<<<<<< DATA ENDPOINTS >>>>>>>>>>
 @blueprint.route('/<int:department_id>/uof.csv')
@@ -394,7 +385,7 @@ def public_assaults_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
-    return render_template("department/site/schema/assaults.html", department=department, published=True)
+    return render_template("department/site/schema/assaults.html", department=department, chart_blocks=department.get_assaults_schema_blocks(), editing=False, published=True)
 
 @blueprint.route("/<short_name>/useofforce/")
 @authorized_access_only(dataset="use_of_force_incidents")

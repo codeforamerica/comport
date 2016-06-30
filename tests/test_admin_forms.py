@@ -158,10 +158,13 @@ class TestAdminEditForms:
 
         # assert that the field forms are there (as defined in conftest.py)
         assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccuredDateTitleAndContent' in response.forms
-        assert 'editDivisionTitleAndContent' in response.forms
-        assert 'editDistrictTitleAndContent' in response.forms
-        assert 'editShiftTitleAndContent' in response.forms
+        assert 'editOfficerIdentifierTitleAndContent' in response.forms
+        assert 'editServiceTypeTitleAndContent' in response.forms
+        assert 'editForceTypeTitleAndContent' in response.forms
+        assert 'editAssignmentTitleAndContent' in response.forms
+        assert 'editArrestMadeTitleAndContent' in response.forms
+        assert 'editOfficerInjuredTitleAndContent' in response.forms
+        assert 'editReportFiledTitleAndContent' in response.forms
 
     def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
         ''' Edit forms exist for the complaints schema page.
@@ -224,8 +227,8 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
         assert response.status_code == 200
 
-        assert 'editShiftTitleAndContent' in response.forms
-        form = response.forms['editShiftTitleAndContent']
+        assert 'editForceTypeTitleAndContent' in response.forms
+        form = response.forms['editForceTypeTitleAndContent']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
         form['chart_title'] = new_title
@@ -233,7 +236,7 @@ class TestAdminEditForms:
         response = form.submit().follow()
         assert response.status_code == 200
 
-        checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-shift").first()
+        checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-force-type").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 

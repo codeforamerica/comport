@@ -300,18 +300,18 @@ class TestPagesRespond:
         assert assaults_blocks['introduction'] == assaults_intro
         assert response.status_code == 200
 
-    def test_assaults_schema_page_exists(self, testapp):
-        # create a department
-        Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+    def test_assaults_schema_page_exists(self, testapp, preconfigured_department):
+        # get a department from the fixture
+        department, _ = preconfigured_department
 
         # make a request to specific front page
-        response = testapp.get("/department/SPD/schema/assaultsonofficers/")
+        response = testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name))
 
         assert response.status_code == 200
 
-    def test_assaults_schema_preview_page_exists(self, testapp):
-        # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+    def test_assaults_schema_preview_page_exists(self, testapp, preconfigured_department):
+        # get a department from the fixture
+        department, _ = preconfigured_department
 
         # set up a user
         log_in_user(testapp, department)
