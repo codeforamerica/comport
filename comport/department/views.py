@@ -294,7 +294,7 @@ def ois_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/schema/ois.html", department=department)
+    return render_template("department/site/schema/ois.html", department=department, chart_blocks=department.get_ois_schema_blocks(), editing=False)
 
 @blueprint.route('/<int:department_id>/preview/schema/assaultsonofficers')
 @login_required
@@ -435,4 +435,4 @@ def public_ois_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
-    return render_template("department/site/schema/ois.html", department=department, published=True)
+    return render_template("department/site/schema/ois.html", department=department, chart_blocks=department.get_ois_schema_blocks(), editing=False, published=True)

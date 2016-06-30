@@ -264,7 +264,7 @@ class TestAdminEditForms:
     def test_editing_ois_schema_field_value(self, preconfigured_department, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department, _ = preconfigured_department
 
         # set up a user
         log_in_user(testapp, department)
