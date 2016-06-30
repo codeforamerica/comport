@@ -62,6 +62,22 @@ def preconfigured_department():
     department.chart_blocks.append(assaults_bft)
     department.chart_blocks.append(assaults_bof)
 
+    assaults_schema_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-schema-introduction", content="CCCCCCCCCCCCC")
+    assaults_schema_footer = ChartBlock(title="FOOTER", dataset="footer", slug="assaults-schema-footer", content="CCCCCCCCCCCCC")
+    assaults_schema_disclaimer = ChartBlock(title="DISCLAIMER", dataset="disclaimer", slug="assaults-schema-disclaimer", content="CCCCCCCCCCCCC")
+
+    # define the field blocks
+    field_block_slugs = ['id', 'officer-identifier', 'service-type', 'force-type', 'assignment', 'arrest-made', 'officer-injured', 'officer-killed', 'report-filed']
+    field_blocks = []
+    for slug in field_block_slugs:
+        field_blocks.append(ChartBlock(title="{}".format(slug.replace("-", " ").upper()), dataset=slug.replace("-", ""), slug="assaults-schema-field-{}".format(slug), content="CCCCCCCCCCCCC"))
+
+    department.chart_blocks.append(assaults_schema_intro)
+    department.chart_blocks.append(assaults_schema_footer)
+    department.chart_blocks.append(assaults_schema_disclaimer)
+    for block in field_blocks:
+        department.chart_blocks.append(block)
+
     # create & append complaint chart blocks with the expected slugs
     complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-introduction", content="BBBBBBBBBBBBB")
     complaint_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="complaints-by-month", content="BBBBBBBBBBBBB")
