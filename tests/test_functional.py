@@ -25,20 +25,20 @@ class TestConditionalAccess:
         department = Department.create(name="Good Police Department", short_name="GPD", is_public=False, load_defaults=False)
         assert not department.is_public
 
-    def test_department_not_logged_in_unauthorized(self, testapp, preconfigured_department):
+    def test_department_not_logged_in_unauthorized(self, testapp):
         # set up department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
         department.is_public = False
 
         # make requests to specific front pages
-        testapp.get("/department/GPD/complaints/", status=403)
-        testapp.get("/department/GPD/useofforce/", status=403)
-        testapp.get("/department/GPD/officerinvolvedshootings/", status=403)
-        testapp.get("/department/GPD/assaultsonofficers/", status=403)
-        testapp.get("/department/GPD/schema/complaints/", status=403)
-        testapp.get("/department/GPD/schema/useofforce/", status=403)
-        testapp.get("/department/GPD/schema/officerinvolvedshootings/", status=403)
-        testapp.get("/department/GPD/schema/assaultsonofficers/", status=403)
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=403)
         testapp.get("/department/{}/complaints.csv".format(department.id), status=403)
         testapp.get("/department/{}/uof.csv".format(department.id), status=403)
         testapp.get("/department/{}/ois.csv".format(department.id), status=403)
@@ -46,23 +46,23 @@ class TestConditionalAccess:
         testapp.get("/department/{}/officerCalls.csv".format(department.id), status=403)
         testapp.get("/department/{}/demographics.csv".format(department.id), status=403)
 
-    def test_department_logged_in_authorized(self, testapp, preconfigured_department):
+    def test_department_logged_in_authorized(self, testapp):
         # set up department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
         department.is_public = False
 
         # set up a user
         log_in_user(testapp, department)
 
         # make requests to specific front pages
-        testapp.get("/department/GPD/complaints/", status=200)
-        testapp.get("/department/GPD/useofforce/", status=200)
-        testapp.get("/department/GPD/officerinvolvedshootings/", status=200)
-        testapp.get("/department/GPD/assaultsonofficers/", status=200)
-        testapp.get("/department/GPD/schema/complaints/", status=200)
-        testapp.get("/department/GPD/schema/useofforce/", status=200)
-        testapp.get("/department/GPD/schema/officerinvolvedshootings/", status=200)
-        testapp.get("/department/GPD/schema/assaultsonofficers/", status=200)
+        testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
         testapp.get("/department/{}/complaints.csv".format(department.id), status=200)
         testapp.get("/department/{}/uof.csv".format(department.id), status=200)
         testapp.get("/department/{}/ois.csv".format(department.id), status=200)
@@ -99,9 +99,9 @@ class TestConditionalAccess:
         assert department.is_public_citizen_complaints is False
         assert department.is_public_use_of_force_incidents is False
 
-    def test_visit_private_dataset_throws_unauth(self, testapp, preconfigured_department):
+    def test_visit_private_dataset_throws_unauth(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # we can access all the datasets except assaults
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
@@ -165,9 +165,9 @@ class TestConditionalAccess:
         testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
 
-    def test_only_department_user_can_access_non_public_datasets(self, testapp, preconfigured_department):
+    def test_only_department_user_can_access_non_public_datasets(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=True)
         department.is_public_citizen_complaints = False
         department.is_public_use_of_force_incidents = False
         department.is_public_officer_involved_shootings = False
@@ -196,9 +196,9 @@ class TestConditionalAccess:
 @pytest.mark.usefixtures('db')
 class TestPagesRespond:
 
-    def test_complaints_schema_edit_page_exists(self, testapp, preconfigured_department):
+    def test_complaints_schema_edit_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -208,9 +208,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_assaults_schema_edit_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_schema_edit_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -220,9 +220,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_ois_schema_edit_page_exists(self, testapp, preconfigured_department):
+    def test_ois_schema_edit_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -232,9 +232,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_useofforce_schema_edit_page_exists(self, testapp, preconfigured_department):
+    def test_useofforce_schema_edit_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -244,9 +244,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_complaints_schema_preview_page_exists(self, testapp, preconfigured_department):
+    def test_complaints_schema_preview_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -256,9 +256,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_useofforce_schema_preview_page_exists(self, testapp, preconfigured_department):
+    def test_useofforce_schema_preview_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -268,9 +268,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_ois_schema_preview_page_exists(self, testapp, preconfigured_department):
+    def test_ois_schema_preview_page_exists(self, testapp):
         # create a department
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -300,18 +300,18 @@ class TestPagesRespond:
         assert assaults_blocks['introduction'] == assaults_intro
         assert response.status_code == 200
 
-    def test_assaults_schema_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_schema_page_exists(self, testapp):
         # get a department from the fixture
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name))
 
         assert response.status_code == 200
 
-    def test_assaults_schema_preview_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_schema_preview_page_exists(self, testapp):
         # get a department from the fixture
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -365,9 +365,9 @@ class TestPagesRespond:
         assert len(incidents1) == 1 and len(incidents2) == 1
         assert incidents1[0]['id'] == '123ABC' and incidents2[0]['id'] == '123XYZ'
 
-    def test_assaults_edit_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_edit_page_exists(self, testapp):
         # get a department from the fixture
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -377,9 +377,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_assaults_preview_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_preview_page_exists(self, testapp):
         # get a department from the fixture
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)

@@ -91,7 +91,7 @@ class TestStartExtractorForm:
 @pytest.mark.usefixtures('db')
 class TestAdminEditForms:
 
-    def test_ois_schema_edit_forms_exist(self, preconfigured_department, testapp):
+    def test_ois_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
@@ -115,7 +115,7 @@ class TestAdminEditForms:
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
 
-    def test_useofforce_schema_edit_forms_exist(self, preconfigured_department, testapp):
+    def test_useofforce_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
@@ -160,7 +160,7 @@ class TestAdminEditForms:
         assert 'editOfficerYearsOfServiceTitleAndContent' in response.forms
         assert 'editOfficerIdentifierTitleAndContent' in response.forms
 
-    def test_assaults_schema_edit_forms_exist(self, preconfigured_department, testapp):
+    def test_assaults_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
@@ -187,7 +187,7 @@ class TestAdminEditForms:
         assert 'editOfficerInjuredTitleAndContent' in response.forms
         assert 'editReportFiledTitleAndContent' in response.forms
 
-    def test_complaints_schema_edit_forms_exist(self, preconfigured_department, testapp):
+    def test_complaints_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
@@ -211,10 +211,10 @@ class TestAdminEditForms:
         assert 'editDistrictTitleAndContent' in response.forms
         assert 'editShiftTitleAndContent' in response.forms
 
-    def test_editing_complaints_schema_field_value(self, preconfigured_department, testapp):
+    def test_editing_complaints_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -232,14 +232,14 @@ class TestAdminEditForms:
         response = form.submit().follow()
         assert response.status_code == 200
 
-        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift").first()
+        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 
-    def test_editing_assaults_schema_field_value(self, preconfigured_department, testapp):
+    def test_editing_assaults_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -261,10 +261,10 @@ class TestAdminEditForms:
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 
-    def test_editing_ois_schema_field_value(self, preconfigured_department, testapp):
+    def test_editing_ois_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -286,10 +286,10 @@ class TestAdminEditForms:
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 
-    def test_editing_useofforce_schema_field_value(self, preconfigured_department, testapp):
+    def test_editing_useofforce_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department, _ = preconfigured_department
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -311,7 +311,7 @@ class TestAdminEditForms:
         assert checkblock.title == new_title
         assert checkblock.content == new_content
 
-    def test_submitting_schema_edit_form_redirects_to_preview(self, preconfigured_department, testapp):
+    def test_submitting_schema_edit_form_redirects_to_preview(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
