@@ -267,7 +267,7 @@ def useofforce_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/schema/useofforce.html", department=department)
+    return render_template("department/site/schema/useofforce.html", department=department, chart_blocks=department.get_uof_schema_blocks())
 
 @blueprint.route('/<int:department_id>/edit/schema/useofforce')
 @login_required
@@ -427,7 +427,7 @@ def public_uof_schema(short_name):
     department = Department.query.filter_by(short_name=short_name.upper()).first()
     if not department:
         abort(404)
-    return render_template("department/site/schema/useofforce.html", department=department, published=True)
+    return render_template("department/site/schema/useofforce.html", department=department, chart_blocks=department.get_uof_schema_blocks(), editing=False, published=True)
 
 @blueprint.route('/<short_name>/schema/officerinvolvedshootings/')
 @authorized_access_only(dataset="officer_involved_shootings")
