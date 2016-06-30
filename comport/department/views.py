@@ -267,7 +267,7 @@ def useofforce_schema_preview(department_id):
     department = Department.get_by_id(department_id)
     if not department:
         abort(404)
-    return render_template("department/site/schema/useofforce.html", department=department)
+    return render_template("department/site/schema/useofforce.html", department=department, chart_blocks=department.get_uof_schema_blocks())
 
 @blueprint.route('/<int:department_id>/edit/schema/useofforce')
 @login_required
