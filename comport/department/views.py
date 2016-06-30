@@ -287,6 +287,15 @@ def assaults_schema_preview(department_id):
         abort(404)
     return render_template("department/site/schema/assaults.html", department=department)
 
+@blueprint.route('/<int:department_id>/edit/schema/assaultsonofficers')
+@login_required
+@admin_or_department_required()
+def assaults_schema_edit(department_id):
+    department = Department.get_by_id(department_id)
+    if not department:
+        abort(404)
+    return render_template("department/site/schema/assaults.html", department=department, chart_blocks=department.get_assaults_schema_blocks(), editing=True)
+
 @blueprint.route('/<int:department_id>/schema/assaultsonofficers')
 @login_required
 @admin_or_department_required()

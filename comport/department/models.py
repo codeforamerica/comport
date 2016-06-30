@@ -99,6 +99,14 @@ class Department(SurrogatePK, Model):
             ])
         }
 
+    def get_assaults_schema_blocks(self):
+        return {
+            'introduction': self.get_block_by_slug('assaults-schema-introduction'),
+            'footer': self.get_block_by_slug('assaults-schema-footer'),
+            'disclaimer': self.get_block_by_slug('assaults-schema-disclaimer'),
+            'blocks': self.get_blocks_by_slug_startswith('assaults-schema-field-')
+        }
+
     def get_introduction_blocks(self):
         return dict([(block.slug, block) for block in self.chart_blocks if block.dataset in ["introduction"]])
 
