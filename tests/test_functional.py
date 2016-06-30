@@ -288,16 +288,13 @@ class TestPagesRespond:
         redirect_response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=500)
         assert redirect_response.status_code == 500
 
-    def test_assaults_front_page_exists(self, testapp, preconfigured_department):
+    def test_assaults_front_page_exists(self, testapp):
         # get a department and intro block from the fixture
-        department, assaults_intro = preconfigured_department
+        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=True)
 
         # make a request to specific front page
-        response = testapp.get("/department/GPD/assaultsonofficers/")
+        response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name))
 
-        assaults_blocks = department.get_assaults_blocks()
-
-        assert assaults_blocks['introduction'] == assaults_intro
         assert response.status_code == 200
 
     def test_assaults_schema_page_exists(self, testapp):
