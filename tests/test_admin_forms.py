@@ -5,6 +5,7 @@ from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
 from comport.content.models import ChartBlock
 from .utils import log_in_user
+from bs4 import BeautifulSoup
 
 @pytest.mark.usefixtures('app')
 class TestNewDepartmentForm:
@@ -90,6 +91,35 @@ class TestStartExtractorForm:
 
 @pytest.mark.usefixtures('db')
 class TestAdminEditForms:
+
+    def test_edit_and_preview_links_on_department_admin_page(sefl, testapp):
+        ''' There are links to preview & edit main and schema pages from the department admin page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}".format(department.id))
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="{}/preview/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/assaultsonofficers".format(department.id)) is not None
 
     def test_ois_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
