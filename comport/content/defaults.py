@@ -13,7 +13,8 @@ class ChartBlockDefaults:
 [Here](http://www.socrata.com) is a link to the City's open data portal and open data policy
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Year",
@@ -22,7 +23,8 @@ class ChartBlockDefaults:
             dataset="complaints",
             content="Since 2009, citizens have submitted between 68 to 178 formal complaints about officers each year, with an average of 104 per year. A complaint is from one citizen, but may contain multiple allegations and/or be about multiple officers. This graph counts both formal and informal complaints.",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Month",
@@ -31,7 +33,8 @@ class ChartBlockDefaults:
             dataset="complaints",
             content="The current month shows complaints to date, so will not be a complete count until the month ends.",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Allegation",
@@ -42,7 +45,8 @@ class ChartBlockDefaults:
 Allegations in complaints fall into a number of classes.  For example, the allegation class citizen interaction contains specific allegations such as rude, demeaning and affronting language, and failure to provide name or badge number.
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Allegation Type",
@@ -52,7 +56,8 @@ Allegations in complaints fall into a number of classes.  For example, the alleg
             content="""Complaints are mapped to the regulations that IMPD officers must follow. The most frequent complaints relate to interactions with citizens, such as rude language, followed by driving-related complaints.
 This count is from January 2014 to present.""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Disposition",
@@ -77,7 +82,8 @@ All findings remain on an officer’s personnel record.
 Complaints that are still being investigated are shown as **unspecified** in this chart.
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints By Precinct",
@@ -101,7 +107,8 @@ Southwest District: 136,680 population; 80.8 square miles
 Population information is from 2010 census data.
 """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Officer Demographics",
@@ -114,7 +121,8 @@ This chart shows the number of officers who have received one or more complaints
 This chart shows both Formal and Informal complaints, so some numbers appear larger than expected.
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Demographics of complainants and officers",
@@ -125,7 +133,8 @@ This chart shows both Formal and Informal complaints, so some numbers appear lar
 
 If a complaint names multiple officers, they are each counted here, so the numbers may be higher than total complaints filed. For example, if a citizen complaint submits allegations about both an Asian and a white officer, that would add one to both  the Asian and white officer columns for the complainant’s race.""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Complaints by Officer",
@@ -136,7 +145,8 @@ If a complaint names multiple officers, they are each counted here, so the numbe
 
 IMPD trains on criminal law and its requirements pertaining to reasonable suspicion and probable cause. Ethical decision making is a topic of training as well. More on IMPD training will be available here soon.""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
         ChartBlock(
             title="Introduction to Complaints Data",
@@ -165,7 +175,8 @@ We believe that being transparent about our work will help us better serve the p
 
 We have done some initial analysis on this dataset, though there are many other ways the data can be compared and analyzed. The underlying data is available [here](https://www.projectcomport.org/department/IMPD/schema/complaints) for public use.""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -176,7 +187,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -187,7 +199,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -198,7 +211,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -209,7 +223,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -220,7 +235,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -231,7 +247,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -242,7 +259,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -253,7 +271,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="""No content
             """,
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -263,7 +282,8 @@ We have done some initial analysis on this dataset, though there are many other 
             dataset="assaults",
             content="""TK""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -273,7 +293,8 @@ We have done some initial analysis on this dataset, though there are many other 
             dataset="assaults",
             content="""TK""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -283,7 +304,8 @@ We have done some initial analysis on this dataset, though there are many other 
             dataset="assaults",
             content="""TK""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -293,7 +315,8 @@ We have done some initial analysis on this dataset, though there are many other 
             dataset="assaults",
             content="""TK""",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -303,7 +326,8 @@ We have done some initial analysis on this dataset, though there are many other 
             content="Please Note: IMPD started using a new database and process for collecting this data in Summer 2014. Entries prior to July 2014 were entered in to the database from an older paper form, so they may not be consistent with entries after Summer 2014.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -317,7 +341,8 @@ RESERVATION OF RIGHTS: The City reserves the right to discontinue availability o
 INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify, hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -327,7 +352,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -337,7 +363,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed unique identifier for a given incident. Incidents may contain multiple uses of force. When that is the case, there will be multiple entries for one incident number.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -347,7 +374,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The date that the incident occurred.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -357,7 +385,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -367,7 +396,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -377,7 +407,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -387,7 +418,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Some shifts contain this secondary level of detail on the officer's assignment.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -397,7 +429,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The reason the officer used force, such as Assaulting Officer(s) or Combative Suspect.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -411,7 +444,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
 - Canine Bite is the only use of force type that doesn’t fall within the three types.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -421,7 +455,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="If there was an investigation and ruling on the incident, it will be noted here.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -431,7 +466,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The reason for the interaction, such as Traffic Stop or Call for Service.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -441,7 +477,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Whether the resident was arrested as part of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -451,7 +488,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="If the resident was arrested as part of the incident, what they were charged with.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -461,7 +499,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="TRUE if the resident was injured during the incident, FALSE if the resident was not injured.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -471,7 +510,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="TRUE if the resident was hospitalized during the incident, FALSE if the resident was not hospitalized.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -481,7 +521,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -491,7 +532,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="TRUE if the officer was injured during the incident, FALSE if the officer was not injured.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -501,7 +543,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="TRUE if the officer was hospitalized during the incident, FALSE if the officer was not hospitalized.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -511,7 +554,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Injuries the officer sustained, if any, such as Minor Bleeding.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -521,7 +565,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -531,7 +576,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -541,7 +587,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's age at the time of the incident, if known.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -551,7 +598,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -561,7 +609,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -571,7 +620,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's age at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -581,7 +631,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The number of years the officer had been employed by IMPD at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -591,7 +642,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -601,7 +653,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Please Note: The CPCO started using a new database and process for collecting this data in January 2014. Entries prior to January 2014 were entered into an older paper form, so they are unavailable in this dataset at this time.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -611,7 +664,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed unique identifier for a given complaint. Complaints may contain multiple allegations. When that is the case, there will be multiple entries for one incident number.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -621,7 +675,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The date that the incident occurred.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=1
         ),
 
         ChartBlock(
@@ -631,7 +686,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=2
         ),
 
         ChartBlock(
@@ -641,7 +697,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=3
         ),
 
         ChartBlock(
@@ -651,7 +708,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=4
         ),
 
         ChartBlock(
@@ -661,7 +719,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Some shifts contain this secondary level of detail on the officer's assignment.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=5
         ),
 
         ChartBlock(
@@ -671,7 +730,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The reason for the interaction, such as Traffic Stop or Call for Service.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=6
         ),
 
         ChartBlock(
@@ -681,7 +741,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Who received the complaint and whether it was categorized as formal or informal.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=7
         ),
 
         ChartBlock(
@@ -691,7 +752,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Allegations in complaints fall into a number of classes. Some classes of allegations are: Citizen Interactions, Bias Based Policing and Use of Force.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=8
         ),
 
         ChartBlock(
@@ -701,7 +763,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Allegations are tied to the regulations and standards which Officers are held to. Examples are: rude, demeaning and affronting language, and failure to provide name or badge number, which both fall under the allegation class of citizen interaction.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=9
         ),
 
         ChartBlock(
@@ -718,7 +781,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
 Complaints that are still being investigated will be blank in this column.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=10
         ),
 
         ChartBlock(
@@ -728,7 +792,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=11
         ),
 
         ChartBlock(
@@ -738,7 +803,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The resident's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=12
         ),
 
         ChartBlock(
@@ -748,7 +814,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The resident's age at the time of the incident, if known.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=13
         ),
 
         ChartBlock(
@@ -758,7 +825,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=14
         ),
 
         ChartBlock(
@@ -768,7 +836,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The officer's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=15
         ),
 
         ChartBlock(
@@ -778,7 +847,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The officer's age at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=16
         ),
 
         ChartBlock(
@@ -788,7 +858,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="The number of years the officer had been employed by IMPD at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=17
         ),
 
         ChartBlock(
@@ -798,7 +869,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=18
         ),
 
         ChartBlock(
@@ -808,7 +880,8 @@ Complaints that are still being investigated will be blank in this column.''',
             content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -822,7 +895,8 @@ RESERVATION OF RIGHTS: The City reserves the right to discontinue availability o
 INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -832,7 +906,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is Assaults on Officers intro text.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -842,7 +917,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed unique identifier for a given incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
 
@@ -853,7 +929,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has been involved in multiple assaults.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -863,7 +940,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The reason for the interaction, such as Traffic Stop or Call for Service.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -873,7 +951,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The type of weapon used against the officer.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -883,7 +962,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The type of vehicle the officers were in.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -893,7 +973,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="True if the person assaulting the officer was arrested.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -903,7 +984,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="True if officer was injured during the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -913,7 +995,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="True if officer was killed during the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -923,7 +1006,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="True if a report was filed about the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -933,7 +1017,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -947,7 +1032,8 @@ RESERVATION OF RIGHTS: The City reserves the right to discontinue availability o
 INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -957,7 +1043,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Please Note: IMPD started using a new database and process for collecting this data in Summer 2014. Entries prior to July 2014 were entered in to the database from an older paper form, so they may not be consistent with entries after Summer 2014.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -967,7 +1054,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -981,7 +1069,8 @@ RESERVATION OF RIGHTS: The City reserves the right to discontinue availability o
 INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify, hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -991,7 +1080,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1001,7 +1091,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed unique identifier for a given incident. Incidents may contain multiple uses of force. When that is the case, there will be multiple entries for one incident number.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1011,7 +1102,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The date that the incident occurred.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1021,7 +1113,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the Division that the officer was assigned to at time of the incident, such as Criminal Investigation or Administration.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1031,7 +1124,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the District, such as East District or NW District, or Branch, such as Homicide or Robbery, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1041,7 +1135,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is the shift, such as Day or Late shift, or section, such as crash investigation section, that the officer was assigned to at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1051,7 +1146,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Some shifts contain this secondary level of detail on the officer's assignment.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1061,7 +1157,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="If there was an investigation and ruling on the incident, it will be noted here.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1071,7 +1168,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The weapon the resident had at the time of the incident, if any.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1081,7 +1179,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The firearm type the officer used in the incident, and whether it was a duty or personal weapon.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1091,7 +1190,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The reason for the interaction, such as Traffic Stop or Call for Service.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1101,7 +1201,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Injuries the resident sustained, if any, such as Complaint of Pain or Laceration.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1111,7 +1212,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="Injuries the officer sustained, if any, such as Minor Bleeding.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1121,7 +1223,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1131,7 +1234,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1141,7 +1245,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The resident's age at the time of the incident, if known.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1151,7 +1256,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's race, with the following categories: Asian, Bi-racial, Black, Hispanic, Unknown, White.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1161,7 +1267,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's gender.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
 
@@ -1172,7 +1279,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The officer's age at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1182,7 +1290,8 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="The number of years the officer had been employed by IMPD at the time of the incident.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         ),
 
         ChartBlock(
@@ -1192,6 +1301,7 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             content="This is a hashed identifier used to identify the officer within this data, for example to see if an officer has received multiple complaints.",
             caption="",
             date_updated=None,
-            date_edited=None
+            date_edited=None,
+            order=0
         )
     ]

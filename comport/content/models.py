@@ -11,6 +11,7 @@ class ChartBlock(SurrogatePK, Model):
     content = Column(db.Text, unique=False, nullable=True)
     date_updated = Column(db.DateTime, nullable=True)
     date_edited = Column(db.DateTime, nullable=True)
+    order = Column(db.Integer, unique=False, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)

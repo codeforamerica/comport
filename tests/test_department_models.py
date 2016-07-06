@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 from comport.content.models import ChartBlock
-from comport.department.models import Extractor
+from comport.department.models import Extractor, Department
 from .factories import DepartmentFactory
 import uuid
 
@@ -56,22 +56,22 @@ class TestExtractors:
     def test_chart_block_order(self):
         ''' Set and get complaint chart blocks.
         '''
-        department = DepartmentFactory()
-        department.save()
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
         # create ChartBlocks with id attributes
-        complaint_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-by-allegation", order=3)
-        complaint_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-by-allegation-type", order=2)
-        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-disposition", order=1)
+        # complaints-schema-field-officer-age
+        complaint_csfoa = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-schema-field-officer-age", order=3)
+        complaint_csfoyos = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-schema-field-officer-years-of-service", order=2)
+        complaint_csfoi = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-schema-field-officer-identifier", order=1)
 
-        department.chart_blocks.append(complaint_bya)
-        department.chart_blocks.append(complaint_byat)
-        department.chart_blocks.append(complaint_bdis)
+        department.chart_blocks.append(complaint_csfoa)
+        department.chart_blocks.append(complaint_csfoyos)
+        department.chart_blocks.append(complaint_csfoi)
 
-        complaint_blocks = department.get_complaint_blocks()
-        assert complaint_blocks['blocks'][2] == complaint_bya
-        assert complaint_blocks['blocks'][1] == complaint_byat
-        assert complaint_blocks['blocks'][0] == complaint_bdis
+        complaint_blocks = department.get_complaint_schema_blocks()
+        assert complaint_blocks['blocks'][2] == complaint_csfoa
+        assert complaint_blocks['blocks'][1] == complaint_csfoyos
+        assert complaint_blocks['blocks'][0] == complaint_csfoi
 
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.
