@@ -53,6 +53,26 @@ class TestExtractors:
 
         assert department.get_extractor() == None
 
+    def test_chart_block_order(self):
+        ''' Set and get complaint chart blocks.
+        '''
+        department = DepartmentFactory()
+        department.save()
+
+        # create ChartBlocks with id attributes
+        complaint_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-by-allegation", order=3)
+        complaint_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-by-allegation-type", order=2)
+        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-disposition", order=1)
+
+        department.chart_blocks.append(complaint_bya)
+        department.chart_blocks.append(complaint_byat)
+        department.chart_blocks.append(complaint_bdis)
+
+        complaint_blocks = department.get_complaint_blocks()
+        assert complaint_blocks['blocks'][2] == complaint_bya
+        assert complaint_blocks['blocks'][1] == complaint_byat
+        assert complaint_blocks['blocks'][0] == complaint_bdis
+
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.
         '''
