@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import pytest
+from urllib.parse import urlparse
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
+from comport.content.models import ChartBlock
+from .utils import log_in_user
+from bs4 import BeautifulSoup
 
 @pytest.mark.usefixtures('app')
 class TestNewDepartmentForm:
@@ -84,3 +88,282 @@ class TestStartExtractorForm:
         # the new date was set
         assert extractor.next_month == submit_month
         assert extractor.next_year == submit_year
+
+@pytest.mark.usefixtures('db')
+class TestAdminEditForms:
+
+    def test_edit_and_preview_links_on_department_admin_page(sefl, testapp):
+        ''' There are links to preview & edit main and schema pages from the department admin page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}".format(department.id))
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="{}/preview/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/assaultsonofficers".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/useofforce".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/complaints".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/assaultsonofficers".format(department.id)) is not None
+
+    def test_ois_schema_edit_forms_exist(self, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
+    def test_useofforce_schema_edit_forms_exist(self, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+        assert 'editBeatTitleAndContent' in response.forms
+        assert 'editUseOfForceReasonTitleAndContent' in response.forms
+        assert 'editOfficerForceTypeTitleAndContent' in response.forms
+        assert 'editDispositionTitleAndContent' in response.forms
+        assert 'editServiceTypeTitleAndContent' in response.forms
+        assert 'editArrestMadeTitleAndContent' in response.forms
+        assert 'editArrestChargesTitleAndContent' in response.forms
+        assert 'editResidentInjuredTitleAndContent' in response.forms
+        assert 'editResidentHospitalizedTitleAndContent' in response.forms
+        assert 'editResidentConditionTitleAndContent' in response.forms
+        assert 'editOfficerInjuredTitleAndContent' in response.forms
+        assert 'editOfficerHospitalizedTitleAndContent' in response.forms
+        assert 'editOfficerConditionTitleAndContent' in response.forms
+        assert 'editResidentRaceTitleAndContent' in response.forms
+        assert 'editResidentSexTitleAndContent' in response.forms
+        assert 'editResidentAgeTitleAndContent' in response.forms
+        assert 'editOfficerRaceTitleAndContent' in response.forms
+        assert 'editOfficerSexTitleAndContent' in response.forms
+        assert 'editOfficerAgeTitleAndContent' in response.forms
+        assert 'editOfficerYearsOfServiceTitleAndContent' in response.forms
+        assert 'editOfficerIdentifierTitleAndContent' in response.forms
+
+    def test_assaults_schema_edit_forms_exist(self, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOfficerIdentifierTitleAndContent' in response.forms
+        assert 'editServiceTypeTitleAndContent' in response.forms
+        assert 'editForceTypeTitleAndContent' in response.forms
+        assert 'editAssignmentTitleAndContent' in response.forms
+        assert 'editArrestMadeTitleAndContent' in response.forms
+        assert 'editOfficerInjuredTitleAndContent' in response.forms
+        assert 'editReportFiledTitleAndContent' in response.forms
+
+    def test_complaints_schema_edit_forms_exist(self, testapp):
+        ''' Edit forms exist for the complaints schema page.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        # assert that the intro, footer, disclaimer forms are there
+        assert 'editIntro' in response.forms
+        assert 'editFooter' in response.forms
+        assert 'editDisclaimer' in response.forms
+
+        # assert that the field forms are there (as defined in conftest.py)
+        assert 'editIdTitleAndContent' in response.forms
+        assert 'editOccurredDateTitleAndContent' in response.forms
+        assert 'editDivisionTitleAndContent' in response.forms
+        assert 'editDistrictTitleAndContent' in response.forms
+        assert 'editShiftTitleAndContent' in response.forms
+
+    def test_editing_complaints_schema_field_value(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_assaults_schema_field_value(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editForceTypeTitleAndContent' in response.forms
+        form = response.forms['editForceTypeTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-force-type").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_ois_schema_field_value(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="ois-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_editing_useofforce_schema_field_value(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="uof-schema-field-shift").first()
+        assert checkblock.title == new_title
+        assert checkblock.content == new_content
+
+    def test_submitting_schema_edit_form_redirects_to_preview(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        # submit new title & content
+        assert 'editShiftTitleAndContent' in response.forms
+        form = response.forms['editShiftTitleAndContent']
+        new_title = "A New Data Field Title"
+        new_content = "A Short Definition of this Data Field"
+        form['chart_title'] = new_title
+        form['chart_content'] = new_content
+        response = form.submit()
+
+        # the response should be a redirect
+        assert response.status_code == 302
+        # the location of the redirect should be the preview page
+        parsed = urlparse(response.location)
+        assert parsed.path == "/department/{}/preview/schema/complaints".format(department.id)
