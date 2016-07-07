@@ -269,6 +269,35 @@ class TestAdminEditForms:
         assert checkblock.content == new_content
         assert checkblock.order == new_order
 
+    def test_submitting_complaints_schema_intro_field_value(self, testapp):
+        ''' Submitting the form to edit a schema field changes the correct value in the database
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editIntro' in response.forms
+        form = response.forms['editIntro']
+        new_content = "A Short Definition of this Data Field"
+        form['chart_content'] = new_content
+        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-introduction", department_id=department.id).first()
+        title = checkblock.title
+        order = checkblock.order
+        response = form.submit().follow()
+
+        assert response.status_code == 200
+
+        checkblock2 = ChartBlock.query.filter_by(slug="complaints-schema-introduction", department_id=department.id).first()
+
+        assert checkblock.content == new_content
+        assert title == checkblock2.title
+        assert order == checkblock2.order
+
     def test_editing_assaults_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''

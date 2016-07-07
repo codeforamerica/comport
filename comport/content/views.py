@@ -22,6 +22,7 @@ def edit_chart_block(department_id, chart_slug):
 
     block.title = request.form["chart_title"]
     block.content = request.form["chart_content"]
+    block.order = request.form["chart_order"]
 
     block.save()
 
