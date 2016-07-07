@@ -53,22 +53,6 @@ class TestExtractors:
 
         assert department.get_extractor() == None
 
-    # def test_main_chart_block_order(self):
-    #     ''' Set and get complaint chart blocks.
-    #     '''
-    #     department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
-    #
-    #     # create ChartBlocks with id attributes
-    #     blocks = department.get_complaint_blocks()
-    #     block = blocks['blocks'][0]
-    #     block.order = 100
-    #     block.save()
-    #
-    #     complaint_blocks = department.get_complaint_blocks()
-    #     assert blocks['blocks'][1].order == 1
-    #     assert complaint_blocks['blocks'][0].order == 1
-    #     assert blocks['blocks'][1].slug == complaint_blocks['blocks'][0].slug
-
     def test_schema_chart_block_order(self):
         ''' Set and get complaint chart blocks.
         '''
