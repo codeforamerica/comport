@@ -15,7 +15,7 @@ import sqlalchemy as sa
 
 
 def upgrade():
-    op.add_column('chart_blocks', sa.Column('order', sa.Integer(), nullable=True))
+    op.add_column('chart_blocks', sa.Column('order', sa.Integer(), server_default='0', nullable=True))
 
 
 def downgrade():
