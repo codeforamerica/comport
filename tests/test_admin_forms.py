@@ -241,6 +241,37 @@ class TestAdminEditForms:
         assert 'editDistrictTitleContentAndOrder' in response.forms
         assert 'editShiftTitleContentAndOrder' in response.forms
 
+    def test_changing_complaints_schema_field_order_reorders_other_fields(self, testapp):
+        ''' Changing the order value of a schema field will re-order the other fields to make room.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        schema_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
+
+        assert schema_fields[0].order < schema_fields[1].order
+        assert schema_fields[1].order < schema_fields[2].order
+        assert schema_fields[2].order < schema_fields[3].order
+
+        form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace("complaints-schema-field-", "").replace("-", " ").title().replace(" ", ""))
+        assert form_name in response.forms
+        form = response.forms[form_name]
+        new_order = schema_fields[0].order
+        form['chart_order'] = new_order
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        check_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
+        assert check_fields[0].order < check_fields[1].order
+        assert check_fields[1].order < check_fields[2].order
+        assert check_fields[2].order < check_fields[3].order
+
     def test_editing_complaints_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
@@ -269,8 +300,8 @@ class TestAdminEditForms:
         assert checkblock.content == new_content
         assert checkblock.order == new_order
 
-    def test_submitting_complaints_schema_intro_field_value(self, testapp):
-        ''' Submitting the form to edit a schema field changes the correct value in the database
+    def test_submitting_schema_intro_field_value(self, testapp):
+        ''' Submitting the form to edit a schema intro field changes the expected value in the database and not others
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
 
