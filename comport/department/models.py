@@ -176,12 +176,18 @@ class Department(SurrogatePK, Model):
 
     def get_blocks_by_slugs(self, slugs):
         arr = [b for b in self.chart_blocks if b.slug in slugs]
-        arr.sort(key=lambda k: k.order)
+        try:
+            arr.sort(key=lambda k: k.order)
+        except TypeError:
+            pass
         return arr
 
     def get_blocks_by_slug_startswith(self, partial_slug):
         arr = [b for b in self.chart_blocks if b.slug.startswith(partial_slug)]
-        arr.sort(key=lambda k: k.order)
+        try:
+            arr.sort(key=lambda k: k.order)
+        except TypeError:
+            pass
         return arr
 
     def __repr__(self):
