@@ -20,9 +20,10 @@ def edit_chart_block(department_id, chart_slug):
     if not current_user.has_department(department_id) and not current_user.is_admin():
         abort(401)
 
-    block.title = request.form["chart_title"]
-    block.content = request.form["chart_content"]
-    block.order = request.form["chart_order"]
+    # set values if they were passed
+    block.title = request.form["chart_title"] if "chart_title" in request.form and request.form["chart_title"] else block.title
+    block.content = request.form["chart_content"] if "chart_content" in request.form and request.form["chart_content"] else block.content
+    block.order = request.form["chart_order"] if "chart_order" in request.form and request.form["chart_order"] else block.order
 
     block.save()
 
