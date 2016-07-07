@@ -138,12 +138,12 @@ class TestAdminEditForms:
         assert 'editFooter' in response.forms
         assert 'editDisclaimer' in response.forms
 
-        # assert that the field forms are there (as defined in conftest.py)
-        assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccurredDateTitleAndContent' in response.forms
-        assert 'editDivisionTitleAndContent' in response.forms
-        assert 'editDistrictTitleAndContent' in response.forms
-        assert 'editShiftTitleAndContent' in response.forms
+        # assert that the field forms are there
+        assert 'editIdTitleContentAndOrder' in response.forms
+        assert 'editOccurredDateTitleContentAndOrder' in response.forms
+        assert 'editDivisionTitleContentAndOrder' in response.forms
+        assert 'editDistrictTitleContentAndOrder' in response.forms
+        assert 'editShiftTitleContentAndOrder' in response.forms
 
     def test_useofforce_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
@@ -162,33 +162,33 @@ class TestAdminEditForms:
         assert 'editFooter' in response.forms
         assert 'editDisclaimer' in response.forms
 
-        # assert that the field forms are there (as defined in conftest.py)
-        assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccurredDateTitleAndContent' in response.forms
-        assert 'editDivisionTitleAndContent' in response.forms
-        assert 'editDistrictTitleAndContent' in response.forms
-        assert 'editShiftTitleAndContent' in response.forms
-        assert 'editBeatTitleAndContent' in response.forms
-        assert 'editUseOfForceReasonTitleAndContent' in response.forms
-        assert 'editOfficerForceTypeTitleAndContent' in response.forms
-        assert 'editDispositionTitleAndContent' in response.forms
-        assert 'editServiceTypeTitleAndContent' in response.forms
-        assert 'editArrestMadeTitleAndContent' in response.forms
-        assert 'editArrestChargesTitleAndContent' in response.forms
-        assert 'editResidentInjuredTitleAndContent' in response.forms
-        assert 'editResidentHospitalizedTitleAndContent' in response.forms
-        assert 'editResidentConditionTitleAndContent' in response.forms
-        assert 'editOfficerInjuredTitleAndContent' in response.forms
-        assert 'editOfficerHospitalizedTitleAndContent' in response.forms
-        assert 'editOfficerConditionTitleAndContent' in response.forms
-        assert 'editResidentRaceTitleAndContent' in response.forms
-        assert 'editResidentSexTitleAndContent' in response.forms
-        assert 'editResidentAgeTitleAndContent' in response.forms
-        assert 'editOfficerRaceTitleAndContent' in response.forms
-        assert 'editOfficerSexTitleAndContent' in response.forms
-        assert 'editOfficerAgeTitleAndContent' in response.forms
-        assert 'editOfficerYearsOfServiceTitleAndContent' in response.forms
-        assert 'editOfficerIdentifierTitleAndContent' in response.forms
+        # assert that the field forms are there
+        assert 'editIdTitleContentAndOrder' in response.forms
+        assert 'editOccurredDateTitleContentAndOrder' in response.forms
+        assert 'editDivisionTitleContentAndOrder' in response.forms
+        assert 'editDistrictTitleContentAndOrder' in response.forms
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        assert 'editBeatTitleContentAndOrder' in response.forms
+        assert 'editUseOfForceReasonTitleContentAndOrder' in response.forms
+        assert 'editOfficerForceTypeTitleContentAndOrder' in response.forms
+        assert 'editDispositionTitleContentAndOrder' in response.forms
+        assert 'editServiceTypeTitleContentAndOrder' in response.forms
+        assert 'editArrestMadeTitleContentAndOrder' in response.forms
+        assert 'editArrestChargesTitleContentAndOrder' in response.forms
+        assert 'editResidentInjuredTitleContentAndOrder' in response.forms
+        assert 'editResidentHospitalizedTitleContentAndOrder' in response.forms
+        assert 'editResidentConditionTitleContentAndOrder' in response.forms
+        assert 'editOfficerInjuredTitleContentAndOrder' in response.forms
+        assert 'editOfficerHospitalizedTitleContentAndOrder' in response.forms
+        assert 'editOfficerConditionTitleContentAndOrder' in response.forms
+        assert 'editResidentRaceTitleContentAndOrder' in response.forms
+        assert 'editResidentSexTitleContentAndOrder' in response.forms
+        assert 'editResidentAgeTitleContentAndOrder' in response.forms
+        assert 'editOfficerRaceTitleContentAndOrder' in response.forms
+        assert 'editOfficerSexTitleContentAndOrder' in response.forms
+        assert 'editOfficerAgeTitleContentAndOrder' in response.forms
+        assert 'editOfficerYearsOfServiceTitleContentAndOrder' in response.forms
+        assert 'editOfficerIdentifierTitleContentAndOrder' in response.forms
 
     def test_assaults_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
@@ -207,15 +207,15 @@ class TestAdminEditForms:
         assert 'editFooter' in response.forms
         assert 'editDisclaimer' in response.forms
 
-        # assert that the field forms are there (as defined in conftest.py)
-        assert 'editIdTitleAndContent' in response.forms
-        assert 'editOfficerIdentifierTitleAndContent' in response.forms
-        assert 'editServiceTypeTitleAndContent' in response.forms
-        assert 'editForceTypeTitleAndContent' in response.forms
-        assert 'editAssignmentTitleAndContent' in response.forms
-        assert 'editArrestMadeTitleAndContent' in response.forms
-        assert 'editOfficerInjuredTitleAndContent' in response.forms
-        assert 'editReportFiledTitleAndContent' in response.forms
+        # assert that the field forms are there
+        assert 'editIdTitleContentAndOrder' in response.forms
+        assert 'editOfficerIdentifierTitleContentAndOrder' in response.forms
+        assert 'editServiceTypeTitleContentAndOrder' in response.forms
+        assert 'editForceTypeTitleContentAndOrder' in response.forms
+        assert 'editAssignmentTitleContentAndOrder' in response.forms
+        assert 'editArrestMadeTitleContentAndOrder' in response.forms
+        assert 'editOfficerInjuredTitleContentAndOrder' in response.forms
+        assert 'editReportFiledTitleContentAndOrder' in response.forms
 
     def test_complaints_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
@@ -234,12 +234,12 @@ class TestAdminEditForms:
         assert 'editFooter' in response.forms
         assert 'editDisclaimer' in response.forms
 
-        # assert that the field forms are there (as defined in conftest.py)
-        assert 'editIdTitleAndContent' in response.forms
-        assert 'editOccurredDateTitleAndContent' in response.forms
-        assert 'editDivisionTitleAndContent' in response.forms
-        assert 'editDistrictTitleAndContent' in response.forms
-        assert 'editShiftTitleAndContent' in response.forms
+        # assert that the field forms are there
+        assert 'editIdTitleContentAndOrder' in response.forms
+        assert 'editOccurredDateTitleContentAndOrder' in response.forms
+        assert 'editDivisionTitleContentAndOrder' in response.forms
+        assert 'editDistrictTitleContentAndOrder' in response.forms
+        assert 'editShiftTitleContentAndOrder' in response.forms
 
     def test_editing_complaints_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -253,18 +253,21 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
         assert response.status_code == 200
 
-        assert 'editShiftTitleAndContent' in response.forms
-        form = response.forms['editShiftTitleAndContent']
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        form = response.forms['editShiftTitleContentAndOrder']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
+        new_order = 99
         form['chart_title'] = new_title
         form['chart_content'] = new_content
+        form['chart_order'] = new_order
         response = form.submit().follow()
         assert response.status_code == 200
 
         checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
+        assert checkblock.order == new_order
 
     def test_editing_assaults_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -278,18 +281,21 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
         assert response.status_code == 200
 
-        assert 'editForceTypeTitleAndContent' in response.forms
-        form = response.forms['editForceTypeTitleAndContent']
+        assert 'editForceTypeTitleContentAndOrder' in response.forms
+        form = response.forms['editForceTypeTitleContentAndOrder']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
+        new_order = 99
         form['chart_title'] = new_title
         form['chart_content'] = new_content
+        form['chart_order'] = new_order
         response = form.submit().follow()
         assert response.status_code == 200
 
         checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-force-type").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
+        assert checkblock.order == new_order
 
     def test_editing_ois_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -303,18 +309,21 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
         assert response.status_code == 200
 
-        assert 'editShiftTitleAndContent' in response.forms
-        form = response.forms['editShiftTitleAndContent']
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        form = response.forms['editShiftTitleContentAndOrder']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
+        new_order = 99
         form['chart_title'] = new_title
         form['chart_content'] = new_content
+        form['chart_order'] = new_order
         response = form.submit().follow()
         assert response.status_code == 200
 
         checkblock = ChartBlock.query.filter_by(slug="ois-schema-field-shift").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
+        assert checkblock.order == new_order
 
     def test_editing_useofforce_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -328,18 +337,21 @@ class TestAdminEditForms:
         response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
         assert response.status_code == 200
 
-        assert 'editShiftTitleAndContent' in response.forms
-        form = response.forms['editShiftTitleAndContent']
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        form = response.forms['editShiftTitleContentAndOrder']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
+        new_order = 99
         form['chart_title'] = new_title
         form['chart_content'] = new_content
+        form['chart_order'] = new_order
         response = form.submit().follow()
         assert response.status_code == 200
 
         checkblock = ChartBlock.query.filter_by(slug="uof-schema-field-shift").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
+        assert checkblock.order == new_order
 
     def test_submitting_schema_edit_form_redirects_to_preview(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -354,12 +366,14 @@ class TestAdminEditForms:
         assert response.status_code == 200
 
         # submit new title & content
-        assert 'editShiftTitleAndContent' in response.forms
-        form = response.forms['editShiftTitleAndContent']
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        form = response.forms['editShiftTitleContentAndOrder']
         new_title = "A New Data Field Title"
         new_content = "A Short Definition of this Data Field"
+        new_order = 99
         form['chart_title'] = new_title
         form['chart_content'] = new_content
+        form['chart_order'] = new_order
         response = form.submit()
 
         # the response should be a redirect
