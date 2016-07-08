@@ -3,8 +3,7 @@ from flask import Blueprint, redirect, url_for, request, abort
 from flask_login import current_user
 from flask.ext.login import login_required
 from urllib.parse import urlparse
-from .models import ChartBlock
-
+from comport.content.models import ChartBlock
 
 blueprint = Blueprint("content", __name__, url_prefix='/content',
                       static_folder="../static")
@@ -26,6 +25,29 @@ def edit_chart_block(department_id, chart_slug):
     block.order = request.form["chart_order"] if "chart_order" in request.form and request.form["chart_order"] else block.order
 
     block.save()
+    if "blocks_prefix" in request.form:
+        # Importing this at the top of file caused a circular dependency
+        # issue so we do a delayed import here
+        from comport.department.models import Department
+        department = Department.query.filter_by(id=department_id).first()
+        blocks = department.get_blocks_by_slug_startswith(request.form["blocks_prefix"])
+
+        # Init new array to length of blocks
+        new_blocks = [None] * len(blocks)
+
+        # Put block of interest where it's supposed to be
+        new_blocks[block.order] = block
+        blocks.pop(blocks.index(block))
+
+        # Iterate through new_blocks
+        for index, value in enumerate(new_blocks):
+            if value is not None:
+                continue
+
+            move_block = blocks.pop(0)
+            move_block.order = index
+            move_block.save()
+            new_blocks[index] = move_block
 
     if request.referrer and 'edit' in request.referrer:
         new_path = urlparse(request.referrer.replace('/edit/', '/preview/')).path
