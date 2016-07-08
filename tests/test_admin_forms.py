@@ -241,7 +241,7 @@ class TestAdminEditForms:
         assert 'editDistrictTitleContentAndOrder' in response.forms
         assert 'editShiftTitleContentAndOrder' in response.forms
 
-    def test_changing_complaints_schema_field_order_reorders_other_fields(self, testapp):
+    def test_changing_schema_field_order_reorders_other_fields(self, testapp):
         ''' Changing the order value of a schema field will re-order the other fields to make room.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
@@ -249,28 +249,30 @@ class TestAdminEditForms:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a request to specific front page
-        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
-        assert response.status_code == 200
+        for incident_type in ["complaints", "assaultsonofficers", "ois", "uof"]:
+            # make a request to specific front page
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            assert response.status_code == 200
 
-        schema_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
+            schema_field_prefix = "{}-schema-field-".format(incident_type)
+            schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
 
-        assert schema_fields[0].order < schema_fields[1].order
-        assert schema_fields[1].order < schema_fields[2].order
-        assert schema_fields[2].order < schema_fields[3].order
+            assert schema_fields[0].order < schema_fields[1].order
+            assert schema_fields[1].order < schema_fields[2].order
+            assert schema_fields[2].order < schema_fields[3].order
 
-        form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace("complaints-schema-field-", "").replace("-", " ").title().replace(" ", ""))
-        assert form_name in response.forms
-        form = response.forms[form_name]
-        new_order = schema_fields[0].order
-        form['chart_order'] = new_order
-        response = form.submit().follow()
-        assert response.status_code == 200
+            form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace(schema_field_prefix, "").replace("-", " ").title().replace(" ", ""))
+            assert form_name in response.forms
+            form = response.forms[form_name]
+            new_order = schema_fields[0].order
+            form['chart_order'] = new_order
+            response = form.submit().follow()
+            assert response.status_code == 200
 
-        check_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
-        assert check_fields[0].order < check_fields[1].order
-        assert check_fields[1].order < check_fields[2].order
-        assert check_fields[2].order < check_fields[3].order
+            check_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
+            assert check_fields[0].order < check_fields[1].order
+            assert check_fields[1].order < check_fields[2].order
+            assert check_fields[2].order < check_fields[3].order
 
     def test_changing_order_number_to_a_valid_range(self, testapp):
         ''' Changing the order value of a schema field will re-order the other fields to make room.
@@ -280,51 +282,53 @@ class TestAdminEditForms:
         # set up a user
         log_in_user(testapp, department)
 
-        # make a request to specific front page
-        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
-        assert response.status_code == 200
+        for incident_type in ["complaints", "assaultsonofficers", "ois", "uof"]:
+            # make a request to specific front page
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            assert response.status_code == 200
 
-        schema_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
-        fields_length = len(schema_fields)
+            schema_field_prefix = "{}-schema-field-".format(incident_type)
+            schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
+            fields_length = len(schema_fields)
 
-        assert schema_fields[0].order < schema_fields[1].order
-        assert schema_fields[1].order < schema_fields[2].order
-        assert schema_fields[2].order < schema_fields[3].order
+            assert schema_fields[0].order < schema_fields[1].order
+            assert schema_fields[1].order < schema_fields[2].order
+            assert schema_fields[2].order < schema_fields[3].order
 
-        # Testing overtly high order numbers
-        form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace("complaints-schema-field-", "").replace("-", " ").title().replace(" ", ""))
-        assert form_name in response.forms
-        form = response.forms[form_name]
-        new_order = fields_length + 10
-        form['chart_order'] = new_order
-        response = form.submit().follow()
-        assert response.status_code == 200
+            # Testing overtly high order numbers
+            form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace(schema_field_prefix, "").replace("-", " ").title().replace(" ", ""))
+            assert form_name in response.forms
+            form = response.forms[form_name]
+            new_order = fields_length + 10
+            form['chart_order'] = new_order
+            response = form.submit().follow()
+            assert response.status_code == 200
 
-        check_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
-        assert check_fields[-1].order == len(check_fields) - 1
-        assert len(check_fields) == fields_length
-        assert check_fields[-1].slug == schema_fields[2].slug
+            check_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
+            assert check_fields[-1].order == len(check_fields) - 1
+            assert len(check_fields) == fields_length
+            assert check_fields[-1].slug == schema_fields[2].slug
 
-        # make a request to specific front page
-        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
-        assert response.status_code == 200
+            # make a request to specific front page
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            assert response.status_code == 200
 
-        schema_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
-        fields_length = len(schema_fields)
+            schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
+            fields_length = len(schema_fields)
 
-        # Testing negative order numbers
-        form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace("complaints-schema-field-", "").replace("-", " ").title().replace(" ", ""))
-        assert form_name in response.forms
-        form = response.forms[form_name]
-        new_order = -10
-        form['chart_order'] = new_order
-        response = form.submit().follow()
-        assert response.status_code == 200
+            # Testing negative order numbers
+            form_name = "edit{}TitleContentAndOrder".format(schema_fields[2].slug.replace(schema_field_prefix, "").replace("-", " ").title().replace(" ", ""))
+            assert form_name in response.forms
+            form = response.forms[form_name]
+            new_order = -10
+            form['chart_order'] = new_order
+            response = form.submit().follow()
+            assert response.status_code == 200
 
-        check_fields = department.get_blocks_by_slug_startswith("complaints-schema-field-")
-        assert check_fields[0].slug == schema_fields[2].slug
-        assert len(check_fields) == fields_length
-        assert check_fields[0].order == 0
+            check_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
+            assert check_fields[0].slug == schema_fields[2].slug
+            assert len(check_fields) == fields_length
+            assert check_fields[0].order == 0
 
     def test_editing_complaints_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
