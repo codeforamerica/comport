@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 from comport.content.models import ChartBlock
-from comport.department.models import Extractor
+from comport.department.models import Extractor, Department
 from .factories import DepartmentFactory
 import uuid
 
@@ -52,6 +52,22 @@ class TestExtractors:
         department.save()
 
         assert department.get_extractor() == None
+
+    def test_schema_chart_block_order(self):
+        ''' Set and get complaint chart blocks.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # create ChartBlocks with id attributes
+        blocks = department.get_complaint_schema_blocks()
+        block = blocks['blocks'][0]
+        block.order = 100
+        block.save()
+
+        complaint_blocks = department.get_complaint_schema_blocks()
+        assert blocks['blocks'][1].order == 1
+        assert complaint_blocks['blocks'][0].order == 1
+        assert blocks['blocks'][1].slug == complaint_blocks['blocks'][0].slug
 
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.

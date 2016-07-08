@@ -60,10 +60,12 @@
       {% else %}
         <!-- Title and Content -->
         <td>
-          <form id="edit{{ block.slug|replace("complaints-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}TitleAndContent" method="post" action="/content/{{ block.slug }}/{{department.id}}">
+          <form id="edit{{ block.slug|replace("complaints-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}TitleContentAndOrder" method="post" action="/content/{{ block.slug }}/{{department.id}}">
             <div class="form-group">
               <textarea class="form-control" name="chart_title">{{ block.title }}</textarea>
               <textarea class="form-control" name="chart_content">{{ block.content }}</textarea>
+              <textarea class="form-control" name="chart_order">{{ block.order }}</textarea>
+              <input type="hidden" name="blocks_prefix" value="complaints-schema-field-">
               <input type="submit" />
             </div>
           </form>
