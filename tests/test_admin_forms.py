@@ -358,7 +358,7 @@ class TestAdminEditForms:
         assert checkblock.content == new_content
         assert checkblock.order == len(department.get_blocks_by_slug_startswith("complaints-schema-field-")) - 1
 
-    def test_submit_non_numberic_value_to_order(self, testapp):
+    def test_submit_non_numeric_value_to_order(self, testapp):
         ''' Submitting the form to change the order of a schmea field with a non-numeric value doesn't change anything.
         '''
         department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
