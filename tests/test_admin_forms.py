@@ -358,6 +358,31 @@ class TestAdminEditForms:
         assert checkblock.content == new_content
         assert checkblock.order == len(department.get_blocks_by_slug_startswith("complaints-schema-field-")) - 1
 
+    def test_submit_non_numberic_value_to_order(self, testapp):
+        ''' Submitting the form to change the order of a schmea field with a non-numeric value doesn't change anything.
+        '''
+        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # get the order of a schema field
+        check_order = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first().order
+
+        # make a request to specific front page
+        response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
+        assert response.status_code == 200
+
+        assert 'editShiftTitleContentAndOrder' in response.forms
+        form = response.forms['editShiftTitleContentAndOrder']
+        new_order = "I'm not a number"
+        form['chart_order'] = new_order
+        response = form.submit().follow()
+        assert response.status_code == 200
+
+        checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first()
+        assert checkblock.order == check_order
+
     def test_submitting_schema_intro_field_value(self, testapp):
         ''' Submitting the form to edit a schema intro field changes the expected value in the database and not others
         '''
