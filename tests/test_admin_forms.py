@@ -249,12 +249,12 @@ class TestAdminEditForms:
         # set up a user
         log_in_user(testapp, department)
 
-        for incident_type in ["complaints", "assaultsonofficers", "ois", "uof"]:
+        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
             # make a request to specific front page
-            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type[1]))
             assert response.status_code == 200
 
-            schema_field_prefix = "{}-schema-field-".format(incident_type)
+            schema_field_prefix = "{}-schema-field-".format(incident_type[0])
             schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
 
             assert schema_fields[0].order < schema_fields[1].order
@@ -282,12 +282,12 @@ class TestAdminEditForms:
         # set up a user
         log_in_user(testapp, department)
 
-        for incident_type in ["complaints", "assaultsonofficers", "ois", "uof"]:
+        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
             # make a request to specific front page
-            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type[1]))
             assert response.status_code == 200
 
-            schema_field_prefix = "{}-schema-field-".format(incident_type)
+            schema_field_prefix = "{}-schema-field-".format(incident_type[0])
             schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
             fields_length = len(schema_fields)
 
@@ -310,7 +310,7 @@ class TestAdminEditForms:
             assert check_fields[-1].slug == schema_fields[2].slug
 
             # make a request to specific front page
-            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type))
+            response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type[1]))
             assert response.status_code == 200
 
             schema_fields = department.get_blocks_by_slug_startswith(schema_field_prefix)
@@ -413,7 +413,7 @@ class TestAdminEditForms:
         checkblock = ChartBlock.query.filter_by(slug="assaults-schema-field-force-type").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
-        assert checkblock.order == new_order
+        assert checkblock.order == len(department.get_blocks_by_slug_startswith("assaults-schema-field-")) - 1
 
     def test_editing_ois_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -441,7 +441,7 @@ class TestAdminEditForms:
         checkblock = ChartBlock.query.filter_by(slug="ois-schema-field-shift").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
-        assert checkblock.order == new_order
+        assert checkblock.order == len(department.get_blocks_by_slug_startswith("ois-schema-field-")) - 1
 
     def test_editing_useofforce_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
@@ -469,7 +469,7 @@ class TestAdminEditForms:
         checkblock = ChartBlock.query.filter_by(slug="uof-schema-field-shift").first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
-        assert checkblock.order == new_order
+        assert checkblock.order == len(department.get_blocks_by_slug_startswith("uof-schema-field-")) - 1
 
     def test_submitting_schema_edit_form_redirects_to_preview(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
