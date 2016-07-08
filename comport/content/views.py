@@ -23,14 +23,17 @@ def edit_chart_block(department_id, chart_slug):
     block.title = request.form["chart_title"] if "chart_title" in request.form and request.form["chart_title"] else block.title
     block.content = request.form["chart_content"] if "chart_content" in request.form and request.form["chart_content"] else block.content
     block.order = request.form["chart_order"] if "chart_order" in request.form and request.form["chart_order"] else block.order
-
     block.save()
+
     if "blocks_prefix" in request.form:
         # Importing this at the top of file caused a circular dependency
         # issue so we do a delayed import here
         from comport.department.models import Department
         department = Department.query.filter_by(id=department_id).first()
         blocks = department.get_blocks_by_slug_startswith(request.form["blocks_prefix"])
+
+        block.order = max(min(block.order, len(blocks) - 1), 0)
+        block.save()
 
         # Init new array to length of blocks
         new_blocks = [None] * len(blocks)

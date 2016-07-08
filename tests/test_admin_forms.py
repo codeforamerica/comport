@@ -352,7 +352,7 @@ class TestAdminEditForms:
         checkblock = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first()
         assert checkblock.title == new_title
         assert checkblock.content == new_content
-        assert checkblock.order == new_order
+        assert checkblock.order == len(department.get_blocks_by_slug_startswith("complaints-schema-field-")) - 1
 
     def test_submitting_schema_intro_field_value(self, testapp):
         ''' Submitting the form to edit a schema intro field changes the expected value in the database and not others
