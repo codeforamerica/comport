@@ -1074,17 +1074,6 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
         ),
 
         ChartBlock(
-            title="Footer",
-            dataset="footer",
-            slug="ois-schema-footer",
-            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
-            caption="",
-            date_updated=None,
-            date_edited=None,
-            order=0
-        ),
-
-        ChartBlock(
             title="Id",
             dataset="",
             slug="ois-schema-field-id",
