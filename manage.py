@@ -211,7 +211,7 @@ def add_new_blocks():
     for department in Department.query.all():
         for block in ChartBlockDefaults.defaults:
             if block.slug not in [x.slug for x in department.chart_blocks]:
-                print("adding %s to %s", [block.slug, department.name])
+                print("adding {} to {}".format(block.slug, department.name))
                 department.chart_blocks.append(block)
                 department.save()
     db.session.commit()
