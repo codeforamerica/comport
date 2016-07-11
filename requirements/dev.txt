@@ -3,6 +3,7 @@
 
 # Testing
 pytest>=2.6.3
+mock>=2.0.0
 webtest
 responses==0.5.1
 beautifulsoup4==4.4.1
