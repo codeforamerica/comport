@@ -17,7 +17,7 @@ class TestManageMethods:
 
         mock_chart_blocks = [
             ChartBlock(title="Open Data Introduction", slug="introduction", dataset="introduction"),
-            ChartBlock(title="Complaints By Year", slug="complaints-by-year",dataset="complaints"),
+            ChartBlock(title="Complaints By Year", slug="complaints-by-year", dataset="complaints"),
             ChartBlock(title="Complaints By Month", slug="complaints-by-month", dataset="complaints"),
             ChartBlock(title="Complaints By Allegation", slug="complaints-by-allegation", dataset="complaints"),
             ChartBlock(title="Complaints By Allegation Type", slug="complaints-by-allegation-type", dataset="complaints")
