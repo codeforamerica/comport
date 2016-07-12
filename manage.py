@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
+from copy import deepcopy
 from dateutil.relativedelta import relativedelta
 from random import randint
 from flask_script import Manager, Shell, Server, prompt_pass, prompt_bool
@@ -211,8 +212,10 @@ def add_new_blocks():
     for department in Department.query.all():
         for block in ChartBlockDefaults.defaults:
             if block.slug not in [x.slug for x in department.chart_blocks]:
-                print("adding %s to %s", [block.slug, department.name])
-                department.chart_blocks.append(block)
+                print("adding {} to {}".format(block.slug, department.name))
+                # Attempting to save had removed identical chart blocks from previously
+                # iterated departments. Passing in a deep copy here prevents that.
+                department.chart_blocks.append(deepcopy(block))
                 department.save()
     db.session.commit()
 
