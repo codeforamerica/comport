@@ -435,6 +435,11 @@ class TestLoggingIn:
         # sees error
         assert "Unknown user" in res
 
+    def test_login (self, testapp):
+       #Goes to login 
+        response = testapp.get("/admin/", expect_errors=True)
+        assert response.status_code == 401
+        assert response.html.find_all('a')[1]['href'] == '/login/'
 
 class TestUserRoles:
 
