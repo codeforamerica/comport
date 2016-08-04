@@ -349,7 +349,7 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             title="Footer",
             dataset="footer",
             slug="uof-schema-footer",
-            content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
             date_edited=None,
@@ -438,6 +438,7 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             dataset="",
             slug="uof-schema-field-officer-force-type",
             content='''In Indianapolis, kinds of force are categorized as physical if the officer uses their body, less lethal if the officer uses a weapon that's commonly considered non-lethal, or lethal if the officer uses a firearm, knife or vehicle. The types of force counted are:
+
 - Physical: Elbow Strike, Fist Strike, Handcuffing, Joint/Pressure, Kick, Knee Strike, Leg Sweep, Other, Palm Strike, Take Down, Weight Leverage
 - Less Lethal: Baton, Bean Bag, BPS Gas, Burning CS, Clearout OC, CS Fogger, CS Grenade, CS/OC, Flash Bang, Other, Pepperball, Taser
 - Lethal: Handgun, Knife, Rifle, Shotgun, Sniper Rifle, Sub Machine Gun, Vehicle
@@ -877,7 +878,7 @@ Complaints that are still being investigated will be blank in this column.''',
             title="FOOTER",
             dataset="footer",
             slug="complaints-schema-footer",
-            content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
             date_edited=None,
@@ -1014,7 +1015,7 @@ INDEMNIFICATION: To the fullest extent permitted by law, any user of the data pr
             title="FOOTER",
             dataset="footer",
             slug="assaults-schema-footer",
-            content="* Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
+            content="*Officer Call data represents the number of calls for service from residents that officers responded to plus the number of times officers themselves initiated a response.",
             caption="",
             date_updated=None,
             date_edited=None,
