@@ -26,6 +26,7 @@ def app():
 @pytest.fixture(scope='function')
 def testapp(app):
     """A Webtest app."""
+    app.login_manager._login_disabled = False
     return TestApp(app)
 
 @pytest.fixture(scope='function')
