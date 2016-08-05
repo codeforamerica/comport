@@ -54,13 +54,13 @@ def use_of_force():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
     department = extractor.first_department()
-    j = request.json
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
 
     uof_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department.short_name))
 
-    for incident in j['data']:
+    for incident in request_json['data']:
         added = uof_class.add_or_update_incident(department, incident)
         if added is True:
             added_rows += 1
@@ -127,53 +127,19 @@ def complaints():
 def assaults():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
-    department_id = extractor.first_department().id
-    j = request.json
+    department = extractor.first_department()
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
-    cleaner = Cleaners()
 
-    for incident in j['data']:
-        # capitalize all the fields in the incident
-        incident = cleaner.capitalize_incident(incident)
+    assaults_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(department.short_name))
 
-        found_incident = AssaultOnOfficerIMPD.query.filter_by(
-            department_id=department_id,
-            opaque_id=incident["opaqueId"],
-            officer_identifier=incident["officerIdentifier"]
-        ).first()
-
-        if not found_incident:
-
-            found_incident = AssaultOnOfficerIMPD.create(
-                department_id=department_id,
-                opaque_id=incident["opaqueId"],
-                officer_identifier=incident["officerIdentifier"],
-                service_type=incident["serviceType"],
-                force_type=incident["forceType"],
-                assignment=incident['assignment'],
-                arrest_made=incident['arrestMade'],
-                officer_injured=incident['officerInjured'],
-                officer_killed=incident['officerKilled'],
-                report_filed=incident['reportFiled']
-            )
-
+    for incident in request_json['data']:
+        added = assaults_class.add_or_update_incident(department, incident)
+        if added is True:
             added_rows += 1
-            continue
-
-        found_incident.department_id = department_id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.force_type = incident["forceType"]
-        found_incident.force_type = incident["forceType"]
-        found_incident.assignment = incident["assignment"]
-        found_incident.arrest_made = incident["arrestMade"]
-        found_incident.officer_injured = incident["officerInjured"]
-        found_incident.officer_killed = incident["officerKilled"]
-        found_incident.report_filed = incident["reportFiled"]
-        found_incident.save()
-        updated_rows += 1
+        elif added is False:
+            updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None

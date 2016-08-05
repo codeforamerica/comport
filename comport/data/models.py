@@ -148,6 +148,47 @@ class AssaultOnOfficerIMPD(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
+    @classmethod
+    def add_or_update_incident(cls, department, incident):
+        ''' Add a new Assaults on Officers incident or update an existing one
+        '''
+        row_added = False
+        # get a cleaner instance
+        cleaner = Cleaners()
+        # capitalize all the fields in the incident
+        incident = cleaner.capitalize_incident(incident)
+
+        found_incident = cls.query.filter_by(
+            department_id=department.id,
+            opaque_id=incident["opaqueId"],
+            officer_identifier=incident["officerIdentifier"]
+        ).first()
+
+        if not found_incident:
+
+            found_incident = cls.create(
+                department_id=department.id,
+                opaque_id=incident["opaqueId"]
+            )
+
+            row_added = True
+
+        found_incident.department_id = department.id
+        found_incident.opaque_id = incident["opaqueId"]
+        found_incident.officer_identifier = incident["officerIdentifier"]
+        found_incident.service_type = incident["serviceType"]
+        found_incident.force_type = incident["forceType"]
+        found_incident.force_type = incident["forceType"]
+        found_incident.assignment = incident["assignment"]
+        found_incident.arrest_made = incident["arrestMade"]
+        found_incident.officer_injured = incident["officerInjured"]
+        found_incident.officer_killed = incident["officerKilled"]
+        found_incident.report_filed = incident["reportFiled"]
+        found_incident.save()
+
+        return row_added
+
+
 class CitizenComplaintIMPD(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
@@ -177,7 +218,7 @@ class CitizenComplaintIMPD(SurrogatePK, Model):
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
-        ''' Add a new UOF incident or update an existing one
+        ''' Add a new Citizen Complaints incident or update an existing one
         '''
         row_added = False
         # get a cleaner instance
@@ -281,7 +322,7 @@ class OfficerInvolvedShootingIMPD(SurrogatePK, Model):
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
-        ''' Add a new UOF incident or update an existing one
+        ''' Add a new OIS incident or update an existing one
         '''
         row_added = False
         # get a cleaner instance
