@@ -15,7 +15,7 @@ from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig, Config
 from comport.database import db
 from comport.utils import parse_csv_date
-from comport.data.models import UseOfForceIncident, CitizenComplaint, DenominatorValue, DemographicValue, OfficerInvolvedShooting
+from comport.data.models import UseOfForceIncidentIMPD, CitizenComplaintIMPD, DenominatorValue, DemographicValue, OfficerInvolvedShootingIMPD
 import glob
 import csv
 import hashlib

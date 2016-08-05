@@ -8,7 +8,7 @@ import responses
 import json
 from datetime import datetime
 from comport.department.models import Department, Extractor
-from comport.data.models import OfficerInvolvedShooting, UseOfForceIncident, CitizenComplaint, AssaultOnOfficer
+from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
 from testclient.JSON_test_client import JSONTestClient
 from comport.data.cleaners import Cleaners
 from flask import current_app

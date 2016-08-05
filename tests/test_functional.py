@@ -9,7 +9,7 @@ import pytest
 from flask import url_for
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncident
+from comport.data.models import UseOfForceIncidentIMPD
 from .utils import log_in_user
 
 @pytest.mark.usefixtures('db')

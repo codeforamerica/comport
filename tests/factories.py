@@ -5,7 +5,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from comport.user.models import User
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncident, DenominatorValue, CitizenComplaint
+from comport.data.models import UseOfForceIncidentIMPD, DenominatorValue, CitizenComplaintIMPD
 from comport.database import db
 from comport.utils import factory_random_string
 from datetime import datetime

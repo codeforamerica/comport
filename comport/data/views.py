@@ -2,7 +2,7 @@
 from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting, AssaultOnOfficer
+from comport.data.models import UseOfForceIncidentIMPD, CitizenComplaintIMPD, OfficerInvolvedShootingIMPD, AssaultOnOfficerIMPD
 from comport.utils import parse_date, parse_int, send_slack_message
 
 from .cleaners import Cleaners
