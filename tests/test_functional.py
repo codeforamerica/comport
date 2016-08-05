@@ -386,6 +386,7 @@ class TestPagesRespond:
         assert response.status_code == 200
 
 
+@pytest.mark.usefixtures('db')
 class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):
@@ -423,7 +424,7 @@ class TestLoggingIn:
         # sees error
         assert "Invalid password" in res
 
-    def test_sees_error_message_if_username_doesnt_exist(self, user, testapp):
+    def test_sees_error_message_if_username_doesnt_exist(self, testapp):
         # Goes to homepage
         res = testapp.get("/login/")
         # Fills out login form, password incorrect
@@ -436,6 +437,7 @@ class TestLoggingIn:
         assert "Unknown user" in res
 
 
+@pytest.mark.usefixtures('db')
 class TestUserRoles:
 
     def test_access(self, user, testapp):
@@ -459,9 +461,10 @@ class TestUserRoles:
         assert "You do not have sufficient permissions to do that" in res
 
 
+@pytest.mark.usefixtures('db')
 class TestRegistering:
 
-    def test_can_register(self, user, testapp):
+    def test_can_register(self, testapp):
         ''' A new user can register.
         '''
         # The new user's credentials
