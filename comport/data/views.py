@@ -279,7 +279,7 @@ def complaints():
         incident["officerSex"] = cleaner.sex(incident["officerSex"])
         incident["officerRace"] = cleaner.race(incident["officerRace"])
 
-        found_incident = CitizenComplaint.query.filter_by(
+        found_incident = CitizenComplaintIMPD.query.filter_by(
             opaque_id=incident["opaqueId"],
             allegation_type=incident["allegationType"],
             allegation=incident["allegation"],
@@ -294,7 +294,7 @@ def complaints():
 
         if not found_incident:
 
-            multiple_complaintant_check = CitizenComplaint.query.filter_by(
+            multiple_complaintant_check = CitizenComplaintIMPD.query.filter_by(
                 opaque_id=incident["opaqueId"],
                 allegation_type=incident["allegationType"],
                 allegation=incident["allegation"],
@@ -305,7 +305,7 @@ def complaints():
             if multiple_complaintant_check:
                 continue
 
-            found_incident = CitizenComplaint.create(
+            found_incident = CitizenComplaintIMPD.create(
                 department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 service_type=incident["serviceType"],
@@ -376,7 +376,7 @@ def assaults():
         # capitalize all the fields in the incident
         incident = cleaner.capitalize_incident(incident)
 
-        found_incident = AssaultOnOfficer.query.filter_by(
+        found_incident = AssaultOnOfficerIMPD.query.filter_by(
             department_id=department_id,
             opaque_id=incident["opaqueId"],
             officer_identifier=incident["officerIdentifier"]
@@ -384,7 +384,7 @@ def assaults():
 
         if not found_incident:
 
-            found_incident = AssaultOnOfficer.create(
+            found_incident = AssaultOnOfficerIMPD.create(
                 department_id=department_id,
                 opaque_id=incident["opaqueId"],
                 officer_identifier=incident["officerIdentifier"],

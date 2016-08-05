@@ -210,7 +210,7 @@ class CitizenComplaintFactory(BaseFactory):
         obj.beat = tmp[3]
 
     class Meta:
-        model = CitizenComplaint
+        model = CitizenComplaintIMPD
 
 class UseOfForceIncidentFactory(BaseFactory):
     opaque_id = FuzzyText(length=12)
@@ -421,4 +421,4 @@ class UseOfForceIncidentFactory(BaseFactory):
         obj.beat = tmp[3]
 
     class Meta:
-        model = UseOfForceIncident
+        model = UseOfForceIncidentIMPD

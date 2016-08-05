@@ -350,8 +350,8 @@ class TestPagesRespond:
         department1 = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
         department2 = Department.create(name="Random Police Department", short_name="RPD", load_defaults=False)
 
-        UseOfForceIncident.create(opaque_id="123ABC", department_id=department1.id)
-        UseOfForceIncident.create(opaque_id="123XYZ", department_id=department2.id)
+        UseOfForceIncidentIMPD.create(opaque_id="123ABC", department_id=department1.id)
+        UseOfForceIncidentIMPD.create(opaque_id="123XYZ", department_id=department2.id)
 
         response1 = testapp.get("/department/{}/uof.csv".format(department1.id))
         response2 = testapp.get("/department/{}/uof.csv".format(department2.id))

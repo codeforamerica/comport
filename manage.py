@@ -49,7 +49,7 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'UseOfForceIncident': UseOfForceIncident, "CitizenComplaint": CitizenComplaint, "OfficerInvolvedShooting": OfficerInvolvedShooting}
+    return {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'UseOfForceIncident': UseOfForceIncidentIMPD, "CitizenComplaint": CitizenComplaintIMPD, "OfficerInvolvedShooting": OfficerInvolvedShootingIMPD}
 
 
 @manager.command
@@ -84,7 +84,7 @@ def load_test_data():
                 officer_identifier = hashlib.md5((complaint.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
                 opaque_id = hashlib.md5((complaint.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
 
-                CitizenComplaint.create(
+                CitizenComplaintIMPD.create(
                     opaque_id=opaque_id,
                     department_id=department.id,
                     occured_date=parse_csv_date(complaint.get("OCCURRED_DT", None)),
@@ -113,7 +113,7 @@ def load_test_data():
                 officer_identifier = hashlib.md5((incident.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
                 opaque_id = hashlib.md5((incident.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
 
-                UseOfForceIncident.create(
+                UseOfForceIncidentIMPD.create(
                     department_id=department.id,
                     opaque_id=opaque_id,
                     occured_date=parse_csv_date(incident.get("OCCURRED_DT", None)),
@@ -154,7 +154,7 @@ def load_test_data():
                 officer_identifier = hashlib.md5((incident.get("OFFNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
                 opaque_id = hashlib.md5((incident.get("INCNUM", None) + Config.SECRET_KEY).encode('UTF-8')).hexdigest()
 
-                OfficerInvolvedShooting.create(
+                OfficerInvolvedShootingIMPD.create(
                     department_id=department.id,
                     opaque_id=opaque_id,
                     occured_date=parse_csv_date(incident.get("OCCURRED_DT", None)),
