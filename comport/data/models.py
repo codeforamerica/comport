@@ -22,8 +22,8 @@ class DemographicValue(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
 
-class UseOfForceIncident(SurrogatePK, Model):
-    __tablename__ = 'use_of_force_incidents'
+class UseOfForceIncidentIMPD(SurrogatePK, Model):
+    __tablename__ = 'use_of_force_incidents_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
@@ -59,8 +59,8 @@ class UseOfForceIncident(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
-class AssaultOnOfficer(SurrogatePK, Model):
-    __tablename__ = 'assaults_on_officers'
+class AssaultOnOfficerIMPD(SurrogatePK, Model):
+    __tablename__ = 'assaults_on_officers_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     officer_identifier = Column(db.String(255), unique=False, nullable=True)
@@ -75,8 +75,8 @@ class AssaultOnOfficer(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
-class CitizenComplaint(SurrogatePK, Model):
-    __tablename__ = 'citizen_complaints'
+class CitizenComplaintIMPD(SurrogatePK, Model):
+    __tablename__ = 'citizen_complaints_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
@@ -103,8 +103,8 @@ class CitizenComplaint(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
 
-class OfficerInvolvedShooting(SurrogatePK, Model):
-    __tablename__ = 'officer_involved_shootings'
+class OfficerInvolvedShootingIMPD(SurrogatePK, Model):
+    __tablename__ = 'officer_involved_shootings_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     occured_date = Column(db.DateTime, nullable=True)
