@@ -107,7 +107,7 @@ class TestHeartbeat:
         ''' New assaults data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Imminent Maple Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
