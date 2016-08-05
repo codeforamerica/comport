@@ -2,18 +2,14 @@
 from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import UseOfForceIncidentIMPD, CitizenComplaintIMPD, OfficerInvolvedShootingIMPD, AssaultOnOfficerIMPD
-from comport.utils import parse_date, parse_int, send_slack_message
-
-from .cleaners import Cleaners
+from comport.utils import send_slack_message
 
 import json
 import importlib
 from datetime import datetime
 
 
-blueprint = Blueprint("data", __name__, url_prefix='/data',
-                      static_folder="../static")
+blueprint = Blueprint("data", __name__, url_prefix='/data', static_folder="../static")
 
 
 @blueprint.route("/heartbeat", methods=['POST'])
