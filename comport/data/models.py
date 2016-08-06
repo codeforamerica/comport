@@ -23,7 +23,6 @@ class DemographicValue(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
-
 class UseOfForceIncidentIMPD(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents_impd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
@@ -187,7 +186,6 @@ class AssaultOnOfficerIMPD(SurrogatePK, Model):
         found_incident.save()
 
         return row_added
-
 
 class CitizenComplaintIMPD(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints_impd'
