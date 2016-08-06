@@ -8,6 +8,7 @@ import csv
 import io
 import json
 import copy
+import importlib
 
 user_department_relationship_table = db.Table(
     'user_department_relationship_table',
@@ -28,11 +29,6 @@ class Department(SurrogatePK, Model):
     is_public_assaults_on_officers = Column(db.Boolean, default=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", secondary=user_department_relationship_table, backref="departments")
-    use_of_force_incidents = relationship(
-        "UseOfForceIncidentIMPD", backref="department")
-    citizen_complaints = relationship("CitizenComplaintIMPD", backref="department")
-    officer_involved_shootings = relationship("OfficerInvolvedShootingIMPD", backref="department")
-    assaults_on_officers = relationship("AssaultOnOfficerIMPD", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     demographic_values = relationship("DemographicValue", backref="department")
@@ -206,7 +202,8 @@ class Department(SurrogatePK, Model):
                          "residentSex", "residentAge", "officerRace", "officerSex",
                          "officerAge", "officerYearsOfService", "officerIdentifier"])
 
-        use_of_force_incidents = self.use_of_force_incidents
+        uof_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(self.short_name))
+        use_of_force_incidents = uof_class.query.all()
 
         for incident in use_of_force_incidents:
             occured_date = coalesce_date(incident.occured_date)
@@ -254,7 +251,9 @@ class Department(SurrogatePK, Model):
                          "officerSex", "officerAge", "officerYearsOfService",
                          "officerIdentifier"])
 
-        officer_involved_shootings = self.officer_involved_shootings
+        ois_class = getattr(importlib.import_module("comport.data.models"), "OfficerInvolvedShooting{}".format(self.short_name))
+        officer_involved_shootings = ois_class.query.all()
+
         for incident in officer_involved_shootings:
             occured_date = coalesce_date(incident.occured_date)
             values = [
@@ -294,7 +293,8 @@ class Department(SurrogatePK, Model):
                          "residentAge", "officerRace", "officerSex", "officerAge",
                          "officerYearsOfService", "officerIdentifier"])
 
-        complaints = self.citizen_complaints
+        complaint_class = getattr(importlib.import_module("comport.data.models"), "CitizenComplaint{}".format(self.short_name))
+        complaints = complaint_class.query.all()
 
         for complaint in complaints:
             occured_date = coalesce_date(complaint.occured_date)
@@ -331,7 +331,8 @@ class Department(SurrogatePK, Model):
         writer.writerow(["id", "officerIdentifier", "serviceType", "forceType", "assignment",
                          "arrestMade", "officerInjured", "officerKilled", "reportFiled"])
 
-        incidents = self.assaults_on_officers
+        assaults_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(self.short_name))
+        incidents = assaults_class.query.all()
 
         for incident in incidents:
             values = [

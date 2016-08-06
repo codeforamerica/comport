@@ -48,7 +48,7 @@ class TestConditionalAccess:
 
     def test_department_logged_in_authorized(self, testapp):
         # set up department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="Incredibly Masculine Police Department", short_name="IMPD", load_defaults=True)
         department.is_public = False
 
         # set up a user
@@ -101,7 +101,7 @@ class TestConditionalAccess:
 
     def test_visit_private_dataset_throws_unauth(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="Ivory Mouth Police Department", short_name="IMPD", load_defaults=True)
 
         # we can access all the datasets except assaults
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
@@ -338,7 +338,7 @@ class TestPagesRespond:
 
     def test_assaults_csv_endpoint_exists(self, testapp):
         # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department = Department.create(name="Inky Mole Police Department", short_name="IMPD", load_defaults=False)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
@@ -347,8 +347,8 @@ class TestPagesRespond:
 
     def test_csv_filtered_by_dept(self, testapp):
         # create a department
-        department1 = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
-        department2 = Department.create(name="Random Police Department", short_name="RPD", load_defaults=False)
+        department1 = Department.create(name="International Morrisey Police Department", short_name="IMPD", load_defaults=False)
+        department2 = Department.create(name="Brave Police Department", short_name="BPD", load_defaults=False)
 
         UseOfForceIncidentIMPD.create(opaque_id="123ABC", department_id=department1.id)
         UseOfForceIncidentIMPD.create(opaque_id="123XYZ", department_id=department2.id)
