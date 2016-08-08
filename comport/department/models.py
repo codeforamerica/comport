@@ -194,47 +194,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
-                         "useOfForceReason", "officerForceType", "disposition",
-                         "serviceType", "arrestMade", "arrestCharges", "residentInjured",
-                         "residentHospitalized", "residentCondition", "officerInjured",
-                         "officerHospitalized", "officerCondition", "residentRace",
-                         "residentSex", "residentAge", "officerRace", "officerSex",
-                         "officerAge", "officerYearsOfService", "officerIdentifier"])
-
         uof_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(self.short_name))
+
+        csv_schema = uof_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
         use_of_force_incidents = uof_class.query.all()
 
         for incident in use_of_force_incidents:
-            occured_date = coalesce_date(incident.occured_date)
-            values = [
-                incident.opaque_id,
-                occured_date,
-                incident.division,
-                incident.precinct,
-                incident.shift,
-                incident.beat,
-                incident.use_of_force_reason,
-                incident.officer_force_type,
-                incident.disposition,
-                incident.service_type,
-                incident.arrest_made,
-                incident.arrest_charges,
-                incident.resident_injured,
-                incident.resident_hospitalized,
-                incident.resident_condition,
-                incident.officer_injured,
-                incident.officer_hospitalized,
-                incident.officer_condition,
-                incident.resident_race,
-                incident.resident_sex,
-                incident.resident_age,
-                incident.officer_race,
-                incident.officer_sex,
-                incident.officer_age,
-                incident.officer_years_of_service,
-                incident.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -244,40 +221,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
-                         "disposition", "residentWeaponUsed", "officerWeaponUsed",
-                         "serviceType", "residentCondition", "officerCondition",
-                         "residentRace", "residentSex", "residentAge", "officerRace",
-                         "officerSex", "officerAge", "officerYearsOfService",
-                         "officerIdentifier"])
-
         ois_class = getattr(importlib.import_module("comport.data.models"), "OfficerInvolvedShooting{}".format(self.short_name))
+
+        csv_schema = ois_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
         officer_involved_shootings = ois_class.query.all()
 
         for incident in officer_involved_shootings:
-            occured_date = coalesce_date(incident.occured_date)
-            values = [
-                incident.opaque_id,
-                occured_date,
-                incident.division,
-                incident.precinct,
-                incident.shift,
-                incident.beat,
-                incident.disposition,
-                incident.resident_weapon_used,
-                incident.officer_weapon_used,
-                incident.service_type,
-                incident.resident_condition,
-                incident.officer_condition,
-                incident.resident_race,
-                incident.resident_sex,
-                incident.resident_age,
-                incident.officer_race,
-                incident.officer_sex,
-                incident.officer_age,
-                incident.officer_years_of_service,
-                incident.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -287,38 +248,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift",
-                         "beat", "serviceType", "source", "allegationType",
-                         "allegation", "finding", "residentRace", "residentSex",
-                         "residentAge", "officerRace", "officerSex", "officerAge",
-                         "officerYearsOfService", "officerIdentifier"])
-
         complaint_class = getattr(importlib.import_module("comport.data.models"), "CitizenComplaint{}".format(self.short_name))
+
+        csv_schema = complaint_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
         complaints = complaint_class.query.all()
 
         for complaint in complaints:
-            occured_date = coalesce_date(complaint.occured_date)
-            values = [
-                complaint.opaque_id,
-                occured_date,
-                complaint.division,
-                complaint.precinct,
-                complaint.shift,
-                complaint.beat,
-                complaint.service_type,
-                complaint.source,
-                complaint.allegation_type,
-                complaint.allegation,
-                complaint.disposition,
-                complaint.resident_race,
-                complaint.resident_sex,
-                complaint.resident_age,
-                complaint.officer_race,
-                complaint.officer_sex,
-                complaint.officer_age,
-                complaint.officer_years_of_service,
-                complaint.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(complaint, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -328,24 +275,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "officerIdentifier", "serviceType", "forceType", "assignment",
-                         "arrestMade", "officerInjured", "officerKilled", "reportFiled"])
-
         assaults_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(self.short_name))
+
+        csv_schema = assaults_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
         incidents = assaults_class.query.all()
 
         for incident in incidents:
-            values = [
-                incident.opaque_id,
-                incident.officer_identifier,
-                incident.service_type,
-                incident.force_type,
-                incident.assignment,
-                incident.arrest_made,
-                incident.officer_injured,
-                incident.officer_killed,
-                incident.report_filed
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()

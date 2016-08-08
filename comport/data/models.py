@@ -65,6 +65,12 @@ class UseOfForceIncidentIMPD(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("disposition", "disposition"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+
+    @classmethod
     def add_or_update_incident(cls, department, incident):
         ''' Add a new UOF incident or update an existing one
         '''
@@ -150,6 +156,12 @@ class AssaultOnOfficerIMPD(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("officerIdentifier", "officer_identifier"), ("serviceType", "service_type"), ("forceType", "force_type"), ("assignment", "assignment"), ("arrestMade", "arrest_made"), ("officerInjured", "officer_injured"), ("officerKilled", "officer_killed"), ("reportFiled", "report_filed")]
+
+    @classmethod
     def add_or_update_incident(cls, department, incident):
         ''' Add a new Assaults on Officers incident or update an existing one
         '''
@@ -215,6 +227,12 @@ class CitizenComplaintIMPD(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+
+    @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("serviceType", "service_type"), ("source", "source"), ("allegationType", "allegation_type"), ("allegation", "allegation"), ("finding", "disposition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -321,6 +339,12 @@ class OfficerInvolvedShootingIMPD(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used"), ("officerWeaponUsed", "officer_weapon_used"), ("serviceType", "service_type"), ("residentCondition", "resident_condition"), ("officerCondition", "officer_condition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+
+    @classmethod
     def add_or_update_incident(cls, department, incident):
         ''' Add a new OIS incident or update an existing one
         '''
@@ -422,6 +446,12 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("disposition", "disposition"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentWeaponUsed", "resident_weapon_used"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+
+    @classmethod
     def add_or_update_incident(cls, department, incident):
         ''' Add a new UOF incident or update an existing one
         '''
@@ -513,6 +543,12 @@ class CitizenComplaintBPD(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+
+    @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("serviceType", "service_type"), ("source", "source"), ("allegation", "allegation"), ("disposition", "disposition"), ("residentIdentifier", "resident_identifier"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerIdentifier", "officer_identifier"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -612,6 +648,12 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
+
+    @classmethod
+    def get_csv_schema(cls):
+        ''' Get the CSV column headers and variable names.
+        '''
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used"), ("officerWeaponUsed", "officer_weapon_used"), ("serviceType", "service_type"), ("residentCondition", "resident_condition"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
