@@ -45,7 +45,7 @@ def _make_context():
     ''' Return context dict for a shell session.
     '''
     # generate a list of all the incident classes
-    short_names = ["IMPD"]
+    short_names = ["IMPD", "BPD"]
     incident_prefixes = ["UseOfForceIncident", "AssaultOnOfficer", "CitizenComplaint", "OfficerInvolvedShooting"]
     incident_classes = {}
     for name in short_names:
