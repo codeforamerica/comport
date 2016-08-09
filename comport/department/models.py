@@ -50,71 +50,63 @@ class Department(SurrogatePK, Model):
         }
 
     def get_ois_blocks(self):
+        blocks = PageBlockLookup.get_ois_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('ois-introduction'),
-            'first-block': self.get_block_by_slug('ois-by-inc-district'),
-            'blocks': self.get_blocks_by_slugs([
-                'ois-weapon-type',
-                'officer-demographics',
-                'ois-race',
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_complaint_blocks(self):
+        blocks = PageBlockLookup.get_complaints_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('complaints-introduction'),
-            'first-block': self.get_block_by_slug('complaints-by-month'),
-            'blocks': self.get_blocks_by_slugs([
-                'complaints-by-allegation',
-                'complaints-by-allegation-type',
-                'complaints-by-disposition',
-                'complaints-by-precinct',
-                'officer-demographics',
-                'complaints-by-demographic',
-                'complaints-by-officer',
-            ])
-        }
-
-    def get_complaint_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('complaints-schema-introduction'),
-            'footer': self.get_block_by_slug('complaints-schema-footer'),
-            'disclaimer': self.get_block_by_slug('complaints-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('complaints-schema-field-')
-        }
-
-    def get_uof_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('uof-schema-introduction'),
-            'footer': self.get_block_by_slug('uof-schema-footer'),
-            'disclaimer': self.get_block_by_slug('uof-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('uof-schema-field-')
-        }
-
-    def get_ois_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('ois-schema-introduction'),
-            'footer': self.get_block_by_slug('ois-schema-footer'),
-            'disclaimer': self.get_block_by_slug('ois-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('ois-schema-field-')
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_assaults_blocks(self):
+        blocks = PageBlockLookup.get_assaults_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('assaults-introduction'),
-            'first-block': self.get_block_by_slug('assaults-by-service-type'),
-            'blocks': self.get_blocks_by_slugs([
-                'assaults-by-force-type',
-                'assaults-by-officer'
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
+        }
+
+    def get_complaint_schema_blocks(self):
+        blocks = PageBlockLookup.get_complaint_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
+        }
+
+    def get_uof_schema_blocks(self):
+        blocks = PageBlockLookup.get_uof_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
+        }
+
+    def get_ois_schema_blocks(self):
+        blocks = PageBlockLookup.get_ois_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
         }
 
     def get_assaults_schema_blocks(self):
+        blocks = PageBlockLookup.get_assaults_schema_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('assaults-schema-introduction'),
-            'footer': self.get_block_by_slug('assaults-schema-footer'),
-            'disclaimer': self.get_block_by_slug('assaults-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('assaults-schema-field-')
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
         }
 
     def get_introduction_blocks(self):
