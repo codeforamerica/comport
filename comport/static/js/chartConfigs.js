@@ -266,7 +266,7 @@ var configs = {
     addOther: true,
     },
 
-  'complaints-by-disposition': {
+  'complaints-by-finding': {
     filter: last12Months,
     chartType: 'flagHistogram',
     removeBlankX: true,
@@ -274,6 +274,18 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].finding; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  'complaints-by-disposition': {
+    filter: last12Months,
+    chartType: 'flagHistogram',
+    removeBlankX: true,
+    keyFunc: function(d){ return d.disposition; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].disposition; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     },

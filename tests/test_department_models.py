@@ -80,7 +80,7 @@ class TestExtractors:
         complaint_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="complaints-by-month")
         complaint_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-by-allegation")
         complaint_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-by-allegation-type")
-        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-disposition")
+        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-finding")
         complaint_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-precinct")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         complaint_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="complaints-by-demographic")
