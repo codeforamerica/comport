@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from comport.database import (Column, db, Model, relationship, SurrogatePK)
 from comport.content.defaults import ChartBlockDefaults
+from .page_block_lookup import PageBlockLookup
 from flask import abort
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
@@ -41,14 +42,11 @@ class Department(SurrogatePK, Model):
             self.save()
 
     def get_uof_blocks(self):
+        blocks = PageBlockLookup.get_uof_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('uof-introduction'),
-            'first-block': self.get_block_by_slug('uof-force-type'),
-            'blocks': self.get_blocks_by_slugs([
-                'uof-by-inc-district',
-                'officer-demographics',
-                'uof-race'
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_ois_blocks(self):
