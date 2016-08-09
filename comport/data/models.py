@@ -472,12 +472,14 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
         incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
 
-        found_incident = cls.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            department_id=department.id,
-            officer_identifier=incident["officerIdentifier"],
-            officer_force_type=incident["officerForceType"]
-        ).first()
+        found_incident = False
+        # found_incident = cls.query.filter_by(
+        #     opaque_id=incident["opaqueId"],
+        #     department_id=department.id,
+        #     officer_identifier=incident["officerIdentifier"],
+        #     resident_identifier=incident["residentIdentifier"],
+        #     officer_force_type=incident["officerForceType"]
+        # ).first()
 
         if not found_incident:
             found_incident = cls.create(
@@ -567,29 +569,30 @@ class CitizenComplaintBPD(SurrogatePK, Model):
         incident["officerSex"] = cleaner.sex(incident["officerSex"])
         incident["officerRace"] = cleaner.race(incident["officerRace"])
 
-        found_incident = cls.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            allegation=incident["allegation"],
-            officer_identifier=incident["officerIdentifier"],
-            department_id=department.id,
-            resident_race=incident["residentRace"],
-            resident_sex=incident["residentSex"],
-            resident_age=incident["residentAge"]
-        ).first()
+        found_incident = False
+        # found_incident = cls.query.filter_by(
+        #     opaque_id=incident["opaqueId"],
+        #     allegation=incident["allegation"],
+        #     officer_identifier=incident["officerIdentifier"],
+        #     department_id=department.id,
+        #     resident_race=incident["residentRace"],
+        #     resident_sex=incident["residentSex"],
+        #     resident_age=incident["residentAge"]
+        # ).first()
 
         if not found_incident:
 
             # check for multiple complainants
             # :TODO: validate this practice!
-            multiple_complaintant_check = cls.query.filter_by(
-                opaque_id=incident["opaqueId"],
-                allegation=incident["allegation"],
-                officer_identifier=incident["officerIdentifier"],
-                department_id=department.id
-            ).first()
+            # multiple_complaintant_check = cls.query.filter_by(
+            #     opaque_id=incident["opaqueId"],
+            #     allegation=incident["allegation"],
+            #     officer_identifier=incident["officerIdentifier"],
+            #     department_id=department.id
+            # ).first()
 
-            if multiple_complaintant_check:
-                return None
+            # if multiple_complaintant_check:
+            #     return None
 
             found_incident = cls.create(
                 department_id=department.id,
@@ -676,11 +679,12 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
         # and values that might've been sent as strings are integers
         incident["officerYearsOfService"] = cleaner.string_to_integer(incident["officerYearsOfService"])
 
-        found_incident = cls.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            department_id=department.id,
-            officer_identifier=incident["officerIdentifier"]
-        ).first()
+        found_incident = False
+        # found_incident = cls.query.filter_by(
+        #     opaque_id=incident["opaqueId"],
+        #     department_id=department.id,
+        #     officer_identifier=incident["officerIdentifier"]
+        # ).first()
 
         if not found_incident:
             found_incident = cls.create(
