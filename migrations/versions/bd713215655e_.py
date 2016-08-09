@@ -80,7 +80,6 @@ def upgrade():
         sa.Column('assignment', sa.String(length=255), nullable=True),
         sa.Column('use_of_force_reason', sa.String(length=255), nullable=True),
         sa.Column('officer_force_type', sa.String(length=255), nullable=True),
-        sa.Column('disposition', sa.String(length=255), nullable=True),
         sa.Column('service_type', sa.String(length=255), nullable=True),
         sa.Column('arrest_made', sa.Boolean(), nullable=True),
         sa.Column('arrest_charges', sa.String(length=255), nullable=True),

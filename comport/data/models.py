@@ -421,7 +421,6 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
     assignment = Column(db.String(255), unique=False, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     officer_force_type = Column(db.String(255), unique=False, nullable=True)
-    disposition = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     arrest_made = Column(db.Boolean, nullable=True)
     arrest_charges = Column(db.String(255), unique=False, nullable=True)
@@ -449,7 +448,7 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Get the CSV column headers and variable names.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("disposition", "disposition"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentWeaponUsed", "resident_weapon_used"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentWeaponUsed", "resident_weapon_used"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -494,7 +493,6 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         found_incident.assignment = incident["assignment"]
         found_incident.use_of_force_reason = incident["useOfForceReason"]
         found_incident.officer_force_type = incident["officerForceType"]
-        found_incident.disposition = incident["disposition"]
         found_incident.service_type = incident["serviceType"]
         found_incident.arrest_made = incident["arrestMade"]
         found_incident.arrest_charges = incident["arrestCharges"]
@@ -504,7 +502,7 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         found_incident.officer_injured = incident["officerInjured"]
         found_incident.officer_hospitalized = incident["officerHospitalized"]
         found_incident.officer_condition = incident["officerCondition"]
-        found_incident.resident_identifier = incident["resident_identifier"]
+        found_incident.resident_identifier = incident["residentIdentifier"]
         found_incident.resident_weapon_used = incident["residentWeaponUsed"]
         found_incident.resident_race = incident["residentRace"]
         found_incident.resident_sex = incident["residentSex"]
@@ -609,7 +607,7 @@ class CitizenComplaintBPD(SurrogatePK, Model):
         found_incident.source = incident["source"]
         found_incident.allegation = incident["allegation"]
         found_incident.disposition = incident["disposition"]
-        found_incident.resident_identifier = incident["resident_identifier"]
+        found_incident.resident_identifier = incident["residentIdentifier"]
         found_incident.resident_race = incident["residentRace"]
         found_incident.resident_sex = incident["residentSex"]
         found_incident.resident_age = incident["residentAge"]
@@ -691,6 +689,7 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
             )
             row_added = True
 
+
         found_incident.department_id = department.id
         found_incident.opaque_id = incident["opaqueId"]
         found_incident.occured_date = parse_date(incident["occuredDate"])
@@ -699,11 +698,11 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
         found_incident.assignment = incident["assignment"]
         found_incident.disposition = incident["disposition"]
         found_incident.resident_weapon_used = incident["residentWeaponUsed"]
-        found_incident.officer_weapon_used = incident["officerForceType"]
+        found_incident.officer_weapon_used = incident["officerWeaponUsed"]
         found_incident.service_type = incident["serviceType"]
         found_incident.resident_condition = incident["residentCondition"]
         found_incident.officer_condition = incident["officerCondition"]
-        found_incident.resident_identifier = incident["resident_identifier"]
+        found_incident.resident_identifier = incident["residentIdentifier"]
         found_incident.resident_race = incident["residentRace"]
         found_incident.resident_sex = incident["residentSex"]
         found_incident.resident_age = incident["residentAge"]
