@@ -100,6 +100,18 @@ var configs = {
     addOther: true,
     },
 
+    'uof-by-assignment': {
+      chartType: 'flagHistogram',
+      filter: last12Months,
+      keyFunc: function(d){ return d.assignment; },
+      sortWith: function(d){ return -d.count; },
+      x: 'type',
+      xFunc: function(b){ return b[0].assignment; },
+      y: 'count',
+      yFunc: function(b){ return b.length; },
+      addOther: true,
+      },
+
   'uof-force-type': {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -325,6 +337,18 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+    },
+
+  'ois-by-assignment': {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: false,

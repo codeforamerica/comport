@@ -7,7 +7,7 @@ class PageBlockLookup:
             'introduction': 'uof-introduction',
             'first-block': 'uof-force-type',
             'blocks': [
-                'uof-by-inc-district',
+                'uof-by-assignment',
                 'officer-demographics',
                 'uof-race'
             ]
@@ -16,7 +16,7 @@ class PageBlockLookup:
     def get_ois_blocks(short_name):
         return {
             'introduction': 'ois-introduction',
-            'first-block': 'ois-by-inc-district',
+            'first-block': 'ois-by-assignment',
             'blocks': [
                 'ois-weapon-type',
                 'officer-demographics',
