@@ -3,19 +3,6 @@
 class PageBlockLookup:
 
     def get_uof_blocks(short_name):
-
-        if short_name == "BPD":
-            return {
-                'introduction': 'uof-introduction',
-                'first-block': 'uof-force-type',
-                'blocks': [
-                    'uof-by-inc-district',
-                    'officer-demographics',
-                    'uof-race'
-                ]
-            }
-
-        # We use IMPD as a default here
         return {
             'introduction': 'uof-introduction',
             'first-block': 'uof-force-type',
@@ -47,13 +34,14 @@ class PageBlockLookup:
                     'complaints-by-allegation',
                     'complaints-by-allegation-type',
                     'complaints-by-disposition',
-                    'complaints-by-precinct',
+                    'complaints-by-assignment',
                     'officer-demographics',
                     'complaints-by-demographic',
                     'complaints-by-officer',
                 ]
             }
 
+        # We use IMPD as a default here
         return {
             'introduction': 'complaints-introduction',
             'first-block': 'complaints-by-month',
