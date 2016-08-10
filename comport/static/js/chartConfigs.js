@@ -266,6 +266,18 @@ var configs = {
     addOther: true,
     },
 
+  'complaints-by-assignment': {
+    filter: last12Months,
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
   'complaints-by-finding': {
     filter: last12Months,
     chartType: 'flagHistogram',
