@@ -149,13 +149,12 @@ class TestExtractors:
     def test_get_uof_blocks(self):
         ''' Set and get uof chart blocks.
         '''
-        department = DepartmentFactory()
-        department.save()
+        department = Department.create(name="Ivory Mouth Police Department", short_name="IMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
         uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-force-type")
-        uof_bid = ChartBlock(title="BYINCDISTRICT", dataset="bid", slug="uof-by-inc-district")
+        uof_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-inc-district")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         uof_race = ChartBlock(title="RACE", dataset="race", slug="uof-race")
         department.chart_blocks.append(uof_intro)
@@ -213,12 +212,11 @@ class TestExtractors:
     def test_get_ois_blocks(self):
         ''' Set and get ois chart blocks.
         '''
-        department = DepartmentFactory()
-        department.save()
+        department = Department.create(name="Bouth Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
-        ois_bid = ChartBlock(title="BYINCDISTRICT", dataset="bid", slug="ois-by-inc-district")
+        ois_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="ois-by-assignment")
         ois_wt = ChartBlock(title="WEAPONTYPE", dataset="weapontype", slug="ois-weapon-type")
         ois_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         ois_race = ChartBlock(title="RACE", dataset="race", slug="ois-race")

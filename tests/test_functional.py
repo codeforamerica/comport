@@ -49,7 +49,7 @@ class TestConditionalAccess:
 
     def test_department_logged_in_authorized(self, testapp):
         # set up department
-        department = Department.create(name="Incredibly Masculine Police Department", short_name="IMPD", load_defaults=True)
+        department = Department.create(name="Int Masculine Police Department", short_name="IMPD", load_defaults=True)
         department.is_public = False
 
         # set up a user
@@ -85,7 +85,7 @@ class TestConditionalAccess:
 
     def test_dataset_can_be_set_private(self):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="I Mood Police Department", short_name="IMPD", load_defaults=False)
         assert hasattr(department, "is_public_assaults_on_officers")
         assert hasattr(department, "is_public_officer_involved_shootings")
         assert hasattr(department, "is_public_citizen_complaints")

@@ -3,20 +3,42 @@
 class PageBlockLookup:
 
     def get_uof_blocks(short_name):
+        if short_name == 'BPD':
+            return {
+                'introduction': 'uof-introduction',
+                'first-block': 'uof-force-type',
+                'blocks': [
+                    'uof-by-assignment',
+                    'officer-demographics',
+                    'uof-race'
+                ]
+            }
+
         return {
             'introduction': 'uof-introduction',
             'first-block': 'uof-force-type',
             'blocks': [
-                'uof-by-assignment',
+                'uof-by-inc-district',
                 'officer-demographics',
                 'uof-race'
             ]
         }
 
     def get_ois_blocks(short_name):
+        if short_name == 'BPD':
+            return {
+                'introduction': 'ois-introduction',
+                'first-block': 'ois-by-assignment',
+                'blocks': [
+                    'ois-weapon-type',
+                    'officer-demographics',
+                    'ois-race',
+                ]
+            }
+
         return {
             'introduction': 'ois-introduction',
-            'first-block': 'ois-by-assignment',
+            'first-block': 'ois-by-inc-district',
             'blocks': [
                 'ois-weapon-type',
                 'officer-demographics',
