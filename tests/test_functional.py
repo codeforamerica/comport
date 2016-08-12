@@ -6,10 +6,11 @@ See: http://webtest.readthedocs.org/
 import io
 import csv
 import pytest
+import importlib
 from flask import url_for
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncident
+from comport.data.models import UseOfForceIncidentIMPD
 from .utils import log_in_user
 
 @pytest.mark.usefixtures('db')
@@ -48,7 +49,7 @@ class TestConditionalAccess:
 
     def test_department_logged_in_authorized(self, testapp):
         # set up department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="Int Masculine Police Department", short_name="IMPD", load_defaults=True)
         department.is_public = False
 
         # set up a user
@@ -84,7 +85,7 @@ class TestConditionalAccess:
 
     def test_dataset_can_be_set_private(self):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="I Mood Police Department", short_name="IMPD", load_defaults=False)
         assert hasattr(department, "is_public_assaults_on_officers")
         assert hasattr(department, "is_public_officer_involved_shootings")
         assert hasattr(department, "is_public_citizen_complaints")
@@ -101,7 +102,7 @@ class TestConditionalAccess:
 
     def test_visit_private_dataset_throws_unauth(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="Ivory Mouth Police Department", short_name="IMPD", load_defaults=True)
 
         # we can access all the datasets except assaults
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
@@ -338,7 +339,7 @@ class TestPagesRespond:
 
     def test_assaults_csv_endpoint_exists(self, testapp):
         # create a department
-        department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
+        department = Department.create(name="Inky Mole Police Department", short_name="IMPD", load_defaults=False)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
@@ -347,11 +348,14 @@ class TestPagesRespond:
 
     def test_csv_filtered_by_dept(self, testapp):
         # create a department
-        department1 = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=False)
-        department2 = Department.create(name="Random Police Department", short_name="RPD", load_defaults=False)
+        department1 = Department.create(name="International Morrisey Police Department", short_name="IMPD", load_defaults=False)
+        department2 = Department.create(name="Brave Police Department", short_name="BPD", load_defaults=False)
 
-        UseOfForceIncident.create(opaque_id="123ABC", department_id=department1.id)
-        UseOfForceIncident.create(opaque_id="123XYZ", department_id=department2.id)
+        incidentclass1 = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department1.short_name))
+        incidentclass2 = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department2.short_name))
+
+        incidentclass1.create(opaque_id="123ABC", department_id=department1.id)
+        incidentclass2.create(opaque_id="123XYZ", department_id=department2.id)
 
         response1 = testapp.get("/department/{}/uof.csv".format(department1.id))
         response2 = testapp.get("/department/{}/uof.csv".format(department2.id))
@@ -386,6 +390,7 @@ class TestPagesRespond:
         assert response.status_code == 200
 
 
+@pytest.mark.usefixtures('db')
 class TestLoggingIn:
 
     def test_can_log_in_returns_200(self, user, testapp):
@@ -423,7 +428,7 @@ class TestLoggingIn:
         # sees error
         assert "Invalid password" in res
 
-    def test_sees_error_message_if_username_doesnt_exist(self, user, testapp):
+    def test_sees_error_message_if_username_doesnt_exist(self, testapp):
         # Goes to homepage
         res = testapp.get("/login/")
         # Fills out login form, password incorrect
@@ -436,6 +441,7 @@ class TestLoggingIn:
         assert "Unknown user" in res
 
 
+@pytest.mark.usefixtures('db')
 class TestUserRoles:
 
     def test_access(self, user, testapp):
@@ -459,9 +465,10 @@ class TestUserRoles:
         assert "You do not have sufficient permissions to do that" in res
 
 
+@pytest.mark.usefixtures('db')
 class TestRegistering:
 
-    def test_can_register(self, user, testapp):
+    def test_can_register(self, testapp):
         ''' A new user can register.
         '''
         # The new user's credentials

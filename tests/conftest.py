@@ -6,8 +6,6 @@ from webtest import TestApp
 from comport.settings import TestConfig
 from comport.app import create_app
 from comport.database import db as _db
-from comport.content.models import ChartBlock
-from comport.department.models import Department
 
 from .factories import UserFactory, DepartmentFactory
 
@@ -35,7 +33,6 @@ def db(app):
     _db.drop_all()
     _db.create_all()
     return _db
-
 
 @pytest.fixture
 def user(db):

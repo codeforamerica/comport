@@ -8,7 +8,7 @@ import responses
 import json
 from datetime import datetime
 from comport.department.models import Department, Extractor
-from comport.data.models import OfficerInvolvedShooting, UseOfForceIncident, CitizenComplaint, AssaultOnOfficer
+from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
 from testclient.JSON_test_client import JSONTestClient
 from comport.data.cleaners import Cleaners
 from flask import current_app
@@ -107,7 +107,7 @@ class TestHeartbeat:
         ''' New assaults data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Imminent Maple Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -128,7 +128,7 @@ class TestHeartbeat:
         # check the assault incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_assault = cleaner.capitalize_incident(assault_data[0])
-        check_assault = AssaultOnOfficer.query.filter_by(opaque_id=sent_assault['opaqueId']).first()
+        check_assault = AssaultOnOfficerIMPD.query.filter_by(opaque_id=sent_assault['opaqueId']).first()
         assert check_assault.service_type == sent_assault['serviceType']
         assert check_assault.force_type == sent_assault['forceType']
         assert check_assault.assignment == sent_assault['assignment']
@@ -141,7 +141,7 @@ class TestHeartbeat:
         ''' New complaint data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Idiotic Meteor Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -162,7 +162,7 @@ class TestHeartbeat:
         # check the complaint incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_complaint = cleaner.capitalize_incident(complaint_data[0])
-        check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        check_complaint = CitizenComplaintIMPD.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
         assert check_complaint.precinct == sent_complaint['precinct']
@@ -186,7 +186,7 @@ class TestHeartbeat:
         ''' New complaint data from the extractor with wrongly typed data is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Instinctual Marshmallow Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -213,7 +213,7 @@ class TestHeartbeat:
         # check the complaint incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_complaint = cleaner.capitalize_incident(complaint_data[0])
-        check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        check_complaint = CitizenComplaintIMPD.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
         assert check_complaint.precinct == sent_complaint['precinct']
@@ -237,7 +237,7 @@ class TestHeartbeat:
         ''' Updated complaint data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Illmatic Man Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -274,13 +274,13 @@ class TestHeartbeat:
         assert response.json_body['added'] == 0
 
         # There's only one complaint in the database.
-        all_complaints = CitizenComplaint.query.all()
+        all_complaints = CitizenComplaintIMPD.query.all()
         assert len(all_complaints) == 1
 
         # check the complaint incident in the database against the updated data that was sent
         cleaner = Cleaners()
         sent_complaint = cleaner.capitalize_incident(updated_complaint_data[0])
-        check_complaint = CitizenComplaint.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        check_complaint = CitizenComplaintIMPD.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_complaint['occuredDate']
         assert check_complaint.division == sent_complaint['division']
         assert check_complaint.precinct == sent_complaint['precinct']
@@ -304,7 +304,7 @@ class TestHeartbeat:
         ''' Multiple complaint data from the extractor is skipped.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Icky Morgue Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -338,14 +338,14 @@ class TestHeartbeat:
         assert response.json_body['added'] == 0
 
         # There is one complaint in the database.
-        all_complaints = CitizenComplaint.query.all()
+        all_complaints = CitizenComplaintIMPD.query.all()
         assert len(all_complaints) == 1
 
     def test_post_complaint_data_near_match_does_not_update(self, testapp):
         ''' Complaint data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Ipswitch Moor Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -375,14 +375,14 @@ class TestHeartbeat:
         assert response.json_body['added'] == 1
 
         # There are two complaints in the database.
-        all_complaints = CitizenComplaint.query.all()
+        all_complaints = CitizenComplaintIMPD.query.all()
         assert len(all_complaints) == 2
 
     def test_post_uof_data(self, testapp):
         ''' New UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Internal Moth Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -403,7 +403,7 @@ class TestHeartbeat:
         # check the uof incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_uof = uof_data[0]
-        check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
+        check_uof = UseOfForceIncidentIMPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
         assert check_uof.division == cleaner.capitalize(sent_uof['division'])
         assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
@@ -435,7 +435,7 @@ class TestHeartbeat:
         ''' New UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Incendiary Morocco Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -462,7 +462,7 @@ class TestHeartbeat:
         # check the uof incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_uof = uof_data[0]
-        check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
+        check_uof = UseOfForceIncidentIMPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
         assert check_uof.division == cleaner.capitalize(sent_uof['division'])
         assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
@@ -494,7 +494,7 @@ class TestHeartbeat:
         ''' Updated UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Innocuous Manatee Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -527,13 +527,13 @@ class TestHeartbeat:
         assert response.json_body['added'] == 0
 
         # There's only one complaint in the database.
-        all_uof = UseOfForceIncident.query.all()
+        all_uof = UseOfForceIncidentIMPD.query.all()
         assert len(all_uof) == 1
 
         # check the uof incident in the database against the updated data that was sent
         cleaner = Cleaners()
         sent_uof = updated_uof_data[0]
-        check_uof = UseOfForceIncident.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
+        check_uof = UseOfForceIncidentIMPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
         assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
         assert check_uof.division == cleaner.capitalize(sent_uof['division'])
         assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
@@ -565,7 +565,7 @@ class TestHeartbeat:
         ''' UOF data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Innocent Matilda Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -595,14 +595,14 @@ class TestHeartbeat:
         assert response.json_body['added'] == 1
 
         # There's only one complaint in the database.
-        all_uof = UseOfForceIncident.query.all()
+        all_uof = UseOfForceIncidentIMPD.query.all()
         assert len(all_uof) == 2
 
     def test_post_ois_data(self, testapp):
         ''' New OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Intentional Morality Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -623,7 +623,7 @@ class TestHeartbeat:
         # check the ois incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_ois = ois_data[0]
-        check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
+        check_ois = OfficerInvolvedShootingIMPD.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
         assert check_ois.division == cleaner.capitalize(sent_ois['division'])
         assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
@@ -647,7 +647,7 @@ class TestHeartbeat:
         ''' New OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Invincible Mountain Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -675,7 +675,7 @@ class TestHeartbeat:
         # check the ois incident in the database against the data that was sent
         cleaner = Cleaners()
         sent_ois = ois_data[0]
-        check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
+        check_ois = OfficerInvolvedShootingIMPD.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
         assert check_ois.division == cleaner.capitalize(sent_ois['division'])
         assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
@@ -699,7 +699,7 @@ class TestHeartbeat:
         ''' Updated OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Invisible Monkey Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -731,13 +731,13 @@ class TestHeartbeat:
         assert response.json_body['added'] == 0
 
         # There's only one complaint in the database.
-        all_ois = OfficerInvolvedShooting.query.all()
+        all_ois = OfficerInvolvedShootingIMPD.query.all()
         assert len(all_ois) == 1
 
         # check the ois incident in the database against the updated data that was sent
         cleaner = Cleaners()
         sent_ois = updated_ois_data[0]
-        check_ois = OfficerInvolvedShooting.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
+        check_ois = OfficerInvolvedShootingIMPD.query.filter_by(opaque_id=sent_ois['opaqueId']).first()
         assert check_ois.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_ois['occuredDate']
         assert check_ois.division == cleaner.capitalize(sent_ois['division'])
         assert check_ois.precinct == cleaner.capitalize(sent_ois['precinct'])
@@ -761,7 +761,7 @@ class TestHeartbeat:
         ''' OIS data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="Indigo Moon Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -791,5 +791,5 @@ class TestHeartbeat:
         assert response.json_body['added'] == 1
 
         # There's only one complaint in the database.
-        all_ois = OfficerInvolvedShooting.query.all()
+        all_ois = OfficerInvolvedShootingIMPD.query.all()
         assert len(all_ois) == 2

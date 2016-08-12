@@ -62,7 +62,7 @@ This count is from January 2014 to present.""",
         ChartBlock(
             title="Complaints By Disposition",
             caption="",
-            slug="complaints-by-disposition",
+            slug="complaints-by-finding",
             dataset="complaints",
             content="""
 Information about [the complaint investigation process](http://www.indy.gov/eGov/City/DPS/CPCO/Pages/faq.aspx#4) is available on the [CPCO FAQ page](http://www.indy.gov/eGov/City/DPS/CPCO/Pages/faq).

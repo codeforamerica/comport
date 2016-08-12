@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from comport.database import (Column, db, Model, relationship, SurrogatePK)
 from comport.content.defaults import ChartBlockDefaults
+from .page_block_lookup import PageBlockLookup
 from flask import abort
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
+from comport.content.models import ChartBlock
 import csv
 import io
 import json
 import copy
+import importlib
 
 user_department_relationship_table = db.Table(
     'user_department_relationship_table',
@@ -28,11 +31,6 @@ class Department(SurrogatePK, Model):
     is_public_assaults_on_officers = Column(db.Boolean, default=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", secondary=user_department_relationship_table, backref="departments")
-    use_of_force_incidents = relationship(
-        "UseOfForceIncident", backref="department")
-    citizen_complaints = relationship("CitizenComplaint", backref="department")
-    officer_involved_shootings = relationship("OfficerInvolvedShooting", backref="department")
-    assaults_on_officers = relationship("AssaultOnOfficer", backref="department")
     chart_blocks = relationship("ChartBlock", backref="department")
     denominator_values = relationship("DenominatorValue", backref="department")
     demographic_values = relationship("DemographicValue", backref="department")
@@ -45,82 +43,71 @@ class Department(SurrogatePK, Model):
             self.save()
 
     def get_uof_blocks(self):
+        blocks = PageBlockLookup.get_uof_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('uof-introduction'),
-            'first-block': self.get_block_by_slug('uof-force-type'),
-            'blocks': self.get_blocks_by_slugs([
-                'uof-by-inc-district',
-                'officer-demographics',
-                'uof-race'
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_ois_blocks(self):
+        blocks = PageBlockLookup.get_ois_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('ois-introduction'),
-            'first-block': self.get_block_by_slug('ois-by-inc-district'),
-            'blocks': self.get_blocks_by_slugs([
-                'ois-weapon-type',
-                'officer-demographics',
-                'ois-race',
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_complaint_blocks(self):
+        blocks = PageBlockLookup.get_complaints_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('complaints-introduction'),
-            'first-block': self.get_block_by_slug('complaints-by-month'),
-            'blocks': self.get_blocks_by_slugs([
-                'complaints-by-allegation',
-                'complaints-by-allegation-type',
-                'complaints-by-disposition',
-                'complaints-by-precinct',
-                'officer-demographics',
-                'complaints-by-demographic',
-                'complaints-by-officer',
-            ])
-        }
-
-    def get_complaint_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('complaints-schema-introduction'),
-            'footer': self.get_block_by_slug('complaints-schema-footer'),
-            'disclaimer': self.get_block_by_slug('complaints-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('complaints-schema-field-')
-        }
-
-    def get_uof_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('uof-schema-introduction'),
-            'footer': self.get_block_by_slug('uof-schema-footer'),
-            'disclaimer': self.get_block_by_slug('uof-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('uof-schema-field-')
-        }
-
-    def get_ois_schema_blocks(self):
-        return {
-            'introduction': self.get_block_by_slug('ois-schema-introduction'),
-            'footer': self.get_block_by_slug('ois-schema-footer'),
-            'disclaimer': self.get_block_by_slug('ois-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('ois-schema-field-')
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
         }
 
     def get_assaults_blocks(self):
+        blocks = PageBlockLookup.get_assaults_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('assaults-introduction'),
-            'first-block': self.get_block_by_slug('assaults-by-service-type'),
-            'blocks': self.get_blocks_by_slugs([
-                'assaults-by-force-type',
-                'assaults-by-officer'
-            ])
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
+        }
+
+    def get_complaint_schema_blocks(self):
+        blocks = PageBlockLookup.get_complaint_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
+        }
+
+    def get_uof_schema_blocks(self):
+        blocks = PageBlockLookup.get_uof_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
+        }
+
+    def get_ois_schema_blocks(self):
+        blocks = PageBlockLookup.get_ois_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
         }
 
     def get_assaults_schema_blocks(self):
+        blocks = PageBlockLookup.get_assaults_schema_blocks(self.short_name)
         return {
-            'introduction': self.get_block_by_slug('assaults-schema-introduction'),
-            'footer': self.get_block_by_slug('assaults-schema-footer'),
-            'disclaimer': self.get_block_by_slug('assaults-schema-disclaimer'),
-            'blocks': self.get_blocks_by_slug_startswith('assaults-schema-field-')
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
         }
 
     def get_introduction_blocks(self):
@@ -174,12 +161,24 @@ class Department(SurrogatePK, Model):
 
         return next_block
 
-    def get_blocks_by_slugs(self, slugs):
-        arr = [b for b in self.chart_blocks if b.slug in slugs]
-        try:
-            arr.sort(key=lambda k: k.order)
-        except TypeError:
-            pass
+    def get_blocks_by_slugs(self, slugs, sort_by_order=False):
+        ''' Get chart blocks matching the passed list of slugs
+        '''
+        arr = []
+        if sort_by_order:
+            arr = [b for b in self.chart_blocks if b.slug in slugs]
+            try:
+                arr.sort(key=lambda k: k.order)
+            except TypeError:
+                pass
+
+        # return the blocks in the order the slugs were passed
+        else:
+            for b in slugs:
+                block = ChartBlock.query.filter_by(department_id=self.id, slug=b).first()
+                if block:
+                    arr.append(block)
+
         return arr
 
     def get_blocks_by_slug_startswith(self, partial_slug):
@@ -198,46 +197,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
-                         "useOfForceReason", "officerForceType", "disposition",
-                         "serviceType", "arrestMade", "arrestCharges", "residentInjured",
-                         "residentHospitalized", "residentCondition", "officerInjured",
-                         "officerHospitalized", "officerCondition", "residentRace",
-                         "residentSex", "residentAge", "officerRace", "officerSex",
-                         "officerAge", "officerYearsOfService", "officerIdentifier"])
+        uof_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(self.short_name))
 
-        use_of_force_incidents = self.use_of_force_incidents
+        csv_schema = uof_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
+        use_of_force_incidents = uof_class.query.all()
 
         for incident in use_of_force_incidents:
-            occured_date = coalesce_date(incident.occured_date)
-            values = [
-                incident.opaque_id,
-                occured_date,
-                incident.division,
-                incident.precinct,
-                incident.shift,
-                incident.beat,
-                incident.use_of_force_reason,
-                incident.officer_force_type,
-                incident.disposition,
-                incident.service_type,
-                incident.arrest_made,
-                incident.arrest_charges,
-                incident.resident_injured,
-                incident.resident_hospitalized,
-                incident.resident_condition,
-                incident.officer_injured,
-                incident.officer_hospitalized,
-                incident.officer_condition,
-                incident.resident_race,
-                incident.resident_sex,
-                incident.resident_age,
-                incident.officer_race,
-                incident.officer_sex,
-                incident.officer_age,
-                incident.officer_years_of_service,
-                incident.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -247,38 +224,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift", "beat",
-                         "disposition", "residentWeaponUsed", "officerWeaponUsed",
-                         "serviceType", "residentCondition", "officerCondition",
-                         "residentRace", "residentSex", "residentAge", "officerRace",
-                         "officerSex", "officerAge", "officerYearsOfService",
-                         "officerIdentifier"])
+        ois_class = getattr(importlib.import_module("comport.data.models"), "OfficerInvolvedShooting{}".format(self.short_name))
 
-        officer_involved_shootings = self.officer_involved_shootings
+        csv_schema = ois_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
+        officer_involved_shootings = ois_class.query.all()
+
         for incident in officer_involved_shootings:
-            occured_date = coalesce_date(incident.occured_date)
-            values = [
-                incident.opaque_id,
-                occured_date,
-                incident.division,
-                incident.precinct,
-                incident.shift,
-                incident.beat,
-                incident.disposition,
-                incident.resident_weapon_used,
-                incident.officer_weapon_used,
-                incident.service_type,
-                incident.resident_condition,
-                incident.officer_condition,
-                incident.resident_race,
-                incident.resident_sex,
-                incident.resident_age,
-                incident.officer_race,
-                incident.officer_sex,
-                incident.officer_age,
-                incident.officer_years_of_service,
-                incident.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -288,37 +251,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "occurredDate", "division", "district", "shift",
-                         "beat", "serviceType", "source", "allegationType",
-                         "allegation", "finding", "residentRace", "residentSex",
-                         "residentAge", "officerRace", "officerSex", "officerAge",
-                         "officerYearsOfService", "officerIdentifier"])
+        complaint_class = getattr(importlib.import_module("comport.data.models"), "CitizenComplaint{}".format(self.short_name))
 
-        complaints = self.citizen_complaints
+        csv_schema = complaint_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
+        complaints = complaint_class.query.all()
 
         for complaint in complaints:
-            occured_date = coalesce_date(complaint.occured_date)
-            values = [
-                complaint.opaque_id,
-                occured_date,
-                complaint.division,
-                complaint.precinct,
-                complaint.shift,
-                complaint.beat,
-                complaint.service_type,
-                complaint.source,
-                complaint.allegation_type,
-                complaint.allegation,
-                complaint.disposition,
-                complaint.resident_race,
-                complaint.resident_sex,
-                complaint.resident_age,
-                complaint.officer_race,
-                complaint.officer_sex,
-                complaint.officer_age,
-                complaint.officer_years_of_service,
-                complaint.officer_identifier
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(complaint, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()
@@ -328,23 +278,24 @@ class Department(SurrogatePK, Model):
 
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
 
-        writer.writerow(["id", "officerIdentifier", "serviceType", "forceType", "assignment",
-                         "arrestMade", "officerInjured", "officerKilled", "reportFiled"])
+        assaults_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(self.short_name))
 
-        incidents = self.assaults_on_officers
+        csv_schema = assaults_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
+        incidents = assaults_class.query.all()
 
         for incident in incidents:
-            values = [
-                incident.opaque_id,
-                incident.officer_identifier,
-                incident.service_type,
-                incident.force_type,
-                incident.assignment,
-                incident.arrest_made,
-                incident.officer_injured,
-                incident.officer_killed,
-                incident.report_filed
-            ]
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var == "occured_date":
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
             writer.writerow(values)
 
         return output.getvalue()

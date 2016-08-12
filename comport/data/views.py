@@ -2,17 +2,14 @@
 from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
-from comport.data.models import UseOfForceIncident, CitizenComplaint, OfficerInvolvedShooting, AssaultOnOfficer
-from comport.utils import parse_date, parse_int, send_slack_message
-
-from .cleaners import Cleaners
+from comport.utils import send_slack_message
 
 import json
+import importlib
 from datetime import datetime
 
 
-blueprint = Blueprint("data", __name__, url_prefix='/data',
-                      static_folder="../static")
+blueprint = Blueprint("data", __name__, url_prefix='/data', static_folder="../static")
 
 
 @blueprint.route("/heartbeat", methods=['POST'])
@@ -52,105 +49,19 @@ def heartbeat():
 def use_of_force():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
-    department_id = extractor.first_department().id
-    j = request.json
+    department = extractor.first_department()
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
-    cleaner = Cleaners()
 
-    for incident in j['data']:
+    uof_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department.short_name))
 
-        # capitalize the location
-        incident["division"] = cleaner.capitalize(incident["division"])
-        incident["precinct"] = cleaner.capitalize(incident["precinct"])
-        incident["shift"] = cleaner.capitalize(incident["shift"])
-        incident["beat"] = cleaner.capitalize(incident["beat"])
-        # clean force type, race, gender
-        incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
-        incident["residentRace"] = cleaner.race(incident["residentRace"])
-        incident["residentSex"] = cleaner.sex(incident["residentSex"])
-        incident["officerRace"] = cleaner.race(incident["officerRace"])
-        incident["officerSex"] = cleaner.sex(incident["officerSex"])
-        # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
-        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
-        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
-
-        found_incident = UseOfForceIncident.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            department_id=department_id,
-            officer_identifier=incident["officerIdentifier"],
-            officer_force_type=incident["officerForceType"]
-        ).first()
-
-        occured_date = parse_date(incident["occuredDate"])
-
-        if not found_incident:
-            found_incident = UseOfForceIncident.create(
-                department_id=department_id,
-                opaque_id=incident["opaqueId"],
-                occured_date=occured_date,
-                division=incident["division"],
-                precinct=incident["precinct"],
-                shift=incident["shift"],
-                beat=incident["beat"],
-                disposition=incident["disposition"],
-                census_tract=None,
-                officer_force_type=incident["officerForceType"],
-                use_of_force_reason=incident["useOfForceReason"],
-                service_type=incident["serviceType"],
-                arrest_made=incident["arrestMade"],
-                arrest_charges=incident["arrestCharges"],
-                resident_weapon_used=incident["residentWeaponUsed"],
-                resident_injured=incident["residentInjured"],
-                resident_hospitalized=incident["residentHospitalized"],
-                officer_injured=incident["officerInjured"],
-                officer_hospitalized=incident["officerHospitalized"],
-                resident_race=incident["residentRace"],
-                resident_sex=incident["residentSex"],
-                resident_age=incident["residentAge"],
-                resident_condition=incident["residentCondition"],
-                officer_identifier=incident["officerIdentifier"],
-                officer_race=incident["officerRace"],
-                officer_sex=incident["officerSex"],
-                officer_age=incident["officerAge"],
-                officer_years_of_service=incident["officerYearsOfService"],
-                officer_condition=incident["officerCondition"]
-            )
+    for incident in request_json['data']:
+        added = uof_class.add_or_update_incident(department, incident)
+        if added is True:
             added_rows += 1
-            continue
-
-        found_incident.department_id = department_id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.occured_date = occured_date
-        found_incident.division = incident["division"]
-        found_incident.precinct = incident["precinct"]
-        found_incident.shift = incident["shift"]
-        found_incident.beat = incident["beat"]
-        found_incident.disposition = incident["disposition"]
-        found_incident.census_tract = None
-        found_incident.officer_force_type = incident["officerForceType"]
-        found_incident.use_of_force_reason = incident["useOfForceReason"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.arrest_made = incident["arrestMade"]
-        found_incident.arrest_charges = incident["arrestCharges"]
-        found_incident.resident_weapon_used = incident["residentWeaponUsed"]
-        found_incident.resident_injured = incident["residentInjured"]
-        found_incident.resident_hospitalized = incident["residentHospitalized"]
-        found_incident.officer_injured = incident["officerInjured"]
-        found_incident.officer_hospitalized = incident["officerHospitalized"]
-        found_incident.resident_race = incident["residentRace"]
-        found_incident.resident_sex = incident["residentSex"]
-        found_incident.resident_age = incident["residentAge"]
-        found_incident.resident_condition = incident["residentCondition"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_race = incident["officerRace"]
-        found_incident.officer_sex = incident["officerSex"]
-        found_incident.officer_age = incident["officerAge"]
-        found_incident.officer_years_of_service = incident["officerYearsOfService"]
-        found_incident.officer_condition = incident["officerCondition"]
-        found_incident.save()
-        updated_rows += 1
+        elif added is False:
+            updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None
@@ -163,91 +74,19 @@ def use_of_force():
 def officer_involved_shooting():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
-    department_id = extractor.first_department().id
+    department = extractor.first_department()
     request_json = request.json
     added_rows = 0
     updated_rows = 0
-    cleaner = Cleaners()
+
+    ois_class = getattr(importlib.import_module("comport.data.models"), "OfficerInvolvedShooting{}".format(department.short_name))
 
     for incident in request_json['data']:
-
-        # capitalize the location
-        incident["division"] = cleaner.capitalize(incident["division"])
-        incident["precinct"] = cleaner.capitalize(incident["precinct"])
-        incident["shift"] = cleaner.capitalize(incident["shift"])
-        incident["beat"] = cleaner.capitalize(incident["beat"])
-        # clean weapon, race, gender
-        incident["residentWeaponUsed"] = cleaner.resident_weapon_used(incident["residentWeaponUsed"])
-        incident["residentSex"] = cleaner.sex(incident["residentSex"])
-        incident["residentRace"] = cleaner.race(incident["residentRace"])
-        incident["officerSex"] = cleaner.sex(incident["officerSex"])
-        incident["officerRace"] = cleaner.race(incident["officerRace"])
-        # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
-        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
-        # and values that might've been sent as strings are integers
-        incident["officerYearsOfService"] = cleaner.string_to_integer(incident["officerYearsOfService"])
-
-        found_incident = OfficerInvolvedShooting.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            department_id=department_id,
-            officer_identifier=incident["officerIdentifier"]
-        ).first()
-
-        occured_date = parse_date(incident["occuredDate"])
-
-        if not found_incident:
-            found_incident = OfficerInvolvedShooting.create(
-                department_id=department_id,
-                opaque_id=incident["opaqueId"],
-                service_type=incident["serviceType"],
-                occured_date=occured_date,
-                division=incident["division"],
-                precinct=incident["precinct"],
-                shift=incident["shift"],
-                beat=incident["beat"],
-                disposition=incident["disposition"],
-                resident_race=incident["residentRace"],
-                resident_sex=incident["residentSex"],
-                resident_age=incident["residentAge"],
-                resident_weapon_used=incident["residentWeaponUsed"],
-                resident_condition=incident["residentCondition"],
-                officer_identifier=incident["officerIdentifier"],
-                officer_weapon_used=incident["officerForceType"],
-                officer_race=incident["officerRace"],
-                officer_sex=incident["officerSex"],
-                officer_age=incident["officerAge"],
-                officer_years_of_service=parse_int(incident["officerYearsOfService"]),
-                officer_condition=incident["officerCondition"],
-                census_tract=None
-            )
+        added = ois_class.add_or_update_incident(department, incident)
+        if added is True:
             added_rows += 1
-            continue
-
-        found_incident.department_id = department_id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.occured_date = occured_date
-        found_incident.division = incident["division"]
-        found_incident.precinct = incident["precinct"]
-        found_incident.shift = incident["shift"]
-        found_incident.beat = incident["beat"]
-        found_incident.disposition = incident["disposition"]
-        found_incident.resident_race = incident["residentRace"]
-        found_incident.resident_sex = incident["residentSex"]
-        found_incident.resident_age = incident["residentAge"]
-        found_incident.resident_weapon_used = incident["residentWeaponUsed"]
-        found_incident.resident_condition = incident["residentCondition"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_weapon_used = incident["officerForceType"]
-        found_incident.officer_race = incident["officerRace"]
-        found_incident.officer_sex = incident["officerSex"]
-        found_incident.officer_age = incident["officerAge"]
-        found_incident.officer_years_of_service = parse_int(incident["officerYearsOfService"])
-        found_incident.officer_condition = incident["officerCondition"]
-        found_incident.census_tract = None
-        found_incident.save()
-        updated_rows += 1
+        elif added is False:
+            updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None
@@ -260,101 +99,19 @@ def officer_involved_shooting():
 def complaints():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
-    department_id = extractor.first_department().id
-    j = request.json
+    department = extractor.first_department()
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
-    cleaner = Cleaners()
 
-    for incident in j['data']:
-        # make sure values that might've been sent as integers are strings
-        incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
-        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
-        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
-        # capitalize all the fields in the incident
-        incident = cleaner.capitalize_incident(incident)
-        # clean sex & race
-        incident["residentSex"] = cleaner.sex(incident["residentSex"])
-        incident["residentRace"] = cleaner.race(incident["residentRace"])
-        incident["officerSex"] = cleaner.sex(incident["officerSex"])
-        incident["officerRace"] = cleaner.race(incident["officerRace"])
+    complaint_class = getattr(importlib.import_module("comport.data.models"), "CitizenComplaint{}".format(department.short_name))
 
-        found_incident = CitizenComplaint.query.filter_by(
-            opaque_id=incident["opaqueId"],
-            allegation_type=incident["allegationType"],
-            allegation=incident["allegation"],
-            officer_identifier=incident["officerIdentifier"],
-            department_id=department_id,
-            resident_race=incident["residentRace"],
-            resident_sex=incident["residentSex"],
-            resident_age=incident["residentAge"]
-        ).first()
-
-        occured_date = parse_date(incident["occuredDate"])
-
-        if not found_incident:
-
-            multiple_complaintant_check = CitizenComplaint.query.filter_by(
-                opaque_id=incident["opaqueId"],
-                allegation_type=incident["allegationType"],
-                allegation=incident["allegation"],
-                officer_identifier=incident["officerIdentifier"],
-                department_id=department_id
-            ).first()
-
-            if multiple_complaintant_check:
-                continue
-
-            found_incident = CitizenComplaint.create(
-                department_id=department_id,
-                opaque_id=incident["opaqueId"],
-                service_type=incident["serviceType"],
-                source=incident["source"],
-                occured_date=occured_date,
-                division=incident["division"],
-                precinct=incident["precinct"],
-                shift=incident["shift"],
-                beat=incident["beat"],
-                allegation_type=incident["allegationType"],
-                allegation=incident["allegation"],
-                disposition=incident["disposition"],
-                resident_race=incident["residentRace"],
-                resident_sex=incident["residentSex"],
-                resident_age=incident["residentAge"],
-                officer_identifier=incident["officerIdentifier"],
-                officer_race=incident["officerRace"],
-                officer_sex=incident["officerSex"],
-                officer_age=incident["officerAge"],
-                officer_years_of_service=incident["officerYearsOfService"],
-                census_tract=None
-            )
-
+    for incident in request_json['data']:
+        added = complaint_class.add_or_update_incident(department, incident)
+        if added is True:
             added_rows += 1
-            continue
-
-        found_incident.department_id = department_id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.source = incident["source"]
-        found_incident.occured_date = occured_date
-        found_incident.division = incident["division"]
-        found_incident.precinct = incident["precinct"]
-        found_incident.shift = incident["shift"]
-        found_incident.beat = incident["beat"]
-        found_incident.allegation_type = incident["allegationType"]
-        found_incident.allegation = incident["allegation"]
-        found_incident.disposition = incident["disposition"]
-        found_incident.resident_race = incident["residentRace"]
-        found_incident.resident_sex = incident["residentSex"]
-        found_incident.resident_age = incident["residentAge"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_race = incident["officerRace"]
-        found_incident.officer_sex = incident["officerSex"]
-        found_incident.officer_age = incident["officerAge"]
-        found_incident.officer_years_of_service = incident["officerYearsOfService"]
-        found_incident.census_tract = None
-        found_incident.save()
-        updated_rows += 1
+        elif added is False:
+            updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None
@@ -366,53 +123,19 @@ def complaints():
 def assaults():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
-    department_id = extractor.first_department().id
-    j = request.json
+    department = extractor.first_department()
+    request_json = request.json
     added_rows = 0
     updated_rows = 0
-    cleaner = Cleaners()
 
-    for incident in j['data']:
-        # capitalize all the fields in the incident
-        incident = cleaner.capitalize_incident(incident)
+    assaults_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(department.short_name))
 
-        found_incident = AssaultOnOfficer.query.filter_by(
-            department_id=department_id,
-            opaque_id=incident["opaqueId"],
-            officer_identifier=incident["officerIdentifier"]
-        ).first()
-
-        if not found_incident:
-
-            found_incident = AssaultOnOfficer.create(
-                department_id=department_id,
-                opaque_id=incident["opaqueId"],
-                officer_identifier=incident["officerIdentifier"],
-                service_type=incident["serviceType"],
-                force_type=incident["forceType"],
-                assignment=incident['assignment'],
-                arrest_made=incident['arrestMade'],
-                officer_injured=incident['officerInjured'],
-                officer_killed=incident['officerKilled'],
-                report_filed=incident['reportFiled']
-            )
-
+    for incident in request_json['data']:
+        added = assaults_class.add_or_update_incident(department, incident)
+        if added is True:
             added_rows += 1
-            continue
-
-        found_incident.department_id = department_id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.force_type = incident["forceType"]
-        found_incident.force_type = incident["forceType"]
-        found_incident.assignment = incident["assignment"]
-        found_incident.arrest_made = incident["arrestMade"]
-        found_incident.officer_injured = incident["officerInjured"]
-        found_incident.officer_killed = incident["officerKilled"]
-        found_incident.report_filed = incident["reportFiled"]
-        found_incident.save()
-        updated_rows += 1
+        elif added is False:
+            updated_rows += 1
 
     extractor.next_month = None
     extractor.next_year = None
