@@ -42,7 +42,7 @@ class PageBlockLookup:
                 'blocks': [
                     'ois-weapon-type',
                     'officer-demographics',
-                    'ois-race',
+                    'ois-race'
                 ]
             }
 
@@ -53,7 +53,7 @@ class PageBlockLookup:
             'blocks': [
                 'ois-weapon-type',
                 'officer-demographics',
-                'ois-race',
+                'ois-race'
             ]
         }
 
