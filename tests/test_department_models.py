@@ -77,3 +77,37 @@ class TestDepartmentModel:
         assert before_blocks['blocks'][1].slug == after_blocks['blocks'][0].slug
         assert after_blocks['blocks'][-1].order == 100
         assert before_blocks['blocks'][0].slug == after_blocks['blocks'][-1].slug
+
+    def test_get_blocks_by_slugs_order(self):
+        ''' We can get blocks sorted by order or in the order the slugs were passed.
+        '''
+        department = Department.create(name="Inner Mongolia Police Department", short_name="IMPD", load_defaults=True)
+
+        # get some complaint schema blocks
+        blocks = department.get_complaint_schema_blocks()['blocks']
+        assert len(blocks) >= 6
+        blocks = blocks[:6]
+
+        # make sure our test will be valid
+        orders = [b.order for b in blocks]
+        assert orders == sorted(orders)
+
+        # make a list of slugs out of order
+        ordered_slugs = [b.slug for b in blocks]
+        mixedup_slugs = ordered_slugs.copy()
+        mixedup_slugs = [ordered_slugs[i] for i in [5, 3, 1, 0, 2, 4]]
+        assert ordered_slugs != mixedup_slugs
+
+        # now request an ordered list of chart blocks from the mixed up list
+        check_ordered_blocks = department.get_blocks_by_slugs(mixedup_slugs, sort_by_order=True)
+        check_ordered_slugs = [b.slug for b in check_ordered_blocks]
+        assert len(check_ordered_blocks) == 6
+        assert check_ordered_slugs == ordered_slugs
+        assert check_ordered_slugs != mixedup_slugs
+
+        # and request a list of chart blocks in the order the slugs are passed
+        check_mixedup_blocks = department.get_blocks_by_slugs(mixedup_slugs, sort_by_order=False)
+        check_mixedup_slugs = [b.slug for b in check_mixedup_blocks]
+        assert len(check_mixedup_slugs) == 6
+        assert check_mixedup_slugs != ordered_slugs
+        assert check_mixedup_slugs == mixedup_slugs
