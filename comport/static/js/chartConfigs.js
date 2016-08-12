@@ -100,17 +100,17 @@ var configs = {
     addOther: true,
     },
 
-    'uof-by-assignment': {
-      chartType: 'flagHistogram',
-      filter: last12Months,
-      keyFunc: function(d){ return d.assignment; },
-      sortWith: function(d){ return -d.count; },
-      x: 'type',
-      xFunc: function(b){ return b[0].assignment; },
-      y: 'count',
-      yFunc: function(b){ return b.length; },
-      addOther: true,
-      },
+  'uof-by-assignment': {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
 
   'uof-force-type': {
     chartType: 'flagHistogram',
@@ -123,7 +123,6 @@ var configs = {
     yFunc: function(b){ return b.length; },
     addOther: true,
     },
-
 
   'uof-officer-injuries': {
     chartType: 'percent',
@@ -253,7 +252,6 @@ var configs = {
     addOther: true,
     },
 
-
   'complaints-by-allegation-type': {
     filter: last12Months,
     chartType: 'flagHistogram',
@@ -329,7 +327,6 @@ var configs = {
     dataFunc: officerComplaintsCount,
   },
 
-
   'ois-by-inc-district': {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -354,26 +351,25 @@ var configs = {
     addOther: false,
     },
 
+  'ois-weapon-type': {
+    chartType: 'flagHistogram',
+    filter: last12Months,
+    keyFunc: function(d){return d.officerWeaponUsed; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){  return b[0].officerWeaponUsed; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+    },
 
-    'ois-weapon-type': {
-      chartType: 'flagHistogram',
-      filter: last12Months,
-      keyFunc: function(d){return d.officerWeaponUsed; },
-      sortWith: function(d){ return -d.count; },
-      x: 'type',
-      xFunc: function(b){  return b[0].officerWeaponUsed; },
-      y: 'count',
-      yFunc: function(b){ return b.length; },
-      addOther: false,
-      },
-
-    'ois-race': {
-      filter: last12Months,
-      chartType: 'matrix',
-      dataFunc: raceMatrix,
-      xAxisTitle: "Resident",
-      yAxisTitle: "Officer",
-      },
+  'ois-race': {
+    filter: last12Months,
+    chartType: 'matrix',
+    dataFunc: raceMatrix,
+    xAxisTitle: "Resident",
+    yAxisTitle: "Officer",
+    },
 
 };
 
