@@ -5,6 +5,7 @@ from .page_block_lookup import PageBlockLookup
 from flask import abort
 from comport.utils import coalesce_date
 from comport.user.models import User, Role
+from comport.content.models import ChartBlock
 import csv
 import io
 import json
@@ -160,12 +161,24 @@ class Department(SurrogatePK, Model):
 
         return next_block
 
-    def get_blocks_by_slugs(self, slugs):
-        arr = [b for b in self.chart_blocks if b.slug in slugs]
-        try:
-            arr.sort(key=lambda k: k.order)
-        except TypeError:
-            pass
+    def get_blocks_by_slugs(self, slugs, sort_by_order=False):
+        ''' Get chart blocks matching the passed list of slugs
+        '''
+        arr = []
+        if sort_by_order:
+            arr = [b for b in self.chart_blocks if b.slug in slugs]
+            try:
+                arr.sort(key=lambda k: k.order)
+            except TypeError:
+                pass
+
+        # return the blocks in the order the slugs were passed
+        else:
+            for b in slugs:
+                block = ChartBlock.query.filter_by(department_id=self.id, slug=b).first()
+                if block:
+                    arr.append(block)
+
         return arr
 
     def get_blocks_by_slug_startswith(self, partial_slug):
