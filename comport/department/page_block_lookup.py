@@ -66,7 +66,6 @@ class PageBlockLookup:
                 'first-block': 'complaints-by-month',
                 'blocks': [
                     'complaints-by-allegation',
-                    'complaints-by-allegation-type',
                     'complaints-by-disposition',
                     'complaints-by-assignment',
                     'officer-demographics',
