@@ -693,7 +693,6 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
             )
             row_added = True
 
-
         found_incident.department_id = department.id
         found_incident.opaque_id = incident["opaqueId"]
         found_incident.occured_date = parse_date(incident["occuredDate"])
