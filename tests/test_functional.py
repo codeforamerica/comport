@@ -446,6 +446,18 @@ class TestLoggingIn:
         assert response.status_code == 401
         assert response.html.find_all('a')[1]['href'] == '/login/'
 
+    def test_user_is_logged_in (self, user, testapp):
+        res = testapp.get("/login/")
+        # Fills out login form in navbar
+        form = res.forms['loginForm']
+        form['username'] = user.username
+        form['password'] = 'myprecious'
+        # Submits
+        res = form.submit().follow()
+        res = testapp.get("/login/")
+        # sees alert
+        assert 'Logged in as ' + user.username  in res
+
 @pytest.mark.usefixtures('db')
 class TestUserRoles:
 
