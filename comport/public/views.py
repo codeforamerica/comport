@@ -44,7 +44,7 @@ def login():
                     return render_template("public/login.html", form=form, published=True)
         else:
             flash_errors(form)
-    return render_template("public/login.html", form=form, published=True)
+    return render_template("public/login.html", form=form)
 
 
 @blueprint.route('/logout/')
