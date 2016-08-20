@@ -38,7 +38,9 @@ def login():
                 if request.args.get("next"):
                     return redirect(request.args.get("next"))
                 if form.user.first_department():
-                    return redirect(url_for("department.department_dashboard", department_id=form.user.first_department().id))
+                    # :TODO: temporarily redirecting to the public complaints page while content editing is happening
+                    return redirect(url_for("department.public_complaints", short_name=form.user.first_department().short_name))
+                    # return redirect(url_for("department.department_dashboard", department_id=form.user.first_department().id))
                 else:
                     flash("You are not registered in any department. Please contact support.", 'alert alert-danger')
                     return render_template("public/login.html", form=form, published=True)
