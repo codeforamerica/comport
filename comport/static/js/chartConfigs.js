@@ -331,7 +331,7 @@ var configs = {
     chartType: 'flagHistogram',
     // TODO: temporary for testing
     // filter: last12Months,
-    filter: uniqueForKeys('id', 'district'),
+    filter: uniqueForKeysInLast12Months('id', 'district'),
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
