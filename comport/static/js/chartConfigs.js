@@ -327,15 +327,28 @@ var configs = {
     dataFunc: officerComplaintsCount,
   },
 
+  // unique officer-involved shootings by incident and district
   'ois-by-inc-district': {
     chartType: 'flagHistogram',
-    // TODO: temporary for testing
-    // filter: last12Months,
     filter: uniqueForKeysInLast12Months('id', 'district'),
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+    },
+
+  // weapons used by officers in officer-involved shootings
+  // there may be more than one weapon per incident
+  'ois-weapon-type': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'officerIdentifier', 'officerWeaponUsed'),
+    keyFunc: function(d){return d.officerWeaponUsed; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){  return b[0].officerWeaponUsed; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: false,
@@ -348,18 +361,6 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: false,
-    },
-
-  'ois-weapon-type': {
-    chartType: 'flagHistogram',
-    filter: last12Months,
-    keyFunc: function(d){return d.officerWeaponUsed; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){  return b[0].officerWeaponUsed; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: false,
