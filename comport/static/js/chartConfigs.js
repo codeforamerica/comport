@@ -329,7 +329,9 @@ var configs = {
 
   'ois-by-inc-district': {
     chartType: 'flagHistogram',
-    filter: last12Months,
+    // TODO: temporary for testing
+    // filter: last12Months,
+    filter: uniqueForKeys('id', 'district'),
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
