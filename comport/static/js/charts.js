@@ -309,8 +309,8 @@ function uniqueForKeys(){
   // combination of the values of those columns
    //   returns [
    //     {id:1, shift: 'a', beat: 'b'},
-   //     {id:1, shift: 'c, beat: 'b'},
-   //     {id:2, shift: 'a, beat: 'b'},
+   //     {id:1, shift: 'c', beat: 'b'},
+   //     {id:2, shift: 'a', beat: 'b'},
    // ]
   function concatValues(values){
     var separator = '-';
@@ -320,7 +320,7 @@ function uniqueForKeys(){
     });
     return result;
   }
-  keys = arguments;
+  var keys = Array.prototype.slice.call(arguments);
   var grouper = d3.nest()
     .key(function (d){
       var values = keys.map(function(k){ return d[k]; });
