@@ -300,6 +300,45 @@ function parseData(rows){
   return rows;
 }
 
+function uniqueForKeys(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  // returns an array of objects representing each unique
+  // combination of the values of those columns
+   //   returns [
+   //     {id:1, shift: 'a', beat: 'b'},
+   //     {id:1, shift: 'c, beat: 'b'},
+   //     {id:2, shift: 'a, beat: 'b'},
+   // ]
+  function concatValues(values){
+    var separator = '-';
+    var result = '';
+    values.forEach(function(val){
+      result += (separator + val);
+    });
+    return result;
+  }
+  keys = arguments;
+  var grouper = d3.nest()
+    .key(function (d){
+      var values = keys.map(function(k){ return d[k]; });
+      return concatValues(values);
+    }).rollup(function(leaves){
+      // each 'leaf' has the same values for the keys
+      var datum = {};
+      keys.forEach(function(k){
+        datum[k] = leaves[0][k];
+      });
+      return datum;
+    })
+    return function(unfilteredRows){
+      return grouper.map(unfilteredRows, d3.map)
+        .values();
+    };
+}
+
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
 
