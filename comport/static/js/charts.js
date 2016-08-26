@@ -339,6 +339,20 @@ function uniqueForKeys(){
     };
 }
 
+function uniqueForKeysInLast12Months(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // but first prefilters down to the last 12 months
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  var args = Array.prototype.slice.call(arguments);
+  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args)
+  return function(rows, config){
+    var prefiltered = last12Months(rows, config);
+    return uniqueFilter(prefiltered);
+  }
+}
+
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
 
