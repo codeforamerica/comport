@@ -271,16 +271,6 @@ function addOtherCategory(data){
   });
 }
 
-function last12Months(rows, config){
-  // offset today by 12 d3-defined months in the past
-  var latestDate = d3.max(rows, function(d){ return d.date; })
-  var startDate = d3.time.month.offset(latestDate, -12);
-  config.dateSpan = [startDate, latestDate];
-  return rows.filter(function(r){
-    return startDate < r.date;
-  });
-}
-
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
 var dateTimeKey = "occurredDate";
@@ -298,6 +288,16 @@ function parseData(rows){
     return d.date;
   });
   return rows;
+}
+
+function last12Months(rows, config){
+  // offset today by 12 d3-defined months in the past
+  var latestDate = d3.max(rows, function(d){ return d.date; })
+  var startDate = d3.time.month.offset(latestDate, -12);
+  config.dateSpan = [startDate, latestDate];
+  return rows.filter(function(r){
+    return startDate < r.date;
+  });
 }
 
 function uniqueForKeys(){
