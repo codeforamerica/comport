@@ -90,7 +90,7 @@ var configs = {
 
   'uof-by-inc-district': {
     chartType: 'flagHistogram',
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'district', 'officerForceType'),
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
@@ -114,7 +114,7 @@ var configs = {
 
   'uof-force-type': {
     chartType: 'flagHistogram',
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'officerIdentifier', 'officerForceType'),
     keyFunc: function(d){ return d.officerForceType; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
