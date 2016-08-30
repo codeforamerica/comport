@@ -52,23 +52,6 @@ function complaintsGroupedByID(rows){
   return complaintGrouper.map(rows, d3.map).values();
 }
 
-function uniqueOfficerComplaints(rows){
-  var newSet = [];
-  var grouper = d3.nest()
-    .key(function (d){ return d.officerIdentifier; })
-    .key(function (d){ return d.id; });
-  var officerComplaintMap = grouper.map(rows, d3.map);
-  officerComplaintMap.forEach(function(offId, complaints){
-    newSet.push({
-      officerId: offId,
-      complaintCount: complaints.keys().length,
-      values: complaints
-    });
-  });
-  return newSet;
-}
-
-
 function raceKey( value ) {
   if( !value ){
     value = "";
@@ -173,11 +156,24 @@ function raceMatrix(config, data){
       subgroups.percent = ( total / totalComplaintCount );
     });
 
-
-
-
   counts.officerRaceTotals = officerRaceTotals;
   return counts;
+}
+
+function uniqueOfficerComplaints(rows){
+  var newSet = [];
+  var grouper = d3.nest()
+    .key(function (d){ return d.officerIdentifier; })
+    .key(function (d){ return d.id; });
+  var officerComplaintMap = grouper.map(rows, d3.map);
+  officerComplaintMap.forEach(function(offId, complaints){
+    newSet.push({
+      officerId: offId,
+      complaintCount: complaints.keys().length,
+      values: complaints
+    });
+  });
+  return newSet;
 }
 
 function officerComplaintsCount(config, data){
