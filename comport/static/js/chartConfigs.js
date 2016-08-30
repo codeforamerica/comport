@@ -226,6 +226,7 @@ var configs = {
     }
     },
 
+  // unique complaints per month
   'complaints-by-month': {
     chartType: 'mountainHistogram',
     filter: function(rows, config){
@@ -243,8 +244,9 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
+  // unique complaints by allegation
   'complaints-by-allegation': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'allegation'),
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegation; },
     sortWith: function(d){ return -d.count; },
@@ -255,8 +257,9 @@ var configs = {
     addOther: true,
     },
 
+  // unique complaints by allegation type
   'complaints-by-allegation-type': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'allegationType'),
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.allegationType; },
     sortWith: function(d){ return -d.count; },
@@ -267,8 +270,9 @@ var configs = {
     addOther: true,
     },
 
+  // unique complaints by district
   'complaints-by-precinct': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'district'),
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
@@ -291,8 +295,9 @@ var configs = {
     addOther: true,
     },
 
+  // unique complaints by finding
   'complaints-by-finding': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'finding'),
     chartType: 'flagHistogram',
     removeBlankX: true,
     keyFunc: function(d){ return d.finding; },
@@ -323,6 +328,7 @@ var configs = {
     yAxisTitle: "Officer",
   },
 
+  // unique complaints by officer
   'complaints-by-officer': {
     chartType: 'flagHistogram',
     x: "label",
