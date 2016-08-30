@@ -315,8 +315,9 @@ var configs = {
     }
     },
 
+  // unique complaints by assignment
   'complaints-by-assignment': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
     chartType: 'flagHistogram',
     keyFunc: function(d){ return d.assignment; },
     sortWith: function(d){ return -d.count; },
@@ -327,8 +328,9 @@ var configs = {
     addOther: true,
     },
 
+  // unique complaints by disposition
   'complaints-by-disposition': {
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'disposition'),
     chartType: 'flagHistogram',
     removeBlankX: true,
     keyFunc: function(d){ return d.disposition; },
