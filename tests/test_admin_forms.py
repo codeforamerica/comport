@@ -121,6 +121,21 @@ class TestAdminEditForms:
         assert soup.find("a", href="{}/edit/schema/ois".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/schema/assaultsonofficers".format(department.id)) is not None
 
+    def test_edit_and_preview_links_on_preview_page(self, testapp):
+        department = Department.create(name="Metropolis Police Department", short_name="MPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        for page in ['index', 'complaints', 'useofforce', 'ois', 'assaultsonofficers']:
+
+            response = testapp.get("/department/{}/preview/{}".format(department.id, page))
+            assert response.status_code == 200
+            soup = BeautifulSoup(response.text)
+            assert soup.find("a", href="/department/{}/edit/{}".format(department.id, page)) is not None
+            assert soup.find("a", href="/department/{}".format(department.id)) is not None
+
     def test_ois_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
@@ -524,3 +539,19 @@ class TestAdminEditForms:
         # the location of the redirect should be the preview page
         parsed = urlparse(response.location)
         assert parsed.path == "/department/{}/preview/schema/complaints".format(department.id)
+
+
+    def test_edit_and_preview_links_on_schema_preview_page(self, testapp):
+        department = Department.create(name="Metropolis Police Department", short_name="MPD", load_defaults=True)
+
+        # set up a user
+        log_in_user(testapp, department)
+
+        # make a request to specific front page
+        for page in ['complaints', 'useofforce', 'ois', 'assaultsonofficers']:
+
+            response = testapp.get("/department/{}/preview/schema/{}".format(department.id, page))
+            assert response.status_code == 200
+            soup = BeautifulSoup(response.text)
+            assert soup.find("a", href="/department/{}/edit/schema/{}".format(department.id, page)) is not None
+            assert soup.find("a", href="/department/{}".format(department.id)) is not None

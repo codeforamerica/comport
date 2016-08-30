@@ -234,6 +234,14 @@ button:active {
           box-sizing: border-box;
 }
 
+/* Admin Edit */
+.admin_edit_btn {
+  text-align: center;
+}
+.admin_edit_btn a {
+  color: #fff;
+}
+
 /* footer */
 
 footer {

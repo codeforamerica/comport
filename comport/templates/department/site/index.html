@@ -5,6 +5,15 @@
 {% endblock css %}
 
 {% block content %}
+{% if preview_mode %} 
+{% block edit_nav %}
+  <div class="admin_edit_btn">
+    <a href="/department/{{department.id}}/edit/{{endpoint_name}}" title="Edit"><button type="">Edit</button></a>
+    <a href="/department/{{department.id}}" title="Done"><button type="">Done</button></a>
+  </div>
+{% endblock edit_nav %}
+
+{% endif %}
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
     <h1>{{department.name}}</h1>
