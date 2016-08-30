@@ -213,7 +213,7 @@ var configs = {
   'complaints-by-year': {
     chartType: 'lineChart',
     filter: function(rows, config){
-      return allegationsToComplaints(rows, config);
+      return complaintsGroupedByID(rows, config);
     },
     keyFunc: function(d){ return d.date.getFullYear(); },
     dataMapAdjust: addMissingYears,
@@ -229,7 +229,7 @@ var configs = {
   'complaints-by-month': {
     chartType: 'mountainHistogram',
     filter: function(rows, config){
-      return allegationsToComplaints(last12Months(rows, config), config);
+      return complaintsGroupedByID(last12Months(rows, config), config);
     },
     keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
     sortWith: function(d){ return d.month; },

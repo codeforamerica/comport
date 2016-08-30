@@ -19,30 +19,32 @@ function unique(a, b){
   }
 }
 
-function allegationReducer(complaint, allegation){
-  var newObj = {};
-  for (key in complaint){
-    if( complaint.hasOwnProperty(key) ){
-      var complaintVal = complaint[key];
-      var allegationVal = allegation[key];
-      if( notEqual(complaintVal, allegationVal) ){
-          newObj[key] = unique(complaintVal, allegationVal);
+function complaintReducer(complaintA, complaintB){
+  // takes two complaint rows and combines them
+  // where there are colliding values, creates an array and stores both
+  var reducedComplaint = {};
+  for (key in complaintA){
+    if( complaintA.hasOwnProperty(key) ){
+      var complaintAVal = complaintA[key];
+      var complaintBVal = complaintB[key];
+      if( notEqual(complaintAVal, complaintBVal) ){
+          reducedComplaint[key] = unique(complaintAVal, complaintBVal);
       } else {
-        newObj[key] = complaint[key];
+        reducedComplaint[key] = complaintA[key];
       }
     }
   }
-  return newObj;
+  return reducedComplaint;
 }
 
-function allegationsToComplaints(rows){
+function complaintsGroupedByID(rows){
   // group complaints by id
   // each complaint has a unique ID, but there may be multiple rows of data for a single complaint
   // this function reduces one complaint's rows to a single object that has arrays for fields with colliding values
   var complaintGrouper = d3.nest()
     .key(function (d){ return d.id; })
     .rollup(function(allegations){
-      var complaint = allegations.reduce(allegationReducer);
+      var complaint = allegations.reduce(complaintReducer);
       complaint['allegations'] = allegations;
       return complaint;
     });
