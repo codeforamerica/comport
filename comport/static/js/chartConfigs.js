@@ -131,9 +131,10 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
+  // unique use of force incidents by assignment
   'uof-by-assignment': {
     chartType: 'flagHistogram',
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
     keyFunc: function(d){ return d.assignment; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
