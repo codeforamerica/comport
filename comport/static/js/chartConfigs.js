@@ -378,9 +378,10 @@ var configs = {
     yAxisTitle: "Officer",
     },
 
+  // unique officer-involved shootings by assignment
   'ois-by-assignment': {
     chartType: 'flagHistogram',
-    filter: last12Months,
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
     keyFunc: function(d){ return d.assignment; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
