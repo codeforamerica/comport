@@ -19,6 +19,49 @@ var configs = {
     //  sortFunc,
     // ]
 
+  // officer demographics
+  'officer-demographics': {
+    hideDate: true,
+    chartType: 'symmetricalFlags',
+    dataFunc: function(){ return DEMOGRAPHICS; }
+    },
+
+  // unique types of force used by officers
+  // will be more types of force used than incidents
+  'uof-force-type': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'officerIdentifier', 'officerForceType'),
+    keyFunc: function(d){ return d.officerForceType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].officerForceType; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique use of force incidents by district
+  'uof-by-inc-district': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'district'),
+    keyFunc: function(d){ return d.district; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // racial breakdown in use of force incidents
+  'uof-race': {
+    filter: last12Months,
+    chartType: 'matrix',
+    dataFunc: raceMatrix,
+    xAxisTitle: "Resident",
+    yAxisTitle: "Officer",
+    },
+
   'uof-by-year': {
     chartType: 'lineChart',
     keyFunc: function(d){ return d.date.getFullYear(); },
@@ -88,19 +131,6 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  // unique use of force incidents by district
-  'uof-by-inc-district': {
-    chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'district'),
-    keyFunc: function(d){ return d.district; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].district; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
   'uof-by-assignment': {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -108,20 +138,6 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
-  // unique types of force used by officers
-  // will be more types of force used than incidents
-  'uof-force-type': {
-    chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'officerIdentifier', 'officerForceType'),
-    keyFunc: function(d){ return d.officerForceType; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].officerForceType; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
@@ -181,20 +197,6 @@ var configs = {
   'uof-dispositions-outcomes': {
     },
 
-  'officer-demographics': {
-    hideDate: true,
-    chartType: 'symmetricalFlags',
-    dataFunc: function(){ return DEMOGRAPHICS; }
-    },
-
-  'uof-race': {
-    filter: last12Months,
-    chartType: 'matrix',
-    dataFunc: raceMatrix,
-    xAxisTitle: "Resident",
-    yAxisTitle: "Officer",
-    },
-
   'uof-per-officer': {
     chartType: 'flagHistogram',
     },
@@ -208,22 +210,6 @@ var configs = {
     xFunc: function(b){ return experienceBuckets(b[0].officerYearsOfService); },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    },
-
-  'complaints-by-year': {
-    chartType: 'lineChart',
-    filter: function(rows, config){
-      return complaintsGroupedByID(rows, config);
-    },
-    keyFunc: function(d){ return d.date.getFullYear(); },
-    dataMapAdjust: addMissingYears,
-    x: 'year',
-    xFunc: function(b){ return b[0].date.getFullYear(); },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    postDraw: function(){
-      // add note to final year
-    }
     },
 
   // unique complaints per month
@@ -270,31 +256,6 @@ var configs = {
     addOther: true,
     },
 
-  // unique complaints by district
-  'complaints-by-precinct': {
-    filter: uniqueForKeysInLast12Months('id', 'district'),
-    chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.district; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].district; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
-  'complaints-by-assignment': {
-    filter: last12Months,
-    chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.assignment; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
   // unique complaints by finding
   'complaints-by-finding': {
     filter: uniqueForKeysInLast12Months('id', 'finding'),
@@ -308,18 +269,20 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  'complaints-by-disposition': {
-    filter: last12Months,
+  // unique complaints by district
+  'complaints-by-precinct': {
+    filter: uniqueForKeysInLast12Months('id', 'district'),
     chartType: 'flagHistogram',
-    removeBlankX: true,
-    keyFunc: function(d){ return d.disposition; },
+    keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].disposition; },
+    xFunc: function(b){ return b[0].district; },
     y: 'count',
     yFunc: function(b){ return b.length; },
+    addOther: true,
     },
 
+  // complaints by race of complainants and officers
   'complaints-by-demographic': {
     filter: last12Months,
     chartType: 'matrix',
@@ -335,6 +298,46 @@ var configs = {
     y: "count",
     dataFunc: officerComplaintsCount,
   },
+
+  'complaints-by-year': {
+    chartType: 'lineChart',
+    filter: function(rows, config){
+      return complaintsGroupedByID(rows, config);
+    },
+    keyFunc: function(d){ return d.date.getFullYear(); },
+    dataMapAdjust: addMissingYears,
+    x: 'year',
+    xFunc: function(b){ return b[0].date.getFullYear(); },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    postDraw: function(){
+      // add note to final year
+    }
+    },
+
+  'complaints-by-assignment': {
+    filter: last12Months,
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  'complaints-by-disposition': {
+    filter: last12Months,
+    chartType: 'flagHistogram',
+    removeBlankX: true,
+    keyFunc: function(d){ return d.disposition; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].disposition; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
 
   // unique officer-involved shootings by incident and district
   'ois-by-inc-district': {
@@ -363,6 +366,15 @@ var configs = {
     addOther: false,
     },
 
+  // officer-involved shootings by officer and resident race
+  'ois-race': {
+    filter: last12Months,
+    chartType: 'matrix',
+    dataFunc: raceMatrix,
+    xAxisTitle: "Resident",
+    yAxisTitle: "Officer",
+    },
+
   'ois-by-assignment': {
     chartType: 'flagHistogram',
     filter: last12Months,
@@ -373,14 +385,6 @@ var configs = {
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: false,
-    },
-
-  'ois-race': {
-    filter: last12Months,
-    chartType: 'matrix',
-    dataFunc: raceMatrix,
-    xAxisTitle: "Resident",
-    yAxisTitle: "Officer",
     },
 
 };
