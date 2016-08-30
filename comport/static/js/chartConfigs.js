@@ -41,6 +41,7 @@ var configs = {
     },
 
   // unique use of force incidents by district
+  // (IMPD only)
   'uof-by-inc-district': {
     chartType: 'flagHistogram',
     filter: uniqueForKeysInLast12Months('id', 'district'),
@@ -48,6 +49,20 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique use of force incidents by assignment
+  // (BPD only)
+  'uof-by-assignment': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
@@ -61,6 +76,8 @@ var configs = {
     xAxisTitle: "Resident",
     yAxisTitle: "Officer",
     },
+
+  // (begin) uof charts below are not currently in use
 
   'uof-by-year': {
     chartType: 'lineChart',
@@ -129,19 +146,6 @@ var configs = {
     xFunc: function(b){ return b[0].shift; },
     y: 'count',
     yFunc: function(b){ return b.length; },
-    },
-
-  // unique use of force incidents by assignment
-  'uof-by-assignment': {
-    chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'assignment'),
-    keyFunc: function(d){ return d.assignment; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
     },
 
   'uof-officer-injuries': {
@@ -213,6 +217,8 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
+  // (end) uof charts above are not currently in use
+
   // unique complaints per month
   'complaints-by-month': {
     chartType: 'mountainHistogram',
@@ -258,6 +264,7 @@ var configs = {
     },
 
   // unique complaints by finding
+  // (IMPD only)
   'complaints-by-finding': {
     filter: uniqueForKeysInLast12Months('id', 'finding'),
     chartType: 'flagHistogram',
@@ -270,7 +277,22 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
+  // unique complaints by disposition
+  // (BPD only)
+  'complaints-by-disposition': {
+    filter: uniqueForKeysInLast12Months('id', 'disposition'),
+    chartType: 'flagHistogram',
+    removeBlankX: true,
+    keyFunc: function(d){ return d.disposition; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].disposition; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
   // unique complaints by district
+  // (IMPD only)
   'complaints-by-precinct': {
     filter: uniqueForKeysInLast12Months('id', 'district'),
     chartType: 'flagHistogram',
@@ -278,6 +300,20 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique complaints by assignment
+  // (BPD only)
+  'complaints-by-assignment': {
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
@@ -300,6 +336,8 @@ var configs = {
     dataFunc: officerComplaintsCount,
   },
 
+  // (begin) complaints charts below are not currently in use
+
   'complaints-by-year': {
     chartType: 'lineChart',
     filter: function(rows, config){
@@ -316,33 +354,10 @@ var configs = {
     }
     },
 
-  // unique complaints by assignment
-  'complaints-by-assignment': {
-    filter: uniqueForKeysInLast12Months('id', 'assignment'),
-    chartType: 'flagHistogram',
-    keyFunc: function(d){ return d.assignment; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
-  // unique complaints by disposition
-  'complaints-by-disposition': {
-    filter: uniqueForKeysInLast12Months('id', 'disposition'),
-    chartType: 'flagHistogram',
-    removeBlankX: true,
-    keyFunc: function(d){ return d.disposition; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].disposition; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    },
+  // (end) complaints charts above are not currently in use
 
   // unique officer-involved shootings by incident and district
+  // (IMPD only)
   'ois-by-inc-district': {
     chartType: 'flagHistogram',
     filter: uniqueForKeysInLast12Months('id', 'district'),
@@ -350,6 +365,20 @@ var configs = {
     sortWith: function(d){ return -d.count; },
     x: 'type',
     xFunc: function(b){ return b[0].district; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+    },
+
+  // unique officer-involved shootings by assignment
+  // (BPD only)
+  'ois-by-assignment': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: false,
@@ -376,19 +405,6 @@ var configs = {
     dataFunc: raceMatrix,
     xAxisTitle: "Resident",
     yAxisTitle: "Officer",
-    },
-
-  // unique officer-involved shootings by assignment
-  'ois-by-assignment': {
-    chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'assignment'),
-    keyFunc: function(d){ return d.assignment; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: false,
     },
 
 };
