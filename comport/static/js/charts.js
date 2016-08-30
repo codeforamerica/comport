@@ -36,6 +36,9 @@ function allegationReducer(complaint, allegation){
 }
 
 function allegationsToComplaints(rows){
+  // group complaints by id
+  // each complaint has a unique ID, but there may be multiple rows of data for a single complaint
+  // this function reduces one complaint's rows to a single object that has arrays for fields with colliding values
   var complaintGrouper = d3.nest()
     .key(function (d){ return d.id; })
     .rollup(function(allegations){
@@ -43,6 +46,7 @@ function allegationsToComplaints(rows){
       complaint['allegations'] = allegations;
       return complaint;
     });
+  // return a list of just the values
   return complaintGrouper.map(rows, d3.map).values();
 }
 
