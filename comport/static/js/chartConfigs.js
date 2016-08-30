@@ -88,9 +88,10 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
+  // unique use of force incidents by district
   'uof-by-inc-district': {
     chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'district', 'officerForceType'),
+    filter: uniqueForKeysInLast12Months('id', 'district'),
     keyFunc: function(d){ return d.district; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
@@ -112,6 +113,8 @@ var configs = {
     addOther: true,
     },
 
+  // unique types of force used by officers
+  // will be more types of force used than incidents
   'uof-force-type': {
     chartType: 'flagHistogram',
     filter: uniqueForKeysInLast12Months('id', 'officerIdentifier', 'officerForceType'),
