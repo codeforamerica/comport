@@ -3,6 +3,7 @@
 {% block content %}
 {% if preview_mode %} 
   <div class="admin_edit_btn">
+    {% set endpoint_name = request.path.split('/')[-1] %}
     <a href="/department/{{department.id}}/edit/schema/{{endpoint_name}}" title="Edit"><button type="">Edit</button></a>
     <a href="/department/{{department.id}}" title="Done"><button type="">Done</button></a>
   </div>
