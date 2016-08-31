@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% set preview_mode = ('/preview/' in request.path) %}
 {% if preview_mode %} 
   <div class="admin_edit_btn">
     {% set endpoint_name = request.path.split('/')[-1] %}

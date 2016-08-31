@@ -5,6 +5,7 @@
 {% endblock css %}
 
 {% block content %}
+{% set preview_mode = ('/preview/' in request.path) %}
 {% if preview_mode %} 
 {% block edit_nav %}
   <div class="admin_edit_btn">
