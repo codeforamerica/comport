@@ -19,49 +19,38 @@ function unique(a, b){
   }
 }
 
-function allegationReducer(complaint, allegation){
-  var newObj = {};
-  for (key in complaint){
-    if( complaint.hasOwnProperty(key) ){
-      var complaintVal = complaint[key];
-      var allegationVal = allegation[key];
-      if( notEqual(complaintVal, allegationVal) ){
-          newObj[key] = unique(complaintVal, allegationVal);
+function complaintReducer(complaintA, complaintB){
+  // takes two complaint rows and combines them
+  // where there are colliding values, creates an array and stores both
+  var reducedComplaint = {};
+  for (key in complaintA){
+    if( complaintA.hasOwnProperty(key) ){
+      var complaintAVal = complaintA[key];
+      var complaintBVal = complaintB[key];
+      if( notEqual(complaintAVal, complaintBVal) ){
+          reducedComplaint[key] = unique(complaintAVal, complaintBVal);
       } else {
-        newObj[key] = complaint[key];
+        reducedComplaint[key] = complaintA[key];
       }
     }
   }
-  return newObj;
+  return reducedComplaint;
 }
 
-function allegationsToComplaints(rows){
+function complaintsGroupedByID(rows){
+  // group complaints by id
+  // each complaint has a unique ID, but there may be multiple rows of data for a single complaint
+  // this function reduces one complaint's rows to a single object that has arrays for fields with colliding values
   var complaintGrouper = d3.nest()
     .key(function (d){ return d.id; })
     .rollup(function(allegations){
-      var complaint = allegations.reduce(allegationReducer);
+      var complaint = allegations.reduce(complaintReducer);
       complaint['allegations'] = allegations;
       return complaint;
     });
+  // return a list of just the values
   return complaintGrouper.map(rows, d3.map).values();
 }
-
-function uniqueOfficerComplaints(rows){
-  var newSet = [];
-  var grouper = d3.nest()
-    .key(function (d){ return d.officerIdentifier; })
-    .key(function (d){ return d.id; });
-  var officerComplaintMap = grouper.map(rows, d3.map);
-  officerComplaintMap.forEach(function(offId, complaints){
-    newSet.push({
-      officerId: offId,
-      complaintCount: complaints.keys().length,
-      values: complaints
-    });
-  });
-  return newSet;
-}
-
 
 function raceKey( value ) {
   if( !value ){
@@ -167,11 +156,24 @@ function raceMatrix(config, data){
       subgroups.percent = ( total / totalComplaintCount );
     });
 
-
-
-
   counts.officerRaceTotals = officerRaceTotals;
   return counts;
+}
+
+function uniqueOfficerComplaints(rows){
+  var newSet = [];
+  var grouper = d3.nest()
+    .key(function (d){ return d.officerIdentifier; })
+    .key(function (d){ return d.id; });
+  var officerComplaintMap = grouper.map(rows, d3.map);
+  officerComplaintMap.forEach(function(offId, complaints){
+    newSet.push({
+      officerId: offId,
+      complaintCount: complaints.keys().length,
+      values: complaints
+    });
+  });
+  return newSet;
 }
 
 function officerComplaintsCount(config, data){
@@ -271,16 +273,6 @@ function addOtherCategory(data){
   });
 }
 
-function last12Months(rows, config){
-  // offset today by 12 d3-defined months in the past
-  var latestDate = d3.max(rows, function(d){ return d.date; })
-  var startDate = d3.time.month.offset(latestDate, -12);
-  config.dateSpan = [startDate, latestDate];
-  return rows.filter(function(r){
-    return startDate < r.date;
-  });
-}
-
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
 var dateTimeKey = "occurredDate";
@@ -298,6 +290,69 @@ function parseData(rows){
     return d.date;
   });
   return rows;
+}
+
+function last12Months(rows, config){
+  // offset today by 12 d3-defined months in the past
+  var latestDate = d3.max(rows, function(d){ return d.date; })
+  var startDate = d3.time.month.offset(latestDate, -12);
+  config.dateSpan = [startDate, latestDate];
+  return rows.filter(function(r){
+    return startDate < r.date;
+  });
+}
+
+function uniqueForKeys(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  // returns an array of objects representing each unique
+  // combination of the values of those columns
+   //   returns [
+   //     {id:1, shift: 'a', beat: 'b'},
+   //     {id:1, shift: 'c', beat: 'b'},
+   //     {id:2, shift: 'a', beat: 'b'},
+   // ]
+  function concatValues(values){
+    var separator = '-';
+    var result = '';
+    values.forEach(function(val){
+      result += (separator + val);
+    });
+    return result;
+  }
+  var keys = Array.prototype.slice.call(arguments);
+  var grouper = d3.nest()
+    .key(function (d){
+      var values = keys.map(function(k){ return d[k]; });
+      return concatValues(values);
+    }).rollup(function(leaves){
+      // each 'leaf' has the same values for the keys
+      var datum = {};
+      keys.forEach(function(k){
+        datum[k] = leaves[0][k];
+      });
+      return datum;
+    })
+    return function(unfilteredRows){
+      return grouper.map(unfilteredRows, d3.map)
+        .values();
+    };
+}
+
+function uniqueForKeysInLast12Months(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // but first prefilters down to the last 12 months
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  var args = Array.prototype.slice.call(arguments);
+  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args)
+  return function(rows, config){
+    var prefiltered = last12Months(rows, config);
+    return uniqueFilter(prefiltered);
+  }
 }
 
 function structureData(parsed_rows, config){

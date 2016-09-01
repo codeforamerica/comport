@@ -17,16 +17,6 @@ class ChartBlockDefaults:
             order=0
         ),
         ChartBlock(
-            title="Complaints By Year",
-            caption="",
-            slug="complaints-by-year",
-            dataset="complaints",
-            content="Since 2009, citizens have submitted between 68 to 178 formal complaints about officers each year, with an average of 104 per year. A complaint is from one citizen, but may contain multiple allegations and/or be about multiple officers. This graph counts both formal and informal complaints.",
-            date_updated=None,
-            date_edited=None,
-            order=0
-        ),
-        ChartBlock(
             title="Complaints By Month",
             caption="",
             slug="complaints-by-month",

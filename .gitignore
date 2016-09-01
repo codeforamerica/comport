@@ -83,3 +83,4 @@ data/testdata/*
 comport/static/libs/jQuery/*
 
 venv/
+tmp/
