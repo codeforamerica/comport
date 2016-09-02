@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 
 {% block content %}
+{% set preview_mode = ('/preview/' in request.path) %}
+{% if preview_mode %} 
+  <div class="admin_edit_btn">
+    {% set endpoint_name = request.path.split('/')[-1] %}
+    <a href="/department/{{department.id}}/edit/schema/{{endpoint_name}}" title="Edit"><button type="">Edit</button></a>
+    <a href="/department/{{department.id}}" title="Done"><button type="">Done</button></a>
+  </div>
+{% endif %}
 
 <div class="row">
   <div class="col-md-12 schema-wrapper">
