@@ -57,18 +57,27 @@ function raceKey( value ) {
     value = "";
   }
   return {
-    "Unknown": "Unknown",
-    "Black": "Black",
     "": "Unknown",
-    "Hispanic": "Hispanic",
-    "White": "White",
-    "Bi-racial": "Other",
-    "White ": "White",
-    "black": "Black",
-    "B": "Black",
+    "African Amer": "Black",
+    "Amer-Indian": "Other",
     "Asian": "Asian",
+    "B": "Black",
+    "Bi-racial": "Other",
+    "Bi-Racial": "Other",
+    "Black": "Black",
+    "black": "Black",
+    "East-Indian": "Asian",
+    "Hispanic": "Hispanic",
+    "Korean": "Asian",
+    "Other Asian": "Asian",
+    "Other Hispan": "Hispanic",
     "Other": "Other",
     "Polynesian": "Asian",
+    "Puerto Rican": "Hispanic",
+    "Unknown": "Unknown",
+    "W": "White",
+    "White ": "White",
+    "White": "White",
   }[value];
 };
 
