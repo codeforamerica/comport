@@ -68,6 +68,20 @@ var configs = {
     addOther: true,
     },
 
+  // unique use of force incidents by division
+  // (LMPD only)
+  'uof-by-division': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'division'),
+    keyFunc: function(d){ return d.division; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].division; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
   // racial breakdown in use of force incidents
   'uof-race': {
     filter: last12Months,
