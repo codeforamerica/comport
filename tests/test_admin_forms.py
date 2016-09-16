@@ -51,14 +51,14 @@ class TestNewDepartmentForm:
         assert 'The department short name "{}" is already registered.'.format(test_short_name) in form.department_short_name.errors
 
 
-@pytest.mark.usefixtures('app')
+@pytest.mark.usefixtures('db')
 class TestStartExtractorForm:
 
     def test_can_set_extractor_start_date(self, testapp):
         ''' Can set an extraction start date.
         '''
         # set up the department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
 
         # set up a user
         user = User.create(username="moby", email="moby@example.com", password="password")

@@ -18,12 +18,12 @@ class TestConditionalAccess:
 
     def test_department_is_public_by_default(self):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         assert department.is_public
 
     def test_department_can_be_set_private(self):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", is_public=False, load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", is_public=False, load_defaults=False)
         assert not department.is_public
 
     def test_department_not_logged_in_unauthorized(self, testapp):
@@ -73,7 +73,7 @@ class TestConditionalAccess:
 
     def test_datset_is_public_by_default(self):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         assert hasattr(department, "is_public_assaults_on_officers")
         assert hasattr(department, "is_public_officer_involved_shootings")
         assert hasattr(department, "is_public_citizen_complaints")
@@ -168,7 +168,7 @@ class TestConditionalAccess:
 
     def test_only_department_user_can_access_non_public_datasets(self, testapp):
         # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
         department.is_public_citizen_complaints = False
         department.is_public_use_of_force_incidents = False
         department.is_public_officer_involved_shootings = False
@@ -281,17 +281,9 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
-        # create a department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
-
-        # make a request to a non-public front page
-        redirect_response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=500)
-        assert redirect_response.status_code == 500
-
     def test_assaults_front_page_exists(self, testapp):
         # get a department and intro block from the fixture
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name))
