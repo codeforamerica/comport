@@ -26,6 +26,22 @@ var configs = {
     dataFunc: function(){ return DEMOGRAPHICS; }
     },
 
+  // unique use of force incidents per month
+  'uof-by-month': {
+    chartType: 'mountainHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'date'),
+    keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
+    sortWith: function(d){ return d.month; },
+    x: 'month',
+    xFunc: function(b){ return d3.time.month.floor(b[0].date); },
+    xTickFormat: function(d){
+      var fmt = d3.time.format('%b %Y');
+      return fmt(new Date(d));
+    },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
   // unique types of force used by officers
   // will be more types of force used than incidents
   'uof-force-type': {
