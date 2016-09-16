@@ -84,3 +84,4 @@ comport/static/libs/jQuery/*
 
 venv/
 tmp/
+.cache/
