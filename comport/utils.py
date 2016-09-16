@@ -6,7 +6,6 @@ import json
 import string
 from random import randint, choice
 from datetime import datetime, timedelta
-from factory.fuzzy import _random
 
 def slack_escape(str):
     ''' Escape a string to be sent to Slack, as per https://api.slack.com/docs/formatting#how_to_escape_characters
@@ -50,9 +49,6 @@ def flash_errors(form, category="warning"):
 
 def random_string(N):
     return ''.join(choice(string.ascii_uppercase + string.digits + '     ') for _ in range(N))
-
-def factory_random_string(N):
-    return ''.join(_random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 def parse_date(date):
     return None if not date else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
