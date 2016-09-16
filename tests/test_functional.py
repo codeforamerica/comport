@@ -281,14 +281,6 @@ class TestPagesRespond:
 
         assert response.status_code == 200
 
-    def test_loading_unconfigured_data_type_redirects_to_index(self, testapp):
-        # create a department
-        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
-
-        # make a request to a non-public front page
-        redirect_response = testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=500)
-        assert redirect_response.status_code == 500
-
     def test_assaults_front_page_exists(self, testapp):
         # get a department and intro block from the fixture
         department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
