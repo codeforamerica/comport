@@ -157,7 +157,8 @@ class Department(SurrogatePK, Model):
         try:
             next_block = next(b for b in self.chart_blocks if b.slug == slug)
         except StopIteration:
-            abort(500)
+            # no matching chart block was found
+            return None
 
         return next_block
 
