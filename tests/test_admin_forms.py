@@ -51,7 +51,7 @@ class TestNewDepartmentForm:
         assert 'The department short name "{}" is already registered.'.format(test_short_name) in form.department_short_name.errors
 
 
-@pytest.mark.usefixtures('app')
+@pytest.mark.usefixtures('db')
 class TestStartExtractorForm:
 
     def test_can_set_extractor_start_date(self, testapp):
