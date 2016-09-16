@@ -95,7 +95,7 @@ class TestAdminEditForms:
     def test_edit_and_preview_links_on_department_admin_page(sefl, testapp):
         ''' There are links to preview & edit main and schema pages from the department admin page.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -139,7 +139,7 @@ class TestAdminEditForms:
     def test_ois_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -163,7 +163,7 @@ class TestAdminEditForms:
     def test_useofforce_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -208,7 +208,7 @@ class TestAdminEditForms:
     def test_assaults_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -235,7 +235,7 @@ class TestAdminEditForms:
     def test_complaints_schema_edit_forms_exist(self, testapp):
         ''' Edit forms exist for the complaints schema page.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -259,7 +259,7 @@ class TestAdminEditForms:
     def test_changing_schema_field_order_reorders_other_fields(self, testapp):
         ''' Changing the order value of a schema field will re-order the other fields to make room.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -292,7 +292,7 @@ class TestAdminEditForms:
     def test_changing_order_number_to_a_valid_range(self, testapp):
         ''' Changing the order value of a schema field will re-order the other fields to make room.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -348,7 +348,7 @@ class TestAdminEditForms:
     def test_editing_complaints_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -376,7 +376,7 @@ class TestAdminEditForms:
     def test_submit_non_numeric_value_to_order(self, testapp):
         ''' Submitting the form to change the order of a schmea field with a non-numeric value doesn't change anything.
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -401,7 +401,7 @@ class TestAdminEditForms:
     def test_submitting_schema_intro_field_value(self, testapp):
         ''' Submitting the form to edit a schema intro field changes the expected value in the database and not others
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -430,7 +430,7 @@ class TestAdminEditForms:
     def test_editing_assaults_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -458,7 +458,7 @@ class TestAdminEditForms:
     def test_editing_ois_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -486,7 +486,7 @@ class TestAdminEditForms:
     def test_editing_useofforce_schema_field_value(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -514,7 +514,7 @@ class TestAdminEditForms:
     def test_submitting_schema_edit_form_redirects_to_preview(self, testapp):
         ''' Submitting the form to edit a schema field changes the correct value in the database
         '''
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)

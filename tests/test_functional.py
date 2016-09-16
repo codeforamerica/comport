@@ -28,7 +28,7 @@ class TestConditionalAccess:
 
     def test_department_not_logged_in_unauthorized(self, testapp):
         # set up department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
         department.is_public = False
 
         # make requests to specific front pages
@@ -49,7 +49,7 @@ class TestConditionalAccess:
 
     def test_department_logged_in_authorized(self, testapp):
         # set up department
-        department = Department.create(name="Int Masculine Police Department", short_name="IMPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
         department.is_public = False
 
         # set up a user
@@ -85,7 +85,7 @@ class TestConditionalAccess:
 
     def test_dataset_can_be_set_private(self):
         # create a department
-        department = Department.create(name="I Mood Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         assert hasattr(department, "is_public_assaults_on_officers")
         assert hasattr(department, "is_public_officer_involved_shootings")
         assert hasattr(department, "is_public_citizen_complaints")
@@ -102,7 +102,7 @@ class TestConditionalAccess:
 
     def test_visit_private_dataset_throws_unauth(self, testapp):
         # create a department
-        department = Department.create(name="Ivory Mouth Police Department", short_name="IMPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
 
         # we can access all the datasets except assaults
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
@@ -175,7 +175,7 @@ class TestConditionalAccess:
         department.is_public_assaults_on_officers = False
 
         # log in under a different department, datasets should not be accessible
-        bad_department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=False)
+        bad_department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
         log_in_user(testapp, bad_department)
 
         testapp.get("/department/{}/complaints/".format(department.short_name), status=403)
@@ -199,7 +199,7 @@ class TestPagesRespond:
 
     def test_complaints_schema_edit_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -211,7 +211,7 @@ class TestPagesRespond:
 
     def test_assaults_schema_edit_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -235,7 +235,7 @@ class TestPagesRespond:
 
     def test_useofforce_schema_edit_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -247,7 +247,7 @@ class TestPagesRespond:
 
     def test_complaints_schema_preview_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -259,7 +259,7 @@ class TestPagesRespond:
 
     def test_useofforce_schema_preview_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -271,7 +271,7 @@ class TestPagesRespond:
 
     def test_ois_schema_preview_page_exists(self, testapp):
         # create a department
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -300,7 +300,7 @@ class TestPagesRespond:
 
     def test_assaults_schema_page_exists(self, testapp):
         # get a department from the fixture
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name))
@@ -309,7 +309,7 @@ class TestPagesRespond:
 
     def test_assaults_schema_preview_page_exists(self, testapp):
         # get a department from the fixture
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -339,7 +339,7 @@ class TestPagesRespond:
 
     def test_assaults_csv_endpoint_exists(self, testapp):
         # create a department
-        department = Department.create(name="Inky Mole Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/assaultsonofficers.csv".format(department.id))
@@ -348,8 +348,8 @@ class TestPagesRespond:
 
     def test_csv_filtered_by_dept(self, testapp):
         # create a department
-        department1 = Department.create(name="International Morrisey Police Department", short_name="IMPD", load_defaults=False)
-        department2 = Department.create(name="Brave Police Department", short_name="BPD", load_defaults=False)
+        department1 = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
+        department2 = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         incidentclass1 = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department1.short_name))
         incidentclass2 = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(department2.short_name))
@@ -368,7 +368,7 @@ class TestPagesRespond:
 
     def test_assaults_edit_page_exists(self, testapp):
         # get a department from the fixture
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)
@@ -380,7 +380,7 @@ class TestPagesRespond:
 
     def test_assaults_preview_page_exists(self, testapp):
         # get a department from the fixture
-        department = Department.create(name="Bad Police Department", short_name="BPD", load_defaults=True)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
         log_in_user(testapp, department)

@@ -132,7 +132,6 @@ class JSONTestClient(object):
     def make_complaints(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         # make a smaller pool of officers so that it's possible to have more than one complaint per officer
         officers = []
-        officer_count = round(count * .33)
         for x in range(0, count):
             officers.append({
                 "officerIdentifier": self.hash(random_string(10)),
@@ -170,7 +169,6 @@ class JSONTestClient(object):
     def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         # make a smaller pool of officers so that it's possible to have more than one assault per officer
         officers = []
-        officer_count = round(count * .33)
         for x in range(0, count):
             officers.append({
                 "officerIdentifier": self.hash(random_string(10))
@@ -180,7 +178,6 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assault_assignment()
             force_type = self.generate_assault_force_type()
-            service_type = self.generate_assault_service_type()
             new_assault = {
                 "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_assault_service_type(),
@@ -195,7 +192,6 @@ class JSONTestClient(object):
             assaults.append(new_assault)
 
         return assaults
-
 
     def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
@@ -496,30 +492,83 @@ class JSONTestClient(object):
                 "Interviewing", "Restraining", "Transporting", None]
         )
 
-    def generate_assignment(self):
+    def generate_assignment(self, department_short_code="IMPD"):
+        if department_short_code == "BPD":
+            assignment = random.choice([
+                ["Operational", "CID", "Northeastern District"],
+                ["Operational", "CID", "Northern District"],
+                ["Operational", "CID", "Northwestern District"],
+                ["Operational", "CID", "Southeastern District"],
+                ["Operational", "Patrol", "Southwestern District"],
+                ["Operational", "Patrol", "Central District"],
+                ["Operational", "Patrol", "Eastern District"],
+                ["Operational", "Patrol", "Northeastern District"],
+                ["Operational", "Patrol", "Northern District"],
+                ["Operational", "Patrol", "Northwestern District"],
+                ["Operational", "Patrol", "Police Academy"],
+                ["Operational", "Patrol", "Southeastern District"],
+                ["Operational", "Patrol", "Southern District"],
+                ["Operational", "Patrol", "Western District"],
+                ["Administrative", "CID", "Homicide Section"],
+                ["Administrative", "Administrative", "Southwestern District"],
+                ["Administrative", "Administrative", "Police Academy"]
+            ])
+            return {"bureau": assignment[0], "division": assignment[1], "assignment": assignment[2]}
+
+        elif department_short_code == "LMPD":
+            assignment = random.choice([
+                ["Administrative Bureau", "Training", "Training", "Basic Academy"],
+                ["Patrol Bureau", "1st Division", "1st Division", "1st Platoon"],
+                ["Patrol Bureau", "1st Division", "1st Division", "2nd Platoon"],
+                ["Patrol Bureau", "1st Division", "1st Division", "3rd Platoon"],
+                ["Patrol Bureau", "1st Division", "1st Division", "Bike Platoon"],
+                ["Patrol Bureau", "2nd Division", "2nd Division", "1st Platoon"],
+                ["Patrol Bureau", "2nd Division", "2nd Division", "2nd Platoon"],
+                ["Patrol Bureau", "2nd Division", "2nd Division", "3rd Platoon"],
+                ["Patrol Bureau", "3rd Division", "3rd Division", "1st Platoon"],
+                ["Patrol Bureau", "3rd Division", "3rd Division", "2nd Platoon"],
+                ["Patrol Bureau", "3rd Division", "3rd Division", "3rd Platoon"],
+                ["Patrol Bureau", "4th Division", "4th Division", "1st Platoon"],
+                ["Patrol Bureau", "4th Division", "4th Division", "2nd Platoon"],
+                ["Patrol Bureau", "4th Division", "4th Division", "3rd Platoon"],
+                ["Patrol Bureau", "5th Division", "5th Division", "1st Platoon"],
+                ["Patrol Bureau", "5th Division", "5th Division", "2nd Platoon"],
+                ["Patrol Bureau", "5th Division", "5th Division", "3rd Platoon"],
+                ["Patrol Bureau", "6th Division", "6th Division", "1st Platoon"],
+                ["Patrol Bureau", "6th Division", "6th Division", "2nd Platoon"],
+                ["Patrol Bureau", "6th Division", "6th Division", "3rd Platoon"],
+                ["Patrol Bureau", "7th Division", "7th Division", "1st Platoon"],
+                ["Patrol Bureau", "7th Division", "7th Division", "2nd Platoon"],
+                ["Patrol Bureau", "7th Division", "7th Division", "3rd Platoon"],
+                ["Patrol Bureau", "8th Division", "8th Division", "1st Platoon"],
+                ["Patrol Bureau", "8th Division", "8th Division", "2nd Platoon"],
+                ["Patrol Bureau", "8th Division", "8th Division", "3rd Platoon"],
+                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 1"],
+                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 2"],
+                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 3"],
+                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 4"],
+                ["Support Bureau", "Special Operations", "Canine Unit", "1st Platoon"],
+                ["Support Bureau", "Special Operations", "Canine Unit", "2nd Platoon"],
+                ["Support Bureau", "Special Operations", "Canine Unit", "3rd Platoon"]
+            ])
+            return {"bureau": assignment[0], "division": assignment[1], "unit": assignment[2], "platoon": assignment[3]}
+
+        # IMPD is the default
         assignment = random.choice([
             ["Chiefs Staff Division", "Court Liaison", "", ""],
             ["Investigative Division", "Crime Prevention", "C Shift", ""],
-            ["Investigative Division", "Detective Bureau",
-                "Auto Theft Unit", "Evenings"],
-            ["Investigative Division", "Detective Bureau",
-                "Auto Theft Unit", "Off Duty"],
-            ["Investigative Division", "Detective Bureau",
-                "Auto Theft Unit", "Rotating"],
-            ["Investigative Division", "Detective Bureau",
-                "Homicide  Unit", "Evenings"],
-            ["Investigative Division", "Detective Bureau",
-                "Homicide  Unit", "Rotating"],
+            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Evenings"],
+            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Off Duty"],
+            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Rotating"],
+            ["Investigative Division", "Detective Bureau", "Homicide  Unit", "Evenings"],
+            ["Investigative Division", "Detective Bureau", "Homicide  Unit", "Rotating"],
             ["Investigative Division", "First Precinct", "A Shift", "X21 Zone"],
             ["Investigative Division", "First Precinct", "A Shift", "X22 Zone"],
             ["Investigative Division", "First Precinct", "B Shift", "X26 Zone"],
             ["Investigative Division", "Second Precinct", "Day Beats", "Beat 19"],
-            ["Investigative Division", "Special Investigations",
-                "Computer Crimes", "Days"],
-            ["Investigative Division", "Special Investigations",
-                "Computer Crimes", "Evenings"],
-            ["Investigative Division", "Special Investigations",
-                "Criminal Intelligence", "Days"],
+            ["Investigative Division", "Special Investigations", "Computer Crimes", "Days"],
+            ["Investigative Division", "Special Investigations", "Computer Crimes", "Evenings"],
+            ["Investigative Division", "Special Investigations", "Criminal Intelligence", "Days"],
             ["Investigative Division", "Special Investigations", "Day Beats", "Beat 19"],
             ["Investigative Division", "Special Investigations", "K 9 Unit", "Days"],
             ["Investigative Division", "Special Investigations", "Narcotics", "Days"],
@@ -567,8 +616,7 @@ class JSONTestClient(object):
             ["Operational Division", "Fourth Precinct", "C Shift", "X22 Zone"],
             ["Operational Division", "Fourth Precinct", "C Shift", "X25 Zone"],
             ["Operational Division", "Fourth Precinct", "C Shift", "X27 Zone"],
-            ["Operational Division", "Fourth Precinct",
-                "Commanding Officer", "Days"],
+            ["Operational Division", "Fourth Precinct", "Commanding Officer", "Days"],
             ["Operational Division", "Second Precinct", "A Shift", "Beat 14"],
             ["Operational Division", "Second Precinct", "A Shift", "Beat 17"],
             ["Operational Division", "Second Precinct", "A Shift", "Beat 19"],

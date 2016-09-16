@@ -1,22 +1,27 @@
 # -*- coding: utf-8 -*-
 import pytest
+import datetime
+import csv
+import io
 from comport.content.models import ChartBlock
 from comport.department.models import Department
+from comport.data.models import UseOfForceIncidentLMPD
 
 @pytest.mark.usefixtures('db')
-class TestDepartmentModelBPD:
+class TestDepartmentModelLMPD:
 
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-introduction")
         complaint_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="complaints-by-month")
         complaint_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-by-allegation")
-        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-disposition")
-        complaint_bass = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-assignment")
+        complaint_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-by-allegation-type")
+        complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-finding")
+        complaint_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-precinct")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         complaint_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="complaints-by-demographic")
         complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer")
@@ -24,8 +29,9 @@ class TestDepartmentModelBPD:
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
         department.chart_blocks.append(complaint_bya)
+        department.chart_blocks.append(complaint_byat)
         department.chart_blocks.append(complaint_bdis)
-        department.chart_blocks.append(complaint_bass)
+        department.chart_blocks.append(complaint_bpre)
         department.chart_blocks.append(complaint_od)
         department.chart_blocks.append(complaint_bde)
         department.chart_blocks.append(complaint_bof)
@@ -36,16 +42,17 @@ class TestDepartmentModelBPD:
         assert complaint_blocks['introduction'] == complaint_intro
         assert complaint_blocks['first-block'] == complaint_bm
         assert complaint_blocks['blocks'][0] == complaint_bya
-        assert complaint_blocks['blocks'][1] == complaint_bdis
-        assert complaint_blocks['blocks'][2] == complaint_bass
-        assert complaint_blocks['blocks'][3] == complaint_od
-        assert complaint_blocks['blocks'][4] == complaint_bde
-        assert complaint_blocks['blocks'][5] == complaint_bof
+        assert complaint_blocks['blocks'][1] == complaint_byat
+        assert complaint_blocks['blocks'][2] == complaint_bdis
+        assert complaint_blocks['blocks'][3] == complaint_bpre
+        assert complaint_blocks['blocks'][4] == complaint_od
+        assert complaint_blocks['blocks'][5] == complaint_bde
+        assert complaint_blocks['blocks'][6] == complaint_bof
 
     def test_get_complaint_schema_blocks(self):
         ''' Set and get complaint schema chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
@@ -81,17 +88,19 @@ class TestDepartmentModelBPD:
     def test_get_uof_blocks(self):
         ''' Set and get uof chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
+        uof_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="uof-by-month")
         uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-force-type")
-        uof_bass = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-assignment")
+        uof_bd = ChartBlock(title="BYDIVISION", dataset="bd", slug="uof-by-division")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         uof_race = ChartBlock(title="RACE", dataset="race", slug="uof-race")
         department.chart_blocks.append(uof_intro)
+        department.chart_blocks.append(uof_bm)
         department.chart_blocks.append(uof_ft)
-        department.chart_blocks.append(uof_bass)
+        department.chart_blocks.append(uof_bd)
         department.chart_blocks.append(uof_od)
         department.chart_blocks.append(uof_race)
         department.save()
@@ -99,15 +108,16 @@ class TestDepartmentModelBPD:
         # verify that the blocks are returned in the expected structure
         uof_blocks = department.get_uof_blocks()
         assert uof_blocks['introduction'] == uof_intro
-        assert uof_blocks['first-block'] == uof_ft
-        assert uof_blocks['blocks'][0] == uof_bass
-        assert uof_blocks['blocks'][1] == uof_od
-        assert uof_blocks['blocks'][2] == uof_race
+        assert uof_blocks['first-block'] == uof_bm
+        assert uof_blocks['blocks'][0] == uof_ft
+        assert uof_blocks['blocks'][1] == uof_bd
+        assert uof_blocks['blocks'][2] == uof_od
+        assert uof_blocks['blocks'][3] == uof_race
 
     def test_get_uof_schema_blocks(self):
         ''' Set and get uof schema chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-schema-introduction")
@@ -143,11 +153,11 @@ class TestDepartmentModelBPD:
     def test_get_ois_blocks(self):
         ''' Set and get ois chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
-        ois_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="ois-by-assignment")
+        ois_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="ois-by-inc-district")
         ois_wt = ChartBlock(title="WEAPONTYPE", dataset="weapontype", slug="ois-weapon-type")
         ois_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         ois_race = ChartBlock(title="RACE", dataset="race", slug="ois-race")
@@ -169,7 +179,7 @@ class TestDepartmentModelBPD:
     def test_get_ois_schema_blocks(self):
         ''' Set and get ois schema chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-schema-introduction")
@@ -205,7 +215,7 @@ class TestDepartmentModelBPD:
     def test_get_assaults_blocks(self):
         ''' Set and get ois chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         assault_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction")
@@ -228,7 +238,7 @@ class TestDepartmentModelBPD:
     def test_get_assaults_schema_blocks(self):
         ''' Set and get assaults schema chart blocks.
         '''
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-schema-introduction")
@@ -260,3 +270,25 @@ class TestDepartmentModelBPD:
         assert assaults_fst in assaults_blocks['blocks']
         assert assaults_fft in assaults_blocks['blocks']
         assert assaults_ffa in assaults_blocks['blocks']
+
+    def test_csv_response(self, testapp):
+        # create a department and an LMPD uof incident
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
+
+        uof_check = dict(department_id=department.id, opaque_id="Check Opaque ID", occured_date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), bureau="Check Bureau", division="Check Division", unit="Check Unit", platoon="Check Platoon", disposition="Check Disposition", use_of_force_reason="Check UOF Reason", officer_force_type="Check Officer Force Type", service_type="Check Service Type", arrest_made=False, arrest_charges="Check Arrest Charges", resident_injured=True, resident_hospitalized=False, resident_condition="Check Resident Condition", officer_injured=False, officer_hospitalized=False, officer_condition="Check Officer Condition", resident_identifier="Check Resident Identifier", resident_weapon_used="Check Resident Weapon Used", resident_race="Check Resident Race", resident_sex="Check Resident Sex", resident_age="Check Resident Age", officer_race="Check Officer Race", officer_sex="Check Officer Sex", officer_age="Check Officer Age", officer_years_of_service="Check Officer Years Of Service", officer_identifier="Check Officer Identifier")
+
+        UseOfForceIncidentLMPD.create(**uof_check)
+
+        response = testapp.get("/department/{}/uof.csv".format(department.id))
+
+        incidents = list(csv.DictReader(io.StringIO(response.text)))
+
+        # build a variable to csv header lookup from the csv schema
+        csv_schema = UseOfForceIncidentLMPD.get_csv_schema()
+        schema_lookup = dict(zip([col[1] for col in csv_schema], [col[0] for col in csv_schema]))
+
+        assert len(incidents) == 1
+        for check_key in uof_check.keys():
+            if check_key == 'department_id':
+                continue
+            assert str(uof_check[check_key]) == incidents[0][schema_lookup[check_key]]

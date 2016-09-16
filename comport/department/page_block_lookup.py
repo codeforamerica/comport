@@ -21,6 +21,18 @@ class PageBlockLookup:
                 ]
             }
 
+        if short_name == 'LMPD':
+            return {
+                'introduction': 'uof-introduction',
+                'first-block': 'uof-by-month',
+                'blocks': [
+                    'uof-force-type',
+                    'uof-by-division',
+                    'officer-demographics',
+                    'uof-race'
+                ]
+            }
+
         # IMPD's blocks are the default
         return {
             'introduction': 'uof-introduction',

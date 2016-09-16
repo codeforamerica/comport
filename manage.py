@@ -45,11 +45,16 @@ def _make_context():
     ''' Return context dict for a shell session.
     '''
     # generate a list of all the incident classes
-    short_names = ["IMPD", "BPD"]
-    incident_prefixes = ["UseOfForceIncident", "AssaultOnOfficer", "CitizenComplaint", "OfficerInvolvedShooting"]
+    class_lookup = [
+        {"UseOfForceIncident": ["IMPD", "BPD", "LMPD"]},
+        {"CitizenComplaint": ["IMPD", "BPD"]},
+        {"OfficerInvolvedShooting": ["IMPD", "BPD"]},
+        {"AssaultOnOfficer": ["IMPD"]}
+    ]
     incident_classes = {}
-    for name in short_names:
-        for prefix in incident_prefixes:
+    for guide in class_lookup:
+        prefix, departments = guide.popitem()
+        for name in departments:
             class_name = prefix + name
             incident_classes[class_name] = getattr(importlib.import_module("comport.data.models"), class_name)
 
@@ -106,7 +111,7 @@ def test_client():
     delete_everything()
 
     # create a fake PD and admin user
-    department = Department.create(name="Izquierda Metropolitan Police Department", short_name="IMPD", load_defaults=True)
+    department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
     user = User.create(username="user", email="user@example.com", password="password", active=True, is_admin=True)
     user.departments.append(department)
     user.save()
