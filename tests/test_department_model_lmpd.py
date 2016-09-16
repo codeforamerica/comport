@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 import pytest
+import datetime
+import csv
+import io
 from comport.content.models import ChartBlock
 from comport.department.models import Department
+from comport.data.models import UseOfForceIncidentLMPD
 
 @pytest.mark.usefixtures('db')
 class TestDepartmentModelLMPD:
@@ -266,3 +270,25 @@ class TestDepartmentModelLMPD:
         assert assaults_fst in assaults_blocks['blocks']
         assert assaults_fft in assaults_blocks['blocks']
         assert assaults_ffa in assaults_blocks['blocks']
+
+    def test_csv_response(self, testapp):
+        # create a department and an LMPD uof incident
+        department = Department.create(name="LM Police Department", short_name="LMPD", load_defaults=False)
+
+        uof_check = dict(department_id=department.id, opaque_id="Check Opaque ID", occured_date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), bureau="Check Bureau", division="Check Division", unit="Check Unit", platoon="Check Platoon", disposition="Check Disposition", use_of_force_reason="Check UOF Reason", officer_force_type="Check Officer Force Type", service_type="Check Service Type", arrest_made=False, arrest_charges="Check Arrest Charges", resident_injured=True, resident_hospitalized=False, resident_condition="Check Resident Condition", officer_injured=False, officer_hospitalized=False, officer_condition="Check Officer Condition", resident_identifier="Check Resident Identifier", resident_weapon_used="Check Resident Weapon Used", resident_race="Check Resident Race", resident_sex="Check Resident Sex", resident_age="Check Resident Age", officer_race="Check Officer Race", officer_sex="Check Officer Sex", officer_age="Check Officer Age", officer_years_of_service="Check Officer Years Of Service", officer_identifier="Check Officer Identifier")
+
+        UseOfForceIncidentLMPD.create(**uof_check)
+
+        response = testapp.get("/department/{}/uof.csv".format(department.id))
+
+        incidents = list(csv.DictReader(io.StringIO(response.text)))
+
+        # build a variable to csv header lookup from the csv schema
+        csv_schema = UseOfForceIncidentLMPD.get_csv_schema()
+        schema_lookup = dict(zip([col[1] for col in csv_schema], [col[0] for col in csv_schema]))
+
+        assert len(incidents) == 1
+        for check_key in uof_check.keys():
+            if check_key == 'department_id':
+                continue
+            assert str(uof_check[check_key]) == incidents[0][schema_lookup[check_key]]
