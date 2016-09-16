@@ -88,13 +88,15 @@ class TestDepartmentModelLMPD:
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
+        uof_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="uof-by-month")
         uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-force-type")
-        uof_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-inc-district")
+        uof_bd = ChartBlock(title="BYDIVISION", dataset="bd", slug="uof-by-division")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         uof_race = ChartBlock(title="RACE", dataset="race", slug="uof-race")
         department.chart_blocks.append(uof_intro)
+        department.chart_blocks.append(uof_bm)
         department.chart_blocks.append(uof_ft)
-        department.chart_blocks.append(uof_bid)
+        department.chart_blocks.append(uof_bd)
         department.chart_blocks.append(uof_od)
         department.chart_blocks.append(uof_race)
         department.save()
@@ -102,10 +104,11 @@ class TestDepartmentModelLMPD:
         # verify that the blocks are returned in the expected structure
         uof_blocks = department.get_uof_blocks()
         assert uof_blocks['introduction'] == uof_intro
-        assert uof_blocks['first-block'] == uof_ft
-        assert uof_blocks['blocks'][0] == uof_bid
-        assert uof_blocks['blocks'][1] == uof_od
-        assert uof_blocks['blocks'][2] == uof_race
+        assert uof_blocks['first-block'] == uof_bm
+        assert uof_blocks['blocks'][0] == uof_ft
+        assert uof_blocks['blocks'][1] == uof_bd
+        assert uof_blocks['blocks'][2] == uof_od
+        assert uof_blocks['blocks'][3] == uof_race
 
     def test_get_uof_schema_blocks(self):
         ''' Set and get uof schema chart blocks.
