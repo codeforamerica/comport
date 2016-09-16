@@ -9,7 +9,7 @@ class TestDepartmentModelBPD:
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.
         '''
-        department = Department.create(name="Boring Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-introduction")
@@ -45,7 +45,7 @@ class TestDepartmentModelBPD:
     def test_get_complaint_schema_blocks(self):
         ''' Set and get complaint schema chart blocks.
         '''
-        department = Department.create(name="Beautiful Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
@@ -81,7 +81,7 @@ class TestDepartmentModelBPD:
     def test_get_uof_blocks(self):
         ''' Set and get uof chart blocks.
         '''
-        department = Department.create(name="Bush Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
@@ -107,7 +107,7 @@ class TestDepartmentModelBPD:
     def test_get_uof_schema_blocks(self):
         ''' Set and get uof schema chart blocks.
         '''
-        department = Department.create(name="Brat Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-schema-introduction")
@@ -143,7 +143,7 @@ class TestDepartmentModelBPD:
     def test_get_ois_blocks(self):
         ''' Set and get ois chart blocks.
         '''
-        department = Department.create(name="Blanket Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
@@ -169,7 +169,7 @@ class TestDepartmentModelBPD:
     def test_get_ois_schema_blocks(self):
         ''' Set and get ois schema chart blocks.
         '''
-        department = Department.create(name="Borg Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-schema-introduction")
@@ -205,7 +205,7 @@ class TestDepartmentModelBPD:
     def test_get_assaults_blocks(self):
         ''' Set and get ois chart blocks.
         '''
-        department = Department.create(name="Bratwurst Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         assault_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-introduction")
@@ -228,7 +228,7 @@ class TestDepartmentModelBPD:
     def test_get_assaults_schema_blocks(self):
         ''' Set and get assaults schema chart blocks.
         '''
-        department = Department.create(name="Bane Police Department", short_name="BPD", load_defaults=False)
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         assaults_intro = ChartBlock(title="INTRO", dataset="intros", slug="assaults-schema-introduction")

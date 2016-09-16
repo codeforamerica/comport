@@ -111,7 +111,7 @@ def test_client():
     delete_everything()
 
     # create a fake PD and admin user
-    department = Department.create(name="Izquierda Metropolitan Police Department", short_name="IMPD", load_defaults=True)
+    department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
     user = User.create(username="user", email="user@example.com", password="password", active=True, is_admin=True)
     user.departments.append(department)
     user.save()

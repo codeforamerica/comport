@@ -55,7 +55,7 @@ class TestDepartmentModel:
     def test_schema_chart_block_order(self):
         ''' Set and get complaint chart blocks.
         '''
-        department = Department.create(name="Inner Mongolia Police Department", short_name="IMPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
 
         # get complaint schema blocks
         before_blocks = department.get_complaint_schema_blocks()
@@ -81,7 +81,7 @@ class TestDepartmentModel:
     def test_get_blocks_by_slugs_order(self):
         ''' We can get blocks sorted by order or in the order the slugs were passed.
         '''
-        department = Department.create(name="Inner Mongolia Police Department", short_name="IMPD", load_defaults=True)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=True)
 
         # get some complaint schema blocks
         blocks = department.get_complaint_schema_blocks()['blocks']

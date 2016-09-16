@@ -107,7 +107,7 @@ class TestHeartbeat:
         ''' New assaults data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Imminent Maple Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -141,7 +141,7 @@ class TestHeartbeat:
         ''' New complaint data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Idiotic Meteor Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -186,7 +186,7 @@ class TestHeartbeat:
         ''' New complaint data from the extractor with wrongly typed data is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Instinctual Marshmallow Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -237,7 +237,7 @@ class TestHeartbeat:
         ''' Updated complaint data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Illmatic Man Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -304,7 +304,7 @@ class TestHeartbeat:
         ''' Multiple complaint data from the extractor is skipped.
         '''
         # Set up the extractor
-        department = Department.create(name="Icky Morgue Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -345,7 +345,7 @@ class TestHeartbeat:
         ''' Complaint data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Ipswitch Moor Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -382,7 +382,7 @@ class TestHeartbeat:
         ''' New UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Internal Moth Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -435,7 +435,7 @@ class TestHeartbeat:
         ''' New UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Incendiary Morocco Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -494,7 +494,7 @@ class TestHeartbeat:
         ''' Updated UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Innocuous Manatee Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -565,7 +565,7 @@ class TestHeartbeat:
         ''' UOF data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Innocent Matilda Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -602,7 +602,7 @@ class TestHeartbeat:
         ''' New OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Intentional Morality Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -647,7 +647,7 @@ class TestHeartbeat:
         ''' New OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Invincible Mountain Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -699,7 +699,7 @@ class TestHeartbeat:
         ''' Updated OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
-        department = Department.create(name="Invisible Monkey Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
@@ -761,7 +761,7 @@ class TestHeartbeat:
         ''' OIS data with the same ID but different details creates a new record.
         '''
         # Set up the extractor
-        department = Department.create(name="Indigo Moon Police Department", short_name="IMPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         extractor, envs = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
