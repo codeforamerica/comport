@@ -132,7 +132,6 @@ class JSONTestClient(object):
     def make_complaints(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         # make a smaller pool of officers so that it's possible to have more than one complaint per officer
         officers = []
-        officer_count = round(count * .33)
         for x in range(0, count):
             officers.append({
                 "officerIdentifier": self.hash(random_string(10)),
@@ -170,7 +169,6 @@ class JSONTestClient(object):
     def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         # make a smaller pool of officers so that it's possible to have more than one assault per officer
         officers = []
-        officer_count = round(count * .33)
         for x in range(0, count):
             officers.append({
                 "officerIdentifier": self.hash(random_string(10))
@@ -180,7 +178,6 @@ class JSONTestClient(object):
         for x in range(0, count):
             assignment = self.generate_assault_assignment()
             force_type = self.generate_assault_force_type()
-            service_type = self.generate_assault_service_type()
             new_assault = {
                 "opaqueId": self.hash(random_string(10)),
                 "serviceType": self.generate_assault_service_type(),
@@ -195,7 +192,6 @@ class JSONTestClient(object):
             assaults.append(new_assault)
 
         return assaults
-
 
     def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
         incidents = []
