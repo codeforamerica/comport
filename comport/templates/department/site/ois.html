@@ -7,7 +7,8 @@
   <div class="col-xs-12 col-sm-5">
     <h2>Officer Involved Shootings</h2>
 
-    {% if not editing %}
+    <!-- display introduction text -->
+    {% if not editing and chart_blocks['introduction'] %}
     <p class="intro_text">
       {{ markdown(chart_blocks['introduction'].content) }}
     </p>
@@ -23,10 +24,10 @@
 
     {{ chart_toc(chart_blocks=chart_blocks) }}
 
-  </div>  <!-- end col -->
+  </div> <!-- end col -->
 
-
-  {% if editing %}
+  <!-- edit introduction text -->
+  {% if editing and chart_blocks['introduction'] %}
   <div class="editing-form col-sm-6">
     <form method="post" action="/content/{{ chart_blocks['introduction'].slug }}/{{department.id}}">
       <div class="form-group">
@@ -34,15 +35,18 @@
         <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
         <input type="hidden" name="chart_title" value=""/>
       </div>
-        <input type="submit" />
-     </form>
+      <input type="submit" />
+    </form>
   </div>  <!-- end col -->
   {% endif %}
 
+<!-- display/edit first block -->
+{% if chart_blocks['first-block'] %}
 {{ brick(chart_blocks['first-block'], department, editing, one_col=True) }}
-
+{% endif %}
 </div>  <!-- end row -->
 
+<!-- display/edit remaining blocks -->
 {% for block in chart_blocks['blocks'] %}
 <div class="row">
 {{ brick(block, department, editing) }}
@@ -56,7 +60,9 @@
 var csv_url = '{{ url_for("department.ois_csv", department_id=department.id ) }}';
 var DEMOGRAPHICS = {{ department.serialize_demographics()|safe }};
 var charts = [
+  {% if chart_blocks['first-block'] %}
   "{{chart_blocks['first-block'].slug}}",
+  {% endif %}
   {% for block in chart_blocks['blocks'] -%}
   "{{ block.slug }}",
   {%- endfor %}
