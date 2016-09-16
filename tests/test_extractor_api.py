@@ -37,7 +37,7 @@ class TestHeartbeat:
         ''' Send a valid heartbeat post, get a valid response.
         '''
         # set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
 
         # set the correct authorization
@@ -54,7 +54,7 @@ class TestHeartbeat:
     def test_current_mmyy_on_no_setdate(self, testapp):
         ''' When there is no fixed date, it should send the current month and current year '''
         # set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id)
 
         # set the correct authorization
@@ -78,7 +78,7 @@ class TestHeartbeat:
         ''' A valid heartbeat post triggers a Slack notification
         '''
         # set up the extractor
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
         Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
 
         # set the correct authorization

@@ -58,7 +58,7 @@ class TestStartExtractorForm:
         ''' Can set an extraction start date.
         '''
         # set up the department
-        department = Department.create(name="Good Police Department", short_name="GPD", load_defaults=False)
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
 
         # set up a user
         user = User.create(username="moby", email="moby@example.com", password="password")
