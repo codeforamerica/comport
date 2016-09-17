@@ -38,7 +38,13 @@ def login():
                 if request.args.get("next"):
                     return redirect(request.args.get("next"))
                 if form.user.first_department():
-                    return redirect(url_for("department.department_dashboard", department_id=form.user.first_department().id))
+                    # direct the user to the first existing dataset page
+                    redirect_path = form.user.first_department().get_first_dataset_path()
+                    if redirect_path:
+                        return redirect(url_for(redirect_path, short_name=form.user.first_department().short_name))
+                    else:
+                        flash("There are no datasets configured for this department.", 'alert alert-danger')
+                        return redirect(url_for('public.home'))
                 else:
                     flash("You are not registered in any department. Please contact support.", 'alert alert-danger')
                     return render_template("public/login.html", form=form, published=True)

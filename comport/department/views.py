@@ -413,14 +413,6 @@ def public_uof(short_name):
         abort(404)
     return render_template("department/site/useofforce.html", department=department, chart_blocks=department.get_uof_blocks(), editing=False, published=True)
 
-@blueprint.route("/<short_name>/officerinvolvedshootings/")
-@authorized_access_only(dataset="officer_involved_shootings")
-def public_ois(short_name):
-    department = Department.query.filter_by(short_name=short_name.upper()).first()
-    if not department:
-        abort(404)
-    return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False, published=True)
-
 @blueprint.route('/<short_name>/schema/useofforce/')
 @authorized_access_only(dataset="use_of_force_incidents")
 def public_uof_schema(short_name):
@@ -428,6 +420,14 @@ def public_uof_schema(short_name):
     if not department:
         abort(404)
     return render_template("department/site/schema/useofforce.html", department=department, chart_blocks=department.get_uof_schema_blocks(), editing=False, published=True)
+
+@blueprint.route("/<short_name>/officerinvolvedshootings/")
+@authorized_access_only(dataset="officer_involved_shootings")
+def public_ois(short_name):
+    department = Department.query.filter_by(short_name=short_name.upper()).first()
+    if not department:
+        abort(404)
+    return render_template("department/site/ois.html", department=department, chart_blocks=department.get_ois_blocks(), editing=False, published=True)
 
 @blueprint.route('/<short_name>/schema/officerinvolvedshootings/')
 @authorized_access_only(dataset="officer_involved_shootings")
