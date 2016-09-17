@@ -193,6 +193,29 @@ class Department(SurrogatePK, Model):
     def __repr__(self):
         return '<Department({name})>'.format(name=self.name)
 
+    def get_first_dataset_path(self):
+        ''' Return a string representing the path to the first existing dataset page for this department.
+            For use in url_for calls.
+        '''
+        lookup = [
+            {"prefix": "CitizenComplaint", "path": "department.public_complaints"},
+            {"prefix": "UseOfForceIncident", "path": "department.public_uof"},
+            {"prefix": "OfficerInvolvedShooting", "path": "department.public_ois"},
+            {"prefix": "AssaultOnOfficer", "path": "department.public_assaults"}
+        ]
+
+        for check in lookup:
+            # if there's a class for this dataset, return its path
+            try:
+                getattr(importlib.import_module("comport.data.models"), "{}{}".format(check["prefix"], self.short_name))
+            except AttributeError:
+                continue
+            else:
+                return check["path"]
+
+        # no dataset classes were found
+        return None
+
     def get_uof_csv(self):
         output = io.StringIO()
 
