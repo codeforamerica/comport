@@ -3,6 +3,10 @@ from comport.database import (Column, db, Model, SurrogatePK)
 from .cleaners import Cleaners
 from comport.utils import parse_date, parse_int
 
+#
+# DENOMINATOR VALUES
+#
+
 class DenominatorValue(SurrogatePK, Model):
     __tablename__ = "denominator_values"
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
@@ -13,12 +17,29 @@ class DenominatorValue(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
+#
+# DEMOGRAPHIC VALUES
+#
+
 class DemographicValue(SurrogatePK, Model):
     __tablename__ = "demographic_values"
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     race = Column(db.String(255), unique=False, nullable=True)
     count = Column(db.Integer, unique=False, nullable=True)
     department_value = Column(db.Boolean, nullable=True)
+
+    def __init__(self, **kwargs):
+        db.Model.__init__(self, **kwargs)
+
+#
+# INCIDENTS UPDATED
+#
+
+class IncidentsUpdated(SurrogatePK, Model):
+    __tablename__ = "incidents_updated"
+    department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False, index=True)
+    updated_date = Column(db.DateTime, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
