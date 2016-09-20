@@ -247,21 +247,16 @@ class Department(SurrogatePK, Model):
         ''' Return a string representing the path to the first existing dataset page for this department.
             For use in url_for calls.
         '''
-        lookup = [
-            {"prefix": "CitizenComplaint", "path": "department.public_complaints"},
-            {"prefix": "UseOfForceIncident", "path": "department.public_uof"},
-            {"prefix": "OfficerInvolvedShooting", "path": "department.public_ois"},
-            {"prefix": "AssaultOnOfficer", "path": "department.public_assaults"}
-        ]
-
-        for check in lookup:
+        datasets = ["complaints", "uof", "ois", "assaults"]
+        for check in datasets:
+            lookup = self.get_dataset_lookup(check)
             # if there's a class for this dataset, return its path
             try:
-                getattr(importlib.import_module("comport.data.models"), "{}{}".format(check["prefix"], self.short_name))
+                getattr(importlib.import_module("comport.data.models"), "{}{}".format(lookup["class_prefix"], self.short_name))
             except AttributeError:
                 continue
             else:
-                return check["path"]
+                return lookup["path"]
 
         # no dataset classes were found
         return None
