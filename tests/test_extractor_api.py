@@ -72,7 +72,6 @@ class TestHeartbeat:
         assert response.json_body['nextYear'] == now.year
         assert response.json_body['received'] == {'heartbeat': 'heartbeat'}
 
-
     @responses.activate
     def test_extractor_post_triggers_slack_notification(self, testapp):
         ''' A valid heartbeat post triggers a Slack notification
