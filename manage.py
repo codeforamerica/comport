@@ -13,7 +13,7 @@ from comport.user.models import User, Role
 from comport.department.models import Department, Extractor
 from comport.settings import DevConfig, ProdConfig
 from comport.database import db
-from comport.data.models import DenominatorValue, DemographicValue
+from comport.data.models import DenominatorValue, DemographicValue, IncidentsUpdated
 from testclient.JSON_test_client import JSONTestClient
 import importlib
 
@@ -58,7 +58,7 @@ def _make_context():
             class_name = prefix + name
             incident_classes[class_name] = getattr(importlib.import_module("comport.data.models"), class_name)
 
-    context = {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor}
+    context = {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'IncidentsUpdated': IncidentsUpdated}
     # update the context with the incident classes
     context.update(incident_classes)
 
