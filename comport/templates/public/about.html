@@ -1,0 +1,38 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div id="splash">
+  <div class="row">
+    <div class="col-md-1 cfalogo">
+      <p> A Project of:
+        <a href="https://www.codeforamerica.org">
+          <img src="../static/img/CfA_logo.jpg" alt="CFA Logo">
+        </a>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div id="tagline" class="display">
+        <h1>Change the conversation with transparency.</h1>
+      </div>
+      <p>
+      In 2015, Code for America <a href="https://www.codeforamerica.org/governments/indianapolis">partnered with Indianpolis, Indiana</a> to explore using technology and city data
+        to improve public safety. The result was this site, Comport, which makes it easier for law enforcement
+        agencies to share data with the public. Initially, it covers citizen complaints, use of force, and
+        officer-involved shootings.
+      </p>
+      <p>
+        In 2016, Code for America is expanding Comport to cover 3 more cities while broadening coverage to
+        pursuits and assaults on officers.
+      </p>
+      <p>Special thanks to our initial city partner:
+        <div>
+          <a href="/department/IMPD">
+            <img class="IndyDPS" src="../static/img/IndyDPSlogo.jpeg" >
+          </a>
+        </div>
+      </p>
+    </div>
+{% endblock %}
