@@ -224,6 +224,15 @@ var configs = {
     dataFunc: officerComplaintsCount,
   },
 
+  // unique complaints by officer, with a maximum
+  'complaints-by-officer-with-cap': {
+    chartType: 'flagHistogram',
+    x: "label",
+    y: "count",
+    dataFunc: officerComplaintsCount,
+    maxComplaints: 4,
+  },
+
   // unique officer-involved shootings by incident and district
   // (IMPD only)
   'ois-by-inc-district': {

@@ -192,16 +192,25 @@ function uniqueOfficerComplaints(rows){
 
 function officerComplaintsCount(config, data){
   data = uniqueOfficerComplaints(data);
+  var hasMaxComplaints = config.hasOwnProperty('maxComplaints');
   var counts = d3.nest()
     .key( function (d){
-      return d.complaintCount;
+      if (hasMaxComplaints){
+        return Math.min(d.complaintCount, config.maxComplaints);
+      } else {
+        return d.complaintCount;
+      }
     }).rollup( function (values){
       return values.length;
     }).entries(data);
   return counts.map(function(e){
     var obj = {};
     var n = e.key;
-    obj['label'] = "Officers with " + ( n > 1 ? n+" complaints" : n+" complaint" );
+    if (n == config.maxComplaints){
+      obj['label'] = "Officers with " + n + " or more complaints";
+    } else {
+      obj['label'] = "Officers with " + ( n > 1 ? n+" complaints" : n+" complaint" );
+    }
     obj['count'] = n;
     obj[config.y] = e.values;
     return obj;
@@ -255,8 +264,11 @@ function addMissingYears(dataMap){
 }
 
 function addOtherCategory(data){
+  // add an 'other' category to the prestructured data
+  // to consolidate groups of small counts
   var threshold = .006;
   var small_list = [];
+  // get total sum of all counts
   var total = data.map(function (g){
     return g.count;
   }).reduce(function (a,b) {
