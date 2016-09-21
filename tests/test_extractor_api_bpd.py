@@ -2,9 +2,9 @@
 import pytest
 import responses
 import json
-from datetime import datetime
+from datetime import datetime, time, timedelta
 from comport.department.models import Department, Extractor
-from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD, AssaultOnOfficerBPD
+from comport.data.models import IncidentsUpdated, OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from testclient.JSON_test_client import JSONTestClient
 from comport.data.cleaners import Cleaners
 from flask import current_app
@@ -13,7 +13,7 @@ from flask import current_app
 class TestExtractorBPD:
 
     def test_post_uof_data(self, testapp):
-        ''' New UOF data from the extractor is processed as expected.
+        ''' New and updated UOF data from the extractor is processed as expected.
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
@@ -22,51 +22,54 @@ class TestExtractorBPD:
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
 
-        # Get a generated list of UOF descriptions from the JSON test client
+        # Post 5 fake incidents to the UOF endpoint
+        uof_count = 5
         test_client = JSONTestClient()
-        uof_count = 1
-        uof_data = test_client.get_prebaked_uof(last=uof_count)
-        # post the json to the UOF URL
+        uof_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': uof_data})
 
         # assert that we got the expected reponse
         assert response.status_code == 200
-        assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == uof_count
 
-        # check the uof incident in the database against the data that was sent
-        cleaner = Cleaners()
-        sent_uof = uof_data[0]
-        check_uof = UseOfForceIncidentBPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
-        assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
-        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
-        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
-        assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
-        assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
-        assert check_uof.service_type == sent_uof['serviceType']
-        assert check_uof.arrest_made == sent_uof['arrestMade']
-        assert check_uof.arrest_charges == sent_uof['arrestCharges']
-        assert check_uof.resident_weapon_used == sent_uof['residentWeaponUsed']
-        assert check_uof.resident_injured == sent_uof['residentInjured']
-        assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
-        assert check_uof.officer_injured == sent_uof['officerInjured']
-        assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
-        assert check_uof.resident_condition == sent_uof['residentCondition']
-        assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
-        assert check_uof.officer_condition == sent_uof['officerCondition']
+        # there are 5 incident rows in the database
+        check_uofs = UseOfForceIncidentBPD.query.all()
+        assert len(check_uofs) == uof_count
 
-    def test_post_mistyped_uof_data(self, testapp):
-        ''' New UOF data from the extractor is processed as expected.
+        # make a valid updated date
+        today = datetime.combine(datetime.today(), time())
+        for incident in uof_data:
+            # verify that the opaqueIDs posted match those in the database
+            assert UseOfForceIncidentBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
+            # verify that the opaqueIds are recorded in IncidentsUpdated tables
+            record_updated = IncidentsUpdated.query.filter_by(opaque_id=incident['opaqueId']).first()
+            assert record_updated is not None
+            assert record_updated.updated_date == today
+            # now set the updated dates back a day, so the records will be replaced
+            # when we post new incidents with the same ids
+            record_updated.update(updated_date=today - timedelta(days=1))
+
+        # Create 5 more fake incidents
+        new_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
+        # give them the same opaqueIds as the first batch
+        for idx, _ in enumerate(new_data):
+            new_data[idx]['opaqueId'] = uof_data[idx]['opaqueId']
+
+        # post the new incident rows
+        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+
+        # there are 5 incident rows in the database
+        check_uofs = UseOfForceIncidentBPD.query.all()
+        assert len(check_uofs) == uof_count
+
+        # verify that the opaqueIDs posted match those in the database
+        for incident in uof_data:
+            assert UseOfForceIncidentBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
+
+    def test_all_records_destroyed_when_new_record_posted(self, testapp):
+        ''' Posting a new record with an id that matches a set of past records destroys all of them.
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
@@ -75,159 +78,54 @@ class TestExtractorBPD:
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
 
-        # Get a generated list of UOF descriptions from the JSON test client
+        # Post 5 fake incidents with an identical opaqueId to the UOF endpoint
+        uof_count = 5
         test_client = JSONTestClient()
-        uof_count = 1
-        uof_data = test_client.get_prebaked_uof(last=uof_count)
-
-        # The app expects number values to be transmitted as strings. Let's change them to integers.
-        uof_data[0]['residentAge'] = 28
-        uof_data[0]['officerAge'] = 46
-        uof_data[0]['officerYearsOfService'] = 17
-
-        # post the json to the UOF URL
+        uof_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
+        use_id = uof_data[0]['opaqueId']
+        for idx, _ in enumerate(uof_data):
+            uof_data[idx]['opaqueId'] = use_id
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': uof_data})
 
         # assert that we got the expected reponse
         assert response.status_code == 200
-        assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == uof_count
 
-        # check the uof incident in the database against the data that was sent
-        cleaner = Cleaners()
-        sent_uof = uof_data[0]
-        check_uof = UseOfForceIncidentBPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
-        assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
-        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
-        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
-        assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
-        assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
-        assert check_uof.service_type == sent_uof['serviceType']
-        assert check_uof.arrest_made == sent_uof['arrestMade']
-        assert check_uof.arrest_charges == sent_uof['arrestCharges']
-        assert check_uof.resident_weapon_used == sent_uof['residentWeaponUsed']
-        assert check_uof.resident_injured == sent_uof['residentInjured']
-        assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
-        assert check_uof.officer_injured == sent_uof['officerInjured']
-        assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
-        assert check_uof.resident_condition == sent_uof['residentCondition']
-        assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
-        assert check_uof.officer_condition == sent_uof['officerCondition']
+        # there are 5 incident rows in the database
+        check_uofs = UseOfForceIncidentBPD.query.all()
+        assert len(check_uofs) == uof_count
 
-    def test_update_uof_data(self, testapp):
-        ''' Updated UOF data from the extractor is processed as expected.
-        '''
-        # Set up the extractor
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        # make a valid updated date
+        today = datetime.combine(datetime.today(), time())
+        # all the records in the database have the same id
+        uof_records = UseOfForceIncidentBPD.query.filter_by(opaque_id=use_id).all()
+        assert len(uof_records) == 5
+        # verify that the opaqueId is recorded in an IncidentsUpdated table
+        record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
+        assert record_updated is not None
+        assert record_updated.updated_date == today
+        # now set the updated date back a day, so the records will be replaced
+        # when we post a new incident with the same id
+        record_updated.update(updated_date=today - timedelta(days=1))
 
-        # Set the correct authorization
-        testapp.authorization = ('Basic', (extractor.username, 'password'))
+        # Create 1 new fake incident
+        new_data = test_client.make_uof(count=1, short_name=department.short_name)
+        # give it the same opaqueId as the first batch
+        new_data[0]['opaqueId'] = use_id
 
-        # Get a generated list of UOF descriptions from the JSON test client
-        test_client = JSONTestClient()
-        uof_data = test_client.get_prebaked_uof(last=1)
-        # post the json to the UOF URL
-        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': uof_data})
+        # post the new incident
+        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
 
         # assert that we got the expected reponse
         assert response.status_code == 200
-        assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == 1
 
-        # Get the second pre-baked uof incident
-        updated_uof_data = test_client.get_prebaked_uof(first=1, last=2)
-        # Swap in the opaque ID from the first uof incident
-        updated_uof_data[0]["opaqueId"] = uof_data[0]["opaqueId"]
-        # The uof incident won't be a match unless these fields are the same
-        updated_uof_data[0]["officerIdentifier"] = uof_data[0]["officerIdentifier"]
-        updated_uof_data[0]["officerForceType"] = uof_data[0]["officerForceType"]
-        # post the json to the uof URL
-        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': updated_uof_data})
+        # there is 1 incident row in the database
+        check_uofs = UseOfForceIncidentBPD.query.all()
+        assert len(check_uofs) == 1
 
-        # assert that we got the expected reponse
-        assert response.status_code == 200
-        assert response.json_body['updated'] == 1
-        assert response.json_body['added'] == 0
+        # verify that the opaqueID posted matches that in the database
+        assert check_uofs[0].opaque_id == use_id
 
-        # There's only one complaint in the database.
-        all_uof = UseOfForceIncidentBPD.query.all()
-        assert len(all_uof) == 1
-
-        # check the uof incident in the database against the updated data that was sent
-        cleaner = Cleaners()
-        sent_uof = updated_uof_data[0]
-        check_uof = UseOfForceIncidentBPD.query.filter_by(opaque_id=sent_uof['opaqueId']).first()
-        assert check_uof.occured_date.strftime('%Y-%m-%d %-H:%-M:%S') == sent_uof['occuredDate']
-        assert check_uof.division == cleaner.capitalize(sent_uof['division'])
-        assert check_uof.precinct == cleaner.capitalize(sent_uof['precinct'])
-        assert check_uof.shift == cleaner.capitalize(sent_uof['shift'])
-        assert check_uof.beat == cleaner.capitalize(sent_uof['beat'])
-        assert check_uof.disposition == sent_uof['disposition']
-        assert check_uof.officer_force_type == cleaner.officer_force_type(sent_uof['officerForceType'])
-        assert check_uof.use_of_force_reason == sent_uof['useOfForceReason']
-        assert check_uof.service_type == sent_uof['serviceType']
-        assert check_uof.arrest_made == sent_uof['arrestMade']
-        assert check_uof.arrest_charges == sent_uof['arrestCharges']
-        assert check_uof.resident_weapon_used == sent_uof['residentWeaponUsed']
-        assert check_uof.resident_injured == sent_uof['residentInjured']
-        assert check_uof.resident_hospitalized == sent_uof['residentHospitalized']
-        assert check_uof.officer_injured == sent_uof['officerInjured']
-        assert check_uof.officer_hospitalized == sent_uof['officerHospitalized']
-        assert check_uof.resident_race == cleaner.race(sent_uof['residentRace'])
-        assert check_uof.resident_sex == cleaner.sex(sent_uof['residentSex'])
-        assert check_uof.resident_age == cleaner.number_to_string(sent_uof['residentAge'])
-        assert check_uof.resident_condition == sent_uof['residentCondition']
-        assert check_uof.officer_identifier == sent_uof['officerIdentifier']
-        assert check_uof.officer_race == cleaner.race(sent_uof['officerRace'])
-        assert check_uof.officer_sex == cleaner.sex(sent_uof['officerSex'])
-        assert check_uof.officer_age == cleaner.number_to_string(sent_uof['officerAge'])
-        assert check_uof.officer_years_of_service == cleaner.number_to_string(sent_uof['officerYearsOfService'])
-        assert check_uof.officer_condition == sent_uof['officerCondition']
-
-    def test_post_uof_data_near_match_does_not_update(self, testapp):
-        ''' UOF data with the same ID but different details creates a new record.
-        '''
-        # Set up the extractor
-        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
-
-        # Set the correct authorization
-        testapp.authorization = ('Basic', (extractor.username, 'password'))
-
-        # Get a generated list of UOF descriptions from the JSON test client
-        test_client = JSONTestClient()
-        uof_data = test_client.get_prebaked_uof(last=1)
-        # post the json to the UOF URL
-        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': uof_data})
-
-        # assert that we got the expected reponse
-        assert response.status_code == 200
-        assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == 1
-
-        # Get the second pre-baked uof incident
-        updated_uof_data = test_client.get_prebaked_uof(first=1, last=2)
-        # Swap in the opaque ID from the first uof incident
-        updated_uof_data[0]["opaqueId"] = uof_data[0]["opaqueId"]
-        # post the json to the uof URL
-        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': updated_uof_data})
-
-        # assert that we got the expected reponse
-        assert response.status_code == 200
-        assert response.json_body['updated'] == 0
-        assert response.json_body['added'] == 1
-
-        # There's only one complaint in the database.
-        all_uof = UseOfForceIncidentBPD.query.all()
-        assert len(all_uof) == 2
+        # verify that the opaqueId is recorded in an IncidentsUpdated table
+        record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
+        assert record_updated is not None
+        assert record_updated.updated_date == today
