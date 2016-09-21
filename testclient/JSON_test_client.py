@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from comport.department.models import Extractor
 from comport.utils import random_string, random_date
 import random
-
+import importlib
 
 class JSONTestClient(object):
 
@@ -129,136 +129,184 @@ class JSONTestClient(object):
         m.update((str(text) + key).encode('utf-8'))
         return m.hexdigest()
 
-    def make_complaints(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+    def make_complaints(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1), short_name="IMPD"):
+        # get a reference to the incident class
+        incident_class = getattr(importlib.import_module("comport.data.models"), "CitizenComplaint{}".format(short_name))
+        # build a variable to csv header lookup from the csv schema
+        key_list = [col[2] for col in incident_class.get_csv_schema()]
+
+        # separate officer keys
+        officer_keys = []
+        incident_keys = []
+        for key in key_list:
+            if key.startswith("officer"):
+                officer_keys.append(key)
+            else:
+                incident_keys.append(key)
+
         # make a smaller pool of officers so that it's possible to have more than one complaint per officer
         officers = []
         for x in range(0, count):
-            officers.append({
-                "officerIdentifier": self.hash(random_string(10)),
-                "officerRace": self.generate_race(),
-                "officerSex": self.generate_sex(),
-                "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": str(random.randint(0, 27))
-            })
+            officer = dict()
+            for key in officer_keys:
+                officer[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            officers.append(officer)
 
+        # build the complaints
         complaints = []
         for x in range(0, count):
-            assignment = self.generate_assignment()
-            allegation = self.generate_allegation()
-            new_complaint = {
-                "opaqueId": self.hash(random_string(10)),
-                "serviceType": self.generate_service_type(),
-                "source": self.generate_source(),
-                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
-                "division": assignment["division"],
-                "precinct": assignment["precinct"],
-                "shift": assignment["shift"],
-                "beat": assignment["beat"],
-                "allegationType": allegation["allegationType"],
-                "allegation": allegation["allegation"],
-                "disposition": self.generate_disposition(),
-                "residentRace": self.generate_race(),
-                "residentSex": self.generate_sex(),
-                "residentAge": str(random.randint(15, 70))
-            }
-            new_complaint.update(random.choice(officers))
-            complaints.append(new_complaint)
+            complaint = dict()
+            for key in incident_keys:
+                complaint[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            complaint.update(random.choice(officers))
+            complaints.append(complaint)
 
         return complaints
 
-    def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
-        # make a smaller pool of officers so that it's possible to have more than one assault per officer
+    def make_assaults(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1), short_name="IMPD"):
+        # get a reference to the incident class
+        incident_class = getattr(importlib.import_module("comport.data.models"), "AssaultOnOfficer{}".format(short_name))
+        # build a variable to csv header lookup from the csv schema
+        key_list = [col[2] for col in incident_class.get_csv_schema()]
+
+        # separate officer keys
+        officer_keys = []
+        incident_keys = []
+        for key in key_list:
+            if key == "officerIdentifier":
+                officer_keys.append(key)
+            else:
+                incident_keys.append(key)
+
+        # make a smaller pool of officers so that it's possible to have more than one incident per officer
         officers = []
         for x in range(0, count):
-            officers.append({
-                "officerIdentifier": self.hash(random_string(10))
-            })
+            officer = dict()
+            for key in officer_keys:
+                officer[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            officers.append(officer)
 
-        assaults = []
-        for x in range(0, count):
-            assignment = self.generate_assault_assignment()
-            force_type = self.generate_assault_force_type()
-            new_assault = {
-                "opaqueId": self.hash(random_string(10)),
-                "serviceType": self.generate_assault_service_type(),
-                "forceType": force_type,
-                "assignment": assignment,
-                "arrestMade": self.generate_bool(),
-                "officerInjured": self.generate_bool(),
-                "officerKilled": self.generate_bool(),
-                "reportFiled": self.generate_bool()
-            }
-            new_assault.update(random.choice(officers))
-            assaults.append(new_assault)
-
-        return assaults
-
-    def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+        # build the incidents
         incidents = []
         for x in range(0, count):
-            assignment = self.generate_assignment()
-            incidents.append({
-                "opaqueId": self.hash(random_string(10)),
-                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
-                "occuredTime": "",
-                "division": assignment["division"],
-                "precinct": assignment["precinct"],
-                "shift": assignment["shift"],
-                "beat": assignment["beat"],
-                "disposition": self.generate_disposition(),
-                "officerForceType": self.generate_officer_force_type(),
-                "useOfForceReason": self.generate_use_of_force_reason(),
-                "serviceType": self.generate_service_type(),
-                "arrestMade": self.generate_bool(),
-                "arrestCharges": self.generate_arrest_charges(),
-                "residentWeaponUsed": "",
-                "residentInjured": self.generate_bool(),
-                "residentHospitalized": self.generate_bool(),
-                "officerInjured": self.generate_bool(),
-                "officerHospitalized": self.generate_bool(),
-                "residentRace": self.generate_race(),
-                "residentSex": self.generate_sex(),
-                "residentAge": str(random.randint(15, 70)),
-                "residentCondition": self.generate_condition(),
-                "officerIdentifier": self.hash(random_string(10)),
-                "officerRace": self.generate_race(),
-                "officerSex": self.generate_sex(),
-                "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": str(random.randint(0, 27)),
-                "officerCondition": self.generate_condition()
-            })
+            incident = dict()
+            for key in incident_keys:
+                incident[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            incident.update(random.choice(officers))
+            incidents.append(incident)
 
         return incidents
 
-    def make_ois(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1)):
+    def make_uof(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1), short_name="IMPD"):
+        # get a reference to the incident class
+        incident_class = getattr(importlib.import_module("comport.data.models"), "UseOfForceIncident{}".format(short_name))
+        # build a variable to csv header lookup from the csv schema
+        key_list = [col[2] for col in incident_class.get_csv_schema()]
+
         incidents = []
         for x in range(0, count):
-            assignment = self.generate_assignment()
-            incidents.append({
-                "opaqueId": self.hash(random_string(10)),
-                "serviceType": self.generate_service_type(),
-                "occuredDate": random_date(start_date, end_date).strftime("%Y-%m-%d 0:0:00"),
-                "occuredTime": "",
-                "division": assignment["division"],
-                "precinct": assignment["precinct"],
-                "shift": assignment["shift"],
-                "beat": assignment["beat"],
-                "disposition": self.generate_disposition(),
-                "residentRace": self.generate_race(),
-                "residentSex": self.generate_sex(),
-                "residentAge": str(random.randint(15, 70)),
-                "residentWeaponUsed": self.generate_ois_resident_force_type(),
-                "residentCondition": self.generate_condition(),
-                "officerIdentifier": self.hash(random_string(10)),
-                "officerForceType": self.generate_ois_officer_force_type(),
-                "officerRace": self.generate_race(),
-                "officerSex": self.generate_sex(),
-                "officerAge": str(random.randint(23, 50)),
-                "officerYearsOfService": random.randint(0, 27),
-                "officerCondition": self.generate_condition()
-            })
+            incident = dict()
+            for key in key_list:
+                incident[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            incidents.append(incident)
 
         return incidents
+
+    def make_ois(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1), short_name="IMPD"):
+        # get a reference to the incident class
+        incident_class = getattr(importlib.import_module("comport.data.models"), "OfficerInvolvedShooting{}".format(short_name))
+        # build a variable to csv header lookup from the csv schema
+        key_list = [col[2] for col in incident_class.get_csv_schema()]
+
+        incidents = []
+        for x in range(0, count):
+            incident = dict()
+            for key in key_list:
+                incident[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            incidents.append(incident)
+
+        return incidents
+
+    def make_value(self, value_key, **kwargs):
+        ''' make a convincing fake value for the key
+        '''
+        if value_key in ["arrestMade", "officerInjured", "officerKilled", "reportFiled", "residentInjured", "residentHospitalized", "officerHospitalized"]:
+            return self.generate_bool()
+
+        if value_key in ["opaqueId", "officerIdentifier", "residentIdentifier"]:
+            return self.hash(random_string(10))
+
+        if value_key in ["officerRace", "residentRace"]:
+            return self.generate_race()
+
+        if value_key in ["officerSex", "residentSex"]:
+            return self.generate_sex()
+
+        if value_key in ["officerAge", "residentAge"]:
+            return str(random.randint(23, 50))
+
+        if value_key in ["officerCondition", "residentCondition"]:
+            return self.generate_condition()
+
+        if value_key == "officerYearsOfService":
+            return str(random.randint(0, 27))
+
+        if value_key == "serviceType":
+            return self.generate_service_type()
+
+        if value_key == "source":
+            return self.generate_source()
+
+        if value_key == "occuredDate":
+            return random_date(kwargs['start_date'], kwargs['end_date']).strftime("%Y-%m-%d 0:0:00")
+
+        if value_key == "occuredTime":
+            return ""
+
+        if value_key == "division":
+            return self.generate_division(short_name=kwargs['short_name'])
+
+        if value_key == "precinct":
+            return self.generate_precinct()
+
+        if value_key == "shift":
+            return self.generate_shift()
+
+        if value_key == "beat":
+            return self.generate_beat()
+
+        if value_key == "bureau":
+            return self.generate_bureau(short_name=kwargs['short_name'])
+
+        if value_key == "assignment":
+            return self.generate_assignment()
+
+        if value_key == "unit":
+            return self.generate_unit()
+
+        if value_key == "platoon":
+            return self.generate_platoon()
+
+        if value_key == "allegationType":
+            return self.generate_allegation_type()
+
+        if value_key == "allegation":
+            return self.generate_allegation()
+
+        if value_key == "disposition":
+            return self.generate_disposition()
+
+        if value_key == "officerForceType":
+            return self.generate_officer_force_type()
+
+        if value_key == "useOfForceReason":
+            return self.generate_use_of_force_reason()
+
+        if value_key == "arrestCharges":
+            return self.generate_arrest_charges()
+
+        if value_key == "residentWeaponUsed":
+            return ""
 
     def generate_bool(self):
         return random.choice([True, False, None])
@@ -338,150 +386,15 @@ class JSONTestClient(object):
         ])
         return service_type
 
+    def generate_allegation_type(self):
+        return random.choice(
+            ["Use of Force", "Violation of Any Rule", "Citizen Interaction", "Substandard Performance", "Detention/Arrest", "Vehicle Operation", "Investigative Procedures", "Conduct Unbecoming", "Search/Seizure", "Neglect of Duty", "Off-Duty Employment", "Prisoner Handling/Trans.", "Bias-Based Profiling", "Violation of Any Law", "Supv. Responsibilities", "Breach of Discipline", "Info. Security/Access", "Field Operations", "Failure to Cooperate", "Equipment and Uniforms", "Animal Incidents", "Unit or Section SOPs"]
+        )
+
     def generate_allegation(self):
-        allegation = random.choice([
-            ['Use of Force', 'Unreasonable Force (Hands, Fists, Feet)'],
-            ['Violation of Any Rule',
-             'Failure to obey all orders, rules, regulations, policies, and SOPs'],
-            ['Citizen Interaction', 'Rude, discourteous, or insulting language'],
-            ['Use of Force', 'Unreasonable Force (Weapon)'],
-            ['Substandard Performance', 'Failure to properly investigate crash'],
-            ['Detention/Arrest', 'No PC/suspicion for arrest/detention'],
-            ['Vehicle Operation', 'Improper parking'],
-            ['Use of Force', 'Mistreatment of person in custody'],
-            ['Investigative Procedures', ''],
-            ['Conduct Unbecoming', ''],
-            ['Search/Seizure', ''],
-            ['Substandard Performance', ''],
-            ['Violation of Any Rule', ''],
-            ['Neglect of Duty',
-                'Failure to request a supervisor to investigate a use of force incident'],
-            ['Vehicle Operation', 'Aggressive or unsafe driving'],
-            ['Vehicle Operation', ''],
-            ['Citizen Interaction',
-                'Failure to make a report when approached by a citizen'],
-            ['Violation of Any Rule', 'Failure to conform to the department\'s rules, regulations, orders, policies, and SOPs while off duty'],
-            ['Vehicle Operation', 'Speeding'],
-            ['Neglect of Duty', 'Failure to take proper law enforcement action'],
-            ['Citizen Interaction', 'Failure to provide name or badge number'],
-            ['Citizen Interaction',
-                'Rude, discourteous, or insulting gesture(s)'],
-            ['Off-Duty Employment', ''],
-            ['Use of Force', 'Unreasonable Force (Handcuff Marks)'],
-            ['Neglect of Duty', 'Misuse of Discretion'],
-            ['Search/Seizure', 'Improper warantless search'],
-            ['Search/Seizure', 'Illegal warrantless search'],
-            ['Substandard Performance',
-                'Act or ommission contrary to the obectives of the department'],
-            ['Use of Force', 'Improper use of weapon'],
-            ['Use of Force', 'Unreasonable Force (Less Lethal Weapon)'],
-            ['Prisoner Handling/Trans.', 'Mistreatment of person in custody'],
-            ['Vehicle Operation', 'Misuse of emergency lights or siren'],
-            ['Citizen Interaction', 'Failure to make crash report'],
-            ['Bias-Based Profiling', 'Race'],
-            ['Violation of Any Law', ''],
-            ['Off-Duty Employment', 'Working type of ODE prohibited by general order'],
-            ['Search/Seizure', 'Unreasonable search/seizure of cell phone'],
-            ['Supv. Responsibilities', 'Failure to perform supervisory responsibility'],
-            ['Search/Seizure', 'Improper search of a member of the opposite sex'],
-            ['Search/Seizure', 'Improper strip search'],
-            ['Neglect of Duty', ''],
-            ['Neglect of Duty', 'Failure to secure property'],
-            ['Use of Force', 'Unreasonable Force (Other)'],
-            ['Breach of Discipline', 'Taking official action in a personal dispute or incident involving a friend or relative while off duty'],
-            ['Neglect of Duty', 'Failure to devote full attention to duties'],
-            ['Vehicle Operation', 'Other moving traffic violation'],
-            ['Vehicle Operation', 'Texting while driving'],
-            ['Off-Duty Employment',
-                'Failure to mark out of service at ODE location when required'],
-            ['Info. Security/Access',
-             'Unauthorized dissimenation of official business, records or data of the department'],
-            ['Detention/Arrest', ''],
-            ['Breach of Discipline',
-             'Conduct detrimental to the efficient operation and/or general discipline of the department'],
-            ['Neglect of Duty', 'Failure to appear for a scheduled court appearance'],
-            ['Investigative Procedures',
-                'Failure to complete and incident report when necessary'],
-            ['Neglect of Duty', 'Failure to complete and incident report when necessary'],
-            ['Field Operations', ''],
-            ['Citizen Interaction', 'Indecent or lewd language'],
-            ['Conduct Unbecoming', 'Use of official position, badge, or credentials for personal advantage or to solicit goods, services, or gratuities.'],
-            ['Breach of Discipline', 'Failure to improve performance'],
-            ['Violation of Any Law', 'Theft'],
-            ['Off-Duty Employment', 'Working without an approved work permit'],
-            ['Neglect of Duty',
-                'Failure to honor a subpoena for a court appearance or deposition'],
-            ['Failure to Cooperate',
-                'Failure to be truthful in an official report or correspondence'],
-            ['Neglect of Duty', 'Unwarranted holding of property'],
-            ['Substandard Performance', 'Misuse of department or public property'],
-            ['Substandard Performance',
-                'Failure to complete and incident report when necessary'],
-            ['Citizen Interaction', 'Rude, demeaning, or affronting language'],
-            ['Substandard Performance',
-                'Submission of an inaccurate or incomplete report'],
-            ['Off-Duty Employment', 'Failure to log on duty when required'],
-            ['Citizen Interaction', 'Rude, demeaning, or affronting gestures'],
-            ['Investigative Procedures',
-                'Including false information in incident or crash report'],
-            ['Failure to Cooperate',
-             'Failure to truthfully answer questions specfically, directly, and narrowly'],
-            ['Vehicle Operation', 'Violation of take-home vehicle restrictions'],
-            ['Substandard Performance',
-             'Conduct detrimental to the efficient operation and/or general discipline of the department'],
-            ['Conduct Unbecoming', 'Intervening in the assigned case of another member'],
-            ['Failure to Cooperate',
-                'Including false information in incident or crash report'],
-            ['Equipment and Uniforms', 'Improper weapon storage'],
-            ['Neglect of Duty', 'Failure to take required action while off duty'],
-            ['Violation of Any Law',
-                'Members shall obey all federal, state, and/or local laws.'],
-            ['Vehicle Operation', 'Inappropriate uniform or appearance'],
-            ['Substandard Performance',
-             'Failure to submit evidence or property to property room as required'],
-            ['Use of Force', 'Unreasonable Force (Firearm)'],
-            ['Animal Incidents', 'Unreasonable Force (Firearm)'],
-            ['Animal Incidents', 'Officer Involved Shooting (Animal Injured)'],
-            ['Conduct Unbecoming', 'Rude, demeaning, or affronting language'],
-            ['Substandard Performance', 'No PC/suspicion for arrest/detention'],
-            ['Investigative Procedures',
-                'Submission of an inaccurate or incomplete report'],
-            ['Violation of Any Law', 'Infraction/ordinance violation'],
-            ['Citizen Interaction', 'Unreasonable Force (Firearm)'],
-            ['Search/Seizure', 'Unwarranted holding of property'],
-            ['Citizen Interaction', 'Failure to Release Property'],
-            ['Substandard Performance',
-             'Failure to complete required work promptly, accurately, or completely'],
-            ['Citizen Interaction', 'Traffic stop without marked car or uniform'],
-            ['Neglect of Duty',
-                'Failure to complete required work promptly, accurately, or completely'],
-            ['Conduct Unbecoming', 'Intimidation/Improper Display of Police Authority'],
-            ['Neglect of Duty', 'Failure to complete an incident report when necessary'],
-            ['Citizen Interaction',
-                'Failure to complete an incident report when necessary'],
-            ['Substandard Performance', 'Failure to take proper law enforcement action'],
-            ['Off-Duty Employment', 'Failure to take incident report while working ODE'],
-            ['Neglect of Duty', 'Failure to make and turn in all reports promptly, accurately, and completely in conformity with department orders.'],
-            ['Citizen Interaction',
-             'Failure to request a supervisor when a citizen desires to make a complaint'],
-            ['Citizen Interaction', 'Indecent or lewd gestures(s)'],
-            ['Substandard Performance',
-             'Failure to perform duties which maintain satisfactory standards of efficiency/objectives of department.'],
-            ['Bias-Based Profiling', 'National Origin'],
-            ['Detention/Arrest', 'Detention/arrest in violation of Constitutional Rights.'],
-            ['Citizen Interaction',
-                'Act or ommission contrary to the obectives of the department'],
-            ['Unit or Section SOPs', ''],
-            ['Substandard Performance',
-                'Inability or unwillingness to perform assigned duties.'],
-            ['Vehicle Operation', 'Unauthorized rider'],
-            ['Prisoner Handling/Trans.', 'Failure to properly handcuff prisoner'],
-            ['Conduct Unbecoming', 'Improper posting on a social media website'],
-            ['Substandard Performance', 'Failure to make and turn in all reports promptly, accurately, and completely in conformity with department orders.'],
-            ['Citizen Interaction', 'Failure to request interpreter'],
-            [None, None]
-        ])
-        return {"allegationType": allegation[0], "allegation": allegation[1]}
+        return random.choice(
+            ['Unreasonable Force (Hands, Fists, Feet)', 'Failure to obey all orders, rules, regulations, policies, and SOPs', 'Rude, discourteous, or insulting language', 'Unreasonable Force (Weapon)', 'Failure to properly investigate crash', 'No PC/suspicion for arrest/detention', 'Improper parking', 'Mistreatment of person in custody', 'Failure to request a supervisor to investigate a use of force incident', 'Aggressive or unsafe driving', 'Failure to make a report when approached by a citizen', 'Failure to conform to the department\'s rules, regulations, orders, policies, and SOPs while off duty', 'Speeding', 'Failure to take proper law enforcement action', 'Failure to provide name or badge number', 'Rude, discourteous, or insulting gesture(s)', 'Unreasonable Force (Handcuff Marks)', 'Misuse of Discretion', 'Improper warantless search', 'Illegal warrantless search', 'Act or ommission contrary to the obectives of the department', 'Improper use of weapon', 'Unreasonable Force (Less Lethal Weapon)', 'Misuse of emergency lights or siren', 'Failure to make crash report', 'Race', 'Working type of ODE prohibited by general order', 'Unreasonable search/seizure of cell phone', 'Failure to perform supervisory responsibility', 'Improper search of a member of the opposite sex', 'Improper strip search', 'Failure to secure property', 'Unreasonable Force (Other)', 'Taking official action in a personal dispute or incident involving a friend or relative while off duty', 'Failure to devote full attention to duties', 'Other moving traffic violation', 'Texting while driving', 'Failure to mark out of service at ODE location when required', 'Unauthorized dissimenation of official business, records or data of the department', 'Conduct detrimental to the efficient operation and/or general discipline of the department', 'Failure to appear for a scheduled court appearance', 'Failure to complete and incident report when necessary', 'Indecent or lewd language', 'Use of official position, badge, or credentials for personal advantage or to solicit goods, services, or gratuities.', 'Failure to improve performance', 'Theft', 'Working without an approved work permit', 'Failure to honor a subpoena for a court appearance or deposition', 'Failure to be truthful in an official report or correspondence', 'Unwarranted holding of property', 'Misuse of department or public property', 'Rude, demeaning, or affronting language', 'Submission of an inaccurate or incomplete report', 'Failure to log on duty when required', 'Rude, demeaning, or affronting gestures', 'Including false information in incident or crash report', 'Failure to truthfully answer questions specfically, directly, and narrowly', 'Violation of take-home vehicle restrictions', 'Intervening in the assigned case of another member', 'Improper weapon storage', 'Failure to take required action while off duty', 'Members shall obey all federal, state, and/or local laws.', 'Inappropriate uniform or appearance', 'Failure to submit evidence or property to property room as required', 'Unreasonable Force (Firearm)', 'Officer Involved Shooting (Animal Injured)', 'Infraction/ordinance violation', 'Failure to Release Property', 'Failure to complete required work promptly, accurately, or completely', 'Traffic stop without marked car or uniform', 'Intimidation/Improper Display of Police Authority', 'Failure to complete an incident report when necessary', 'Failure to take incident report while working ODE', 'Failure to make and turn in all reports promptly, accurately, and completely in conformity with department orders.', 'Failure to request a supervisor when a citizen desires to make a complaint', 'Indecent or lewd gestures(s)', 'Failure to perform duties which maintain satisfactory standards of efficiency/objectives of department.', 'National Origin', 'Detention/arrest in violation of Constitutional Rights.', 'Inability or unwillingness to perform assigned duties.', 'Unauthorized rider', 'Failure to properly handcuff prisoner', 'Improper posting on a social media website', 'Failure to request interpreter']
+        )
 
     def generate_source(self):
         return random.choice(["CPCO (Formal)", "CPCO (Informal)"])
@@ -492,168 +405,68 @@ class JSONTestClient(object):
                 "Interviewing", "Restraining", "Transporting", None]
         )
 
-    def generate_assignment(self, department_short_code="IMPD"):
-        if department_short_code == "BPD":
-            assignment = random.choice([
-                ["Operational", "CID", "Northeastern District"],
-                ["Operational", "CID", "Northern District"],
-                ["Operational", "CID", "Northwestern District"],
-                ["Operational", "CID", "Southeastern District"],
-                ["Operational", "Patrol", "Southwestern District"],
-                ["Operational", "Patrol", "Central District"],
-                ["Operational", "Patrol", "Eastern District"],
-                ["Operational", "Patrol", "Northeastern District"],
-                ["Operational", "Patrol", "Northern District"],
-                ["Operational", "Patrol", "Northwestern District"],
-                ["Operational", "Patrol", "Police Academy"],
-                ["Operational", "Patrol", "Southeastern District"],
-                ["Operational", "Patrol", "Southern District"],
-                ["Operational", "Patrol", "Western District"],
-                ["Administrative", "CID", "Homicide Section"],
-                ["Administrative", "Administrative", "Southwestern District"],
-                ["Administrative", "Administrative", "Police Academy"]
-            ])
-            return {"bureau": assignment[0], "division": assignment[1], "assignment": assignment[2]}
+    def generate_division(self, short_name="IMPD"):
+        if short_name == "BPD":
+            return random.choice(
+                ["CID", "Patrol", "Administrative"]
+            )
 
-        elif department_short_code == "LMPD":
-            assignment = random.choice([
-                ["Administrative Bureau", "Training", "Training", "Basic Academy"],
-                ["Patrol Bureau", "1st Division", "1st Division", "1st Platoon"],
-                ["Patrol Bureau", "1st Division", "1st Division", "2nd Platoon"],
-                ["Patrol Bureau", "1st Division", "1st Division", "3rd Platoon"],
-                ["Patrol Bureau", "1st Division", "1st Division", "Bike Platoon"],
-                ["Patrol Bureau", "2nd Division", "2nd Division", "1st Platoon"],
-                ["Patrol Bureau", "2nd Division", "2nd Division", "2nd Platoon"],
-                ["Patrol Bureau", "2nd Division", "2nd Division", "3rd Platoon"],
-                ["Patrol Bureau", "3rd Division", "3rd Division", "1st Platoon"],
-                ["Patrol Bureau", "3rd Division", "3rd Division", "2nd Platoon"],
-                ["Patrol Bureau", "3rd Division", "3rd Division", "3rd Platoon"],
-                ["Patrol Bureau", "4th Division", "4th Division", "1st Platoon"],
-                ["Patrol Bureau", "4th Division", "4th Division", "2nd Platoon"],
-                ["Patrol Bureau", "4th Division", "4th Division", "3rd Platoon"],
-                ["Patrol Bureau", "5th Division", "5th Division", "1st Platoon"],
-                ["Patrol Bureau", "5th Division", "5th Division", "2nd Platoon"],
-                ["Patrol Bureau", "5th Division", "5th Division", "3rd Platoon"],
-                ["Patrol Bureau", "6th Division", "6th Division", "1st Platoon"],
-                ["Patrol Bureau", "6th Division", "6th Division", "2nd Platoon"],
-                ["Patrol Bureau", "6th Division", "6th Division", "3rd Platoon"],
-                ["Patrol Bureau", "7th Division", "7th Division", "1st Platoon"],
-                ["Patrol Bureau", "7th Division", "7th Division", "2nd Platoon"],
-                ["Patrol Bureau", "7th Division", "7th Division", "3rd Platoon"],
-                ["Patrol Bureau", "8th Division", "8th Division", "1st Platoon"],
-                ["Patrol Bureau", "8th Division", "8th Division", "2nd Platoon"],
-                ["Patrol Bureau", "8th Division", "8th Division", "3rd Platoon"],
-                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 1"],
-                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 2"],
-                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 3"],
-                ["Patrol Bureau", "Patrol Bureau", "9th Division", "Street Platoon 4"],
-                ["Support Bureau", "Special Operations", "Canine Unit", "1st Platoon"],
-                ["Support Bureau", "Special Operations", "Canine Unit", "2nd Platoon"],
-                ["Support Bureau", "Special Operations", "Canine Unit", "3rd Platoon"]
-            ])
-            return {"bureau": assignment[0], "division": assignment[1], "unit": assignment[2], "platoon": assignment[3]}
+        if short_name == "LMPD":
+            return random.choice(
+                ["Training", "1st Division", "2nd Division", "3rd Division", "4th Division", "5th Division", "6th Division", "7th Division", "8th Division", "Patrol Bureau", "Special Operations"]
+            )
 
-        # IMPD is the default
-        assignment = random.choice([
-            ["Chiefs Staff Division", "Court Liaison", "", ""],
-            ["Investigative Division", "Crime Prevention", "C Shift", ""],
-            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Evenings"],
-            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Off Duty"],
-            ["Investigative Division", "Detective Bureau", "Auto Theft Unit", "Rotating"],
-            ["Investigative Division", "Detective Bureau", "Homicide  Unit", "Evenings"],
-            ["Investigative Division", "Detective Bureau", "Homicide  Unit", "Rotating"],
-            ["Investigative Division", "First Precinct", "A Shift", "X21 Zone"],
-            ["Investigative Division", "First Precinct", "A Shift", "X22 Zone"],
-            ["Investigative Division", "First Precinct", "B Shift", "X26 Zone"],
-            ["Investigative Division", "Second Precinct", "Day Beats", "Beat 19"],
-            ["Investigative Division", "Special Investigations", "Computer Crimes", "Days"],
-            ["Investigative Division", "Special Investigations", "Computer Crimes", "Evenings"],
-            ["Investigative Division", "Special Investigations", "Criminal Intelligence", "Days"],
-            ["Investigative Division", "Special Investigations", "Day Beats", "Beat 19"],
-            ["Investigative Division", "Special Investigations", "K 9 Unit", "Days"],
-            ["Investigative Division", "Special Investigations", "Narcotics", "Days"],
-            ["Investigative Division", "Special Investigations", "Vice", "Evenings"],
-            ["Operational Bureau", "First Precinct", "C Shift", "X25 Zone"],
-            ["Operational Bureau", "Fourth Precinct", "C.O.P. Program", "Days"],
-            ["Operational Bureau", "Fourth Precinct", "Unknown", "Unknown"],
-            ["Operational Bureau", "Second Precinct", "B Shift", "X20 Zone"],
-            ["Operational Bureau", "Second Precinct", "Day Beats", "Beat 18"],
-            ["Operational Bureau", "Second Precinct", "Day Beats", "Beat 19"],
-            ["Operational Bureau", "Third Precinct", "C Shift", "X26 Zone"],
-            ["Operational Division", "Crime Prevention", "B Shift", "X27 Zone"],
-            ["Operational Division", "Detective Bureau", "Auto Theft Unit", "Days"],
-            ["Operational Division", "First Precinct", "A Shift", "X20 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X22 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X23 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X24 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X25 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X26 Zone"],
-            ["Operational Division", "First Precinct", "A Shift", "X27 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "Beat 20"],
-            ["Operational Division", "First Precinct", "B Shift", "X20 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X21 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X22 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X23 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X24 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X26 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X27 Zone"],
-            ["Operational Division", "First Precinct", "B Shift", "X28 Zone"],
-            ["Operational Division", "First Precinct", "C Shift", "X20 Zone"],
-            ["Operational Division", "First Precinct", "C Shift", "X21 Zone"],
-            ["Operational Division", "First Precinct", "C Shift", "X23 Zone"],
-            ["Operational Division", "First Precinct", "C Shift", "X24 Zone"],
-            ["Operational Division", "First Precinct", "C Shift", "X25 Zone"],
-            ["Operational Division", "Fourth Precinct", "A Shift", "X20 Zone"],
-            ["Operational Division", "Fourth Precinct", "A Shift", "X22 Zone"],
-            ["Operational Division", "Fourth Precinct", "A Shift", "X24 Zone"],
-            ["Operational Division", "Fourth Precinct", "B Shift", "Beat 23"],
-            ["Operational Division", "Fourth Precinct", "B Shift", "X25 Zone"],
-            ["Operational Division", "Fourth Precinct", "B Shift", "X27 Zone"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "Beat 20"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "Beat 23"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "X20 Zone"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "X21 Zone"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "X22 Zone"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "X25 Zone"],
-            ["Operational Division", "Fourth Precinct", "C Shift", "X27 Zone"],
-            ["Operational Division", "Fourth Precinct", "Commanding Officer", "Days"],
-            ["Operational Division", "Second Precinct", "A Shift", "Beat 14"],
-            ["Operational Division", "Second Precinct", "A Shift", "Beat 17"],
-            ["Operational Division", "Second Precinct", "A Shift", "Beat 19"],
-            ["Operational Division", "Second Precinct", "A Shift", "X20 Zone"],
-            ["Operational Division", "Second Precinct", "B Shift", "X20 Zone"],
-            ["Operational Division", "Second Precinct", "B Shift", "X23 Zone"],
-            ["Operational Division", "Second Precinct", "B Shift", "X25 Zone"],
-            ["Operational Division", "Second Precinct", "C Shift", "X22 Zone"],
-            ["Operational Division", "Second Precinct", "Day Beats", ""],
-            ["Operational Division", "Second Precinct", "Day Beats", "Beat 15"],
-            ["Operational Division", "Second Precinct", "Day Beats", "Beat 19"],
-            ["Operational Division", "Second Precinct", "Day Beats", "Beat 20"],
-            ["Operational Division", "Second Precinct", "Days Bikes", "Beat 19"],
-            ["Operational Division", "Second Precinct", "Days Bikes", "Evenings"],
-            ["Operational Division", "Second Precinct", "Night Beats", "Beat 19"],
-            ["Operational Division", "Second Precinct", "Night Beats", "Evenings"],
-            ["Operational Division", "Second Precinct", "Oceanfront", "Day Bikes"],
-            ["Operational Division", "Second Precinct", "Off Duty / LE", "Evenings"],
-            ["Operational Division", "Special Investigations", "B Shift", "X20 Zone"],
-            ["Operational Division", "Special Investigations", "Bomb Squad", "Beat 20"],
-            ["Operational Division", "Special Operations", "Bomb Squad", "Rotating"],
-            ["Operational Division", "Special Operations", "SWAT Team", "	"],
-            ["Operational Division", "Special Operations", "SWAT Team", "MidNights"],
-            ["Operational Division", "Special Operations", "SWAT Team", "Rotating"],
-            ["Operational Division", "Third Precinct", "A Shift", "C.O.P."],
-            ["Operational Division", "Third Precinct", "B Shift", "X22 Zone"],
-            ["Operational Division", "Third Precinct", "B Shift", "X24 Zone"],
-            ["Operational Division", "Third Precinct", "C Shift", "X26 Zone"],
-            ["Operational Division", "Third Precinct", "C Shift", "X29 Zone"],
-            ["Prof. Dev and Training", "VBLETA", "Instructor", "Days"],
-            ["Support Division", "Logistical Support", "A Shift", ""],
-            [None, None, None, None],
-            [None, None, None, None],
-            [None, None, None, None],
-            [None, None, None, None]
-        ])
-        return {"division": assignment[0], "precinct": assignment[1], "shift": assignment[2], "beat": assignment[3]}
+        # IMPD
+        return random.choice(
+            ["Chiefs Staff Division", "Investigative Division", "Operational Bureau", "Operational Division", "Prof. Dev and Training", "Support Division"]
+        )
+
+    def generate_precinct(self):
+        # IMPD
+        return random.choice(
+            ["Court Liaison", "Crime Prevention", "Detective Bureau", "First Precinct", "Fourth Precinct", "Logistical Support", "Second Precinct", "Special Investigations", "Special Operations", "Third Precinct", "VBLETA"]
+        )
+
+    def generate_shift(self):
+        # IMPD
+        return random.choice(
+            ["A Shift", "Auto Theft Unit", "B Shift", "Bomb Squad", "C Shift", "C.O.P. Program", "Commanding Officer", "Computer Crimes", "Criminal Intelligence", "Day Beats", "Days Bikes", "Homicide Unit", "Instructor", "K 9 Unit", "Narcotics", "Night Beats", "Oceanfront", "Off Duty / LE", "SWAT Team", "Unknown", "Vice"]
+        )
+
+    def generate_beat(self):
+        # IMPD
+        return random.choice(
+            ["Beat 14", "Beat 17", "Beat 19", "C.O.P.", "X20 Zone", "X21 Zone", "X22 Zone", "X23 Zone", "X24 Zone", "X25 Zone", "X26 Zone", "X27 Zone", "Days", "Evenings", "Off Duty", "Rotating", "Beat 20", "Beat 23", "X28 Zone", "X29 Zone", "Beat 15", "Beat 18", "Day Bikes", "MidNights", "Unknown"]
+        )
+
+    def generate_bureau(self, short_name="BPD"):
+        if short_name == "LMPD":
+            return random.choice(
+                ["Administrative Bureau", "Patrol Bureau", "Support Bureau"]
+            )
+
+        # BPD
+        return random.choice(
+            ["Administrative", "Operational"]
+        )
+
+    def generate_assignment(self):
+        # BPD
+        return random.choice(
+            ["Northeastern District", "Northern District", "Northwestern District", "Southeastern District", "Southwestern District", "Central District", "Eastern District", "Police Academy", "Southern District", "Western District", "Homicide Second"]
+        )
+
+    def generate_unit(self):
+        # LMPD
+        return random.choice(
+            ["1st Division", "2nd Division", "3rd Division", "4th Division", "5th Division", "6th Division", "7th Division", "8th Division", "9th Division", "Canine Unit", "Training"]
+        )
+
+    def generate_platoon(self):
+        # LMPD
+        return random.choice(
+            ["1st Platoon", "2nd Platoon", "3rd Platoon", "Bike Platoon", "Street Platoon 1", "Street Platoon 2", "Street Platoon 3", "Street Platoon 4", "Basic Academy"]
+        )
 
     def generate_officer_force_type(self):
         return random.choice(
