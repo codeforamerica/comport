@@ -88,9 +88,9 @@ class UseOfForceIncidentIMPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("disposition", "disposition"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("division", "division", "division"), ("district", "precinct", "precinct"), ("shift", "shift", "shift"), ("beat", "beat", "beat"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("disposition", "disposition", "disposition"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -179,9 +179,9 @@ class AssaultOnOfficerIMPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("officerIdentifier", "officer_identifier"), ("serviceType", "service_type"), ("forceType", "force_type"), ("assignment", "assignment"), ("arrestMade", "arrest_made"), ("officerInjured", "officer_injured"), ("officerKilled", "officer_killed"), ("reportFiled", "report_filed")]
+        return [("id", "opaque_id", "opaqueId"), ("officerIdentifier", "officer_identifier", "officerIdentifier"), ("serviceType", "service_type", "serviceType"), ("forceType", "force_type", "forceType"), ("assignment", "assignment", "assignment"), ("arrestMade", "arrest_made", "arrestMade"), ("officerInjured", "officer_injured", "officerInjured"), ("officerKilled", "officer_killed", "officerKilled"), ("reportFiled", "report_filed", "reportFiled")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -252,9 +252,9 @@ class CitizenComplaintIMPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("serviceType", "service_type"), ("source", "source"), ("allegationType", "allegation_type"), ("allegation", "allegation"), ("finding", "disposition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("division", "division", "division"), ("district", "precinct", "precinct"), ("shift", "shift", "shift"), ("beat", "beat", "beat"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source"), ("allegationType", "allegation_type", "allegationType"), ("allegation", "allegation", "allegation"), ("finding", "disposition", "disposition"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -362,9 +362,9 @@ class OfficerInvolvedShootingIMPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("division", "division"), ("district", "precinct"), ("shift", "shift"), ("beat", "beat"), ("disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used"), ("officerWeaponUsed", "officer_weapon_used"), ("serviceType", "service_type"), ("residentCondition", "resident_condition"), ("officerCondition", "officer_condition"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("division", "division", "division"), ("district", "precinct", "precinct"), ("shift", "shift", "shift"), ("beat", "beat", "beat"), ("disposition", "disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("serviceType", "service_type", "serviceType"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -468,9 +468,9 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentWeaponUsed", "resident_weapon_used"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -578,9 +578,9 @@ class CitizenComplaintBPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("serviceType", "service_type"), ("source", "source"), ("allegation", "allegation"), ("disposition", "disposition"), ("residentIdentifier", "resident_identifier"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerIdentifier", "officer_identifier"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source"), ("allegation", "allegation", "allegation"), ("disposition", "disposition", "disposition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerIdentifier", "officer_identifier", "officerIdentifier"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -684,9 +684,9 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("assignment", "assignment"), ("disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used"), ("officerWeaponUsed", "officer_weapon_used"), ("serviceType", "service_type"), ("residentCondition", "resident_condition"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("disposition", "disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("serviceType", "service_type", "serviceType"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -791,9 +791,9 @@ class UseOfForceIncidentLMPD(SurrogatePK, Model):
 
     @classmethod
     def get_csv_schema(cls):
-        ''' Return the CSV column headers and variable names.
+        ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id"), ("occurredDate", "occured_date"), ("bureau", "bureau"), ("division", "division"), ("unit", "unit"), ("platoon", "platoon"), ("disposition", "disposition"), ("useOfForceReason", "use_of_force_reason"), ("officerForceType", "officer_force_type"), ("serviceType", "service_type"), ("arrestMade", "arrest_made"), ("arrestCharges", "arrest_charges"), ("residentInjured", "resident_injured"), ("residentHospitalized", "resident_hospitalized"), ("residentCondition", "resident_condition"), ("officerInjured", "officer_injured"), ("officerHospitalized", "officer_hospitalized"), ("officerCondition", "officer_condition"), ("residentIdentifier", "resident_identifier"), ("residentWeaponUsed", "resident_weapon_used"), ("residentRace", "resident_race"), ("residentSex", "resident_sex"), ("residentAge", "resident_age"), ("officerRace", "officer_race"), ("officerSex", "officer_sex"), ("officerAge", "officer_age"), ("officerYearsOfService", "officer_years_of_service"), ("officerIdentifier", "officer_identifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("unit", "unit", "unit"), ("platoon", "platoon", "platoon"), ("disposition", "disposition", "disposition"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
