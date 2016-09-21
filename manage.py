@@ -58,7 +58,7 @@ def _make_context():
             class_name = prefix + name
             incident_classes[class_name] = getattr(importlib.import_module("comport.data.models"), class_name)
 
-    context = {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'IncidentsUpdated': IncidentsUpdated}
+    context = {'app': app, 'db': db, 'User': User, 'Department': Department, 'Extractor': Extractor, 'IncidentsUpdated': IncidentsUpdated, 'JSONTestClient': JSONTestClient}
     # update the context with the incident classes
     context.update(incident_classes)
 
