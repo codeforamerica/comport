@@ -98,7 +98,7 @@ class TestExtractorBPD:
         today = datetime.combine(datetime.today(), time())
         # all the records in the database have the same id
         uof_records = UseOfForceIncidentBPD.query.filter_by(opaque_id=use_id).all()
-        assert len(uof_records) == 5
+        assert len(uof_records) == uof_count
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
@@ -118,7 +118,7 @@ class TestExtractorBPD:
         # assert that we got the expected reponse
         assert response.status_code == 200
 
-        # there is 1 incident row in the database
+        # there is now only 1 incident row in the database
         check_uofs = UseOfForceIncidentBPD.query.all()
         assert len(check_uofs) == 1
 
