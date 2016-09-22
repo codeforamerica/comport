@@ -586,7 +586,6 @@ class CitizenComplaintBPD(SurrogatePK, Model):
     def add_or_update_incident(cls, department, incident):
         ''' Add a new Citizen Complaints incident or update an existing one
         '''
-        row_added = False
         # get a cleaner instance
         cleaner = Cleaners()
         # make sure values that might've been sent as integers are strings
@@ -601,59 +600,55 @@ class CitizenComplaintBPD(SurrogatePK, Model):
         incident["officerSex"] = cleaner.sex(incident["officerSex"])
         incident["officerRace"] = cleaner.race(incident["officerRace"])
 
-        found_incident = False
-        # found_incident = cls.query.filter_by(
-        #     opaque_id=incident["opaqueId"],
-        #     allegation=incident["allegation"],
-        #     officer_identifier=incident["officerIdentifier"],
-        #     department_id=department.id,
-        #     resident_race=incident["residentRace"],
-        #     resident_sex=incident["residentSex"],
-        #     resident_age=incident["residentAge"]
-        # ).first()
+        # check and set the incident last updated
+        incident_updated = IncidentsUpdated.query.filter_by(opaque_id=incident["opaqueId"], department_id=department.id).first()
+        # for today's date, get a datetime object with time zeroed out
+        today = datetime.combine(datetime.today(), time())
+        updated_reset = False
+        if incident_updated:
+            # was this incident last updated before today?
+            if incident_updated.updated_date < today:
+                # reset the updated date to today
+                incident_updated.update(updated_date=today)
+                updated_reset = True
+        else:
+            # remember that the incident was updated today
+            IncidentsUpdated.create(department_id=department.id, opaque_id=incident["opaqueId"], updated_date=today)
+            updated_reset = True
 
-        if not found_incident:
+        # is there a record of this incident already in the database?
+        # and was this incident's updated just reset or created?
+        found_incident = cls.query.filter_by(opaque_id=incident["opaqueId"]).first()
+        if found_incident and updated_reset:
+            # delete this incident's rows from the database
+            cls.query.filter_by(opaque_id=incident["opaqueId"]).delete()
+            db.session.commit()
 
-            # check for multiple complainants
-            # :TODO: validate this practice!
-            # multiple_complaintant_check = cls.query.filter_by(
-            #     opaque_id=incident["opaqueId"],
-            #     allegation=incident["allegation"],
-            #     officer_identifier=incident["officerIdentifier"],
-            #     department_id=department.id
-            # ).first()
+        # create the new incident row
+        cls.create(
+            department_id=department.id,
+            opaque_id=incident["opaqueId"],
+            occured_date=parse_date(incident["occuredDate"]),
+            bureau=incident["bureau"],
+            division=incident["division"],
+            assignment=incident["assignment"],
+            service_type=incident["serviceType"],
+            source=incident["source"],
+            allegation=incident["allegation"],
+            disposition=incident["disposition"],
+            resident_identifier=incident["residentIdentifier"],
+            resident_race=incident["residentRace"],
+            resident_sex=incident["residentSex"],
+            resident_age=incident["residentAge"],
+            officer_identifier=incident["officerIdentifier"],
+            officer_race=incident["officerRace"],
+            officer_sex=incident["officerSex"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"],
+        )
 
-            # if multiple_complaintant_check:
-            #     return None
-
-            found_incident = cls.create(
-                department_id=department.id,
-                opaque_id=incident["opaqueId"]
-            )
-            row_added = True
-
-        found_incident.department_id = department.id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.occured_date = parse_date(incident["occuredDate"])
-        found_incident.bureau = incident["bureau"]
-        found_incident.division = incident["division"]
-        found_incident.assignment = incident["assignment"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.source = incident["source"]
-        found_incident.allegation = incident["allegation"]
-        found_incident.disposition = incident["disposition"]
-        found_incident.resident_identifier = incident["residentIdentifier"]
-        found_incident.resident_race = incident["residentRace"]
-        found_incident.resident_sex = incident["residentSex"]
-        found_incident.resident_age = incident["residentAge"]
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.officer_race = incident["officerRace"]
-        found_incident.officer_sex = incident["officerSex"]
-        found_incident.officer_age = incident["officerAge"]
-        found_incident.officer_years_of_service = incident["officerYearsOfService"]
-        found_incident.save()
-
-        return row_added
+        # TODO: re-evaluate what this return value means
+        return True
 
 class OfficerInvolvedShootingBPD(SurrogatePK, Model):
     __tablename__ = 'officer_involved_shootings_bpd'
@@ -692,7 +687,6 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
     def add_or_update_incident(cls, department, incident):
         ''' Add a new OIS incident or update an existing one
         '''
-        row_added = False
         # get a cleaner instance
         cleaner = Cleaners()
         # capitalize the location
@@ -711,44 +705,56 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
         # and values that might've been sent as strings are integers
         incident["officerYearsOfService"] = cleaner.string_to_integer(incident["officerYearsOfService"])
 
-        found_incident = False
-        # found_incident = cls.query.filter_by(
-        #     opaque_id=incident["opaqueId"],
-        #     department_id=department.id,
-        #     officer_identifier=incident["officerIdentifier"]
-        # ).first()
+        # check and set the incident last updated
+        incident_updated = IncidentsUpdated.query.filter_by(opaque_id=incident["opaqueId"], department_id=department.id).first()
+        # for today's date, get a datetime object with time zeroed out
+        today = datetime.combine(datetime.today(), time())
+        updated_reset = False
+        if incident_updated:
+            # was this incident last updated before today?
+            if incident_updated.updated_date < today:
+                # reset the updated date to today
+                incident_updated.update(updated_date=today)
+                updated_reset = True
+        else:
+            # remember that the incident was updated today
+            IncidentsUpdated.create(department_id=department.id, opaque_id=incident["opaqueId"], updated_date=today)
+            updated_reset = True
 
-        if not found_incident:
-            found_incident = cls.create(
-                department_id=department.id,
-                opaque_id=incident["opaqueId"]
-            )
-            row_added = True
+        # is there a record of this incident already in the database?
+        # and was this incident's updated just reset or created?
+        found_incident = cls.query.filter_by(opaque_id=incident["opaqueId"]).first()
+        if found_incident and updated_reset:
+            # delete this incident's rows from the database
+            cls.query.filter_by(opaque_id=incident["opaqueId"]).delete()
+            db.session.commit()
 
-        found_incident.department_id = department.id
-        found_incident.opaque_id = incident["opaqueId"]
-        found_incident.occured_date = parse_date(incident["occuredDate"])
-        found_incident.bureau = incident["bureau"]
-        found_incident.division = incident["division"]
-        found_incident.assignment = incident["assignment"]
-        found_incident.disposition = incident["disposition"]
-        found_incident.resident_weapon_used = incident["residentWeaponUsed"]
-        found_incident.officer_weapon_used = incident["officerWeaponUsed"]
-        found_incident.service_type = incident["serviceType"]
-        found_incident.resident_condition = incident["residentCondition"]
-        found_incident.officer_condition = incident["officerCondition"]
-        found_incident.resident_identifier = incident["residentIdentifier"]
-        found_incident.resident_race = incident["residentRace"]
-        found_incident.resident_sex = incident["residentSex"]
-        found_incident.resident_age = incident["residentAge"]
-        found_incident.officer_race = incident["officerRace"]
-        found_incident.officer_sex = incident["officerSex"]
-        found_incident.officer_age = incident["officerAge"]
-        found_incident.officer_years_of_service = parse_int(incident["officerYearsOfService"])
-        found_incident.officer_identifier = incident["officerIdentifier"]
-        found_incident.save()
+        found_incident = cls.create(
+            department_id=department.id,
+            opaque_id=incident["opaqueId"],
+            occured_date=parse_date(incident["occuredDate"]),
+            bureau=incident["bureau"],
+            division=incident["division"],
+            assignment=incident["assignment"],
+            disposition=incident["disposition"],
+            resident_weapon_used=incident["residentWeaponUsed"],
+            officer_weapon_used=incident["officerWeaponUsed"],
+            service_type=incident["serviceType"],
+            resident_condition=incident["residentCondition"],
+            officer_condition=incident["officerCondition"],
+            resident_identifier=incident["residentIdentifier"],
+            resident_race=incident["residentRace"],
+            resident_sex=incident["residentSex"],
+            resident_age=incident["residentAge"],
+            officer_race=incident["officerRace"],
+            officer_sex=incident["officerSex"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=parse_int(incident["officerYearsOfService"]),
+            officer_identifier=incident["officerIdentifier"]
+        )
 
-        return row_added
+        # TODO: re-evaluate what this return value means
+        return True
 
 #
 # LOUISVILLE METRO POLICE DEPARTMENT
