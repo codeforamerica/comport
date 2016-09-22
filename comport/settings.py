@@ -24,7 +24,7 @@ class DevConfig(Config):
     ENV = 'dev'
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://localhost/comport')
-    DEBUG_TB_ENABLED = True
+    DEBUG_TB_ENABLED = False
     ASSETS_DEBUG = True  # Don't bundle/minify static assets
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
 
