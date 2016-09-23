@@ -47,7 +47,27 @@ CAPITALIZE_LIST = [
     "VBLETA",
     "ODE",
     "PC",
-    "CPCO"
+    "CPCO",
+    "SES",
+    "OIS",
+    "SOS",
+    "VCS",
+    "DV",
+    "DDU",
+    "NWD",
+    "SED",
+    "UC",
+    "VRO",
+    "CD",
+    "PA",
+    "TD",
+    "SWD",
+    "HIDTA",
+    "RATT",
+    "CS",
+    "CN",
+    "SD",
+    "BUR"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
@@ -66,7 +86,7 @@ class Cleaners(object):
     def officer_force_type(self, text):
         if text is not None and text in OFFICER_FORCE_TYPE_LOOKUP:
             return OFFICER_FORCE_TYPE_LOOKUP[text]
-        return text
+        return self.capitalize(text)
 
     def race(self, text):
         if not text:
