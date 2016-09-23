@@ -537,7 +537,6 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
             officer_hospitalized=incident["officerHospitalized"],
             officer_condition=incident["officerCondition"],
             resident_identifier=incident["residentIdentifier"],
-            resident_weapon_used=incident["residentWeaponUsed"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
