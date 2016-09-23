@@ -67,7 +67,9 @@ CAPITALIZE_LIST = [
     "CS",
     "CN",
     "SD",
-    "BUR"
+    "BUR",
+    "WATF",
+    "WD"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
