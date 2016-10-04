@@ -19,24 +19,30 @@
     {% for department in departments %}
 
     <p> {{department.name}}</p>
+     {% if department.dataset_is_public_and_has_data("complaints") %}
     <div id="dataset-spotlight" class="col-md-4">
       <a href="/department/{{department.short_name}}/complaints">
         <img src="{{url_for('static', filename='img/complaints.png') }}" alt="">
         Complaints
       </a>
     </div>
+    {% endif %}
+     {% if department.dataset_is_public_and_has_data("uof") %}
     <div id="dataset-spotlight" class="col-md-4">
       <a href="/department/{{department.short_name}}/useofforce">
         <img src="../static/img/uof.png">
         Use of Force
       </a>
     </div>
+    {% endif %}
+    {% if department.dataset_is_public_and_has_data("ois") %}
     <div id="dataset-spotlight" class="col-md-4">
-      <a href="department/{{department.short_name}}/officerinvolvedshootings">
+      <a href="/department/{{department.short_name}}/officerinvolvedshootings">
       <img src="../static/img/ois.png">
       Officer Involved Shootings
     </a>
     </div>
+    {% endif %}
     {% endfor %}
   </div>
    <p> For more information about this project, check out our <a href="/about/">about page</a>.</p>
