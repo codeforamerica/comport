@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.utils import send_slack_message
+from comport.data.models import IncidentsUpdated
 
 import json
 import importlib
@@ -41,6 +42,10 @@ def heartbeat():
 
     slack_body_lines.append(slack_date_line)
     send_slack_message('Comport Pinged by Extractor!', slack_body_lines)
+
+    #
+    # remove records for this department from the incidents_updated table
+    IncidentsUpdated.delete_records(department_id=extractor_department.id)
 
     # respond to the extractor
     heartbeat_response = json.dumps({"received": request.json, "nextMonth": next_month, "nextYear": next_year})

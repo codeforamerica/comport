@@ -45,6 +45,22 @@ class IncidentsUpdated(SurrogatePK, Model):
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
 
+    @classmethod
+    def delete_records(cls, department_id, incident_type=None):
+        ''' Delete IncidentsUpdated records matching the passed parameters
+        '''
+        if not department_id:
+            return 0
+
+        kwargs = dict(department_id=department_id)
+        if incident_type:
+            kwargs['incident_type'] = incident_type
+
+        deleted_count = cls.query.filter_by(**kwargs).delete()
+        db.session.commit()
+
+        return deleted_count
+
 #
 # INDIANAPOLIS METRO POLICE DEPARTMENT
 #
