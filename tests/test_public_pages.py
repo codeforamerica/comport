@@ -1,12 +1,5 @@
-import io
-import csv
 import pytest
-import importlib
-from flask import url_for
-from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncidentIMPD
-from .utils import log_in_user
 from bs4 import BeautifulSoup
 from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
@@ -18,7 +11,7 @@ class TestPublicPages:
 
     def test_home_page_exists(self, testapp):
         testapp.get("/", status=200)
- 
+
     def test_home_page_links_to_about(self, testapp):
         response = testapp.get("/", status=200)
         soup = BeautifulSoup(response.text)
@@ -48,15 +41,15 @@ class TestPublicPages:
         CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
         UseOfForceIncidentBPD.create(department_id=department.id, opaque_id="23456bcdef")
         OfficerInvolvedShootingBPD.create(department_id=department.id, opaque_id="34567cdefg")
-      
+
         response = testapp.get("/", status=200)
         soup = BeautifulSoup(response.text)
         with open("scratch.html", "w") as text_file:
             text_file.write(response.text)
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
-        assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is not None  
-        
+        assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is not None
+
     def test_data_status(self, testapp):
         department = Department.create(name="B Police Department", short_name="BPD", is_public=True)
         CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
@@ -67,4 +60,4 @@ class TestPublicPages:
         soup = BeautifulSoup(response.text)
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
-        assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is None  
+        assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is None
