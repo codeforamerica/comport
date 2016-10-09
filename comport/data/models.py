@@ -40,7 +40,7 @@ class IncidentsUpdated(SurrogatePK, Model):
     __tablename__ = "incidents_updated"
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False, index=True)
-    updated_date = Column(db.DateTime, nullable=True)
+    incident_type = Column(db.String(32), unique=False, nullable=False)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
