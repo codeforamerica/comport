@@ -46,7 +46,7 @@ class IncidentsUpdated(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     @classmethod
-    def delete_records(cls, department_id, incident_type=None):
+    def delete_records(cls, department_id=None, incident_type=None):
         ''' Delete IncidentsUpdated records matching the passed parameters
         '''
         if not department_id:
