@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytest
-from datetime import datetime, time, timedelta
 from comport.department.models import Department, Extractor
 from comport.data.models import IncidentsUpdated, OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from testclient.JSON_test_client import JSONTestClient
@@ -13,10 +12,13 @@ class TestExtractorBPD:
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents to the UOF endpoint
         uof_count = 5
@@ -31,24 +33,23 @@ class TestExtractorBPD:
         check_uofs = UseOfForceIncidentBPD.query.all()
         assert len(check_uofs) == uof_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
         for incident in uof_data:
             # verify that the opaqueIDs posted match those in the database
             assert UseOfForceIncidentBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
             # verify that the opaqueIds are recorded in IncidentsUpdated tables
             record_updated = IncidentsUpdated.query.filter_by(opaque_id=incident['opaqueId']).first()
             assert record_updated is not None
-            assert record_updated.updated_date == today
-            # now set the updated dates back a day, so the records will be replaced
-            # when we post new incidents with the same ids
-            record_updated.update(updated_date=today - timedelta(days=1))
+            assert record_updated.department_id == department.id
+            assert record_updated.incident_type == "uof"
 
         # Create 5 more fake incidents
         new_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
         # give them the same opaqueIds as the first batch
         for idx, _ in enumerate(new_data):
             new_data[idx]['opaqueId'] = uof_data[idx]['opaqueId']
+
+        # post to the heartbeat URL to start the new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # post the new incident rows
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
@@ -69,10 +70,13 @@ class TestExtractorBPD:
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents with an identical opaqueId to the UOF endpoint
         uof_count = 5
@@ -90,25 +94,24 @@ class TestExtractorBPD:
         check_uofs = UseOfForceIncidentBPD.query.all()
         assert len(check_uofs) == uof_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
-        # all the records in the database have the same id
+        # all the records in the database have the same opaqueId
         uof_records = UseOfForceIncidentBPD.query.filter_by(opaque_id=use_id).all()
         assert len(uof_records) == uof_count
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
-        # now set the updated date back a day, so the records will be replaced
-        # when we post a new incident with the same id
-        record_updated.update(updated_date=today - timedelta(days=1))
+        assert record_updated.incident_type == "uof"
+        assert record_updated.department_id == department.id
+
+        # post to the heartbeat URL to start a new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Create 1 new fake incident
         new_data = test_client.make_uof(count=1, short_name=department.short_name)
         # give it the same opaqueId as the first batch
         new_data[0]['opaqueId'] = use_id
 
-        # post the new incident
+        # post the new incident row
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
 
         # assert that we got the expected reponse
@@ -124,17 +127,21 @@ class TestExtractorBPD:
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
+        assert record_updated.incident_type == "uof"
+        assert record_updated.department_id == department.id
 
     def test_post_complaints_data(self, testapp):
         ''' New and updated complaints data from the extractor is processed as expected.
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents to the complaints endpoint
         complaints_count = 5
@@ -149,18 +156,17 @@ class TestExtractorBPD:
         check_complaints = CitizenComplaintBPD.query.all()
         assert len(check_complaints) == complaints_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
         for incident in complaints_data:
             # verify that the opaqueIDs posted match those in the database
             assert CitizenComplaintBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
             # verify that the opaqueIds are recorded in IncidentsUpdated tables
             record_updated = IncidentsUpdated.query.filter_by(opaque_id=incident['opaqueId']).first()
             assert record_updated is not None
-            assert record_updated.updated_date == today
-            # now set the updated dates back a day, so the records will be replaced
-            # when we post new incidents with the same ids
-            record_updated.update(updated_date=today - timedelta(days=1))
+        assert record_updated.incident_type == "complaints"
+        assert record_updated.department_id == department.id
+
+        # post to the heartbeat URL to start a new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Create 5 more fake incidents
         new_data = test_client.make_complaints(count=complaints_count, short_name=department.short_name)
@@ -187,10 +193,13 @@ class TestExtractorBPD:
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents with an identical opaqueId to the complaint endpoint
         complaints_count = 5
@@ -208,18 +217,17 @@ class TestExtractorBPD:
         check_complaints = CitizenComplaintBPD.query.all()
         assert len(check_complaints) == complaints_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
         # all the records in the database have the same id
         complaint_records = CitizenComplaintBPD.query.filter_by(opaque_id=use_id).all()
         assert len(complaint_records) == complaints_count
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
-        # now set the updated date back a day, so the records will be replaced
-        # when we post a new incident with the same id
-        record_updated.update(updated_date=today - timedelta(days=1))
+        assert record_updated.incident_type == "complaints"
+        assert record_updated.department_id == department.id
+
+        # post to the heartbeat URL to start a new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Create 1 new fake incident
         new_data = test_client.make_complaints(count=1, short_name=department.short_name)
@@ -242,17 +250,21 @@ class TestExtractorBPD:
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
+        assert record_updated.incident_type == "complaints"
+        assert record_updated.department_id == department.id
 
     def test_post_ois_data(self, testapp):
         ''' New and updated OIS data from the extractor is processed as expected.
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents to the OIS endpoint
         ois_count = 5
@@ -267,18 +279,17 @@ class TestExtractorBPD:
         check_ois = OfficerInvolvedShootingBPD.query.all()
         assert len(check_ois) == ois_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
         for incident in ois_data:
             # verify that the opaqueIDs posted match those in the database
             assert OfficerInvolvedShootingBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
             # verify that the opaqueIds are recorded in IncidentsUpdated tables
             record_updated = IncidentsUpdated.query.filter_by(opaque_id=incident['opaqueId']).first()
             assert record_updated is not None
-            assert record_updated.updated_date == today
-            # now set the updated dates back a day, so the records will be replaced
-            # when we post new incidents with the same ids
-            record_updated.update(updated_date=today - timedelta(days=1))
+            assert record_updated.incident_type == "ois"
+            assert record_updated.department_id == department.id
+
+        # post to the heartbeat URL to start a new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Create 5 more fake incidents
         new_data = test_client.make_ois(count=ois_count, short_name=department.short_name)
@@ -305,10 +316,13 @@ class TestExtractorBPD:
         '''
         # Set up the extractor
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # Set the correct authorization
         testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Post 5 fake incidents with an identical opaqueId to the OIS endpoint
         ois_count = 5
@@ -326,18 +340,17 @@ class TestExtractorBPD:
         check_ois = OfficerInvolvedShootingBPD.query.all()
         assert len(check_ois) == ois_count
 
-        # make a valid updated date
-        today = datetime.combine(datetime.today(), time())
         # all the records in the database have the same id
         ois_records = OfficerInvolvedShootingBPD.query.filter_by(opaque_id=use_id).all()
         assert len(ois_records) == ois_count
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
-        # now set the updated date back a day, so the records will be replaced
-        # when we post a new incident with the same id
-        record_updated.update(updated_date=today - timedelta(days=1))
+        assert record_updated.incident_type == "ois"
+        assert record_updated.department_id == department.id
+
+        # post to the heartbeat URL to start the update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # Create 1 new fake incident
         new_data = test_client.make_ois(count=1, short_name=department.short_name)
@@ -360,4 +373,5 @@ class TestExtractorBPD:
         # verify that the opaqueId is recorded in an IncidentsUpdated table
         record_updated = IncidentsUpdated.query.filter_by(opaque_id=use_id).first()
         assert record_updated is not None
-        assert record_updated.updated_date == today
+        assert record_updated.incident_type == "ois"
+        assert record_updated.department_id == department.id
