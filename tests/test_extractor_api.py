@@ -38,10 +38,11 @@ class TestHeartbeat:
         '''
         # set up the extractor
         department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
-        Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
+        extractor.update(email='extractor@example.com', next_month=10, next_year=2006)
 
         # set the correct authorization
-        testapp.authorization = ('Basic', ('extractor', 'password'))
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
 
         # post a sample json object to the heartbeat URL
         response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
@@ -55,10 +56,10 @@ class TestHeartbeat:
         ''' When there is no fixed date, it should send the current month and current year '''
         # set up the extractor
         department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
-        Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id)
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # set the correct authorization
-        testapp.authorization = ('Basic', ('extractor', 'password'))
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
 
         # post a sample json object to the heartbeat URL
         response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
@@ -78,10 +79,10 @@ class TestHeartbeat:
         '''
         # set up the extractor
         department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
-        Extractor.create(username='extractor', email='extractor@example.com', password="password", department_id=department.id, next_month=10, next_year=2006)
+        extractor, _ = Extractor.from_department_and_password(department=department, password="password")
 
         # set the correct authorization
-        testapp.authorization = ('Basic', ('extractor', 'password'))
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
 
         # set a fake Slack webhook URL
         fake_webhook_url = 'http://webhook.example.com/'
