@@ -42,6 +42,56 @@ class Department(SurrogatePK, Model):
                 self.chart_blocks.append(copy.deepcopy(default_chart_block))
             self.save()
 
+    @classmethod
+    def get_dataset_lookup(cls, dataset_name):
+        ''' Look up the name for particular aspects of a dataset.
+        '''
+        lookup = [
+            {"in": ["complaints", "citizen_complaints"], "var_suffix": "citizen_complaints", "class_prefix": "CitizenComplaint", "path": "department.public_complaints"},
+            {"in": ["uof", "use_of_force_incidents"], "var_suffix": "use_of_force_incidents", "class_prefix": "UseOfForceIncident", "path": "department.public_uof"},
+            {"in": ["ois", "officer_involved_shootings"], "var_suffix": "officer_involved_shootings", "class_prefix": "OfficerInvolvedShooting", "path": "department.public_ois"},
+            {"in": ["assaults", "assaults_on_officers"], "var_suffix": "assaults_on_officers", "class_prefix": "AssaultOnOfficer", "path": "department.public_assaults"}
+        ]
+
+        found = False
+        for check in lookup:
+            if dataset_name in check["in"]:
+                var_suffix = check["var_suffix"]
+                class_prefix = check["class_prefix"]
+                path = check["path"]
+                found = True
+                break
+
+        if not found:
+            return {}
+
+        return {"var_suffix": var_suffix, "class_prefix": class_prefix, "path": path}
+
+    def dataset_is_public_and_has_data(self, dataset_name):
+        ''' Return true if the dataset is public and has data.
+        '''
+        # look up what dataset we're looking for
+        lookup = self.get_dataset_lookup(dataset_name)
+
+        # if we didn't recognize it, just return false
+        if not lookup:
+            return False
+
+        # get the current is_public value
+        is_public = getattr(self, "is_public_{}".format(lookup["var_suffix"]))
+
+        # check to see whether the model exists
+        try:
+            model_class = getattr(importlib.import_module("comport.data.models"), "{}{}".format(lookup["class_prefix"], self.short_name))
+        except AttributeError:
+            # this department doesn't have this dataset
+            return False
+
+        # check to see whether there's data in the dataset
+        first_record = model_class.query.first()
+
+        return (is_public and first_record is not None)
+
     def get_uof_blocks(self):
         blocks = PageBlockLookup.get_uof_blocks(self.short_name)
         return {
@@ -197,21 +247,16 @@ class Department(SurrogatePK, Model):
         ''' Return a string representing the path to the first existing dataset page for this department.
             For use in url_for calls.
         '''
-        lookup = [
-            {"prefix": "CitizenComplaint", "path": "department.public_complaints"},
-            {"prefix": "UseOfForceIncident", "path": "department.public_uof"},
-            {"prefix": "OfficerInvolvedShooting", "path": "department.public_ois"},
-            {"prefix": "AssaultOnOfficer", "path": "department.public_assaults"}
-        ]
-
-        for check in lookup:
+        datasets = ["complaints", "uof", "ois", "assaults"]
+        for check in datasets:
+            lookup = self.get_dataset_lookup(check)
             # if there's a class for this dataset, return its path
             try:
-                getattr(importlib.import_module("comport.data.models"), "{}{}".format(check["prefix"], self.short_name))
+                getattr(importlib.import_module("comport.data.models"), "{}{}".format(lookup["class_prefix"], self.short_name))
             except AttributeError:
                 continue
             else:
-                return check["path"]
+                return lookup["path"]
 
         # no dataset classes were found
         return None

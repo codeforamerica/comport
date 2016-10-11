@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import pytest
+import importlib
 from comport.content.models import ChartBlock
 from comport.department.models import Department
+from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 
 @pytest.mark.usefixtures('db')
 class TestDepartmentModelBPD:
@@ -19,7 +21,7 @@ class TestDepartmentModelBPD:
         complaint_bass = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-assignment")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         complaint_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="complaints-by-demographic")
-        complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer")
+        complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer-with-cap")
 
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
@@ -260,3 +262,87 @@ class TestDepartmentModelBPD:
         assert assaults_fst in assaults_blocks['blocks']
         assert assaults_fft in assaults_blocks['blocks']
         assert assaults_ffa in assaults_blocks['blocks']
+
+    def test_get_dataset_lookup(self):
+        ''' The dataset lookup returns usable information
+        '''
+        # create a department
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
+
+        complaints_lookup = department.get_dataset_lookup("complaints")
+        uof_lookup = department.get_dataset_lookup("uof")
+        ois_lookup = department.get_dataset_lookup("ois")
+        assaults_lookup = department.get_dataset_lookup("assaults")
+
+        # TODO: how to test that paths are valid?
+
+        # test that the var suffixes are valid
+        try:
+            getattr(department, "is_public_{}".format(complaints_lookup["var_suffix"]))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        try:
+            getattr(department, "is_public_{}".format(uof_lookup["var_suffix"]))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        try:
+            getattr(department, "is_public_{}".format(ois_lookup["var_suffix"]))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        try:
+            getattr(department, "is_public_{}".format(assaults_lookup["var_suffix"]))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        # test that the class prefixes are valid
+        try:
+            getattr(importlib.import_module("comport.data.models"), "{}{}".format(complaints_lookup["class_prefix"], department.short_name))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        try:
+            getattr(importlib.import_module("comport.data.models"), "{}{}".format(uof_lookup["class_prefix"], department.short_name))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        try:
+            getattr(importlib.import_module("comport.data.models"), "{}{}".format(ois_lookup["class_prefix"], department.short_name))
+        except AttributeError:
+            pytest.fail("Unexpected AttributeError")
+
+        # BPD doesn't have assaults data when this test is written
+        with pytest.raises(AttributeError):
+            getattr(importlib.import_module("comport.data.models"), "{}{}".format(assaults_lookup["class_prefix"], department.short_name))
+
+    def test_dataset_is_public_and_has_data(self):
+        ''' We can accurately tell if a dataset is public and has data.
+        '''
+        # create a department
+        department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
+
+        # none of the datasets have data, so they should all return false
+        assert department.dataset_is_public_and_has_data("complaints") == False
+        assert department.dataset_is_public_and_has_data("uof") == False
+        assert department.dataset_is_public_and_has_data("ois") == False
+        assert department.dataset_is_public_and_has_data("assaults") == False
+
+        # create incidents and verify that the datasets are now displayable
+        CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
+        assert department.dataset_is_public_and_has_data("complaints") == True
+
+        UseOfForceIncidentBPD.create(department_id=department.id, opaque_id="23456bcdef")
+        assert department.dataset_is_public_and_has_data("uof") == True
+
+        OfficerInvolvedShootingBPD.create(department_id=department.id, opaque_id="34567cdefg")
+        assert department.dataset_is_public_and_has_data("ois") == True
+
+        # now make them all not public, and they should be false again
+        department.is_public_citizen_complaints = False
+        assert department.dataset_is_public_and_has_data("complaints") == False
+        department.is_public_use_of_force_incidents = False
+        assert department.dataset_is_public_and_has_data("uof") == False
+        department.is_public_officer_involved_shootings = False
+        assert department.dataset_is_public_and_has_data("ois") == False

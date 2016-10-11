@@ -82,7 +82,7 @@ class PageBlockLookup:
                     'complaints-by-assignment',
                     'officer-demographics',
                     'complaints-by-demographic',
-                    'complaints-by-officer',
+                    'complaints-by-officer-with-cap',
                 ]
             }
 
