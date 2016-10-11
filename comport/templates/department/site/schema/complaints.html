@@ -24,11 +24,11 @@
       <form method="get" action="/department/{{department.id}}/complaints.csv">
         <button type="submit">Download this dataset</button>
       </form>
-
+      {% if department.dataset_is_public_and_has_data("demographics") %}
       <form method="get" action="/department/{{department.id}}/demographics.csv">
         <button type="submit">Download Officer Demographic Information for the IMPD</button>
       </form>
-
+      {% endif %}
       <form method="get" action="/department/{{department.id}}/officerCalls.csv">
         <button type="submit">Download Officer Call Information<sup>*</sup> for the IMPD</button>
       </form>
