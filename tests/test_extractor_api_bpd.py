@@ -42,14 +42,14 @@ class TestExtractorBPD:
             assert record_updated.department_id == department.id
             assert record_updated.incident_type == "uof"
 
+        # post to the heartbeat URL to start the new update
+        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
+
         # Create 5 more fake incidents
         new_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
         # give them the same opaqueIds as the first batch
         for idx, _ in enumerate(new_data):
             new_data[idx]['opaqueId'] = uof_data[idx]['opaqueId']
-
-        # post to the heartbeat URL to start the new update
-        response = testapp.post_json("/data/heartbeat", params={"heartbeat": "heartbeat"})
 
         # post the new incident rows
         response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
@@ -64,6 +64,22 @@ class TestExtractorBPD:
         # verify that the opaqueIDs posted match those in the database
         for incident in uof_data:
             assert UseOfForceIncidentBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
+
+        # Create 5 more fake incidents
+        new_data = test_client.make_uof(count=uof_count, short_name=department.short_name)
+        # give them the same opaqueIds as the first batch
+        for idx, _ in enumerate(new_data):
+            new_data[idx]['opaqueId'] = uof_data[idx]['opaqueId']
+
+        # post the new incident rows without starting a new update
+        response = testapp.post_json("/data/UOF", params={'month': 0, 'year': 0, 'data': new_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+
+        # there are 10 incident rows in the database
+        check_uofs = UseOfForceIncidentBPD.query.all()
+        assert len(check_uofs) == uof_count * 2
 
     def test_all_uof_records_destroyed_when_new_record_posted(self, testapp):
         ''' Posting a new record with an id that matches a set of past records destroys all of them.
@@ -188,6 +204,22 @@ class TestExtractorBPD:
         for incident in complaints_data:
             assert CitizenComplaintBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
 
+        # Create 5 more fake incidents
+        new_data = test_client.make_complaints(count=complaints_count, short_name=department.short_name)
+        # give them the same opaqueIds as the first batch
+        for idx, _ in enumerate(new_data):
+            new_data[idx]['opaqueId'] = complaints_data[idx]['opaqueId']
+
+        # post the new incident rows without starting a new update
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': new_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+
+        # there are 10 incident rows in the database
+        check_complaints = CitizenComplaintBPD.query.all()
+        assert len(check_complaints) == complaints_count * 2
+
     def test_all_complaints_records_destroyed_when_new_record_posted(self, testapp):
         ''' Posting a new record with an id that matches a set of past records destroys all of them.
         '''
@@ -310,6 +342,22 @@ class TestExtractorBPD:
         # verify that the opaqueIDs posted match those in the database
         for incident in ois_data:
             assert OfficerInvolvedShootingBPD.query.filter_by(opaque_id=incident['opaqueId']).first() is not None
+
+        # Create 5 more fake incidents
+        new_data = test_client.make_ois(count=ois_count, short_name=department.short_name)
+        # give them the same opaqueIds as the first batch
+        for idx, _ in enumerate(new_data):
+            new_data[idx]['opaqueId'] = ois_data[idx]['opaqueId']
+
+        # post the new incident rows without starting a new update
+        response = testapp.post_json("/data/OIS", params={'month': 0, 'year': 0, 'data': new_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+
+        # there are 10 incident rows in the database
+        check_ois = OfficerInvolvedShootingBPD.query.all()
+        assert len(check_ois) == ois_count * 2
 
     def test_all_ois_records_destroyed_when_new_record_posted(self, testapp):
         ''' Posting a new record with an id that matches a set of past records destroys all of them.
