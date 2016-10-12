@@ -7,6 +7,25 @@ from comport.utils import random_string, random_date
 import random
 import importlib
 
+"""
+HOW TO USE IN TESTS
+-------------------
+# import the library
+from testclient.JSON_test_client import JSONTestClient
+
+# create a test client
+test_client = JSONTestClient()
+
+# create ten rows of fake BPD-compatible Use Of Force data, with dates between Jan 1st, 2016 and August 1st, 2016
+uof_data = test_client.make_uof(count=10, start_date=datetime.datetime(2016, 1, 1), end_date=datetime.datetime(2016, 8, 1), short_name="BPD")
+
+# date range is optional, and defaults to Jan 1st 2014 - Jan 1st 2016
+uof_data = test_client.make_uof(count=10, short_name="BPD")
+
+# count defaults to 1000 and short_name defaults to "IMPD"
+uof_data = test_client.make_uof()
+"""
+
 class JSONTestClient(object):
 
     def run(self, department, mutators=[]):
