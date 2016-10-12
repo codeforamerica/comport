@@ -44,8 +44,6 @@ class TestPublicPages:
 
         response = testapp.get("/", status=200)
         soup = BeautifulSoup(response.text)
-        with open("scratch.html", "w") as text_file:
-            text_file.write(response.text)
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is not None
