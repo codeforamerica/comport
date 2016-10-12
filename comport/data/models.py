@@ -757,7 +757,6 @@ class UseOfForceIncidentLMPD(SurrogatePK, Model):
     officer_hospitalized = Column(db.Boolean, nullable=True)
     officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_identifier = Column(db.String(255), unique=False, nullable=True)
-    resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -774,7 +773,7 @@ class UseOfForceIncidentLMPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("unit", "unit", "unit"), ("platoon", "platoon", "platoon"), ("disposition", "disposition", "disposition"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("unit", "unit", "unit"), ("platoon", "platoon", "platoon"), ("disposition", "disposition", "disposition"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -830,7 +829,6 @@ class UseOfForceIncidentLMPD(SurrogatePK, Model):
             officer_hospitalized=incident["officerHospitalized"],
             officer_condition=incident["officerCondition"],
             resident_identifier=incident["residentIdentifier"],
-            resident_weapon_used=incident["residentWeaponUsed"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
