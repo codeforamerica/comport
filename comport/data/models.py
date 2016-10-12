@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, time
 from comport.database import (Column, db, Model, SurrogatePK)
 from .cleaners import Cleaners
 from comport.utils import parse_date, parse_int
@@ -781,7 +780,6 @@ class UseOfForceIncidentLMPD(SurrogatePK, Model):
     def add_or_update_incident(cls, department, incident):
         ''' Add a new UOF incident or update an existing one
         '''
-        row_added = False
         # get a cleaner instance
         cleaner = Cleaners()
         # capitalize the location
