@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from comport.decorators import extractor_auth_required
 from comport.department.models import Extractor
 from comport.utils import send_slack_message
+from comport.data.models import IncidentsUpdated
 
 import json
 import importlib
@@ -18,10 +19,17 @@ def heartbeat():
     username = request.authorization.username
     extractor = Extractor.query.filter_by(username=username).first()
 
-    extractor.last_contact = datetime.now()
+    # set the extractor last contact datetime to now
+    now = datetime.now()
+    extractor.last_contact = now
     extractor.save()
 
-    heartbeat_response = json.dumps({"received": request.json})
+    # get the month and year to tell the extractor to start from
+    next_month = extractor.next_month if extractor.next_month else now.month
+    next_year = extractor.next_year if extractor.next_year else now.year
+
+    #
+    # build and send a Slack notification about this ping
     slack_body_lines = []
     extractor_department = extractor.first_department()
     if extractor_department:
@@ -30,17 +38,17 @@ def heartbeat():
         slack_body_lines.append('Username: {}'.format(username))
 
     slack_date_line = 'No extraction start date in reply.'
-
-    now = datetime.now()
-    next_month = extractor.next_month if extractor.next_month else now.month
-    next_year = extractor.next_year if extractor.next_year else now.year
-
-    heartbeat_response = json.dumps({"received": request.json, "nextMonth": next_month, "nextYear": next_year})
     slack_date_line = 'Replied with extraction start date: {}/{}'.format(next_month, next_year)
 
     slack_body_lines.append(slack_date_line)
     send_slack_message('Comport Pinged by Extractor!', slack_body_lines)
 
+    #
+    # remove records for this department from the incidents_updated table
+    IncidentsUpdated.delete_records(department_id=extractor_department.id)
+
+    # respond to the extractor
+    heartbeat_response = json.dumps({"received": request.json, "nextMonth": next_month, "nextYear": next_year})
     return heartbeat_response
 
 
