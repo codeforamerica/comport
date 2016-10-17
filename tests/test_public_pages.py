@@ -59,18 +59,3 @@ class TestPublicPages:
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is None
-
-    def test_officer_demo_data(self, testapp):
-        department = Department.create(name="B Police Department", short_name="BPD", is_public=True)
-
-        response = testapp.get("/department/BPD/schema/complaints/", status=200)
-        soup = BeautifulSoup(response.text)
-        with open("scratch.html", "w") as text_file:
-           text_file.write(response.text)
-        assert soup.find("form", action="/department/1/demographics.csv") is None
-
-        CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
-        response = testapp.get("/department/BPD/schema/complaints/", status=200)
-        soup = BeautifulSoup(response.text)
-        assert soup.find("form", action="/department/1/demographics.csv") is not None
-        
