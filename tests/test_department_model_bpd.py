@@ -149,13 +149,13 @@ class TestDepartmentModelBPD:
 
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
+        ois_bm = ChartBlock(title="BYMONTH", dataset="bm", slug="ois-by-month")
         ois_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="ois-by-assignment")
-        ois_wt = ChartBlock(title="WEAPONTYPE", dataset="weapontype", slug="ois-weapon-type")
         ois_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         ois_race = ChartBlock(title="RACE", dataset="race", slug="ois-race")
         department.chart_blocks.append(ois_intro)
+        department.chart_blocks.append(ois_bm)
         department.chart_blocks.append(ois_bid)
-        department.chart_blocks.append(ois_wt)
         department.chart_blocks.append(ois_od)
         department.chart_blocks.append(ois_race)
         department.save()
@@ -163,8 +163,8 @@ class TestDepartmentModelBPD:
         # verify that the blocks are returned in the expected structure
         ois_blocks = department.get_ois_blocks()
         assert ois_blocks['introduction'] == ois_intro
-        assert ois_blocks['first-block'] == ois_bid
-        assert ois_blocks['blocks'][0] == ois_wt
+        assert ois_blocks['first-block'] == ois_bm
+        assert ois_blocks['blocks'][0] == ois_bid
         assert ois_blocks['blocks'][1] == ois_od
         assert ois_blocks['blocks'][2] == ois_race
 

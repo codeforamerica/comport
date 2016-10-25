@@ -247,6 +247,22 @@ var configs = {
     addOther: false,
     },
 
+  // unique officer-involved shootings per month
+  'ois-by-month': {
+    chartType: 'mountainHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'date'),
+    keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
+    sortWith: function(d){ return d.month; },
+    x: 'month',
+    xFunc: function(b){ return d3.time.month.floor(b[0].date); },
+    xTickFormat: function(d){
+      var fmt = d3.time.format('%b %Y');
+      return fmt(new Date(d));
+    },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
   // unique officer-involved shootings by assignment
   // (BPD only)
   'ois-by-assignment': {

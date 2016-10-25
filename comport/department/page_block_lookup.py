@@ -50,9 +50,9 @@ class PageBlockLookup:
         if short_name == 'BPD':
             return {
                 'introduction': 'ois-introduction',
-                'first-block': 'ois-by-assignment',
+                'first-block': 'ois-by-month',
                 'blocks': [
-                    'ois-weapon-type',
+                    'ois-by-assignment',
                     'officer-demographics',
                     'ois-race'
                 ]
