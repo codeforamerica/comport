@@ -182,6 +182,38 @@ class TestHeartbeat:
         assert check_complaint.officer_age == cleaner.number_to_string(sent_complaint['officerAge'])
         assert check_complaint.officer_years_of_service == cleaner.number_to_string(sent_complaint['officerYearsOfService'])
 
+    def test_correct_complaint_cap (self, testapp):
+        ''' New complaint data from the extractor is processed as expected.
+        '''
+        # Set up the extractor
+        department = Department.create(name="IM Police Department", short_name="IMPD", load_defaults=False)
+        extractor, envs = Extractor.from_department_and_password(department=department, password="password")
+
+        # Set the correct authorization
+        testapp.authorization = ('Basic', (extractor.username, 'password'))
+
+        # Get a generated list of complaint descriptions from the JSON test client
+        test_client = JSONTestClient()
+        complaint_count = 1
+        complaint_data = test_client.get_prebaked_complaints(last=complaint_count)
+        complaint_data[0]["allegation"] = "Rude, demeaning, or affronting language"
+
+        # post the json to the complaint URL
+        response = testapp.post_json("/data/complaints", params={'month': 0, 'year': 0, 'data': complaint_data})
+
+        # assert that we got the expected reponse
+        assert response.status_code == 200
+        assert response.json_body['updated'] == 0
+        assert response.json_body['added'] == complaint_count
+
+        # check the complaint incident in the database against the data that was sent
+        cleaner = Cleaners()
+        sent_complaint = cleaner.capitalize_incident(complaint_data[0])
+        check_complaint = CitizenComplaintIMPD.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
+        assert check_complaint.allegation == "Rude, Demeaning, or Affronting Language"
+        with open("scratch.txt", "w") as text_file:
+            text_file.write("Complaint Data: {} ".format(check_complaint.allegation))
+
     def test_post_mistyped_complaint_data(self, testapp):
         ''' New complaint data from the extractor with wrongly typed data is processed as expected.
         '''
