@@ -23,7 +23,11 @@
   <div class="row">
     <h1 class="col-xs-12">{{department.name}}</h1>
   </div>
+{% if department.displayable_dataset_count() > 1 %}
   {% include "department/site/dataset_nav.html" %}
+{% else %}
+  <hr>
+{% endif %}
 
 {% block dataset_content %}
 
