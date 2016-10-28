@@ -92,6 +92,15 @@ class Department(SurrogatePK, Model):
 
         return (is_public and first_record is not None)
 
+    def displayable_dataset_count(self):
+        ''' Return the number of datasets this department has that are public and have data.
+        '''
+        displayable = 0
+        for dataset_name in ["complaints", "uof", "ois", "assaults"]:
+            if self.dataset_is_public_and_has_data(dataset_name):
+                displayable = displayable + 1
+        return displayable
+
     def get_uof_blocks(self):
         blocks = PageBlockLookup.get_uof_blocks(self.short_name)
         return {

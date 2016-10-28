@@ -357,11 +357,15 @@ class TestDepartmentModelLMPD:
         assert department.dataset_is_public_and_has_data("uof") == False
         assert department.dataset_is_public_and_has_data("ois") == False
         assert department.dataset_is_public_and_has_data("assaults") == False
+        # the total count should be zero
+        assert department.displayable_dataset_count() == 0
 
         # create incidents and verify that the datasets are now displayable
         UseOfForceIncidentLMPD.create(department_id=department.id, opaque_id="23456bcdef")
         assert department.dataset_is_public_and_has_data("uof") == True
+        assert department.displayable_dataset_count() == 1
 
         # now make them all not public, and they should be false again
         department.is_public_use_of_force_incidents = False
         assert department.dataset_is_public_and_has_data("uof") == False
+        assert department.displayable_dataset_count() == 0
