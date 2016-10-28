@@ -253,18 +253,13 @@ class Department(SurrogatePK, Model):
         return '<Department({name})>'.format(name=self.name)
 
     def get_first_dataset_path(self):
-        ''' Return a string representing the path to the first existing dataset page for this department.
+        ''' Return a string representing the path to the first available dataset page for this department.
             For use in url_for calls.
         '''
-        datasets = ["complaints", "uof", "ois", "assaults"]
-        for check in datasets:
-            lookup = self.get_dataset_lookup(check)
-            # if there's a class for this dataset, return its path
-            try:
-                getattr(importlib.import_module("comport.data.models"), "{}{}".format(lookup["class_prefix"], self.short_name))
-            except AttributeError:
-                continue
-            else:
+        for dataset_name in ["complaints", "uof", "ois", "assaults"]:
+            lookup = self.get_dataset_lookup(dataset_name)
+            # if this dataset's available, return its path
+            if self.dataset_is_public_and_has_data(dataset_name):
                 return lookup["path"]
 
         # no dataset classes were found
