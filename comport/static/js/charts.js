@@ -322,6 +322,8 @@ function last12Months(rows, config){
   // offset today by 12 d3-defined months in the past
   var latestDate = d3.max(rows, function(d){ return d.date; })
   var startDate = d3.time.month.offset(latestDate, -12);
+  // start from the 1st of the month
+  startDate = d3.time.day.offset(startDate, -1 * (startDate.getDate() - 1))
   config.dateSpan = [startDate, latestDate];
   return rows.filter(function(r){
     return startDate < r.date;
