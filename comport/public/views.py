@@ -20,7 +20,7 @@ def load_user(id):
 
 @blueprint.route("/", methods=["GET"])
 def home():
-    departments = Department.query.filter(Department.is_public==True)
+    departments = Department.query.all()
     return render_template("public/home.html", departments=departments, published=True)
 
 
