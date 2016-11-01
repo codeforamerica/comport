@@ -11,7 +11,7 @@ from flask import url_for
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
 from comport.data.models import UseOfForceIncidentIMPD
-from .utils import log_in_user
+from .utils import create_and_log_in_user
 
 @pytest.mark.usefixtures('db')
 class TestConditionalAccess:
@@ -53,7 +53,7 @@ class TestConditionalAccess:
         department.is_public = False
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make requests to specific front pages
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
@@ -148,7 +148,7 @@ class TestConditionalAccess:
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=403)
 
         # log in, try again, and they should all be accessible again
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         testapp.get("/department/{}/complaints/".format(department.short_name), status=200)
         testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=200)
@@ -176,7 +176,7 @@ class TestConditionalAccess:
 
         # log in under a different department, datasets should not be accessible
         bad_department = Department.create(name="B Police Department", short_name="BPD", load_defaults=False)
-        log_in_user(testapp, bad_department)
+        create_and_log_in_user(testapp, bad_department)
 
         testapp.get("/department/{}/complaints/".format(department.short_name), status=403)
         testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=403)
@@ -202,7 +202,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
@@ -214,7 +214,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
@@ -226,7 +226,7 @@ class TestPagesRespond:
         department = Department.create(name="Spleen Police Department", short_name="SPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
@@ -238,7 +238,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
@@ -250,7 +250,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/complaints".format(department.id))
@@ -262,7 +262,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/useofforce".format(department.id))
@@ -274,7 +274,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/ois".format(department.id))
@@ -304,7 +304,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/preview/schema/assaultsonofficers".format(department.id))
@@ -363,7 +363,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/assaultsonofficers".format(department.id))
@@ -375,7 +375,7 @@ class TestPagesRespond:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to the assaults preview page
         response = testapp.get("/department/{}/preview/assaultsonofficers".format(department.id))
