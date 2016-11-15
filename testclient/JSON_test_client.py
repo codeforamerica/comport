@@ -249,7 +249,7 @@ class JSONTestClient(object):
     def make_value(self, value_key, **kwargs):
         ''' make a convincing fake value for the key
         '''
-        if value_key in ["arrestMade", "officerInjured", "officerKilled", "reportFiled", "residentInjured", "residentHospitalized", "officerHospitalized"]:
+        if value_key in ["arrestMade", "officerInjured", "officerKilled", "reportFiled", "residentInjured", "residentHospitalized", "officerHospitalized", "hasDisposition"]:
             return self.generate_bool()
 
         if value_key in ["opaqueId", "officerIdentifier", "residentIdentifier"]:

@@ -646,7 +646,7 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
     bureau = Column(db.String(255), unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
-    disposition = Column(db.String(255), unique=False, nullable=True)
+    has_disposition = Column(db.Boolean, nullable=True)
     resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
     officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
@@ -669,7 +669,7 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("disposition", "disposition", "disposition"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("serviceType", "service_type", "serviceType"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
+        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("hasDisposition", "has_disposition", "hasDisposition"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("serviceType", "service_type", "serviceType"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -711,7 +711,7 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
             bureau=incident["bureau"],
             division=incident["division"],
             assignment=incident["assignment"],
-            disposition=incident["disposition"],
+            has_disposition=incident["hasDisposition"],
             resident_weapon_used=incident["residentWeaponUsed"],
             officer_weapon_used=incident["officerWeaponUsed"],
             service_type=incident["serviceType"],
