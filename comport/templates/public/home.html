@@ -16,7 +16,7 @@
   </div>
   <div class="row aside">
     {% for department in departments %}
-    {% if department.displayable_dataset_count() > 0 and (department.is_public or (current_user.is_authenticated() and (current_user.is_admin() or current_user.has_department(department.id)))) %}
+    {% if department.displayable_dataset_count() > 0 and (department.is_public or (current_user and (current_user.is_authenticated() and (current_user.is_admin() or current_user.has_department(department.id))))) %}
     <div class="row lead">
     <h3>{{department.name}}</h3>
     <hr>
