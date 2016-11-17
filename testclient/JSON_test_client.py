@@ -255,6 +255,9 @@ class JSONTestClient(object):
         if value_key in ["opaqueId", "officerIdentifier", "residentIdentifier"]:
             return self.hash(random_string(10))
 
+        if value_key in ["caseNumber"]:
+            return self.generate_case_number()
+
         if value_key in ["officerRace", "residentRace"]:
             return self.generate_race()
 
@@ -329,6 +332,9 @@ class JSONTestClient(object):
 
     def generate_bool(self):
         return random.choice([True, False, None])
+
+    def generate_case_number(self):
+        return "{yr}J-{nm}".format(yr=str(random.randint(5, 20)).zfill(2), nm=str(random.randint(1, 1000)).zfill(4))
 
     def generate_sex(self):
         return random.choice([
