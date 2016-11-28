@@ -328,16 +328,21 @@ class TestDepartmentModelBPD:
         assert department.dataset_is_public_and_has_data("uof") == False
         assert department.dataset_is_public_and_has_data("ois") == False
         assert department.dataset_is_public_and_has_data("assaults") == False
+        # the total count should be zero
+        assert department.displayable_dataset_count() == 0
 
         # create incidents and verify that the datasets are now displayable
         CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
         assert department.dataset_is_public_and_has_data("complaints") == True
+        assert department.displayable_dataset_count() == 1
 
         UseOfForceIncidentBPD.create(department_id=department.id, opaque_id="23456bcdef")
         assert department.dataset_is_public_and_has_data("uof") == True
+        assert department.displayable_dataset_count() == 2
 
         OfficerInvolvedShootingBPD.create(department_id=department.id, opaque_id="34567cdefg")
         assert department.dataset_is_public_and_has_data("ois") == True
+        assert department.displayable_dataset_count() == 3
 
         # now make them all not public, and they should be false again
         department.is_public_citizen_complaints = False
@@ -346,3 +351,4 @@ class TestDepartmentModelBPD:
         assert department.dataset_is_public_and_has_data("uof") == False
         department.is_public_officer_involved_shootings = False
         assert department.dataset_is_public_and_has_data("ois") == False
+        assert department.displayable_dataset_count() == 0

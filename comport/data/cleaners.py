@@ -69,7 +69,9 @@ CAPITALIZE_LIST = [
     "SD",
     "BUR",
     "WATF",
-    "WD"
+    "WD",
+    "ECW",
+    "OC"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [

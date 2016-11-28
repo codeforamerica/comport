@@ -1,12 +1,23 @@
 
-from comport.user.models import User
+from comport.user.models import User, Role
 
-def log_in_user(testapp, department):
+def create_and_log_in_user(testapp=None, department=None, rolename=None, username="user"):
     # set up a user
-    user = User.create(username="user", email="user@example.com", password="password")
-    user.departments.append(department)
+    user = User.create(username=username, email="{}@example.com".format(username), password="password")
+
+    # associate a department if a department is passed
+    if department:
+        user.departments.append(department)
+
     user.active = True
     user.save()
+
+    # associate a role if a name is passed
+    if rolename:
+        user_role = Role(name=rolename)
+        user_role.save()
+        user.roles.append(user_role)
+
     # login
     response = testapp.get("/login/")
     form = response.forms['loginForm']

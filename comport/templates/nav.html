@@ -17,7 +17,7 @@
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse navbar-ex1-collapse">
-    {% if current_user and current_user.is_authenticated() and not published%}
+    {% if current_user and current_user.is_authenticated() and not published %}
     <ul class="nav navbar-nav navbar-right">
         <li>
             <span class="navbar-text"><a class="navbar-link" href="{{ url_for('user.home') }}">Logged in as {{ current_user.username }}</a></span>

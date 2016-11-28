@@ -1,6 +1,6 @@
 
 <div class="row">
-
+{% if department.dataset_is_public_and_has_data("complaints") %}
     <ul class="nav nav-tabs nav-justified dataset_nav col-xs-12" role="navigation">
       <li class="{% if url_for(
             'department.public_complaints', short_name=department.short_name.upper()
@@ -12,7 +12,9 @@
           Complaints
         </a>
       </li>
+{% endif %}
 
+{% if department.dataset_is_public_and_has_data("uof") %}
       <li class="{%- if url_for(
             'department.public_uof', short_name=department.short_name.upper()
             ) == request.path
@@ -23,7 +25,9 @@
           Use of Force
         </a>
       </li>
+{% endif %}
 
+{% if department.dataset_is_public_and_has_data("ois") %}
       <li class="{%- if url_for(
             'department.public_ois', short_name=department.short_name.upper()
             ) == request.path
@@ -35,5 +39,6 @@
         </a>
       </li>
     </ul>
+{% endif %}
 
 </div>  <!-- end row -->

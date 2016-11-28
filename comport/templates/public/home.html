@@ -15,11 +15,12 @@
     </div>
   </div>
   <div class="row aside">
-    <h3> Available Data </h3>
     {% for department in departments %}
-
-    <p> {{department.name}}</p>
-     {% if department.dataset_is_public_and_has_data("complaints") %}
+    {% if department.displayable_dataset_count() > 0 and (department.is_public or (current_user and (current_user.is_authenticated() and (current_user.is_admin() or current_user.has_department(department.id))))) %}
+    <div class="row lead">
+    <h3>{{department.name}}</h3>
+    <hr>
+    {% if department.dataset_is_public_and_has_data("complaints") %}
     <div id="dataset-spotlight" class="col-md-4">
       <a href="/department/{{department.short_name}}/complaints">
         <img src="{{url_for('static', filename='img/complaints.png') }}" alt="">
@@ -27,7 +28,7 @@
       </a>
     </div>
     {% endif %}
-     {% if department.dataset_is_public_and_has_data("uof") %}
+    {% if department.dataset_is_public_and_has_data("uof") %}
     <div id="dataset-spotlight" class="col-md-4">
       <a href="/department/{{department.short_name}}/useofforce">
         <img src="../static/img/uof.png">
@@ -43,7 +44,10 @@
     </a>
     </div>
     {% endif %}
+    </div>
+    {% endif %}
     {% endfor %}
+  </div>
   </div>
    <p> For more information about this project, check out our <a href="/about/">about page</a>.</p>
 </div>

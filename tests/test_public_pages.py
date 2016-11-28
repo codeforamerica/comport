@@ -1,10 +1,11 @@
 import pytest
+from flask import url_for
 from comport.department.models import Department
 from bs4 import BeautifulSoup
 from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
 from comport.data.models import UseOfForceIncidentLMPD
-
+from .utils import create_and_log_in_user
 
 @pytest.mark.usefixtures('db')
 class TestPublicPages:
@@ -27,13 +28,55 @@ class TestPublicPages:
         UseOfForceIncidentIMPD.create(department_id=impd.id, opaque_id="12345abcde")
         bpd = Department.create(name="B Police Department", short_name="BPD", is_public=True)
         UseOfForceIncidentBPD.create(department_id=bpd.id, opaque_id="12345abcde")
-        lmpd = Department.create(name="L Police Department", short_name="LMPD", is_public=False)
+        lmpd = Department.create(name="LM Police Department", short_name="LMPD", is_public=False)
         UseOfForceIncidentLMPD.create(department_id=lmpd.id, opaque_id="12345abcde")
 
         response = testapp.get("/", status=200)
         soup = BeautifulSoup(response.text)
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
+        assert soup.find("a", href="/department/LMPD/useofforce") is None
+
+    def test_non_public_depts_display_for_users_with_access(self, testapp):
+        ''' Users can see links to datasets they're allowed to access on the front page
+        '''
+        impd = Department.create(name="I Police Department", short_name="IMPD", is_public=True)
+        UseOfForceIncidentIMPD.create(department_id=impd.id, opaque_id="12345abcde")
+        bpd = Department.create(name="B Police Department", short_name="BPD", is_public=False)
+        UseOfForceIncidentBPD.create(department_id=bpd.id, opaque_id="12345abcde")
+        lmpd = Department.create(name="LM Police Department", short_name="LMPD", is_public=False)
+        UseOfForceIncidentLMPD.create(department_id=lmpd.id, opaque_id="12345abcde")
+
+        # A non logged-in user can only see the public department
+        response = testapp.get("/", status=200)
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="/department/IMPD/useofforce") is not None
+        assert soup.find("a", href="/department/BPD/useofforce") is None
+        assert soup.find("a", href="/department/LMPD/useofforce") is None
+
+        # A user associated with a particular department can see that department's
+        # available datasets when logged in
+        create_and_log_in_user(testapp=testapp, department=bpd, username="user1")
+        response = testapp.get("/", status=200)
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="/department/IMPD/useofforce") is not None
+        assert soup.find("a", href="/department/BPD/useofforce") is not None
+        assert soup.find("a", href="/department/LMPD/useofforce") is None
+
+        # A user with admin access can see all departments' available datasets
+        create_and_log_in_user(testapp=testapp, department=impd, rolename='admin', username="user2")
+        response = testapp.get("/", status=200)
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="/department/IMPD/useofforce") is not None
+        assert soup.find("a", href="/department/BPD/useofforce") is not None
+        assert soup.find("a", href="/department/LMPD/useofforce") is not None
+
+        # Log out and only the public department should be visible
+        testapp.get(url_for('public.logout')).follow()
+        response = testapp.get("/", status=200)
+        soup = BeautifulSoup(response.text)
+        assert soup.find("a", href="/department/IMPD/useofforce") is not None
+        assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/LMPD/useofforce") is None
 
     def test_all_dept_links(self, testapp):

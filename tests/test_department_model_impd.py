@@ -332,19 +332,25 @@ class TestDepartmentModelIMPD:
         assert department.dataset_is_public_and_has_data("uof") == False
         assert department.dataset_is_public_and_has_data("ois") == False
         assert department.dataset_is_public_and_has_data("assaults") == False
+        # the total count should be zero
+        assert department.displayable_dataset_count() == 0
 
         # create incidents and verify that the datasets are now displayable
         CitizenComplaintIMPD.create(department_id=department.id, opaque_id="12345abcde")
         assert department.dataset_is_public_and_has_data("complaints") == True
+        assert department.displayable_dataset_count() == 1
 
         UseOfForceIncidentIMPD.create(department_id=department.id, opaque_id="23456bcdef")
         assert department.dataset_is_public_and_has_data("uof") == True
+        assert department.displayable_dataset_count() == 2
 
         OfficerInvolvedShootingIMPD.create(department_id=department.id, opaque_id="34567cdefg")
         assert department.dataset_is_public_and_has_data("ois") == True
+        assert department.displayable_dataset_count() == 3
 
         AssaultOnOfficerIMPD.create(department_id=department.id, opaque_id="45678defgh")
         assert department.dataset_is_public_and_has_data("assaults") == True
+        assert department.displayable_dataset_count() == 4
 
         # now make them all not public, and they should be false again
         department.is_public_citizen_complaints = False
@@ -355,3 +361,4 @@ class TestDepartmentModelIMPD:
         assert department.dataset_is_public_and_has_data("ois") == False
         department.is_public_assaults_on_officers = False
         assert department.dataset_is_public_and_has_data("assaults") == False
+        assert department.displayable_dataset_count() == 0

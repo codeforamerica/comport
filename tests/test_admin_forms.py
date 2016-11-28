@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from comport.admin.forms import NewDepartmentForm
 from comport.department.models import Department, Extractor, User
 from comport.content.models import ChartBlock
-from .utils import log_in_user
+from .utils import create_and_log_in_user
 from bs4 import BeautifulSoup
 
 @pytest.mark.usefixtures('app')
@@ -98,7 +98,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}".format(department.id))
@@ -125,7 +125,7 @@ class TestAdminEditForms:
         department = Department.create(name="Metropolis Police Department", short_name="MPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         for page in ['index', 'complaints', 'useofforce', 'ois', 'assaultsonofficers']:
@@ -142,7 +142,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
@@ -166,7 +166,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
@@ -211,7 +211,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
@@ -238,7 +238,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
@@ -262,7 +262,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
             # make a request to specific front page
@@ -295,7 +295,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
             # make a request to specific front page
@@ -351,7 +351,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
@@ -379,7 +379,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # get the order of a schema field
         check_order = ChartBlock.query.filter_by(slug="complaints-schema-field-shift", department_id=department.id).first().order
@@ -404,7 +404,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
@@ -433,7 +433,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/assaultsonofficers".format(department.id))
@@ -461,7 +461,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/ois".format(department.id))
@@ -489,7 +489,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/useofforce".format(department.id))
@@ -517,7 +517,7 @@ class TestAdminEditForms:
         department = Department.create(name="B Police Department", short_name="BPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         response = testapp.get("/department/{}/edit/schema/complaints".format(department.id))
@@ -545,7 +545,7 @@ class TestAdminEditForms:
         department = Department.create(name="Metropolis Police Department", short_name="MPD", load_defaults=True)
 
         # set up a user
-        log_in_user(testapp, department)
+        create_and_log_in_user(testapp, department)
 
         # make a request to specific front page
         for page in ['complaints', 'useofforce', 'ois', 'assaultsonofficers']:
