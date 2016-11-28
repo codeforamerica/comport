@@ -1,17 +1,18 @@
 """fix capitalization for 'allegation'
 
-Revision ID: 300d0c0b7f6
-Revises: 513f93441476
-Create Date: 2016-10-27 17:48:09.758346
+Revision ID: 43c4c512514
+Revises: ab97630e71ce
+Create Date: 2016-11-28 18:36:26.344090
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '300d0c0b7f6'
-down_revision = '513f93441476'
+revision = '43c4c512514'
+down_revision = 'ab97630e71ce'
 
 from alembic import op
 import sqlalchemy as sa
+
 from comport.data.cleaners import Cleaners
 from comport.data.models import CitizenComplaintIMPD
 
@@ -26,6 +27,5 @@ def upgrade():
 
 
 def downgrade():
-   
 	pass
    
