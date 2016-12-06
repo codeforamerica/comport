@@ -97,19 +97,19 @@ class TestCleaners:
         ''' Incident descriptions are title-cased with expected exceptions.
         '''
         cleaner = Cleaners()
-        in_sentence = "It is a way I have of driving off the spleen and regulating the circulation"
-        titlecased_sentence = titlecase(in_sentence)
+        in_sentence = "Northwest and east district"
         send = {}
-        send["damp"] = in_sentence
-        send["drizzly"] = in_sentence
+        send["division"] = in_sentence
+        send["precinct"] = in_sentence
         for key in CAPITALIZE_IGNORE_KEYS_LIST:
             send[key] = in_sentence
 
         result = cleaner.capitalize_incident(send)
 
         # values of keys not in the list should be titlecased
-        assert result["damp"] == titlecased_sentence
-        assert result["drizzly"] == titlecased_sentence
+        titlecased_sentence = "Northwest and East District"
+        assert result["division"] == titlecased_sentence
+        assert result["precinct"] == titlecased_sentence
         # values of keys in the list should not be titlecased
         for key in CAPITALIZE_IGNORE_KEYS_LIST:
             assert result[key] == in_sentence
