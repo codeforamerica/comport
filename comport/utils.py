@@ -51,7 +51,13 @@ def random_string(N):
     return ''.join(choice(string.ascii_uppercase + string.digits + '     ') for _ in range(N))
 
 def parse_date(date):
-    return None if not date else datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+    parsed = None
+    try:
+        parsed = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+    except (ValueError, TypeError):
+        pass
+
+    return parsed
 
 def parse_csv_date(date):
     try:
