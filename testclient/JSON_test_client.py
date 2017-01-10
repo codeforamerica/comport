@@ -279,7 +279,7 @@ class JSONTestClient(object):
         if value_key == "source":
             return self.generate_source()
 
-        if value_key == "occuredDate":
+        if value_key in ["occuredDate", "occurredDate", "receivedDate", "completedDate"]:
             return random_date(kwargs['start_date'], kwargs['end_date']).strftime("%Y-%m-%d 0:0:00")
 
         if value_key == "occuredTime":

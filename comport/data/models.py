@@ -452,9 +452,10 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents_bpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
+    case_number = Column(db.String(128), unique=False, nullable=True)
     occured_date = Column(db.DateTime, nullable=True)
-    bureau = Column(db.String(255), unique=False, nullable=True)
-    division = Column(db.String(255), unique=False, nullable=True)
+    received_date = Column(db.DateTime, nullable=True)
+    completed_date = Column(db.DateTime, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     officer_force_type = Column(db.String(255), unique=False, nullable=True)
@@ -468,7 +469,6 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
     officer_hospitalized = Column(db.Boolean, nullable=True)
     officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_identifier = Column(db.String(255), unique=False, nullable=True)
-    resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -485,7 +485,7 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
+        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("occurredDate", "occured_date", "occuredDate"), ("receivedDate", "received_date", "receivedDate"), ("completedDate", "completed_date", "completedDate"), ("assignment", "assignment", "assignment"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("officerForceType", "officer_force_type", "officerForceType"), ("serviceType", "service_type", "serviceType"), ("arrestMade", "arrest_made", "arrestMade"), ("arrestCharges", "arrest_charges", "arrestCharges"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("residentCondition", "resident_condition", "residentCondition"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerCondition", "officer_condition", "officerCondition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("officerIdentifier", "officer_identifier", "officerIdentifier")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -493,9 +493,7 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         '''
         # get a cleaner instance
         cleaner = Cleaners()
-        # capitalize the location
-        incident["bureau"] = cleaner.capitalize(incident["bureau"])
-        incident["division"] = cleaner.capitalize(incident["division"])
+        # capitalize the assignment
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
         # clean force type, race, gender
         incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
@@ -523,9 +521,10 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         cls.create(
             department_id=department.id,
             opaque_id=incident["opaqueId"],
+            case_number=incident["caseNumber"],
             occured_date=parse_date(incident["occuredDate"]),
-            bureau=incident["bureau"],
-            division=incident["division"],
+            received_date=parse_date(incident["receivedDate"]),
+            completed_date=parse_date(incident["completedDate"]),
             assignment=incident["assignment"],
             use_of_force_reason=incident["useOfForceReason"],
             officer_force_type=incident["officerForceType"],
