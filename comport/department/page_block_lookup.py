@@ -13,8 +13,9 @@ class PageBlockLookup:
         if short_name == 'BPD':
             return {
                 'introduction': 'uof-introduction',
-                'first-block': 'uof-force-type',
+                'first-block': 'uof-by-month',
                 'blocks': [
+                    'uof-force-type',
                     'uof-by-assignment',
                     'officer-demographics',
                     'uof-race'
