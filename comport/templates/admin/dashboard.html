@@ -3,45 +3,33 @@
 {% block content %}
     <h1>Admin Dashboard</h1>
 
-    <h2>Users</h2>
+    <h2>Departments</h2>
     <table class="table table-striped">
       <tr>
         <th>
           Name
         </th>
         <th>
-          Departments
-        </th>
-        <th>
-          Admin
+          Short Name
         </th>
         <th>
         </th>
       </tr>
-      {% for user in users %}
+      {% for department in departments %}
           <tr>
             <td>
-              {{user.username}}
+              {{department.name}}
             </td>
             <td>
-              <ul>
-                {% for department in user.departments %}
-                <li>
-                  {{department.name}}
-                </li>
-                {% endfor%}
-              </ul>
+              {{department.short_name}}
             </td>
             <td>
-              {{user.is_admin()}}
-            </td>
-            <td>
-              <a href='{{ url_for("admin.edit_user", user_id=user.id ) }}'>Edit</a>
+              <a href='{{ url_for("department.department_dashboard", department_id=department.id ) }}'>Edit</a>
             </td>
           </tr>
       {% endfor %}
-
     </table>
+
     <h2>Extractors</h2>
     <table class="table table-striped">
       <tr>
@@ -79,35 +67,47 @@
             </td>
           </tr>
       {% endfor %}
-
     </table>
-    <h2>Departments</h2>
+
+    <h2>Users</h2>
     <table class="table table-striped">
       <tr>
         <th>
           Name
         </th>
         <th>
-          Short Name
+          Departments
+        </th>
+        <th>
+          Admin
         </th>
         <th>
         </th>
       </tr>
-      {% for department in departments %}
+      {% for user in users %}
           <tr>
             <td>
-              {{department.name}}
+              {{user.username}}
             </td>
             <td>
-              {{department.short_name}}
+              <ul>
+                {% for department in user.departments %}
+                <li>
+                  {{department.name}}
+                </li>
+                {% endfor%}
+              </ul>
             </td>
             <td>
-              <a href='{{ url_for("department.department_dashboard", department_id=department.id ) }}'>Edit</a>
+              {{user.is_admin()}}
+            </td>
+            <td>
+              <a href='{{ url_for("admin.edit_user", user_id=user.id ) }}'>Edit</a>
             </td>
           </tr>
       {% endfor %}
-
     </table>
+
     <h2>Outstanding Invite Codes</h2>
     <table class="table table-striped">
       <tr>
@@ -129,6 +129,7 @@
           </tr>
       {% endfor %}
     </table>
+
     <h2>Interest Form Responses</h2>
     <table class="table table-striped">
       <tr>
