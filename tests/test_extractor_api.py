@@ -182,7 +182,7 @@ class TestHeartbeat:
         assert check_complaint.officer_age == cleaner.number_to_string(sent_complaint['officerAge'])
         assert check_complaint.officer_years_of_service == cleaner.number_to_string(sent_complaint['officerYearsOfService'])
 
-    def test_correct_complaint_cap (self, testapp):
+    def test_correct_complaint_cap(self, testapp):
         ''' New complaint data from the extractor is processed as expected.
         '''
         # Set up the extractor
@@ -211,8 +211,6 @@ class TestHeartbeat:
         sent_complaint = cleaner.capitalize_incident(complaint_data[0])
         check_complaint = CitizenComplaintIMPD.query.filter_by(opaque_id=sent_complaint['opaqueId']).first()
         assert check_complaint.allegation == "Rude, Demeaning, or Affronting Language"
-        with open("scratch.txt", "w") as text_file:
-            text_file.write("Complaint Data: {} ".format(check_complaint.allegation))
 
     def test_post_mistyped_complaint_data(self, testapp):
         ''' New complaint data from the extractor with wrongly typed data is processed as expected.
