@@ -1,7 +1,7 @@
 
 <div class="row">
-{% if department.dataset_is_public_and_has_data("complaints") %}
     <ul class="nav nav-tabs nav-justified dataset_nav col-xs-12" role="navigation">
+{% if department.dataset_is_public_and_has_data("complaints") %}
       <li class="{% if url_for(
             'department.public_complaints', short_name=department.short_name.upper()
             ) == request.path
@@ -38,7 +38,7 @@
           Officer Involved Shootings
         </a>
       </li>
-    </ul>
 {% endif %}
+    </ul>
 
 </div>  <!-- end row -->
