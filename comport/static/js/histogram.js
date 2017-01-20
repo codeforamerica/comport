@@ -135,7 +135,7 @@ function flagHistogram(config, data){
         ])
     .range([0, 70]);
 
-  var y = function(d){ return yScale(d[config.y]) + "%" };
+  var y = function(d){ return yScale(d[config.y]) + "%"; };
 
   // draw containing table node
   var table = d3.select(config.parent)
@@ -146,14 +146,14 @@ function flagHistogram(config, data){
     .data(data).enter()
     .append("tr")
     .attr("title", function(d){
-      if( d[config.x] == "Other" ){
+      if( d[config.x] == "Other" && d.hasOwnProperty('groups') ){
         return "Other includes:\n- " + d.groups.map(function(d){
           return d.type + " (" + d.count + ")";
         }).join("\n- ");
       }
     })
     .style("cursor", function(d){
-      if(d[config.x] == "Other"){
+      if(d[config.x] == "Other" && d.hasOwnProperty('groups')){
         return "pointer";
       } else {
         return "auto";
