@@ -26,6 +26,10 @@ var configs = {
     dataFunc: function(){ return DEMOGRAPHICS; }
     },
 
+  //
+  // USE OF FORCE
+  //
+
   // unique use of force incidents per month
   'uof-by-month': {
     chartType: 'mountainHistogram',
@@ -121,6 +125,10 @@ var configs = {
     xAxisTitle: "Resident",
     yAxisTitle: "Officer",
     },
+
+  //
+  // COMPLAINTS
+  //
 
   // unique complaints per month
   'complaints-by-month': {
@@ -248,6 +256,10 @@ var configs = {
     maxComplaints: 4,
   },
 
+  //
+  // OFFICER-INVOLVED SHOOTINGS
+  //
+
   // unique officer-involved shootings by incident and district
   // (IMPD only)
   'ois-by-inc-district': {
@@ -313,6 +325,78 @@ var configs = {
     dataFunc: raceMatrix,
     xAxisTitle: "Resident",
     yAxisTitle: "Officer",
+    },
+
+  //
+  // PURSUITS
+  //
+
+  // unique use of force incidents per month
+  'pursuits-by-month': {
+    chartType: 'mountainHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'date'),
+    keyFunc: function(d){ return d3.time.format('%Y %m')(d.date); },
+    sortWith: function(d){ return d.month; },
+    x: 'month',
+    xFunc: function(b){ return d3.time.month.floor(b[0].date); },
+    xTickFormat: function(d){
+      var fmt = d3.time.format('%b %Y');
+      return fmt(new Date(d));
+    },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    },
+
+  // unique pursuit incidents by assignment
+  'pursuits-by-assignment': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'assignment'),
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique pursuit incidents by reason
+  'pursuits-by-reason': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'reason'),
+    keyFunc: function(d){ return d.reason; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].reason; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique pursuit incidents by distance
+  'pursuits-by-distance': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'distance'),
+    keyFunc: function(d){ return d.distance; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].distance; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
+  // unique pursuit incidents by conclusion
+  'pursuits-by-conclusion': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'conclusion'),
+    keyFunc: function(d){ return d.conclusion; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].conclusion; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
     },
 
 };

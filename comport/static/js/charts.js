@@ -318,16 +318,29 @@ function parseData(rows){
   return rows;
 }
 
-function last12Months(rows, config){
-  // offset today by 12 d3-defined months in the past
-  var latestDate = d3.max(rows, function(d){ return d.date; })
-  var startDate = d3.time.month.offset(latestDate, -12);
+function lastNMonths(rows, config, num){
+  // offset today by the passed number of d3-defined months in the past
+  offset = -1 * (num || 12);
+  var latestDate = d3.max(rows, function(d){ return d.date; });
+  var startDate = d3.time.month.offset(latestDate, offset);
   // start from the 1st of the month
-  startDate = d3.time.day.offset(startDate, -1 * (startDate.getDate() - 1))
+  startDate = d3.time.day.offset(startDate, -1 * (startDate.getDate() - 1));
   config.dateSpan = [startDate, latestDate];
   return rows.filter(function(r){
     return startDate < r.date;
   });
+}
+
+function last12Months(rows, config){
+  return lastNMonths(rows, config, 12);
+}
+
+function last24Months(rows, config){
+  return lastNMonths(rows, config, 24);
+}
+
+function last48Months(rows, config){
+  return lastNMonths(rows, config, 48);
 }
 
 function uniqueForKeys(){
@@ -376,12 +389,41 @@ function uniqueForKeysInLast12Months(){
   // for example:
   //    uniqueForKeys('id', 'shift', 'beat')
   var args = Array.prototype.slice.call(arguments);
-  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args)
+  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args);
   return function(rows, config){
     var prefiltered = last12Months(rows, config);
     return uniqueFilter(prefiltered);
-  }
+  };
 }
+
+function uniqueForKeysInLast24Months(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // but first prefilters down to the last 24 months
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  var args = Array.prototype.slice.call(arguments);
+  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args);
+  return function(rows, config){
+    var prefiltered = last24Months(rows, config);
+    return uniqueFilter(prefiltered);
+  };
+}
+
+function uniqueForKeysInLast48Months(){
+  // takes a list of key strings to filter a set of raw incidents
+  // concatenates the values of the given keys to provide a unique key
+  // but first prefilters down to the last 24 months
+  // for example:
+  //    uniqueForKeys('id', 'shift', 'beat')
+  var args = Array.prototype.slice.call(arguments);
+  var uniqueFilter = uniqueForKeys.apply(uniqueForKeys, args);
+  return function(rows, config){
+    var prefiltered = last48Months(rows, config);
+    return uniqueFilter(prefiltered);
+  };
+}
+
 
 function structureData(parsed_rows, config){
   // restructures csv data into data than can be used to draw a chart
