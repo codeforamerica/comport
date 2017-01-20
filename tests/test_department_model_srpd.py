@@ -82,7 +82,7 @@ class TestDepartmentModelSRPD:
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
         uof_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="uof-by-month")
-        uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-force-type")
+        uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-incident-force-type")
         uof_bass = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-assignment")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         department.chart_blocks.append(uof_intro)
