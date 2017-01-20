@@ -34,6 +34,17 @@ class PageBlockLookup:
                 ]
             }
 
+        if short_name == 'SRPD':
+            return {
+                'introduction': 'uof-introduction',
+                'first-block': 'uof-by-month',
+                'blocks': [
+                    'uof-force-type',
+                    'uof-by-assignment',
+                    'officer-demographics'
+                ]
+            }
+
         # IMPD's blocks are the default
         return {
             'introduction': 'uof-introduction',
@@ -56,6 +67,16 @@ class PageBlockLookup:
                     'ois-by-assignment',
                     'officer-demographics',
                     'ois-race'
+                ]
+            }
+
+        if short_name == 'SRPD':
+            return {
+                'introduction': 'ois-introduction',
+                'first-block': 'ois-by-month',
+                'blocks': [
+                    'ois-by-assignment',
+                    'officer-demographics'
                 ]
             }
 
@@ -87,6 +108,18 @@ class PageBlockLookup:
                 ]
             }
 
+        if short_name == 'SRPD':
+            return {
+                'introduction': 'complaints-introduction',
+                'first-block': 'complaints-by-month',
+                'blocks': [
+                    'complaints-by-allegation',
+                    'complaints-by-disposition',
+                    'complaints-by-assignment',
+                    'officer-demographics'
+                ]
+            }
+
         # IMPD's blocks are the default
         return {
             'introduction': 'complaints-introduction',
@@ -99,6 +132,20 @@ class PageBlockLookup:
                 'officer-demographics',
                 'complaints-by-demographic',
                 'complaints-by-officer'
+            ]
+        }
+
+    def get_pursuits_blocks(short_name):
+        ''' Pursuits main data page blocks
+        '''
+        return {
+            'introduction': 'pursuits-introduction',
+            'first-block': 'pursuits-by-month',
+            'blocks': [
+                'pursuits-by-assignment',
+                'pursuits-by-reason',
+                'pursuits-by-distance',
+                'pursuits-by-conclusion'
             ]
         }
 
@@ -146,6 +193,16 @@ class PageBlockLookup:
             'footer': 'ois-schema-footer',
             'disclaimer': 'ois-schema-disclaimer',
             'blocks': 'ois-schema-field-'
+        }
+
+    def get_pursuits_schema_blocks(short_name):
+        ''' Pursuits schema page blocks
+        '''
+        return {
+            'introduction': 'pursuits-schema-introduction',
+            'footer': 'pursuits-schema-footer',
+            'disclaimer': 'pursuits-schema-disclaimer',
+            'blocks': 'pursuits-schema-field-'
         }
 
     def get_assaults_schema_blocks(short_name):

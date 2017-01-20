@@ -65,6 +65,14 @@
   </a>
   </div>
   {% endif %}
+  {% if department.dataset_is_public_and_has_data("pursuits") %}
+  <div id="dataset-spotlight" class="col-md-4">
+    <a href="/department/{{department.short_name}}/pursuits">
+    <img src="../static/img/uof.png">
+    Pursuits
+  </a>
+  </div>
+  {% endif %}
 </div>
 
 {% endblock content %}

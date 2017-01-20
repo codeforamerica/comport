@@ -39,6 +39,19 @@
         </a>
       </li>
 {% endif %}
+
+{% if department.dataset_is_public_and_has_data("pursuits") %}
+      <li class="{%- if url_for(
+            'department.public_pursuits', short_name=department.short_name.upper()
+            ) == request.path
+          %} active{%- endif %}">
+        <a class="data_page_link" href="{{ url_for(
+            'department.public_pursuits', short_name=department.short_name.upper()
+            ) }}">
+          Pursuits
+        </a>
+      </li>
+{% endif %}
     </ul>
 
 </div>  <!-- end row -->

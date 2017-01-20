@@ -4,6 +4,7 @@ from comport.department.models import Department
 from bs4 import BeautifulSoup
 from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
+from comport.data.models import PursuitSRPD
 from comport.data.models import UseOfForceIncidentLMPD
 from .utils import create_and_log_in_user
 
@@ -84,12 +85,15 @@ class TestPublicPages:
         CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
         UseOfForceIncidentBPD.create(department_id=department.id, opaque_id="23456bcdef")
         OfficerInvolvedShootingBPD.create(department_id=department.id, opaque_id="34567cdefg")
+        SRDepartment = Department.create(name="SR Police Department", short_name="SRPD", is_public=True)
+        PursuitSRPD.create(department_id=SRDepartment.id, opaque_id="45678defgh")
 
         response = testapp.get("/", status=200)
         soup = BeautifulSoup(response.text)
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is not None
+        assert soup.find("a", href="/department/SRPD/pursuits") is not None
 
     def test_data_status(self, testapp):
         department = Department.create(name="B Police Department", short_name="BPD", is_public=True)

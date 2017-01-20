@@ -36,14 +36,17 @@ class TestConditionalAccess:
         testapp.get("/department/{}/useofforce/".format(department.short_name), status=403)
         testapp.get("/department/{}/officerinvolvedshootings/".format(department.short_name), status=403)
         testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/pursuits/".format(department.short_name), status=403)
         testapp.get("/department/{}/schema/complaints/".format(department.short_name), status=403)
         testapp.get("/department/{}/schema/useofforce/".format(department.short_name), status=403)
         testapp.get("/department/{}/schema/officerinvolvedshootings/".format(department.short_name), status=403)
         testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/pursuits/".format(department.short_name), status=403)
         testapp.get("/department/{}/complaints.csv".format(department.id), status=403)
         testapp.get("/department/{}/uof.csv".format(department.id), status=403)
         testapp.get("/department/{}/ois.csv".format(department.id), status=403)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=403)
+        testapp.get("/department/{}/pursuits.csv".format(department.id), status=403)
         testapp.get("/department/{}/officerCalls.csv".format(department.id), status=403)
         testapp.get("/department/{}/demographics.csv".format(department.id), status=403)
 
@@ -70,6 +73,18 @@ class TestConditionalAccess:
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
         testapp.get("/department/{}/officerCalls.csv".format(department.id), status=200)
         testapp.get("/department/{}/demographics.csv".format(department.id), status=200)
+
+    def test_sr_department_logged_in_authorized(self, testapp):
+        # set up another department
+        department = Department.create(name="SR Police Department", short_name="SRPD", load_defaults=True)
+        department.is_public = False
+
+        # set up a user
+        create_and_log_in_user(testapp, department)
+
+        testapp.get("/department/{}/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/pursuits.csv".format(department.id), status=200)
 
     def test_datset_is_public_by_default(self):
         # create a department
@@ -165,6 +180,29 @@ class TestConditionalAccess:
         testapp.get("/department/{}/assaultsonofficers/".format(department.short_name), status=200)
         testapp.get("/department/{}/schema/assaultsonofficers/".format(department.short_name), status=200)
         testapp.get("/department/{}/assaultsonofficers.csv".format(department.id), status=200)
+
+    def test_visit_private_sr_dataset_throws_unauth(self, testapp):
+        # create a department
+        department = Department.create(name="SR Police Department", short_name="SRPD", load_defaults=True)
+
+        # pursuits pages are public
+        testapp.get("/department/{}/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/pursuits.csv".format(department.id), status=200)
+
+        # turn off public pursuits
+        department.is_public_pursuits = False
+
+        # pursuits pages are not accessible
+        testapp.get("/department/{}/pursuits/".format(department.short_name), status=403)
+        testapp.get("/department/{}/schema/pursuits/".format(department.short_name), status=403)
+        testapp.get("/department/{}/pursuits.csv".format(department.id), status=403)
+
+        # log in, try again, and they should all be accessible again
+        create_and_log_in_user(testapp, department)
+        testapp.get("/department/{}/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/schema/pursuits/".format(department.short_name), status=200)
+        testapp.get("/department/{}/pursuits.csv".format(department.id), status=200)
 
     def test_only_department_user_can_access_non_public_datasets(self, testapp):
         # create a department

@@ -107,18 +107,22 @@ class TestAdminEditForms:
         assert soup.find("a", href="{}/preview/useofforce".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/complaints".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/pursuits".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/assaultsonofficers".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/useofforce".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/complaints".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/pursuits".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/assaultsonofficers".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/schema/useofforce".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/schema/complaints".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/preview/schema/pursuits".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/schema/assaultsonofficers".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/schema/useofforce".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/schema/complaints".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/schema/ois".format(department.id)) is not None
+        assert soup.find("a", href="{}/edit/schema/pursuits".format(department.id)) is not None
         assert soup.find("a", href="{}/edit/schema/assaultsonofficers".format(department.id)) is not None
 
     def test_edit_and_preview_links_on_preview_page(self, testapp):
@@ -264,7 +268,7 @@ class TestAdminEditForms:
         # set up a user
         create_and_log_in_user(testapp, department)
 
-        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
+        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce"), ("pursuits", "pursuits")]:
             # make a request to specific front page
             response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type[1]))
             assert response.status_code == 200
@@ -297,7 +301,7 @@ class TestAdminEditForms:
         # set up a user
         create_and_log_in_user(testapp, department)
 
-        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce")]:
+        for incident_type in [("complaints", "complaints"), ("assaults", "assaultsonofficers"), ("ois", "ois"), ("uof", "useofforce"), ("pursuits", "pursuits")]:
             # make a request to specific front page
             response = testapp.get("/department/{}/edit/schema/{}".format(department.id, incident_type[1]))
             assert response.status_code == 200

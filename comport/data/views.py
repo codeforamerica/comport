@@ -126,6 +126,30 @@ def complaints():
     extractor.save()
     return json.dumps({"added": added_rows, "updated": updated_rows})
 
+@blueprint.route("/pursuits", methods=['POST'])
+@extractor_auth_required()
+def pursuits():
+    username = request.authorization.username
+    extractor = Extractor.query.filter_by(username=username).first()
+    department = extractor.first_department()
+    request_json = request.json
+    added_rows = 0
+    updated_rows = 0
+
+    pursuit_class = getattr(importlib.import_module("comport.data.models"), "Pursuit{}".format(department.short_name))
+
+    for incident in request_json['data']:
+        added = pursuit_class.add_or_update_incident(department, incident)
+        if added is True:
+            added_rows += 1
+        elif added is False:
+            updated_rows += 1
+
+    extractor.next_month = None
+    extractor.next_year = None
+    extractor.save()
+    return json.dumps({"added": added_rows, "updated": updated_rows})
+
 @blueprint.route("/assaults", methods=['POST'])
 @extractor_auth_required()
 def assaults():

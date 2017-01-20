@@ -28,6 +28,7 @@ class Department(SurrogatePK, Model):
     is_public_use_of_force_incidents = Column(db.Boolean, default=True, nullable=False)
     is_public_citizen_complaints = Column(db.Boolean, default=True, nullable=False)
     is_public_officer_involved_shootings = Column(db.Boolean, default=True, nullable=False)
+    is_public_pursuits = Column(db.Boolean, default=True, nullable=False)
     is_public_assaults_on_officers = Column(db.Boolean, default=True, nullable=False)
     invite_codes = relationship("Invite_Code", backref="department")
     users = relationship("User", secondary=user_department_relationship_table, backref="departments")
@@ -50,6 +51,7 @@ class Department(SurrogatePK, Model):
             {"in": ["complaints", "citizen_complaints"], "var_suffix": "citizen_complaints", "class_prefix": "CitizenComplaint", "path": "department.public_complaints"},
             {"in": ["uof", "use_of_force_incidents"], "var_suffix": "use_of_force_incidents", "class_prefix": "UseOfForceIncident", "path": "department.public_uof"},
             {"in": ["ois", "officer_involved_shootings"], "var_suffix": "officer_involved_shootings", "class_prefix": "OfficerInvolvedShooting", "path": "department.public_ois"},
+            {"in": ["pursuits", "pursuits"], "var_suffix": "pursuits", "class_prefix": "Pursuit", "path": "department.public_pursuits"},
             {"in": ["assaults", "assaults_on_officers"], "var_suffix": "assaults_on_officers", "class_prefix": "AssaultOnOfficer", "path": "department.public_assaults"}
         ]
 
@@ -96,7 +98,7 @@ class Department(SurrogatePK, Model):
         ''' Return the number of datasets this department has that are public and have data.
         '''
         displayable = 0
-        for dataset_name in ["complaints", "uof", "ois", "assaults"]:
+        for dataset_name in ["complaints", "uof", "ois", "pursuits", "assaults"]:
             if self.dataset_is_public_and_has_data(dataset_name):
                 displayable = displayable + 1
         return displayable
@@ -119,6 +121,14 @@ class Department(SurrogatePK, Model):
 
     def get_complaint_blocks(self):
         blocks = PageBlockLookup.get_complaints_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'first-block': self.get_block_by_slug(blocks['first-block']),
+            'blocks': self.get_blocks_by_slugs(blocks['blocks'])
+        }
+
+    def get_pursuits_blocks(self):
+        blocks = PageBlockLookup.get_pursuits_blocks(self.short_name)
         return {
             'introduction': self.get_block_by_slug(blocks['introduction']),
             'first-block': self.get_block_by_slug(blocks['first-block']),
@@ -153,6 +163,15 @@ class Department(SurrogatePK, Model):
 
     def get_ois_schema_blocks(self):
         blocks = PageBlockLookup.get_ois_schema_blocks(self.short_name)
+        return {
+            'introduction': self.get_block_by_slug(blocks['introduction']),
+            'footer': self.get_block_by_slug(blocks['footer']),
+            'disclaimer': self.get_block_by_slug(blocks['disclaimer']),
+            'blocks': self.get_blocks_by_slug_startswith(blocks['blocks'])
+        }
+
+    def get_pursuits_schema_blocks(self):
+        blocks = PageBlockLookup.get_pursuits_schema_blocks(self.short_name)
         return {
             'introduction': self.get_block_by_slug(blocks['introduction']),
             'footer': self.get_block_by_slug(blocks['footer']),
@@ -256,7 +275,7 @@ class Department(SurrogatePK, Model):
         ''' Return a string representing the path to the first available dataset page for this department.
             For use in url_for calls.
         '''
-        for dataset_name in ["complaints", "uof", "ois", "assaults"]:
+        for dataset_name in ["complaints", "uof", "ois", "pursuits", "assaults"]:
             lookup = self.get_dataset_lookup(dataset_name)
             # if this dataset's available, return its path
             if self.dataset_is_public_and_has_data(dataset_name):
@@ -284,7 +303,7 @@ class Department(SurrogatePK, Model):
             values = []
             for incident_var in csv_vars:
                 incident_value = getattr(incident, incident_var)
-                if incident_var == "occured_date":
+                if incident_var.endswith("_date"):
                     incident_value = coalesce_date(incident_value)
                 values.append(incident_value)
 
@@ -311,7 +330,7 @@ class Department(SurrogatePK, Model):
             values = []
             for incident_var in csv_vars:
                 incident_value = getattr(incident, incident_var)
-                if incident_var == "occured_date":
+                if incident_var.endswith("_date"):
                     incident_value = coalesce_date(incident_value)
                 values.append(incident_value)
 
@@ -338,7 +357,34 @@ class Department(SurrogatePK, Model):
             values = []
             for incident_var in csv_vars:
                 incident_value = getattr(complaint, incident_var)
-                if incident_var == "occured_date":
+                if incident_var.endswith("_date"):
+                    incident_value = coalesce_date(incident_value)
+                values.append(incident_value)
+
+            writer.writerow(values)
+
+        return output.getvalue()
+
+    def get_pursuits_csv(self):
+        output = io.StringIO()
+
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC)
+
+        pursuits_class = getattr(importlib.import_module("comport.data.models"), "Pursuit{}".format(self.short_name))
+
+        csv_schema = pursuits_class.get_csv_schema()
+        csv_headers = [col[0] for col in csv_schema]
+        csv_vars = [col[1] for col in csv_schema]
+
+        writer.writerow(csv_headers)
+
+        incidents = pursuits_class.query.all()
+
+        for incident in incidents:
+            values = []
+            for incident_var in csv_vars:
+                incident_value = getattr(incident, incident_var)
+                if incident_var.endswith("_date"):
                     incident_value = coalesce_date(incident_value)
                 values.append(incident_value)
 
@@ -365,7 +411,7 @@ class Department(SurrogatePK, Model):
             values = []
             for incident_var in csv_vars:
                 incident_value = getattr(incident, incident_var)
-                if incident_var == "occured_date":
+                if incident_var.endswith("_date"):
                     incident_value = coalesce_date(incident_value)
                 values.append(incident_value)
 

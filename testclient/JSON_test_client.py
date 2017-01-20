@@ -139,6 +139,8 @@ class JSONTestClient(object):
             if p.status_code != 200:
                 print("error: %s" % p.text.encode("utf-8", "ignore"))
 
+        # TODO: Generate mock pursuits data
+
     def hash(self, text, key="bildad"):
         ''' Return an MD5 hash of the combined text and key.
         '''
@@ -246,10 +248,25 @@ class JSONTestClient(object):
 
         return incidents
 
+    def make_pursuits(self, count=1000, start_date=datetime.datetime(2014, 1, 1), end_date=datetime.datetime(2016, 1, 1), short_name="IMPD"):
+        # get a reference to the incident class
+        incident_class = getattr(importlib.import_module("comport.data.models"), "Pursuit{}".format(short_name))
+        # build a variable to csv header lookup from the csv schema
+        key_list = [col[2] for col in incident_class.get_csv_schema()]
+
+        incidents = []
+        for x in range(0, count):
+            incident = dict()
+            for key in key_list:
+                incident[key] = self.make_value(key, start_date=start_date, end_date=end_date, short_name=short_name)
+            incidents.append(incident)
+
+        return incidents
+
     def make_value(self, value_key, **kwargs):
         ''' make a convincing fake value for the key
         '''
-        if value_key in ["arrestMade", "officerInjured", "officerKilled", "reportFiled", "residentInjured", "residentHospitalized", "officerHospitalized", "hasDisposition"]:
+        if value_key in ["arrestMade", "officerInjured", "officerKilled", "reportFiled", "residentInjured", "residentHospitalized", "officerHospitalized", "hasDisposition", "aborted", "accident", "copterAvailable", "copterUsed", "duiArrest", "stopDeviceUsed", "followPolicy", "inCarCamAvailable", "inCarCamUsed", "liabilityClaim", "justified"]:
             return self.generate_bool()
 
         if value_key in ["opaqueId", "officerIdentifier", "residentIdentifier"]:
@@ -257,6 +274,9 @@ class JSONTestClient(object):
 
         if value_key in ["caseNumber"]:
             return self.generate_case_number()
+
+        if value_key in ["pursuitNumber"]:
+            return str(random.randint(1, 999))
 
         if value_key in ["officerRace", "residentRace"]:
             return self.generate_race()
@@ -308,6 +328,57 @@ class JSONTestClient(object):
 
         if value_key == "platoon":
             return self.generate_platoon()
+
+        if value_key == "team":
+            return self.generate_team()
+
+        if value_key == "distance":
+            return self.generate_distance()
+
+        if value_key == "reason":
+            return self.generate_reason()
+
+        if value_key == "vehicleType":
+            return self.generate_vehicle_type()
+
+        if value_key == "maxSpeed":
+            return str(random.randint(30, 130))
+
+        if value_key == "stopDevice":
+            return self.generate_stop_device()
+
+        if value_key == "weatherCondition":
+            return self.generate_weather_condition()
+
+        if value_key in ["locationBegan", "locationEnded"]:
+            return self.generate_pursuit_location()
+
+        if value_key == "totalTimeMinutes":
+            return str(random.randint(1, 50))
+
+        if value_key == "influencingFactor":
+            return self.generate_influencing_factor()
+
+        if value_key == "abortedBy":
+            return self.generate_aborted_by()
+
+        if value_key == "concludedBy":
+            return self.generate_concluded_by()
+
+        if value_key == "damageType":
+            return self.generate_damage_type()
+
+        if value_key == "injuryType":
+            return self.generate_injury_type()
+
+        if value_key in ["initiatedByAgency", "concludedByAgency"]:
+            return self.generate_pursuit_agency()
+
+        if value_key == "associatedOfficerCount":
+            return str(random.randint(1, 4))
+
+        if value_key == "violation":
+            return self.generate_pursuit_violation()
 
         if value_key == "allegationType":
             return self.generate_allegation_type()
@@ -491,6 +562,90 @@ class JSONTestClient(object):
         # LMPD
         return random.choice(
             ["1st Platoon", "2nd Platoon", "3rd Platoon", "Bike Platoon", "Street Platoon 1", "Street Platoon 2", "Street Platoon 3", "Street Platoon 4", "Basic Academy"]
+        )
+
+    def generate_team(self):
+        # SRPD
+        return random.choice(
+            ["4-Union", "DUI/Accident Invest.", "8-George", "7-William", "3-Frank", "5-Edward", "2-Lincoln", "6-Ocean", "Motors", "Special Enforcement", "1-Robert"]
+        )
+
+    def generate_distance(self):
+        # SRPD
+        return random.choice(
+            ["1 to 2 miles", "2.1 to 5 miles", "Less than 1 mile", "5.1 to 10 miles", "Beyond 10 miles"]
+        )
+
+    def generate_reason(self):
+        # SRPD
+        return random.choice(
+            ["Criminal Violation", "Vehicle Code Violation", "BOL/Warrant/Wanted", "Infraction"]
+        )
+
+    def generate_vehicle_type(self):
+        # SRPD
+        return random.choice(
+            ["Pass. Veh.", "Motorcycle", "Pickup Truck"]
+        )
+
+    def generate_stop_device(self):
+        # SRPD
+        return random.choice(
+            ["PIT", "Spike Strip"]
+        )
+
+    def generate_weather_condition(self):
+        # SRPD
+        return random.choice(
+            ["Clear", "Raining", "Cloudy", "Fog"]
+        )
+
+    def generate_pursuit_location(self):
+        # SRPD
+        return random.choice(
+            ["Beat 8", "Beat 5", "Beat 9", "Beat 1", "Beat 6", "Beat 4", "Beat 7", "Beat 2", "Outside City Limits", "Beat 3"]
+        )
+
+    def generate_influencing_factor(self):
+        # SRPD
+        return random.choice(
+            ["Alcohol", "N/A - None", "Alcohol and drugs", "Drugs"]
+        )
+
+    def generate_aborted_by(self):
+        # SRPD
+        return random.choice(
+            ["Involved officer(s)", "Supervisor"]
+        )
+
+    def generate_concluded_by(self):
+        # SRPD
+        return random.choice(
+            ["Suspect vehicle crashed", "Suspect stopped vehicle", "Public Safety", "Suspect vehicle eluded pursuit", "Stop device was used sucessfully"]
+        )
+
+    def generate_damage_type(self):
+        # SRPD
+        return random.choice(
+            ["\"Suspect Vehicle Only\"", "\"Un-Involved Citizen and Suspect Vehicles\"", "\"Un-Involved Citizen and Suspect Vehicles & Prop\"", "\"Patrol Vehicle Only\"", "\"Suspect Vehicle and Property\"", "\"Patrol Vehicle and Property\""]
+        )
+
+    def generate_injury_type(self):
+        # SRPD
+        return random.choice(
+            ["Suspect(s) Only", "None", "Suspect(s) and Un-Involved Citizen(s)"]
+        )
+
+    def generate_pursuit_agency(self):
+        # SRPD
+        return random.choice(
+            ["SR PD", "SR JC Police", "State Highway Patrol"]
+        )
+
+    def generate_pursuit_violation(self):
+        # SRPD
+        return random.choice(
+            ["Criminal - Felony", "VC - Infraction", "VC - Misdemeanor", "BOL/Warrant/Wanted", "Criminal - Misdemeanor"]
         )
 
     def generate_officer_force_type(self):
@@ -682,3 +837,12 @@ class JSONTestClient(object):
         if type(last) is not int:
             last = 5
         return [{'opaqueId': 'f732197d9f28d25396873573e7067629', 'officerRace': 'White', 'shift': 'Auto Theft Unit', 'occuredDate': '2015-08-09 0:0:00', 'residentCondition': 'Puncture from Tazer prong', 'officerForceType': 'Duty Handgun', 'precinct': 'Detective Bureau', 'officerSex': 'Female', 'serviceType': 'Transporting', 'division': 'Investigative Division', 'officerAge': '36', 'officerCondition': 'pepper spray', 'officerYearsOfService': 27, 'residentWeaponUsed': 'Suspect - Unarmed', 'beat': 'Evenings', 'residentSex': 'Male', 'residentAge': '26', 'officerIdentifier': '5182b3dd18fa4e745678a2f529bf62c7', 'residentRace': None, 'occuredTime': '', 'disposition': 'Sustained'}, {'opaqueId': '9bc285abcf5741d826387ecb994a62d0', 'officerRace': 'Asian', 'shift': 'C Shift', 'occuredDate': '2015-03-30 0:0:00', 'residentCondition': 'BLEEDING FROM PRIOR FIGHT', 'officerForceType': 'Duty Handgun', 'precinct': 'First Precinct', 'officerSex': 'Male', 'serviceType': None, 'division': 'Operational Bureau', 'officerAge': '32', 'officerCondition': 'oc sprayed', 'officerYearsOfService': 13, 'residentWeaponUsed': 'Suspect - Handgun', 'beat': 'X25 Zone', 'residentSex': None, 'residentAge': '24', 'officerIdentifier': 'd0318d57ca5ff55d27ff7cfb4575cd0a', 'residentRace': 'Asian', 'occuredTime': '', 'disposition': 'Inactivated'}, {'opaqueId': '665db18373624c41d004ea5c4e3df8f9', 'officerRace': 'White', 'shift': 'A Shift', 'occuredDate': '2015-02-20 0:0:00', 'residentCondition': 'Taser Prong entry points', 'officerForceType': 'Duty Handgun', 'precinct': 'Second Precinct', 'officerSex': 'Male', 'serviceType': 'Code Inforcement', 'division': 'Operational Division', 'officerAge': '49', 'officerCondition': 'Major Scrapes', 'officerYearsOfService': 25, 'residentWeaponUsed': 'Suspect - Knife', 'beat': 'Beat 17', 'residentSex': 'Male', 'residentAge': '19', 'officerIdentifier': 'f9a4d4c2050981619f6a296b7eb73793', 'residentRace': None, 'occuredTime': '', 'disposition': 'Unfounded/Unwarranted'}, {'opaqueId': 'e14b23c8b5a1d03901291061b611b62e', 'officerRace': 'Unknown', 'shift': 'A Shift', 'occuredDate': '2014-06-07 0:0:00', 'residentCondition': 'abrassion', 'officerForceType': 'IMPD - Shotgun', 'precinct': 'Fourth Precinct', 'officerSex': None, 'serviceType': 'Code Inforcement', 'division': 'Operational Division', 'officerAge': '42', 'officerCondition': 'Shoulder Pain', 'officerYearsOfService': 1, 'residentWeaponUsed': 'Suspect - Misc Weapon', 'beat': 'X24 Zone', 'residentSex': 'Female', 'residentAge': '46', 'officerIdentifier': '796a086d9da3d9a7eecb9289bc9e88c5', 'residentRace': 'Black', 'occuredTime': '', 'disposition': 'Informational Purpose On'}, {'opaqueId': 'b77f4e3b867fa02078acb95aff11001b', 'officerRace': None, 'shift': 'A Shift', 'occuredDate': '2015-02-15 0:0:00', 'residentCondition': 'Swelling', 'officerForceType': 'IMPD - Duty Handgun', 'precinct': 'First Precinct', 'officerSex': None, 'serviceType': 'Arresting', 'division': 'Operational Division', 'officerAge': '47', 'officerCondition': 'prongs from taser cartridge', 'officerYearsOfService': 15, 'residentWeaponUsed': 'Suspect - Rifle', 'beat': 'X20 Zone', 'residentSex': None, 'residentAge': '22', 'officerIdentifier': '3ae9c4d0fb769fa5f295ecdad855b48a', 'residentRace': 'White ', 'occuredTime': '', 'disposition': 'Partially Sustained'}][first:last]
+
+    def get_prebaked_pursuits(self, first=0, last=5):
+        ''' Return at most five non-random pursuit incidents.
+        '''
+        if type(first) is not int:
+            first = 0
+        if type(last) is not int:
+            last = 5
+        return [{'followPolicy': False, 'accident': None, 'team': '8-George', 'copterUsed': True, 'influencingFactor': 'Alcohol', 'initiatedByAgency': 'SR PD', 'damageType': '"Suspect Vehicle Only"', 'assignment': 'Northern District', 'caseNumber': '16J-0633', 'residentAge': '30', 'violation': 'Criminal - Felony', 'duiArrest': None, 'abortedBy': 'Supervisor', 'distance': '1 to 2 miles', 'reason': 'Infraction', 'concludedByAgency': 'SR PD', 'maxSpeed': '46', 'copterAvailable': None, 'locationBegan': 'Beat 6', 'liabilityClaim': False, 'stopDevice': 'PIT', 'vehicleType': 'Motorcycle', 'inCarCamUsed': None, 'residentRace': 'Other', 'concludedBy': 'Stop device was used sucessfully', 'inCarCamAvailable': False, 'opaqueId': '6e647790f02032e135cac926d71c45f2', 'aborted': True, 'associatedOfficerCount': '1', 'pursuitNumber': '426', 'arrestMade': True, 'justified': True, 'locationEnded': 'Beat 8', 'totalTimeMinutes': '50', 'injuryType': 'Suspect(s) and Un-Involved Citizen(s)', 'residentSex': 'Female', 'weatherCondition': 'Raining', 'stopDeviceUsed': None, 'occurredDate': '2016-05-04 0:0:00', 'officerCondition': 'Knife Wound'}, {'followPolicy': False, 'accident': False, 'team': 'Motors', 'copterUsed': False, 'influencingFactor': 'N/A - None', 'initiatedByAgency': 'SR JC Police', 'damageType': '"Patrol Vehicle Only"', 'assignment': 'Western District', 'caseNumber': '06J-0663', 'residentAge': '45', 'violation': 'BOL/Warrant/Wanted', 'duiArrest': False, 'abortedBy': 'Supervisor', 'distance': 'Beyond 10 miles', 'reason': 'Criminal Violation', 'concludedByAgency': 'State Highway Patrol', 'maxSpeed': '118', 'copterAvailable': True, 'locationBegan': 'Beat 9', 'liabilityClaim': None, 'stopDevice': 'PIT', 'vehicleType': 'Pass. Veh.', 'inCarCamUsed': False, 'residentRace': 'White ', 'concludedBy': 'Stop device was used sucessfully', 'inCarCamAvailable': None, 'opaqueId': '547914e715b49a652fab4a1855d93cf2', 'aborted': True, 'associatedOfficerCount': '4', 'pursuitNumber': '10', 'arrestMade': True, 'justified': True, 'locationEnded': 'Beat 9', 'totalTimeMinutes': '28', 'injuryType': 'Suspect(s) and Un-Involved Citizen(s)', 'residentSex': None, 'weatherCondition': 'Raining', 'stopDeviceUsed': False, 'occurredDate': '2016-05-09 0:0:00', 'officerCondition': 'Probe strikes'}, {'followPolicy': True, 'accident': None, 'team': '4-Union', 'copterUsed': True, 'influencingFactor': 'Drugs', 'initiatedByAgency': 'State Highway Patrol', 'damageType': '"Un-Involved Citizen and Suspect Vehicles & Prop"', 'assignment': 'Southern District', 'caseNumber': '07J-0055', 'residentAge': '37', 'violation': 'BOL/Warrant/Wanted', 'duiArrest': False, 'abortedBy': 'Involved officer(s)', 'distance': '2.1 to 5 miles', 'reason': 'Criminal Violation', 'concludedByAgency': 'SR PD', 'maxSpeed': '61', 'copterAvailable': None, 'locationBegan': 'Beat 3', 'liabilityClaim': None, 'stopDevice': 'PIT', 'vehicleType': 'Pickup Truck', 'inCarCamUsed': True, 'residentRace': 'Other', 'concludedBy': 'Suspect vehicle eluded pursuit', 'inCarCamAvailable': None, 'opaqueId': '2a8545bbdf76689e3ea09499a7a4c200', 'aborted': None, 'associatedOfficerCount': '2', 'pursuitNumber': '448', 'arrestMade': None, 'justified': None, 'locationEnded': 'Beat 4', 'totalTimeMinutes': '13', 'injuryType': 'Suspect(s) and Un-Involved Citizen(s)', 'residentSex': 'Male', 'weatherCondition': 'Cloudy', 'stopDeviceUsed': True, 'occurredDate': '2016-01-22 0:0:00', 'officerCondition': 'Puncture Wound From Probes'}, {'followPolicy': None, 'accident': None, 'team': '5-Edward', 'copterUsed': False, 'influencingFactor': 'Drugs', 'initiatedByAgency': 'SR PD', 'damageType': '"Un-Involved Citizen and Suspect Vehicles"', 'assignment': 'Southeastern District', 'caseNumber': '12J-0948', 'residentAge': '26', 'violation': 'Criminal - Misdemeanor', 'duiArrest': False, 'abortedBy': 'Involved officer(s)', 'distance': '2.1 to 5 miles', 'reason': 'Criminal Violation', 'concludedByAgency': 'State Highway Patrol', 'maxSpeed': '124', 'copterAvailable': None, 'locationBegan': 'Outside City Limits', 'liabilityClaim': False, 'stopDevice': 'PIT', 'vehicleType': 'Pickup Truck', 'inCarCamUsed': None, 'residentRace': 'Other', 'concludedBy': 'Suspect vehicle eluded pursuit', 'inCarCamAvailable': False, 'opaqueId': 'ef97934f78b87f311eea1975bd6ff6ef', 'aborted': True, 'associatedOfficerCount': '3', 'pursuitNumber': '166', 'arrestMade': None, 'justified': True, 'locationEnded': 'Beat 5', 'totalTimeMinutes': '18', 'injuryType': 'Suspect(s) and Un-Involved Citizen(s)', 'residentSex': 'Female', 'weatherCondition': 'Raining', 'stopDeviceUsed': None, 'occurredDate': '2016-06-14 0:0:00', 'officerCondition': 'Shoulder Pain'}, {'followPolicy': True, 'accident': False, 'team': '8-George', 'copterUsed': True, 'influencingFactor': 'Alcohol and drugs', 'initiatedByAgency': 'State Highway Patrol', 'damageType': '"Patrol Vehicle Only"', 'assignment': 'Southwestern District', 'caseNumber': '10J-0030', 'residentAge': '49', 'violation': 'VC - Infraction', 'duiArrest': True, 'abortedBy': 'Involved officer(s)', 'distance': '1 to 2 miles', 'reason': 'Vehicle Code Violation', 'concludedByAgency': 'State Highway Patrol', 'maxSpeed': '68', 'copterAvailable': True, 'locationBegan': 'Beat 1', 'liabilityClaim': None, 'stopDevice': 'PIT', 'vehicleType': 'Pickup Truck', 'inCarCamUsed': True, 'residentRace': 'Bi-Racial', 'concludedBy': 'Suspect stopped vehicle', 'inCarCamAvailable': True, 'opaqueId': '1137099fdf93ee5dec2cde432a44be16', 'aborted': True, 'associatedOfficerCount': '1', 'pursuitNumber': '860', 'arrestMade': None, 'justified': False, 'locationEnded': 'Beat 4', 'totalTimeMinutes': '15', 'injuryType': 'Suspect(s) Only', 'residentSex': None, 'weatherCondition': 'Clear', 'stopDeviceUsed': False, 'occurredDate': '2016-05-29 0:0:00', 'officerCondition': 'Taser Prong entry points'}][first:last]

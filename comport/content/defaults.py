@@ -266,6 +266,67 @@ We have done some initial analysis on this dataset, though there are many other 
         ),
 
         ChartBlock(
+            title="Introduction to Pursuits Data",
+            caption="",
+            slug="pursuits-introduction",
+            dataset="pursuits",
+            content="Intro to pursuits data text goes here.",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Pursuits By Month",
+            caption="",
+            slug="pursuits-by-month",
+            dataset="pursuits",
+            content="Pursuits by month caption goes here.",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Pursuits By Reason",
+            caption="",
+            slug="pursuits-by-reason",
+            dataset="pursuits",
+            content="Pursuits by reason caption goes here.",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Pursuits By Distance",
+            caption="",
+            slug="pursuits-by-distance",
+            dataset="pursuits",
+            content="Pursuits by distance caption goes here",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Pursuits By Conclusion",
+            caption="",
+            slug="pursuits-by-conclusion",
+            dataset="pursuits",
+            content="Pursuits by conclusion caption goes here.",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Pursuits By Assignment",
+            caption="",
+            slug="pursuits-by-assignment",
+            dataset="pursuits",
+            content="Pursuits by assignment caption goes here.",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+
+        ChartBlock(
             title="Introduction to Assaults Data",
             caption="",
             slug="assaults-introduction",
@@ -884,6 +945,437 @@ Complaints that are still being investigated will be blank in this column.''',
 RESERVATION OF RIGHTS: The City reserves the right to discontinue availability of content on this website at any time and for any reason.  The City also reserves the right to claim or seek to protect any intellectual property rights in any of the information, images, software, or processes displayed or used at this website. The data provided on this website does not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have in any of the information, images, software, or processes displayed or used at this website.
 
 INDEMNIFICATION: To the fullest extent permitted by law, any user of the data provided at this website shall defend, indemnify,  hold harmless the City, its officers, officials and employees from any claim, loss, damage, injury, or liability of any kind (including, without limitation, incidental and consequential damages, court costs, attorneys’ fees and costs of investigation), that arise directly or indirectly, in whole or in part, from that user’s use of this data, including any secondary or derivative use of the information provided herein.''',
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+
+        ChartBlock(
+            title="Intro",
+            dataset="intros",
+            slug="pursuits-schema-introduction",
+            content="",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Id",
+            dataset="",
+            slug="pursuits-schema-field-id",
+            content="This is a hashed unique identifier for a given pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="Case Number",
+            dataset="",
+            slug="pursuits-schema-field-case-number",
+            content="The case number for the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=1
+        ),
+        ChartBlock(
+            title="Pursuit Number",
+            dataset="",
+            slug="pursuits-schema-field-pursuit-number",
+            content="The pursuit number for the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=2
+        ),
+        ChartBlock(
+            title="Occurred Date",
+            dataset="",
+            slug="pursuits-schema-field-occurred-date",
+            content="The date that the pursuit occurred.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=3
+        ),
+        ChartBlock(
+            title="team",
+            dataset="",
+            slug="pursuits-schema-field-team",
+            content="The team of the officer(s) involved in the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=4
+        ),
+        ChartBlock(
+            title="assignment",
+            dataset="",
+            slug="pursuits-schema-field-assignment",
+            content="The assignment of the officer(s) involved in the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=5
+        ),
+        ChartBlock(
+            title="aborted",
+            dataset="",
+            slug="pursuits-schema-field-aborted",
+            content="True if the pursuit was aborted.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=6
+        ),
+        ChartBlock(
+            title="accident",
+            dataset="",
+            slug="pursuits-schema-field-accident",
+            content="True if an accident occurred during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=7
+        ),
+        ChartBlock(
+            title="Arrest Made",
+            dataset="",
+            slug="pursuits-schema-field-arrest-made",
+            content="True if an arrest was made as a consequence of the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=8
+        ),
+        ChartBlock(
+            title="Distance",
+            dataset="",
+            slug="pursuits-schema-field-distance",
+            content="The rough distance traveled during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=9
+        ),
+        ChartBlock(
+            title="Reason",
+            dataset="",
+            slug="pursuits-schema-field-reason",
+            content="The reason the pursuit started.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=10
+        ),
+        ChartBlock(
+            title="Vehicle Type",
+            dataset="",
+            slug="pursuits-schema-field-vehicle-type",
+            content="The type of vehicle that was pursued.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=11
+        ),
+        ChartBlock(
+            title="Max Speed",
+            dataset="",
+            slug="pursuits-schema-field-max-speed",
+            content="The maximum speed reached during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=12
+        ),
+        ChartBlock(
+            title="Resident Race",
+            dataset="",
+            slug="pursuits-schema-field-resident-race",
+            content="The resident's race.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=13
+        ),
+        ChartBlock(
+            title="Resident Sex",
+            dataset="",
+            slug="pursuits-schema-field-resident-sex",
+            content="The resident's gender.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=14
+        ),
+        ChartBlock(
+            title="Resident Age",
+            dataset="",
+            slug="pursuits-schema-field-resident-age",
+            content="The resident's age at the time of the pursuit, if known.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=15
+        ),
+        ChartBlock(
+            title="Copter Available",
+            dataset="",
+            slug="pursuits-schema-field-copter-available",
+            content="True if a copter was available to assist in the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=16
+        ),
+        ChartBlock(
+            title="Copter Used",
+            dataset="",
+            slug="pursuits-schema-field-copter-used",
+            content="True if a copter was used to assist in the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=17
+        ),
+        ChartBlock(
+            title="DUI Arrest",
+            dataset="",
+            slug="pursuits-schema-field-dui-arrest",
+            content="True if a DUI arrest was made as a consequence of the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=18
+        ),
+        ChartBlock(
+            title="Stop Device Used",
+            dataset="",
+            slug="pursuits-schema-field-stop-device-used",
+            content="True if a stop device was used during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=19
+        ),
+        ChartBlock(
+            title="Stop Device",
+            dataset="",
+            slug="pursuits-schema-field-stop-device",
+            content="The stop device that was used, if any.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=20
+        ),
+        ChartBlock(
+            title="Follow Policy",
+            dataset="",
+            slug="pursuits-schema-field-follow-policy",
+            content="True if policy was followed during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=21
+        ),
+        ChartBlock(
+            title="Weather Condition",
+            dataset="",
+            slug="pursuits-schema-field-weather-condition",
+            content="The weather conditions during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=22
+        ),
+        ChartBlock(
+            title="Location Began",
+            dataset="",
+            slug="pursuits-schema-field-location-began",
+            content="The assignment where the pursuit began.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=23
+        ),
+        ChartBlock(
+            title="Location Ended",
+            dataset="",
+            slug="pursuits-schema-field-location-ended",
+            content="The assignment where the pursuit ended.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=24
+        ),
+        ChartBlock(
+            title="In-Car Cam Available",
+            dataset="",
+            slug="pursuits-schema-field-in-car-cam-available",
+            content="True if an in-car camera was available.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=25
+        ),
+        ChartBlock(
+            title="In-Car Cam Used",
+            dataset="",
+            slug="pursuits-schema-field-in-car-cam-used",
+            content="True if an in-car camera was used.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=26
+        ),
+        ChartBlock(
+            title="Total Time Minutes",
+            dataset="",
+            slug="pursuits-schema-field-total-time-minutes",
+            content="The total time in minutes that passed during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=27
+        ),
+        ChartBlock(
+            title="Influencing Factor",
+            dataset="",
+            slug="pursuits-schema-field-influencing-factor",
+            content="Any factors that influenced the pursued driver's actions.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=28
+        ),
+        ChartBlock(
+            title="Aborted By",
+            dataset="",
+            slug="pursuits-schema-field-aborted-by",
+            content="If the pursuit was aborted, who aborted it.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=29
+        ),
+        ChartBlock(
+            title="Concluded By",
+            dataset="",
+            slug="pursuits-schema-field-concluded-by",
+            content="How the pursuit was concluded.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=30
+        ),
+        ChartBlock(
+            title="Damage Type",
+            dataset="",
+            slug="pursuits-schema-field-damage-type",
+            content="The type of damage sustained during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=31
+        ),
+        ChartBlock(
+            title="Injury Type",
+            dataset="",
+            slug="pursuits-schema-field-injury-type",
+            content="The types of injuries sustained during the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=32
+        ),
+        ChartBlock(
+            title="Initiated By Agency",
+            dataset="",
+            slug="pursuits-schema-field-initiated-by-agency",
+            content="The agency that initiated the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=33
+        ),
+        ChartBlock(
+            title="Concluded By Agency",
+            dataset="",
+            slug="pursuits-schema-field-concluded-by-agency",
+            content="The agency that concluded the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=34
+        ),
+        ChartBlock(
+            title="Liability Claim",
+            dataset="",
+            slug="pursuits-schema-field-liability-claim",
+            content="True if a liability claim related to the pursuit was filed.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=35
+        ),
+        ChartBlock(
+            title="Associated Officer Count",
+            dataset="",
+            slug="pursuits-schema-field-associated-officer-count",
+            content="The number of officers involved in the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=36
+        ),
+        ChartBlock(
+            title="Violation",
+            dataset="",
+            slug="pursuits-schema-field-violation",
+            content="The violation filed against the pursued driver.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=37
+        ),
+        ChartBlock(
+            title="Justified",
+            dataset="",
+            slug="pursuits-schema-field-justified",
+            content="True if the pursuit was justified.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=38
+        ),
+        ChartBlock(
+            title="Officer Condition",
+            dataset="",
+            slug="pursuits-schema-field-officer-condition",
+            content="The condition of the officer(s) after the pursuit.",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=39
+        ),
+        ChartBlock(
+            title="FOOTER",
+            dataset="footer",
+            slug="pursuits-schema-footer",
+            content="",
+            caption="",
+            date_updated=None,
+            date_edited=None,
+            order=0
+        ),
+        ChartBlock(
+            title="DISCLAIMER",
+            dataset="disclaimer",
+            slug="pursuits-schema-disclaimer",
+            content="",
             caption="",
             date_updated=None,
             date_edited=None,
