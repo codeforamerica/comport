@@ -52,8 +52,15 @@ def random_string(N):
 
 def parse_date(date):
     parsed = None
+    # try it with time
     try:
         parsed = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+    except (ValueError, TypeError):
+        pass
+
+    # try it without time
+    try:
+        parsed = datetime.strptime(date, '%Y-%m-%d')
     except (ValueError, TypeError):
         pass
 
