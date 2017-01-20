@@ -39,7 +39,7 @@ class PageBlockLookup:
                 'introduction': 'uof-introduction',
                 'first-block': 'uof-by-month',
                 'blocks': [
-                    'uof-force-type',
+                    'uof-incident-force-type',
                     'uof-by-assignment',
                     'officer-demographics'
                 ]

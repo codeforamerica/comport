@@ -56,6 +56,21 @@ var configs = {
     addOther: true,
     },
 
+  // unique types of force used by incident only, when no officer identifier is availalbe
+  // will be more types of force used than incidents
+  // (SRPD only)
+  'uof-incident-force-type': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'officerForceType'),
+    keyFunc: function(d){ return d.officerForceType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].officerForceType; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
   // unique use of force incidents by district
   // (IMPD only)
   'uof-by-inc-district': {
