@@ -20,15 +20,18 @@ def edit_page(department_id):
     from comport.department.models import Department
     department = Department.query.filter_by(id=department_id).first()
 
-    # let's sort the contents of the form submission
+    # let's organize the contents of the form submission
     changes = {}
-    for formfield in request.form:
-        # formfield = 'chart_order-pursuits-schema-field-dui-arrest'
-        value_name, slug = formfield.split("-", 1)
+    for form_field in request.form:
+        # form_field is in the format 'chart_order-pursuits-schema-field-dui-arrest'\
+        # split on the first hyphen to get the value name and the slug
+        value_name, slug = form_field.split("-", 1)
+        # save the slug in changes if it's not there already
         if slug not in changes:
             changes[slug] = {}
 
-        changes[slug][value_name] = request.form[formfield]
+        # save the new value and value name
+        changes[slug][value_name] = request.form[form_field]
 
     for chart_slug in changes:
         block = ChartBlock.query.filter_by(department_id=department_id, slug=chart_slug).first()
