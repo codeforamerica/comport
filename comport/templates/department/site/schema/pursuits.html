@@ -28,14 +28,12 @@
     </p>
     {% else %}
     <div class="editing-form col-xs-12 col-sm-6">
-      <form id="editIntro" method="post" action="/content/{{ chart_blocks['introduction'].slug }}/{{department.id}}">
+      <form id="editIntro" method="post" action="/content/{{department.id}}">
         <div class="form-group">
           <label for="chart_content">Intro:</label>
-          <textarea class="form-control" name="chart_content">{{ chart_blocks['introduction'].content }}</textarea>
-          <input type="hidden" name="chart_title" value=""/>
+          <textarea class="form-control" name="chart_content-{{ chart_blocks['introduction'].slug }}">{{ chart_blocks['introduction'].content }}</textarea>
+          <input type="hidden" name="chart_title-{{ chart_blocks['introduction'].slug }}" value=""/>
         </div>
-        <input type="submit" />
-      </form>
     </div>  <!-- end col -->
     {% endif %}
 
@@ -55,15 +53,13 @@
       {% else %}
         <!-- Title and Content -->
         <td>
-          <form id="edit{{ block.slug|replace("pursuits-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}TitleContentAndOrder" method="post" action="/content/{{ block.slug }}/{{department.id}}">
+          <form id="edit{{ block.slug|replace("pursuits-schema-field-", "")|replace("-", " ")|title|replace(" ", "") }}TitleContentAndOrder" method="post" action="/content/{{department.id}}">
             <div class="form-group">
-              <textarea class="form-control" name="chart_title">{{ block.title }}</textarea>
-              <textarea class="form-control" name="chart_content">{{ block.content }}</textarea>
-              <textarea class="form-control" name="chart_order">{{ block.order }}</textarea>
-              <input type="hidden" name="blocks_prefix" value="pursuits-schema-field-">
-              <input type="submit" />
+              <textarea class="form-control" name="chart_title-{{ block.slug }}">{{ block.title }}</textarea>
+              <textarea class="form-control" name="chart_content-{{ block.slug }}">{{ block.content }}</textarea>
+              <textarea class="form-control" name="chart_order-{{ block.slug }}">{{ block.order }}</textarea>
+              <input type="hidden" name="blocks_prefix-{{ block.slug }}" value="pursuits-schema-field-">
             </div>
-          </form>
         </td>
       {% endif %}
       </tr>
@@ -80,14 +76,12 @@
   </div>
   {% else %}
   <div class="editing-form col-xs-12 col-sm-6">
-    <form id="editFooter" method="post" action="/content/{{ chart_blocks['footer'].slug }}/{{department.id}}">
+    <form id="editFooter" method="post" action="/content/{{department.id}}">
       <div class="form-group">
         <label for="chart_content">Footer:</label>
-        <textarea class="form-control" name="chart_content">{{ chart_blocks['footer'].content }}</textarea>
-        <input type="hidden" name="chart_title" value=""/>
+        <textarea class="form-control" name="chart_content-{{ chart_blocks['footer'].slug }}">{{ chart_blocks['footer'].content }}</textarea>
+        <input type="hidden" name="chart_title-{{ chart_blocks['footer'].slug }}" value=""/>
       </div>
-      <input type="submit" />
-    </form>
   </div>  <!-- end col -->
   {% endif %}
 
@@ -100,20 +94,22 @@
   </div>
   {% else %}
   <div class="editing-form col-xs-12 col-sm-6">
-    <form id="editDisclaimer" method="post" action="/content/{{ chart_blocks['disclaimer'].slug }}/{{department.id}}">
+    <form id="editDisclaimer" method="post" action="/content/{{department.id}}">
       <div class="form-group">
         <label for="chart_content">Disclaimer:</label>
-        <textarea class="form-control" name="chart_content">{{ chart_blocks['disclaimer'].content }}</textarea>
-        <input type="hidden" name="chart_title" value=""/>
+        <textarea class="form-control" name="chart_content-{{ chart_blocks['disclaimer'].slug }}">{{ chart_blocks['disclaimer'].content }}</textarea>
+        <input type="hidden" name="chart_title-{{ chart_blocks['disclaimer'].slug }}" value=""/>
       </div>
-      <input type="submit" />
-    </form>
   </div>  <!-- end col -->
   {% endif %}
+
+  {% if editing %}
+        <input type="submit" />
+    </form>
+
+  {% endif %}
+
 </div>
-
-
-
 
 {% endblock content %}
 {% block footer %}
