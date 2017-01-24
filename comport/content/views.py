@@ -4,6 +4,7 @@ from flask_login import current_user
 from flask.ext.login import login_required
 from urllib.parse import urlparse
 from comport.content.models import ChartBlock
+from comport.database import db
 
 blueprint = Blueprint("content", __name__, url_prefix='/content',
                       static_folder="../static")
@@ -17,6 +18,7 @@ def edit_page(department_id):
     # Importing this at the top of file caused a circular dependency
     # issue so we do a delayed import here
     from comport.department.models import Department
+    department = Department.query.filter_by(id=department_id).first()
 
     # let's sort the contents of the form submission
     changes = {}
@@ -44,16 +46,17 @@ def edit_page(department_id):
                 except:
                     pass
                 else:
-                    block.order = changes[chart_slug]["chart_order"]
+                    block.order = int(changes[chart_slug]["chart_order"])
 
-        block.save()
+        db.session.add(block)
+        # block.save()
 
         if "blocks_prefix" in changes[chart_slug]:
-            department = Department.query.filter_by(id=department_id).first()
             blocks = department.get_blocks_by_slug_startswith(changes[chart_slug]["blocks_prefix"])
 
             block.order = max(min(block.order, len(blocks) - 1), 0)
-            block.save()
+            db.session.add(block)
+            # block.save()
 
             # Init new array to length of blocks
             new_blocks = [None] * len(blocks)
@@ -69,8 +72,11 @@ def edit_page(department_id):
 
                 move_block = blocks.pop(0)
                 move_block.order = index
-                move_block.save()
+                db.session.add(move_block)
+                # move_block.save()
                 new_blocks[index] = move_block
+
+    db.session.commit()
 
     if request.referrer and 'edit' in request.referrer:
         new_path = urlparse(request.referrer.replace('/edit/', '/preview/')).path
