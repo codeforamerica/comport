@@ -850,6 +850,8 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     aggravating_factors = Column(db.String(255), unique=False, nullable=True)
@@ -867,7 +869,7 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("fileNumber", "file_number", "fileNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("serviceType", "service_type", "serviceType"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("aggravatingFactors", "aggravating_factors", "aggravatingFactors"), ("arrestMade", "arrest_made", "arrestMade"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerForceType", "officer_force_type", "officerForceType")]
+        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("fileNumber", "file_number", "fileNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("serviceType", "service_type", "serviceType"), ("useOfForceReason", "use_of_force_reason", "useOfForceReason"), ("aggravatingFactors", "aggravating_factors", "aggravatingFactors"), ("arrestMade", "arrest_made", "arrestMade"), ("residentInjured", "resident_injured", "residentInjured"), ("residentHospitalized", "resident_hospitalized", "residentHospitalized"), ("officerInjured", "officer_injured", "officerInjured"), ("officerHospitalized", "officer_hospitalized", "officerHospitalized"), ("officerForceType", "officer_force_type", "officerForceType")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -901,6 +903,8 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"],
             service_type=incident["serviceType"],
             use_of_force_reason=incident["useOfForceReason"],
             aggravating_factors=incident["aggravatingFactors"],
@@ -926,6 +930,8 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
     assignment = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -941,7 +947,7 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("fileNumber", "file_number", "fileNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("allegation", "allegation", "allegation"), ("disposition", "disposition", "disposition"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source")]
+        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("fileNumber", "file_number", "fileNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("allegation", "allegation", "allegation"), ("disposition", "disposition", "disposition"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -977,6 +983,8 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
             assignment=incident["assignment"],
             bureau=incident["bureau"],
             division=incident["division"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
@@ -997,6 +1005,8 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -1015,7 +1025,7 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
 
-        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("serviceType", "service_type", "serviceType"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("intentional", "intentional", "intentional"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("disposition", "disposition", "disposition")]
+        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("serviceType", "service_type", "serviceType"), ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"), ("intentional", "intentional", "intentional"), ("residentCondition", "resident_condition", "residentCondition"), ("officerCondition", "officer_condition", "officerCondition"), ("disposition", "disposition", "disposition")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -1048,6 +1058,8 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
@@ -1071,6 +1083,8 @@ class PursuitSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     aborted = Column(db.Boolean, nullable=True)
     accident = Column(db.Boolean, nullable=True)
     arrest_made = Column(db.Boolean, nullable=True)
@@ -1113,7 +1127,7 @@ class PursuitSRPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("opaqueId", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("pursuitNumber", "pursuit_number", "pursuitNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("aborted", "aborted", "aborted"), ("accident", "accident", "accident"), ("arrestMade", "arrest_made", "arrestMade"), ("distance", "distance", "distance"), ("reason", "reason", "reason"), ("vehicleType", "vehicle_type", "vehicleType"), ("maxSpeed", "max_speed", "maxSpeed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("copterAvailable", "copter_available", "copterAvailable"), ("copterUsed", "copter_used", "copterUsed"), ("duiArrest", "dui_arrest", "duiArrest"), ("stopDeviceUsed", "stop_device_used", "stopDeviceUsed"), ("stopDevice", "stop_device", "stopDevice"), ("followPolicy", "follow_policy", "followPolicy"), ("weatherCondition", "weather_condition", "weatherCondition"), ("locationBegan", "location_began", "locationBegan"), ("locationEnded", "location_ended", "locationEnded"), ("inCarCamAvailable", "in_car_cam_available", "inCarCamAvailable"), ("inCarCamUsed", "in_car_cam_used", "inCarCamUsed"), ("totalTimeMinutes", "total_time_minutes", "totalTimeMinutes"), ("influencingFactor", "influencing_factor", "influencingFactor"), ("abortedBy", "aborted_by", "abortedBy"), ("concludedBy", "concluded_by", "concludedBy"), ("damageType", "damage_type", "damageType"), ("injuryType", "injury_type", "injuryType"), ("initiatedByAgency", "initiated_by_agency", "initiatedByAgency"), ("concludedByAgency", "concluded_by_agency", "concludedByAgency"), ("liabilityClaim", "liability_claim", "liabilityClaim"), ("associatedOfficerCount", "associated_officer_count", "associatedOfficerCount"), ("violation", "violation", "violation"), ("justified", "justified", "justified"), ("officerCondition", "officer_condition", "officerCondition")]
+        return [("opaqueId", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("pursuitNumber", "pursuit_number", "pursuitNumber"), ("occurredDate", "occurred_date", "occurredDate"), ("team", "team", "team"), ("assignment", "assignment", "assignment"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"), ("aborted", "aborted", "aborted"), ("accident", "accident", "accident"), ("arrestMade", "arrest_made", "arrestMade"), ("distance", "distance", "distance"), ("reason", "reason", "reason"), ("vehicleType", "vehicle_type", "vehicleType"), ("maxSpeed", "max_speed", "maxSpeed"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("copterAvailable", "copter_available", "copterAvailable"), ("copterUsed", "copter_used", "copterUsed"), ("duiArrest", "dui_arrest", "duiArrest"), ("stopDeviceUsed", "stop_device_used", "stopDeviceUsed"), ("stopDevice", "stop_device", "stopDevice"), ("followPolicy", "follow_policy", "followPolicy"), ("weatherCondition", "weather_condition", "weatherCondition"), ("locationBegan", "location_began", "locationBegan"), ("locationEnded", "location_ended", "locationEnded"), ("inCarCamAvailable", "in_car_cam_available", "inCarCamAvailable"), ("inCarCamUsed", "in_car_cam_used", "inCarCamUsed"), ("totalTimeMinutes", "total_time_minutes", "totalTimeMinutes"), ("influencingFactor", "influencing_factor", "influencingFactor"), ("abortedBy", "aborted_by", "abortedBy"), ("concludedBy", "concluded_by", "concludedBy"), ("damageType", "damage_type", "damageType"), ("injuryType", "injury_type", "injuryType"), ("initiatedByAgency", "initiated_by_agency", "initiatedByAgency"), ("concludedByAgency", "concluded_by_agency", "concludedByAgency"), ("liabilityClaim", "liability_claim", "liabilityClaim"), ("associatedOfficerCount", "associated_officer_count", "associatedOfficerCount"), ("violation", "violation", "violation"), ("justified", "justified", "justified"), ("officerCondition", "officer_condition", "officerCondition")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -1164,6 +1178,8 @@ class PursuitSRPD(SurrogatePK, Model):
             occurred_date=incident["occurredDate"],
             team=incident["team"],
             assignment=incident["assignment"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"],
             aborted=incident["aborted"],
             accident=incident["accident"],
             arrest_made=incident["arrestMade"],
