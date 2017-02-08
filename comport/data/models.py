@@ -555,15 +555,18 @@ class CitizenComplaintBPD(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints_bpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
+    case_number = Column(db.String(128), unique=False, nullable=True)
+    incident_type = Column(db.String(128), unique=False, nullable=True)
     occured_date = Column(db.DateTime, nullable=True)
-    bureau = Column(db.String(255), unique=False, nullable=True)
-    division = Column(db.String(255), unique=False, nullable=True)
+    received_date = Column(db.DateTime, nullable=True)
+    completed_date = Column(db.DateTime, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
     service_type = Column(db.String(255), unique=False, nullable=True)
     source = Column(db.String(255), unique=False, nullable=True)
     allegation = Column(db.String(255), unique=False, nullable=True)
     disposition = Column(db.String(255), unique=False, nullable=True)
     resident_identifier = Column(db.String(255), unique=False, nullable=True)
+    resident_role = Column(db.String(128), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -580,7 +583,7 @@ class CitizenComplaintBPD(SurrogatePK, Model):
     def get_csv_schema(cls):
         ''' Return the CSV column headers and variable names, and the variable names expected from the extractor.
         '''
-        return [("id", "opaque_id", "opaqueId"), ("occurredDate", "occured_date", "occuredDate"), ("bureau", "bureau", "bureau"), ("division", "division", "division"), ("assignment", "assignment", "assignment"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source"), ("allegation", "allegation", "allegation"), ("disposition", "disposition", "disposition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerIdentifier", "officer_identifier", "officerIdentifier"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")]
+        return [("id", "opaque_id", "opaqueId"), ("caseNumber", "case_number", "caseNumber"), ("incidentType", "incident_type", "incidentType"), ("occurredDate", "occured_date", "occuredDate"), ("receivedDate", "received_date", "receivedDate"), ("completedDate", "completed_date", "completedDate"), ("assignment", "assignment", "assignment"), ("serviceType", "service_type", "serviceType"), ("source", "source", "source"), ("allegation", "allegation", "allegation"), ("disposition", "disposition", "disposition"), ("residentIdentifier", "resident_identifier", "residentIdentifier"), ("residentRole", "resident_role", "residentRole"), ("residentRace", "resident_race", "residentRace"), ("residentSex", "resident_sex", "residentSex"), ("residentAge", "resident_age", "residentAge"), ("officerIdentifier", "officer_identifier", "officerIdentifier"), ("officerRace", "officer_race", "officerRace"), ("officerSex", "officer_sex", "officerSex"), ("officerAge", "officer_age", "officerAge"), ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")]
 
     @classmethod
     def add_or_update_incident(cls, department, incident):
@@ -615,15 +618,18 @@ class CitizenComplaintBPD(SurrogatePK, Model):
         cls.create(
             department_id=department.id,
             opaque_id=incident["opaqueId"],
+            case_number=incident["caseNumber"],
+            incident_type=incident["incidentType"],
             occured_date=parse_date(incident["occuredDate"]),
-            bureau=incident["bureau"],
-            division=incident["division"],
+            received_date=parse_date(incident["receivedDate"]),
+            completed_date=parse_date(incident["completedDate"]),
             assignment=incident["assignment"],
             service_type=incident["serviceType"],
             source=incident["source"],
             allegation=incident["allegation"],
             disposition=incident["disposition"],
             resident_identifier=incident["residentIdentifier"],
+            resident_role=incident["residentRole"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
