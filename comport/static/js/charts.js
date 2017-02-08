@@ -243,7 +243,7 @@ function nullify(value){
   if (value === defaultNullValue){
     return null;
   } else {
-    return value
+    return value;
   }
 }
 
@@ -289,7 +289,7 @@ function addOtherCategory(data){
     groups: small_list.map(function(i){
       return data[i];
     })
-  })
+  });
 
   var removed_count = 0;
   small_list.forEach(function(i){
@@ -301,15 +301,14 @@ function addOtherCategory(data){
 
 var dateTimeFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
 var niceMonthYearFormat = d3.time.format('<span class="month">%b</span>&nbsp;<span class="year">%Y</span>');
-var dateTimeKey = "occurredDate";
 function parseDate(dateTimeString){
   return dateTimeString ? dateTimeFormat.parse(dateTimeString) : null;
 }
 
-function parseData(rows){
+function parseData(rows, dateKey){
   // parses dates and nulls from the raw csv
   rows.forEach(function(r){
-    var dateString = nullify(r[dateTimeKey]);
+    var dateString = nullify(r[dateKey]);
     r.date = parseDate(dateString);
   });
   rows = rows.filter(function(d){

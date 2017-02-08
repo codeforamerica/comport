@@ -405,8 +405,19 @@ var configs = {
 d3.csv(
   csv_url,
   function(error, rows){
+    // figure out the best date key to use
+    var dateCheckKeys = ["receivedDate", "occurredDate"];
+    // default to the fallback
+    var dateKey = dateCheckKeys[dateCheckKeys.length - 1];
+    for (var i = 0; i < dateCheckKeys.length; i++) {
+      if (dateCheckKeys[i] in rows[0]) {
+        // we found a working key, stop checking
+        dateKey = dateCheckKeys[i];
+        break;
+      }
+    }
     // parse the raw csv data
-    var parsed_rows = parseData(rows);
+    var parsed_rows = parseData(rows, dateKey);
 
     allRows = rows;
     allRows.dateSpan = d3.extent(rows, function(d){ return d.date; });
