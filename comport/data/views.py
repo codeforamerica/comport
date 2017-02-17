@@ -37,7 +37,6 @@ def heartbeat():
     else:
         slack_body_lines.append('Username: {}'.format(username))
 
-    slack_date_line = 'No extraction start date in reply.'
     slack_date_line = 'Replied with extraction start date: {}/{}'.format(next_month, next_year)
 
     slack_body_lines.append(slack_date_line)
