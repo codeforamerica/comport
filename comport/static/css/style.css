@@ -2,17 +2,19 @@
    App specific CSS file.
    ========================================================================== */
 
-/* universal */
+/* UNIVERSAL */
 
 html { overflow-y: scroll;
   font-size: 17px;
   line-height: 26px;
 }
 
-body { padding-top: 60px; }
+body {
+  padding-top: 60px;
+}
 
-/* COLORS
- */
+/* COLORS */
+
 .navbar-inverse {
   background-color: #112e51;
   color: #fff;
@@ -22,12 +24,10 @@ body { padding-top: 60px; }
 .navbar-inverse .navbar-link { color: inherit; }
 .navbar-inverse .navbar-nav > li > a { color: inherit; }
 
-/* TYPOGRAPHY
- * https://playbook.cio.gov/designstandards/visual-style/#typography
- */
+/* TYPOGRAPHY */
+/* https://playbook.cio.gov/designstandards/visual-style/#typography */
 
-/* Merriweather bold headings
- */
+/* Merriweather Bold headings */
 h1, h2, h3, h4, h5 {
   font-family: Merriweather, Georgia, serif;
   font-weight: 700;
@@ -47,8 +47,7 @@ body {
   line-height: 26px;
 }
 
-/* LAYOUT
- */
+/* LAYOUT */
 
 .aside, .lead {
   font-family: Merriweather, Georgia, serif;
@@ -73,11 +72,16 @@ p + p {
   width: 40rem;
 }
 
-.logo {
-  width: 25px;
+/* use the #bootstrap-override id so display setting will have priority */
+#bootstrap-override img.logo {
+  display: inline;
   height: 25px;
+  width: 25px;
 }
 
+.logo-text {
+  padding-left: 0.5em;
+}
 
 .intro-text {
   margin-top: 20px;
@@ -187,7 +191,7 @@ span.brick-title {
   width: 100%;
 }
 
-/* Forms */
+/* FORMS */
 
 .form-group {
   width: 32rem;
@@ -234,7 +238,8 @@ button:active {
           box-sizing: border-box;
 }
 
-/* Admin Edit */
+/* ADMIN EDIT */
+
 .admin_edit_btn {
   text-align: center;
 }
@@ -242,7 +247,7 @@ button:active {
   color: #fff;
 }
 
-/* footer */
+/* FOOTER */
 
 footer {
   margin-top: 45px;
