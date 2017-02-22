@@ -10,7 +10,6 @@ import importlib
 from flask import url_for
 from comport.user.models import User, Role, Invite_Code
 from comport.department.models import Department
-from comport.data.models import UseOfForceIncidentIMPD
 from .utils import create_and_log_in_user
 
 @pytest.mark.usefixtures('db')
@@ -470,13 +469,13 @@ class TestLoggingIn:
         # sees error
         assert "Unknown user" in res
 
-    def test_login (self, testapp):
-       #Goes to login 
+    def test_login(self, testapp):
+        # Goes to login
         response = testapp.get("/admin/", expect_errors=True)
         assert response.status_code == 401
         assert response.html.find_all('a')[1]['href'] == '/login/'
 
-    def test_user_is_logged_in (self, user, testapp):
+    def test_user_is_logged_in(self, user, testapp):
         res = testapp.get("/login/")
         # Fills out login form in navbar
         form = res.forms['loginForm']
@@ -486,7 +485,8 @@ class TestLoggingIn:
         res = form.submit().follow()
         res = testapp.get("/login/")
         # sees alert
-        assert 'Logged in as ' + user.username  in res
+        assert user.username in res
+        assert "sign out" in res
 
 @pytest.mark.usefixtures('db')
 class TestUserRoles:
