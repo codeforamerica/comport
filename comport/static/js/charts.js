@@ -283,6 +283,11 @@ function addOtherCategory(data){
     }
   });
 
+  // don't continue if there isn't anything in the 'Other' category
+  if (otherTotal <= 0) {
+    return;
+  }
+
   data.push({
     type: "Other",
     count: otherTotal,
