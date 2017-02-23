@@ -108,10 +108,10 @@ var configs = {
   'uof-by-team': {
     chartType: 'flagHistogram',
     filter: uniqueForKeysInLast12Months('id', 'team'),
-    keyFunc: function(d){ return d.assignment; },
+    keyFunc: function(d){ return d.team; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
+    xFunc: function(b){ return b[0].team; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
