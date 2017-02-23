@@ -103,6 +103,20 @@ var configs = {
     addOther: true,
     },
 
+  // unique use of force incidents by team
+  // (SRPD only)
+  'uof-by-team': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'team'),
+    keyFunc: function(d){ return d.assignment; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].assignment; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
   // unique use of force incidents by division
   // (LMPD only)
   'uof-by-division': {

@@ -40,7 +40,7 @@ class PageBlockLookup:
                 'first-block': 'uof-by-month',
                 'blocks': [
                     'uof-incident-force-type',
-                    'uof-by-assignment',
+                    'uof-by-team',
                     'officer-demographics'
                 ]
             }

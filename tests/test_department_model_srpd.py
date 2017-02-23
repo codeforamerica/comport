@@ -83,12 +83,12 @@ class TestDepartmentModelSRPD:
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
         uof_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="uof-by-month")
         uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-incident-force-type")
-        uof_bass = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-assignment")
+        uof_bt = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-team")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         department.chart_blocks.append(uof_intro)
         department.chart_blocks.append(uof_bm)
         department.chart_blocks.append(uof_ft)
-        department.chart_blocks.append(uof_bass)
+        department.chart_blocks.append(uof_bt)
         department.chart_blocks.append(uof_od)
         department.save()
 
@@ -97,7 +97,7 @@ class TestDepartmentModelSRPD:
         assert uof_blocks['introduction'] == uof_intro
         assert uof_blocks['first-block'] == uof_bm
         assert uof_blocks['blocks'][0] == uof_ft
-        assert uof_blocks['blocks'][1] == uof_bass
+        assert uof_blocks['blocks'][1] == uof_bt
         assert uof_blocks['blocks'][2] == uof_od
 
     def test_get_uof_schema_blocks(self):
