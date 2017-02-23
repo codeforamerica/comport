@@ -11,8 +11,8 @@ function notEqual(a, b){
 
 function unique(a, b){
   if( a instanceof Array ){
-    var s = d3.set(a)
-    s.add(b)
+    var s = d3.set(a);
+    s.add(b);
     return s.values();
   } else {
     return d3.set([a, b]).values();
@@ -23,7 +23,7 @@ function complaintReducer(complaintA, complaintB){
   // takes two complaint rows and combines them
   // where there are colliding values, creates an array and stores both
   var reducedComplaint = {};
-  for (key in complaintA){
+  for (var key in complaintA){
     if( complaintA.hasOwnProperty(key) ){
       var complaintAVal = complaintA[key];
       var complaintBVal = complaintB[key];
@@ -84,7 +84,7 @@ function raceKey( value ) {
     "White ": "White",
     "White": "White",
   }[value];
-};
+}
 
 function race(k){
   return function(d){
@@ -163,7 +163,7 @@ function raceMatrix(config, data){
       // add missing races, but only the unique keys of the corresponding axis
       allOfficerRaceKeys.forEach(function(officerRace){
         if( !subgroups.get(officerRace) ){
-          subgroups.set(officerRace, {})
+          subgroups.set(officerRace, {});
         }
       });
       subgroups.count = total;
@@ -266,7 +266,7 @@ function addMissingYears(dataMap){
 function addOtherCategory(data){
   // add an 'other' category to the prestructured data
   // to consolidate groups of small counts
-  var threshold = .006;
+  var threshold = 0.006;
   var small_list = [];
   // get total sum of all counts
   var total = data.map(function (g){
@@ -374,7 +374,7 @@ function uniqueForKeys(){
         datum[k] = leaves[0][k];
       });
       return datum;
-    })
+    });
     return function(unfilteredRows){
       return grouper.map(unfilteredRows, d3.map)
         .values();
@@ -468,7 +468,7 @@ function structureData(parsed_rows, config){
     });
   }
   if( config.addOther ){
-    addOtherCategory(structured_data)
+    addOtherCategory(structured_data);
   }
   return structured_data;
 }
@@ -481,10 +481,11 @@ function drawChart(rows, config){
   }
 
   // structure data for the particular chart
+  var data;
   if( config.dataFunc ){
-    var data = config.dataFunc(config, rows);
+    data = config.dataFunc(config, rows);
   } else {
-    var data = structureData(rows, config);
+    data = structureData(rows, config);
   }
   if( !config.dateSpan ){
     config.dateSpan = allRows.dateSpan;
@@ -528,4 +529,4 @@ drawFuncs = {
   'mountainHistogram': mountainHistogram,
   'symmetricalFlags': symmetricalFlags,
   'matrix': matrixChart,
-}
+};
