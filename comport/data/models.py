@@ -661,13 +661,13 @@ class CitizenComplaintBPD(SurrogatePK, Model):
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     case_number = Column(db.String(128), unique=False, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
     incident_type = Column(db.String(128), unique=False, nullable=True)
+    source = Column(db.String(255), unique=False, nullable=True)
     occured_date = Column(db.DateTime, nullable=True)
     received_date = Column(db.DateTime, nullable=True)
     completed_date = Column(db.DateTime, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
-    service_type = Column(db.String(255), unique=False, nullable=True)
-    source = Column(db.String(255), unique=False, nullable=True)
     allegation = Column(db.String(255), unique=False, nullable=True)
     disposition = Column(db.String(255), unique=False, nullable=True)
     resident_identifier = Column(db.String(255), unique=False, nullable=True)
@@ -691,13 +691,13 @@ class CitizenComplaintBPD(SurrogatePK, Model):
         return [
             ("id", "opaque_id", "opaqueId"),
             ("caseNumber", "case_number", "caseNumber"),
+            ("serviceType", "service_type", "serviceType"),
             ("incidentType", "incident_type", "incidentType"),
+            ("source", "source", "source"),
             ("occurredDate", "occured_date", "occuredDate"),
             ("receivedDate", "received_date", "receivedDate"),
             ("completedDate", "completed_date", "completedDate"),
             ("assignment", "assignment", "assignment"),
-            ("serviceType", "service_type", "serviceType"),
-            ("source", "source", "source"),
             ("allegation", "allegation", "allegation"),
             ("disposition", "disposition", "disposition"),
             ("residentIdentifier", "resident_identifier", "residentIdentifier"),
@@ -746,13 +746,13 @@ class CitizenComplaintBPD(SurrogatePK, Model):
             department_id=department.id,
             opaque_id=incident["opaqueId"],
             case_number=incident["caseNumber"],
+            service_type=incident["serviceType"],
             incident_type=incident["incidentType"],
+            source=incident["source"],
             occured_date=parse_date(incident["occuredDate"]),
             received_date=parse_date(incident["receivedDate"]),
             completed_date=parse_date(incident["completedDate"]),
             assignment=incident["assignment"],
-            service_type=incident["serviceType"],
-            source=incident["source"],
             allegation=incident["allegation"],
             disposition=incident["disposition"],
             resident_identifier=incident["residentIdentifier"],
