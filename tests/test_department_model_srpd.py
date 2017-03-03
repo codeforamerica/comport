@@ -18,14 +18,14 @@ class TestDepartmentModelSRPD:
         complaint_bm = ChartBlock(title="BYMONTH", dataset="", slug="complaints-by-month")
         complaint_bal = ChartBlock(title="BYALLEGATION", dataset="", slug="complaints-by-allegation")
         complaint_bd = ChartBlock(title="BYDISPOSITION", dataset="", slug="complaints-by-disposition")
-        complaint_bas = ChartBlock(title="BYASSIGNMENT", dataset="", slug="complaints-by-assignment")
+        complaint_bt = ChartBlock(title="BYTEAM", dataset="", slug="complaints-by-team")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="", slug="officer-demographics")
 
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
         department.chart_blocks.append(complaint_bal)
         department.chart_blocks.append(complaint_bd)
-        department.chart_blocks.append(complaint_bas)
+        department.chart_blocks.append(complaint_bt)
         department.chart_blocks.append(complaint_od)
         department.save()
 
@@ -35,7 +35,7 @@ class TestDepartmentModelSRPD:
         assert complaint_blocks['first-block'] == complaint_bm
         assert complaint_blocks['blocks'][0] == complaint_bal
         assert complaint_blocks['blocks'][1] == complaint_bd
-        assert complaint_blocks['blocks'][2] == complaint_bas
+        assert complaint_blocks['blocks'][2] == complaint_bt
         assert complaint_blocks['blocks'][3] == complaint_od
 
     def test_get_complaint_schema_blocks(self):
@@ -83,7 +83,7 @@ class TestDepartmentModelSRPD:
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
         uof_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="uof-by-month")
         uof_ft = ChartBlock(title="FORCETYPE", dataset="forcetype", slug="uof-incident-force-type")
-        uof_bt = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="uof-by-team")
+        uof_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="uof-by-team")
         uof_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         department.chart_blocks.append(uof_intro)
         department.chart_blocks.append(uof_bm)
@@ -144,11 +144,11 @@ class TestDepartmentModelSRPD:
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
         ois_bm = ChartBlock(title="BYMONTH", dataset="bm", slug="ois-by-month")
-        ois_bid = ChartBlock(title="BYASSIGNMENT", dataset="bid", slug="ois-by-assignment")
+        ois_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="ois-by-team")
         ois_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         department.chart_blocks.append(ois_intro)
         department.chart_blocks.append(ois_bm)
-        department.chart_blocks.append(ois_bid)
+        department.chart_blocks.append(ois_bt)
         department.chart_blocks.append(ois_od)
         department.save()
 
@@ -156,7 +156,7 @@ class TestDepartmentModelSRPD:
         ois_blocks = department.get_ois_blocks()
         assert ois_blocks['introduction'] == ois_intro
         assert ois_blocks['first-block'] == ois_bm
-        assert ois_blocks['blocks'][0] == ois_bid
+        assert ois_blocks['blocks'][0] == ois_bt
         assert ois_blocks['blocks'][1] == ois_od
 
     def test_get_ois_schema_blocks(self):
@@ -203,14 +203,14 @@ class TestDepartmentModelSRPD:
         # create & append chart blocks with the expected slugs
         pursuit_intro = ChartBlock(title="INTRO", dataset="intros", slug="pursuits-introduction")
         pursuit_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="pursuits-by-month")
-        pursuit_ba = ChartBlock(title="BYASSIGNMENT", dataset="byassignment", slug="pursuits-by-assignment")
+        pursuit_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="pursuits-by-team")
         pursuit_br = ChartBlock(title="BYREASON", dataset="byreason", slug="pursuits-by-reason")
         pursuit_bd = ChartBlock(title="BYDISTANCE", dataset="bydistance", slug="pursuits-by-distance")
         pursuit_bc = ChartBlock(title="BYCONCLUSION", dataset="byconclusion", slug="pursuits-by-conclusion")
 
         department.chart_blocks.append(pursuit_intro)
         department.chart_blocks.append(pursuit_bm)
-        department.chart_blocks.append(pursuit_ba)
+        department.chart_blocks.append(pursuit_bt)
         department.chart_blocks.append(pursuit_br)
         department.chart_blocks.append(pursuit_bd)
         department.chart_blocks.append(pursuit_bc)
@@ -220,7 +220,7 @@ class TestDepartmentModelSRPD:
         pursuit_blocks = department.get_pursuits_blocks()
         assert pursuit_blocks['introduction'] == pursuit_intro
         assert pursuit_blocks['first-block'] == pursuit_bm
-        assert pursuit_blocks['blocks'][0] == pursuit_ba
+        assert pursuit_blocks['blocks'][0] == pursuit_bt
         assert pursuit_blocks['blocks'][1] == pursuit_br
         assert pursuit_blocks['blocks'][2] == pursuit_bd
         assert pursuit_blocks['blocks'][3] == pursuit_bc
