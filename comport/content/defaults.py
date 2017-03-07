@@ -316,11 +316,11 @@ We have done some initial analysis on this dataset, though there are many other 
             order=0
         ),
         ChartBlock(
-            title="Pursuits By Assignment",
+            title="Pursuits By Team",
             caption="",
-            slug="pursuits-by-assignment",
+            slug="pursuits-by-team",
             dataset="pursuits",
-            content="Pursuits by assignment caption goes here.",
+            content="Pursuits by team caption goes here.",
             date_updated=None,
             date_edited=None,
             order=0

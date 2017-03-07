@@ -103,6 +103,20 @@ var configs = {
     addOther: true,
     },
 
+  // unique use of force incidents by team
+  // (SRPD only)
+  'uof-by-team': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'team'),
+    keyFunc: function(d){ return d.team; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].team; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+    },
+
   // unique use of force incidents by division
   // (LMPD only)
   'uof-by-division': {
@@ -230,6 +244,20 @@ var configs = {
     addOther: true,
     },
 
+  // unique complaints by assignment
+  // (SRPD only)
+  'complaints-by-team': {
+    filter: uniqueForKeysInLast12Months('id', 'team'),
+    chartType: 'flagHistogram',
+    keyFunc: function(d){ return d.team; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].team; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: true,
+  },
+
   // complaints by race of complainants and officers
   'complaints-by-demographic': {
     filter: last12Months,
@@ -304,6 +332,20 @@ var configs = {
     addOther: false,
     },
 
+  // unique officer-involved shootings by assignment
+  // (SRPD only)
+  'ois-by-team': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'team'),
+    keyFunc: function(d){ return d.team; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].team; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+  },
+
   // weapons used by officers in officer-involved shootings
   // there may be more than one weapon per incident
   'ois-weapon-type': {
@@ -347,14 +389,14 @@ var configs = {
     yFunc: function(b){ return b.length; },
     },
 
-  // unique pursuit incidents by assignment
-  'pursuits-by-assignment': {
+  // unique pursuit incidents by team
+  'pursuits-by-team': {
     chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'assignment'),
-    keyFunc: function(d){ return d.assignment; },
+    filter: uniqueForKeysInLast12Months('id', 'team'),
+    keyFunc: function(d){ return d.team; },
     sortWith: function(d){ return -d.count; },
     x: 'type',
-    xFunc: function(b){ return b[0].assignment; },
+    xFunc: function(b){ return b[0].team; },
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
@@ -405,8 +447,19 @@ var configs = {
 d3.csv(
   csv_url,
   function(error, rows){
+    // figure out the best date key to use
+    var dateCheckKeys = ["receivedDate", "occurredDate"];
+    // default to the fallback
+    var dateKey = dateCheckKeys[dateCheckKeys.length - 1];
+    for (var i = 0; i < dateCheckKeys.length; i++) {
+      if (dateCheckKeys[i] in rows[0]) {
+        // we found a working key, stop checking
+        dateKey = dateCheckKeys[i];
+        break;
+      }
+    }
     // parse the raw csv data
-    var parsed_rows = parseData(rows);
+    var parsed_rows = parseData(rows, dateKey);
 
     allRows = rows;
     allRows.dateSpan = d3.extent(rows, function(d){ return d.date; });

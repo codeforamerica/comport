@@ -40,7 +40,7 @@ class PageBlockLookup:
                 'first-block': 'uof-by-month',
                 'blocks': [
                     'uof-incident-force-type',
-                    'uof-by-assignment',
+                    'uof-by-team',
                     'officer-demographics'
                 ]
             }
@@ -75,7 +75,7 @@ class PageBlockLookup:
                 'introduction': 'ois-introduction',
                 'first-block': 'ois-by-month',
                 'blocks': [
-                    'ois-by-assignment',
+                    'ois-by-team',
                     'officer-demographics'
                 ]
             }
@@ -115,7 +115,7 @@ class PageBlockLookup:
                 'blocks': [
                     'complaints-by-allegation',
                     'complaints-by-disposition',
-                    'complaints-by-assignment',
+                    'complaints-by-team',
                     'officer-demographics'
                 ]
             }
@@ -142,7 +142,7 @@ class PageBlockLookup:
             'introduction': 'pursuits-introduction',
             'first-block': 'pursuits-by-month',
             'blocks': [
-                'pursuits-by-assignment',
+                'pursuits-by-team',
                 'pursuits-by-reason',
                 'pursuits-by-distance',
                 'pursuits-by-conclusion'

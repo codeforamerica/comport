@@ -71,7 +71,13 @@ CAPITALIZE_LIST = [
     "WATF",
     "WD",
     "ECW",
-    "OC"
+    "OC",
+    "DUI",
+    "VCID",
+    "SIS",
+    "NED",
+    "BWC",
+    "AWOL"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
