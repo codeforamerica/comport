@@ -1130,20 +1130,20 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     case_number = Column(db.String(128), unique=False, nullable=True)
     file_number = Column(db.String(128), unique=False, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
+    source = Column(db.String(255), unique=False, nullable=True)
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
-    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
+    allegation = Column(db.String(255), unique=False, nullable=True)
+    disposition = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
-    allegation = Column(db.String(255), unique=False, nullable=True)
-    disposition = Column(db.String(255), unique=False, nullable=True)
-    service_type = Column(db.String(255), unique=False, nullable=True)
-    source = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
@@ -1156,20 +1156,20 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
             ("id", "opaque_id", "opaqueId"),
             ("caseNumber", "case_number", "caseNumber"),
             ("fileNumber", "file_number", "fileNumber"),
+            ("serviceType", "service_type", "serviceType"),
+            ("source", "source", "source"),
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
             ("bureau", "bureau", "bureau"),
             ("division", "division", "division"),
-            ("officerAge", "officer_age", "officerAge"),
-            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
+            ("allegation", "allegation", "allegation"),
+            ("disposition", "disposition", "disposition"),
             ("residentRace", "resident_race", "residentRace"),
             ("residentSex", "resident_sex", "residentSex"),
             ("residentAge", "resident_age", "residentAge"),
-            ("allegation", "allegation", "allegation"),
-            ("disposition", "disposition", "disposition"),
-            ("serviceType", "service_type", "serviceType"),
-            ("source", "source", "source")
+            ("officerAge", "officer_age", "officerAge"),
+            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
     @classmethod
@@ -1201,20 +1201,20 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
             opaque_id=incident["opaqueId"],
             case_number=incident["caseNumber"],
             file_number=incident["fileNumber"],
+            service_type=incident["serviceType"],
+            source=incident["source"],
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
             bureau=incident["bureau"],
             division=incident["division"],
-            officer_age=incident["officerAge"],
-            officer_years_of_service=incident["officerYearsOfService"],
+            allegation=incident["allegation"],
+            disposition=incident["disposition"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
-            allegation=incident["allegation"],
-            disposition=incident["disposition"],
-            service_type=incident["serviceType"],
-            source=incident["source"]
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"]
         )
 
         # TODO: re-evaluate what this return value means
