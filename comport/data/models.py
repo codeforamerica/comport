@@ -775,25 +775,25 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     case_number = Column(db.String(255), unique=False, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
     occured_date = Column(db.DateTime, nullable=True)
     received_date = Column(db.DateTime, nullable=True)
     completed_date = Column(db.DateTime, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
     has_disposition = Column(db.Boolean, nullable=True)
-    resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
-    officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
-    service_type = Column(db.String(255), unique=False, nullable=True)
-    resident_condition = Column(db.String(255), unique=False, nullable=True)
-    officer_condition = Column(db.String(255), unique=False, nullable=True)
     resident_identifier = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
+    resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
+    resident_condition = Column(db.String(255), unique=False, nullable=True)
+    officer_identifier = Column(db.String(255), unique=False, nullable=True)
     officer_race = Column(db.String(255), unique=False, nullable=True)
     officer_sex = Column(db.String(255), unique=False, nullable=True)
     officer_age = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
-    officer_identifier = Column(db.String(255), unique=False, nullable=True)
+    officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
+    officer_condition = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
@@ -805,25 +805,25 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
         return [
             ("id", "opaque_id", "opaqueId"),
             ("caseNumber", "case_number", "caseNumber"),
+            ("serviceType", "service_type", "serviceType"),
             ("occurredDate", "occured_date", "occuredDate"),
             ("receivedDate", "received_date", "receivedDate"),
             ("completedDate", "completed_date", "completedDate"),
             ("assignment", "assignment", "assignment"),
             ("hasDisposition", "has_disposition", "hasDisposition"),
-            ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"),
-            ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"),
-            ("serviceType", "service_type", "serviceType"),
-            ("residentCondition", "resident_condition", "residentCondition"),
-            ("officerCondition", "officer_condition", "officerCondition"),
             ("residentIdentifier", "resident_identifier", "residentIdentifier"),
             ("residentRace", "resident_race", "residentRace"),
             ("residentSex", "resident_sex", "residentSex"),
             ("residentAge", "resident_age", "residentAge"),
+            ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"),
+            ("residentCondition", "resident_condition", "residentCondition"),
+            ("officerIdentifier", "officer_identifier", "officerIdentifier"),
             ("officerRace", "officer_race", "officerRace"),
             ("officerSex", "officer_sex", "officerSex"),
             ("officerAge", "officer_age", "officerAge"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
-            ("officerIdentifier", "officer_identifier", "officerIdentifier")
+            ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"),
+            ("officerCondition", "officer_condition", "officerCondition")
         ]
 
     @classmethod
@@ -861,25 +861,25 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
             department_id=department.id,
             opaque_id=incident["opaqueId"],
             case_number=incident["caseNumber"],
+            service_type=incident["serviceType"],
             occured_date=parse_date(incident["occuredDate"]),
             received_date=parse_date(incident["receivedDate"]),
             completed_date=parse_date(incident["completedDate"]),
             assignment=incident["assignment"],
             has_disposition=incident["hasDisposition"],
-            resident_weapon_used=incident["residentWeaponUsed"],
-            officer_weapon_used=incident["officerWeaponUsed"],
-            service_type=incident["serviceType"],
-            resident_condition=incident["residentCondition"],
-            officer_condition=incident["officerCondition"],
             resident_identifier=incident["residentIdentifier"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
+            resident_weapon_used=incident["residentWeaponUsed"],
+            resident_condition=incident["residentCondition"],
+            officer_identifier=incident["officerIdentifier"],
             officer_race=incident["officerRace"],
             officer_sex=incident["officerSex"],
             officer_age=incident["officerAge"],
             officer_years_of_service=parse_int(incident["officerYearsOfService"]),
-            officer_identifier=incident["officerIdentifier"]
+            officer_weapon_used=incident["officerWeaponUsed"],
+            officer_condition=incident["officerCondition"]
         )
 
         # TODO: re-evaluate what this return value means
