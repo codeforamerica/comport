@@ -47,6 +47,11 @@ body {
   line-height: 26px;
 }
 
+.updated {
+  color: #999999;
+  font-size: smaller;
+}
+
 /* LAYOUT */
 
 .aside, .lead {

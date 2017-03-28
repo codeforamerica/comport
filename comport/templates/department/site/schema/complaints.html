@@ -19,6 +19,7 @@
       <form method="get" action="/department/{{department.id}}/complaints.csv">
         <button type="submit">Download this dataset</button>
       </form>
+      <span class="updated">Last Updated {{department.get_extractor().last_contact.strftime('%B %d, %Y')}}</span>
     </div>
 
     <!-- Intro -->
