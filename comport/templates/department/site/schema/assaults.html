@@ -18,7 +18,10 @@
       <form method="get" action="/department/{{department.id}}/assaultsonofficers.csv">
         <button type="submit">Download this dataset</button>
       </form>
+      {% set extractor = department.get_extractor() %}
+      {% if extractor != None and extractor.last_contact != None %}
       <span class="updated">Last Updated {{department.get_extractor().last_contact.strftime('%B %d, %Y')}}</span>
+      {% endif %}
     </div>
 
     <!-- Intro -->
