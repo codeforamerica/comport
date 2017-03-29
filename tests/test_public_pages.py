@@ -1,12 +1,13 @@
 import pytest
 from flask import url_for
-from comport.department.models import Department
+from comport.department.models import Extractor, Department
 from bs4 import BeautifulSoup
 from comport.data.models import OfficerInvolvedShootingBPD, UseOfForceIncidentBPD, CitizenComplaintBPD
 from comport.data.models import OfficerInvolvedShootingIMPD, UseOfForceIncidentIMPD, CitizenComplaintIMPD, AssaultOnOfficerIMPD
 from comport.data.models import PursuitSRPD
 from comport.data.models import UseOfForceIncidentLMPD
 from .utils import create_and_log_in_user
+import datetime
 
 @pytest.mark.usefixtures('db')
 class TestPublicPages:
@@ -106,3 +107,44 @@ class TestPublicPages:
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is None
+
+    def test_updated_text_on_schema_pages(self, testapp):
+        ''' The notice of the last time a dataset was updated is on all schema pages
+        '''
+        department = Department.create(name="B Police Department", short_name="BPD", is_public=True)
+        CitizenComplaintBPD.create(department_id=department.id, opaque_id="12345abcde")
+        UseOfForceIncidentBPD.create(department_id=department.id, opaque_id="23456bcdef")
+        OfficerInvolvedShootingBPD.create(department_id=department.id, opaque_id="34567cdefg")
+
+        SRDepartment = Department.create(name="SR Police Department", short_name="SRPD", is_public=True)
+        PursuitSRPD.create(department_id=SRDepartment.id, opaque_id="45678defgh")
+
+        extractor_password = 'password'
+        bpd_extractor, envs = Extractor.from_department_and_password(department=department, password=extractor_password)
+        bpd_extractor.last_contact = datetime.datetime(2012, 9, 16)
+        srpd_extractor, envs = Extractor.from_department_and_password(department=SRDepartment, password=extractor_password)
+        srpd_extractor.last_contact = datetime.datetime(2014, 11, 2)
+
+        response = testapp.get("/department/BPD/schema/complaints/")
+        soup = BeautifulSoup(response.text)
+        updated_span = soup.find("span", {"class": "updated"})
+        assert updated_span is not None
+        assert "Last Updated September 16, 2012" == updated_span.text
+
+        response = testapp.get("/department/BPD/schema/useofforce/")
+        soup = BeautifulSoup(response.text)
+        updated_span = soup.find("span", {"class": "updated"})
+        assert updated_span is not None
+        assert "Last Updated September 16, 2012" == updated_span.text
+
+        response = testapp.get("/department/BPD/schema/officerinvolvedshootings/")
+        soup = BeautifulSoup(response.text)
+        updated_span = soup.find("span", {"class": "updated"})
+        assert updated_span is not None
+        assert "Last Updated September 16, 2012" == updated_span.text
+
+        response = testapp.get("/department/SRPD/schema/pursuits/")
+        soup = BeautifulSoup(response.text)
+        updated_span = soup.find("span", {"class": "updated"})
+        assert updated_span is not None
+        assert "Last Updated November 02, 2014" == updated_span.text
