@@ -1034,20 +1034,20 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
     opaque_id = Column(db.String(255), unique=False, nullable=False)
     case_number = Column(db.String(128), unique=False, nullable=True)
     file_number = Column(db.String(128), unique=False, nullable=True)
+    service_type = Column(db.String(255), unique=False, nullable=True)
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
-    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
-    service_type = Column(db.String(255), unique=False, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     aggravating_factors = Column(db.String(255), unique=False, nullable=True)
+    officer_force_type = Column(db.String(255), unique=False, nullable=True)
     arrest_made = Column(db.Boolean, nullable=True)
     resident_injured = Column(db.Boolean, nullable=True)
     resident_hospitalized = Column(db.Boolean, nullable=True)
     officer_injured = Column(db.Boolean, nullable=True)
     officer_hospitalized = Column(db.Boolean, nullable=True)
-    officer_force_type = Column(db.String(255), unique=False, nullable=True)
+    officer_age = Column(db.String(255), unique=False, nullable=True)
+    officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
         db.Model.__init__(self, **kwargs)
@@ -1060,20 +1060,20 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             ("id", "opaque_id", "opaqueId"),
             ("caseNumber", "case_number", "caseNumber"),
             ("fileNumber", "file_number", "fileNumber"),
+            ("serviceType", "service_type", "serviceType"),
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
-            ("officerAge", "officer_age", "officerAge"),
-            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
-            ("serviceType", "service_type", "serviceType"),
             ("useOfForceReason", "use_of_force_reason", "useOfForceReason"),
             ("aggravatingFactors", "aggravating_factors", "aggravatingFactors"),
+            ("officerForceType", "officer_force_type", "officerForceType"),
             ("arrestMade", "arrest_made", "arrestMade"),
             ("residentInjured", "resident_injured", "residentInjured"),
             ("residentHospitalized", "resident_hospitalized", "residentHospitalized"),
             ("officerInjured", "officer_injured", "officerInjured"),
             ("officerHospitalized", "officer_hospitalized", "officerHospitalized"),
-            ("officerForceType", "officer_force_type", "officerForceType")
+            ("officerAge", "officer_age", "officerAge"),
+            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
     @classmethod
@@ -1103,22 +1103,22 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
         cls.create(
             department_id=department.id,
             opaque_id=incident["opaqueId"],
-            file_number=incident["fileNumber"],
             case_number=incident["caseNumber"],
+            file_number=incident["fileNumber"],
+            service_type=incident["serviceType"],
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
-            officer_age=incident["officerAge"],
-            officer_years_of_service=incident["officerYearsOfService"],
-            service_type=incident["serviceType"],
             use_of_force_reason=incident["useOfForceReason"],
             aggravating_factors=incident["aggravatingFactors"],
+            officer_force_type=incident["officerForceType"],
             arrest_made=incident["arrestMade"],
             resident_injured=incident["residentInjured"],
             resident_hospitalized=incident["residentHospitalized"],
             officer_injured=incident["officerInjured"],
             officer_hospitalized=incident["officerHospitalized"],
-            officer_force_type=incident["officerForceType"]
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"]
         )
 
         # TODO: re-evaluate what this return value means
