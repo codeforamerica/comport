@@ -1046,7 +1046,6 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
     resident_hospitalized = Column(db.Boolean, nullable=True)
     officer_injured = Column(db.Boolean, nullable=True)
     officer_hospitalized = Column(db.Boolean, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
@@ -1072,7 +1071,6 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             ("residentHospitalized", "resident_hospitalized", "residentHospitalized"),
             ("officerInjured", "officer_injured", "officerInjured"),
             ("officerHospitalized", "officer_hospitalized", "officerHospitalized"),
-            ("officerAge", "officer_age", "officerAge"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
@@ -1117,7 +1115,6 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             resident_hospitalized=incident["residentHospitalized"],
             officer_injured=incident["officerInjured"],
             officer_hospitalized=incident["officerHospitalized"],
-            officer_age=incident["officerAge"],
             officer_years_of_service=incident["officerYearsOfService"]
         )
 
@@ -1142,7 +1139,6 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
 
     def __init__(self, **kwargs):
@@ -1168,7 +1164,6 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
             ("residentRace", "resident_race", "residentRace"),
             ("residentSex", "resident_sex", "residentSex"),
             ("residentAge", "resident_age", "residentAge"),
-            ("officerAge", "officer_age", "officerAge"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
@@ -1213,7 +1208,6 @@ class CitizenComplaintSRPD(SurrogatePK, Model):
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
-            officer_age=incident["officerAge"],
             officer_years_of_service=incident["officerYearsOfService"]
         )
 
@@ -1228,7 +1222,6 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
@@ -1254,7 +1247,6 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
-            ("officerAge", "officer_age", "officerAge"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
             ("residentRace", "resident_race", "residentRace"),
             ("residentSex", "resident_sex", "residentSex"),
@@ -1298,7 +1290,6 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
-            officer_age=incident["officerAge"],
             officer_years_of_service=incident["officerYearsOfService"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
@@ -1323,7 +1314,6 @@ class PursuitSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
-    officer_age = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     aborted = Column(db.Boolean, nullable=True)
     accident = Column(db.Boolean, nullable=True)
@@ -1374,7 +1364,6 @@ class PursuitSRPD(SurrogatePK, Model):
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
-            ("officerAge", "officer_age", "officerAge"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
             ("aborted", "aborted", "aborted"),
             ("accident", "accident", "accident"),
@@ -1461,7 +1450,6 @@ class PursuitSRPD(SurrogatePK, Model):
             occurred_date=incident["occurredDate"],
             team=incident["team"],
             assignment=incident["assignment"],
-            officer_age=incident["officerAge"],
             officer_years_of_service=incident["officerYearsOfService"],
             aborted=incident["aborted"],
             accident=incident["accident"],
