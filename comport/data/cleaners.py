@@ -77,7 +77,8 @@ CAPITALIZE_LIST = [
     "SIS",
     "NED",
     "BWC",
-    "AWOL"
+    "AWOL",
+    "EEO"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
