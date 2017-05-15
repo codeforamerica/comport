@@ -149,8 +149,9 @@ class Cleaners(object):
 
     def capitalize(self, value):
         def abbreviations(word, **kwargs):
-            if word.upper() in CAPITALIZE_LIST:
-                return word.upper()
+            upd = word.upper()
+            if upd in CAPITALIZE_LIST or upd.lstrip("(").rstrip(")") in CAPITALIZE_LIST:
+                return upd
 
         if type(value) is not str:
             return value

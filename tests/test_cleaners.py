@@ -79,6 +79,17 @@ class TestCleaners:
         result = cleaner.capitalize(send)
         assert check == result
 
+    def test_capitalization_inside_parentheses(self):
+        ''' Words are left titlecased even if they're inside parentheses
+        '''
+        cleaner = Cleaners()
+        in_sentence = "I thought I would sail about a little and see the watery part of the world"
+        titlecased_sentence = titlecase(in_sentence)
+        send = " ".join(i.lower() + " (" + j.lower() + ")" for i, j in zip(in_sentence.split(" "), CAPITALIZE_LIST))
+        check = " ".join(i + " (" + j + ")" for i, j in zip(titlecased_sentence.split(" "), CAPITALIZE_LIST))
+        result = cleaner.capitalize(send)
+        assert check == result
+
     def test_captilization_handles_non_strings(self):
         ''' Non-strings passed to capitalize aren't altered.
         '''
