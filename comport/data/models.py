@@ -1334,6 +1334,8 @@ class PursuitSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    bureau = Column(db.String(255), unique=False, nullable=True)
+    division = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
     aborted = Column(db.Boolean, nullable=True)
     accident = Column(db.Boolean, nullable=True)
@@ -1384,6 +1386,8 @@ class PursuitSRPD(SurrogatePK, Model):
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
+            ("bureau", "bureau", "bureau"),
+            ("division", "division", "division"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
             ("aborted", "aborted", "aborted"),
             ("accident", "accident", "accident"),
@@ -1430,6 +1434,8 @@ class PursuitSRPD(SurrogatePK, Model):
         # capitalize the team and assignment
         incident["team"] = cleaner.capitalize(incident["team"])
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
+        incident["bureau"] = cleaner.capitalize(incident["bureau"])
+        incident["division"] = cleaner.capitalize(incident["division"])
         # clean race, gender
         incident["residentSex"] = cleaner.sex(incident["residentSex"])
         incident["residentRace"] = cleaner.race(incident["residentRace"])
@@ -1470,6 +1476,8 @@ class PursuitSRPD(SurrogatePK, Model):
             occurred_date=incident["occurredDate"],
             team=incident["team"],
             assignment=incident["assignment"],
+            bureau=incident["bureau"],
+            division=incident["division"],
             officer_years_of_service=incident["officerYearsOfService"],
             aborted=incident["aborted"],
             accident=incident["accident"],
