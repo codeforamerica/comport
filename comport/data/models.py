@@ -1380,7 +1380,7 @@ class PursuitSRPD(SurrogatePK, Model):
         ''' Return the CSV column headers and variable names, along with the variable names expected from the extractor.
         '''
         return [
-            ("opaqueId", "opaque_id", "opaqueId"),
+            ("id", "opaque_id", "opaqueId"),
             ("caseNumber", "case_number", "caseNumber"),
             ("pursuitNumber", "pursuit_number", "pursuitNumber"),
             ("occurredDate", "occurred_date", "occurredDate"),
