@@ -1038,9 +1038,12 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    bureau = Column(db.String(255), unique=False, nullable=True)
+    division = Column(db.String(255), unique=False, nullable=True)
     use_of_force_reason = Column(db.String(255), unique=False, nullable=True)
     aggravating_factors = Column(db.String(255), unique=False, nullable=True)
     officer_force_type = Column(db.String(255), unique=False, nullable=True)
+    officer_force_type_scale = Column(db.String(255), unique=False, nullable=True)
     arrest_made = Column(db.Boolean, nullable=True)
     resident_injured = Column(db.Boolean, nullable=True)
     resident_hospitalized = Column(db.Boolean, nullable=True)
@@ -1063,9 +1066,12 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
+            ("bureau", "bureau", "bureau"),
+            ("division", "division", "division"),
             ("useOfForceReason", "use_of_force_reason", "useOfForceReason"),
             ("aggravatingFactors", "aggravating_factors", "aggravatingFactors"),
             ("officerForceType", "officer_force_type", "officerForceType"),
+            ("officerForceTypeScale", "officer_force_type_scale", "officerForceTypeScale"),
             ("arrestMade", "arrest_made", "arrestMade"),
             ("residentInjured", "resident_injured", "residentInjured"),
             ("residentHospitalized", "resident_hospitalized", "residentHospitalized"),
@@ -1084,8 +1090,8 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
         # capitalize the location
         incident["team"] = cleaner.capitalize(incident["team"])
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
-        # clean force type
-        incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
+        incident["bureau"] = cleaner.capitalize(incident["bureau"])
+        incident["division"] = cleaner.capitalize(incident["division"])
 
         # check and set the incident last updated
         incident_kwargs = dict(opaque_id=incident["opaqueId"], department_id=department.id, incident_type="uof")
@@ -1107,9 +1113,12 @@ class UseOfForceIncidentSRPD(SurrogatePK, Model):
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
+            bureau=incident["bureau"],
+            division=incident["division"],
             use_of_force_reason=incident["useOfForceReason"],
             aggravating_factors=incident["aggravatingFactors"],
             officer_force_type=incident["officerForceType"],
+            officer_force_type_scale=incident["officerForceTypeScale"],
             arrest_made=incident["arrestMade"],
             resident_injured=incident["residentInjured"],
             resident_hospitalized=incident["residentHospitalized"],
