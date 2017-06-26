@@ -428,19 +428,6 @@ var configs = {
     addOther: true,
     },
 
-  // unique pursuit incidents by conclusion
-  'pursuits-by-conclusion': {
-    chartType: 'flagHistogram',
-    filter: uniqueForKeysInLast12Months('id', 'conclusion'),
-    keyFunc: function(d){ return d.conclusion; },
-    sortWith: function(d){ return -d.count; },
-    x: 'type',
-    xFunc: function(b){ return b[0].conclusion; },
-    y: 'count',
-    yFunc: function(b){ return b.length; },
-    addOther: true,
-    },
-
 };
 
 // Run the code that draws the charts

@@ -144,8 +144,7 @@ class PageBlockLookup:
             'blocks': [
                 'pursuits-by-team',
                 'pursuits-by-reason',
-                'pursuits-by-distance',
-                'pursuits-by-conclusion'
+                'pursuits-by-distance'
             ]
         }
 
