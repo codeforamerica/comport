@@ -263,7 +263,7 @@ function addMissingYears(dataMap){
   });
 }
 
-function addOtherCategory(data){
+function addOtherCategory(data, label){
   // add an 'other' category to the prestructured data
   // to consolidate groups of small counts
   var threshold = 0.006;
@@ -289,7 +289,7 @@ function addOtherCategory(data){
   }
 
   data.push({
-    type: "Other",
+    type: label,
     count: otherTotal,
     groups: small_list.map(function(i){
       return data[i];
@@ -473,7 +473,11 @@ function structureData(parsed_rows, config){
     });
   }
   if( config.addOther ){
-    addOtherCategory(structured_data);
+    otherLabel = 'Other';
+    if ( config.otherLabel ) {
+      otherLabel = config.otherLabel;
+    }
+    addOtherCategory(structured_data, otherLabel);
   }
   return structured_data;
 }

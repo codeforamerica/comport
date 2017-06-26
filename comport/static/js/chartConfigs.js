@@ -73,6 +73,7 @@ var configs = {
     y: 'count',
     yFunc: function(b){ return b.length; },
     addOther: true,
+    otherLabel: 'Additional Types of Force',
     },
 
   // unique use of force incidents by district
