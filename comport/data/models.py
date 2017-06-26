@@ -1231,7 +1231,10 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
     occurred_date = Column(db.DateTime, nullable=True)
     team = Column(db.String(255), unique=False, nullable=True)
     assignment = Column(db.String(255), unique=False, nullable=True)
+    bureau = Column(db.String(255), unique=False, nullable=True)
+    division = Column(db.String(255), unique=False, nullable=True)
     officer_years_of_service = Column(db.String(255), unique=False, nullable=True)
+    discharge_type = Column(db.String(255), unique=False, nullable=True)
     resident_race = Column(db.String(255), unique=False, nullable=True)
     resident_sex = Column(db.String(255), unique=False, nullable=True)
     resident_age = Column(db.String(255), unique=False, nullable=True)
@@ -1256,7 +1259,10 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
             ("occurredDate", "occurred_date", "occurredDate"),
             ("team", "team", "team"),
             ("assignment", "assignment", "assignment"),
+            ("bureau", "bureau", "bureau"),
+            ("division", "division", "division"),
             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
+            ("dischargeType", "discharge_type", "dischargeType"),
             ("residentRace", "resident_race", "residentRace"),
             ("residentSex", "resident_sex", "residentSex"),
             ("residentAge", "resident_age", "residentAge"),
@@ -1277,6 +1283,8 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
         # capitalize the team and assignment
         incident["team"] = cleaner.capitalize(incident["team"])
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
+        incident["bureau"] = cleaner.capitalize(incident["bureau"])
+        incident["division"] = cleaner.capitalize(incident["division"])
         # clean weapon, race, gender
         incident["residentSex"] = cleaner.sex(incident["residentSex"])
         incident["residentRace"] = cleaner.race(incident["residentRace"])
@@ -1299,7 +1307,10 @@ class OfficerInvolvedShootingSRPD(SurrogatePK, Model):
             occurred_date=parse_date(incident["occurredDate"]),
             team=incident["team"],
             assignment=incident["assignment"],
+            bureau=incident["bureau"],
+            division=incident["division"],
             officer_years_of_service=incident["officerYearsOfService"],
+            discharge_type=incident["dischargeType"],
             resident_race=incident["residentRace"],
             resident_sex=incident["residentSex"],
             resident_age=incident["residentAge"],
