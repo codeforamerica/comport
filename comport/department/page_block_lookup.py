@@ -142,9 +142,9 @@ class PageBlockLookup:
             'introduction': 'pursuits-introduction',
             'first-block': 'pursuits-by-month',
             'blocks': [
-                'pursuits-by-team',
                 'pursuits-by-reason',
-                'pursuits-by-distance'
+                'pursuits-by-distance',
+                'pursuits-by-team'
             ]
         }
 

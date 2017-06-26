@@ -203,24 +203,24 @@ class TestDepartmentModelSRPD:
         # create & append chart blocks with the expected slugs
         pursuit_intro = ChartBlock(title="INTRO", dataset="intros", slug="pursuits-introduction")
         pursuit_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="pursuits-by-month")
-        pursuit_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="pursuits-by-team")
         pursuit_br = ChartBlock(title="BYREASON", dataset="byreason", slug="pursuits-by-reason")
         pursuit_bd = ChartBlock(title="BYDISTANCE", dataset="bydistance", slug="pursuits-by-distance")
+        pursuit_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="pursuits-by-team")
 
         department.chart_blocks.append(pursuit_intro)
         department.chart_blocks.append(pursuit_bm)
-        department.chart_blocks.append(pursuit_bt)
         department.chart_blocks.append(pursuit_br)
         department.chart_blocks.append(pursuit_bd)
+        department.chart_blocks.append(pursuit_bt)
         department.save()
 
         # verify that the blocks are returned in the expected structure
         pursuit_blocks = department.get_pursuits_blocks()
         assert pursuit_blocks['introduction'] == pursuit_intro
         assert pursuit_blocks['first-block'] == pursuit_bm
-        assert pursuit_blocks['blocks'][0] == pursuit_bt
-        assert pursuit_blocks['blocks'][1] == pursuit_br
-        assert pursuit_blocks['blocks'][2] == pursuit_bd
+        assert pursuit_blocks['blocks'][0] == pursuit_br
+        assert pursuit_blocks['blocks'][1] == pursuit_bd
+        assert pursuit_blocks['blocks'][2] == pursuit_bt
 
     def test_get_pursuits_schema_blocks(self):
         ''' Set and get pursuit schema chart blocks.
