@@ -333,7 +333,21 @@ var configs = {
     addOther: false,
     },
 
-  // unique officer-involved shootings by assignment
+  // unique officer-involved shootings by discharge type
+  // (SRPD only)
+  'ois-by-type': {
+    chartType: 'flagHistogram',
+    filter: uniqueForKeysInLast12Months('id', 'dischargeType'),
+    keyFunc: function(d){ return d.dischargeType; },
+    sortWith: function(d){ return -d.count; },
+    x: 'type',
+    xFunc: function(b){ return b[0].dischargeType; },
+    y: 'count',
+    yFunc: function(b){ return b.length; },
+    addOther: false,
+  },
+
+  // unique officer-involved shootings by team
   // (SRPD only)
   'ois-by-team': {
     chartType: 'flagHistogram',

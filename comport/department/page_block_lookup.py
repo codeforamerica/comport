@@ -75,6 +75,7 @@ class PageBlockLookup:
                 'introduction': 'ois-introduction',
                 'first-block': 'ois-by-month',
                 'blocks': [
+                    'ois-by-type',
                     'ois-by-team',
                     'officer-demographics'
                 ]

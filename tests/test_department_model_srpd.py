@@ -144,10 +144,12 @@ class TestDepartmentModelSRPD:
         # create & append chart blocks with the expected slugs
         ois_intro = ChartBlock(title="INTRO", dataset="intros", slug="ois-introduction")
         ois_bm = ChartBlock(title="BYMONTH", dataset="bm", slug="ois-by-month")
+        ois_by = ChartBlock(title="BYTYPE", dataset="bytype", slug="ois-by-type")
         ois_bt = ChartBlock(title="BYTEAM", dataset="byteam", slug="ois-by-team")
         ois_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         department.chart_blocks.append(ois_intro)
         department.chart_blocks.append(ois_bm)
+        department.chart_blocks.append(ois_by)
         department.chart_blocks.append(ois_bt)
         department.chart_blocks.append(ois_od)
         department.save()
@@ -156,8 +158,9 @@ class TestDepartmentModelSRPD:
         ois_blocks = department.get_ois_blocks()
         assert ois_blocks['introduction'] == ois_intro
         assert ois_blocks['first-block'] == ois_bm
-        assert ois_blocks['blocks'][0] == ois_bt
-        assert ois_blocks['blocks'][1] == ois_od
+        assert ois_blocks['blocks'][0] == ois_by
+        assert ois_blocks['blocks'][1] == ois_bt
+        assert ois_blocks['blocks'][2] == ois_od
 
     def test_get_ois_schema_blocks(self):
         ''' Set and get ois schema chart blocks.
