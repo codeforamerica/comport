@@ -598,10 +598,15 @@ class UseOfForceIncidentBPD(SurrogatePK, Model):
         '''
         # get a cleaner instance
         cleaner = Cleaners()
-        # capitalize the assignment
+        # capitalize
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
-        # clean force type, race, gender
-        incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
+        incident["useOfForceReason"] = cleaner.capitalize(incident["useOfForceReason"])
+        incident["officerForceType"] = cleaner.capitalize(incident["officerForceType"])
+        incident["serviceType"] = cleaner.capitalize(incident["serviceType"])
+        incident["arrestCharges"] = cleaner.capitalize(incident["arrestCharges"])
+        incident["residentCondition"] = cleaner.capitalize(incident["residentCondition"])
+        incident["officerCondition"] = cleaner.capitalize(incident["officerCondition"])
+        # clean race, gender
         incident["residentRace"] = cleaner.race(incident["residentRace"])
         incident["residentSex"] = cleaner.sex(incident["residentSex"])
         incident["officerRace"] = cleaner.race(incident["officerRace"])
@@ -832,10 +837,14 @@ class OfficerInvolvedShootingBPD(SurrogatePK, Model):
         '''
         # get a cleaner instance
         cleaner = Cleaners()
-        # capitalize the assignment
+        # capitalize
+        incident["serviceType"] = cleaner.capitalize(incident["serviceType"])
         incident["assignment"] = cleaner.capitalize(incident["assignment"])
-        # clean weapon, race, gender
-        incident["residentWeaponUsed"] = cleaner.resident_weapon_used(incident["residentWeaponUsed"])
+        incident["residentWeaponUsed"] = cleaner.capitalize(incident["residentWeaponUsed"])
+        incident["residentCondition"] = cleaner.capitalize(incident["residentCondition"])
+        incident["officerWeaponUsed"] = cleaner.capitalize(incident["officerWeaponUsed"])
+        incident["officerCondition"] = cleaner.capitalize(incident["officerCondition"])
+        # clean race, gender
         incident["residentSex"] = cleaner.sex(incident["residentSex"])
         incident["residentRace"] = cleaner.race(incident["residentRace"])
         incident["officerSex"] = cleaner.sex(incident["officerSex"])
