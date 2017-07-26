@@ -56,9 +56,12 @@ CAPITALIZE_LIST = [
     "ECW",
     "ED",
     "EEO",
+    "FB",
     "FTO",
     "HIDTA",
     "IAD",
+    "IID",
+    "LGBT",
     "ND",
     "NED",
     "NW",
@@ -77,6 +80,7 @@ CAPITALIZE_LIST = [
     "SED",
     "SES",
     "SIS",
+    "SOD",
     "SODD",
     "SOS",
     "SW",
@@ -89,12 +93,20 @@ CAPITALIZE_LIST = [
     "VCID",
     "VCS",
     "VRO",
+    "VSC",
     "WATF",
     "WD"
 ]
 
 CAPITALIZE_IGNORE_KEYS_LIST = [
     "opaqueId",
+    "caseNumber",
+    "occuredDate",
+    "receivedDate",
+    "completedDate",
+    "residentIdentifier",
+    "residentAge",
+    "officerIdentifier",
     "officerYearsOfService"
 ]
 
