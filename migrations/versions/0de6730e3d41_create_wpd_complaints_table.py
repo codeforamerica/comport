@@ -1,4 +1,4 @@
-"""empty message
+"""Create WPD complaints table
 
 Revision ID: 0de6730e3d41
 Revises: 2f13ffb1ce60
@@ -20,7 +20,7 @@ def upgrade():
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('department_id', sa.Integer(), sa.ForeignKey('departments.id'), nullable=False),
         sa.Column('incident_id', sa.String(255), unique=False, nullable=True),
-        sa.Column('occurred_date', sa.DateTime, unique=False, nullable=True),
+        sa.Column('received_date', sa.DateTime, unique=False, nullable=True),
         sa.Column('division', sa.String(255), unique=False, nullable=True),
         sa.Column('bureau', sa.String(255), unique=False, nullable=True),
         sa.Column('shift', sa.String(255), unique=False, nullable=True),

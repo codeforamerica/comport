@@ -1535,7 +1535,7 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents_wpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     incident_id = Column(db.String(255), unique=False, nullable=False)
-    occurred_date = Column(db.DateTime, unique=False, nullable=True)
+    received_date = Column(db.DateTime, unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
     shift = Column(db.String(255), unique=False, nullable=True)
@@ -1571,7 +1571,7 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
         '''
         return [
             ("id", "incident_id", "IncidentId"),
-            ("occurredDate", "occurred_date", "OccurredDateTime"),
+            ("receivedDate", "received_date", "ReceivedDateTime"),
             ("division", "division", "Division"),
             ("district", "bureau", "Bureau"),
             ("shift", "shift", "Shift"),
@@ -1631,7 +1631,7 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
         cls.create(
             department_id=department.id,
             incident_id=incident["IncidentId"],
-            occurred_date=incident["OccurredDateTime"],
+            received_date=incident["ReceivedDateTime"],
             division=incident["Division"],
             bureau=incident["Bureau"],
             shift=incident["Shift"],
@@ -1666,7 +1666,7 @@ class CitizenComplaintWPD(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints_wpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     incident_id = Column(db.String(255), unique=False, nullable=True)
-    occurred_date = Column(db.DateTime, unique=False, nullable=True)
+    received_date = Column(db.DateTime, unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
     shift = Column(db.String(255), unique=False, nullable=True)
@@ -1695,7 +1695,7 @@ class CitizenComplaintWPD(SurrogatePK, Model):
         '''
         return [
             ("id", "incident_id", "IncidentId"),
-            ("occurredDate", "occurred_date", "OccurredDateTime"),
+            ("receivedDate", "received_date", "ReceivedDateTime"),
             ("division", "division", "Division"),
             ("district", "bureau", "Bureau"),
             ("shift", "shift", "Shift"),
@@ -1749,7 +1749,7 @@ class CitizenComplaintWPD(SurrogatePK, Model):
         cls.create(
             department_id=department.id,
             incident_id=incident["IncidentId"],
-            occurred_date=incident["OccurredDateTime"],
+            received_date=incident["ReceivedDateTime"],
             division=incident["Division"],
             bureau=incident["Bureau"],
             shift=incident["Shift"],
