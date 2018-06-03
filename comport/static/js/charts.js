@@ -2,7 +2,7 @@ var allRows;
 
 
 function notEqual(a, b){
-  if( a instanceof Date || b instanceof Date ){
+  if( a instanceof Date && b instanceof Date ){
     return a.getTime() != b.getTime();
   } else {
     return a != b;
@@ -182,7 +182,7 @@ function uniqueOfficerComplaints(rows){
   var officerComplaintMap = grouper.map(rows, d3.map);
   officerComplaintMap.forEach(function(offId, complaints){
     newSet.push({
-      officerId: offId,
+      officerIdentifier: offId,
       complaintCount: complaints.keys().length,
       values: complaints
     });
