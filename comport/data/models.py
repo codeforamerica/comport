@@ -1534,7 +1534,7 @@ class PursuitSRPD(SurrogatePK, Model):
 class UseOfForceIncidentWPD(SurrogatePK, Model):
     __tablename__ = 'use_of_force_incidents_wpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
-    incident_id = Column(db.String(255), unique=False, nullable=False)
+    opaque_id = Column(db.String(255), unique=False, nullable=False)
     received_date = Column(db.DateTime, unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
@@ -1570,33 +1570,33 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
         ''' Return the CSV column headers and variable names, along with the variable names expected from the extractor.
         '''
         return [
-            ("id", "incident_id", "IncidentId"),
-            ("receivedDate", "received_date", "ReceivedDateTime"),
-            ("division", "division", "Division"),
-            ("district", "bureau", "Bureau"),
-            ("shift", "shift", "Shift"),
-            ("useOfForceReason", "use_of_force_reason", "UseOfForceReason"),
-            ("citizenResistType", "citizen_resist_type", "CitizenResistType"),
-            ("citizenResistance", "citizen_resistance", "CitizenResistance"),
-            ("officerForceType", "officer_force_type", "OfficerForceType"),
-            ("arrestCharges", "arrest_charges", "ArrestCharges"),
-            ("disposition", "disposition", "Disposition"),
-            ("serviceType", "service_type", "ServiceType"),
-            ("arrestMade", "arrest_made", "ArrestMade"),
-            ("residentId", "citizen_id", "CitizenId"),
-            ("residentInjured", "citizen_injured", "CitizenInjured"),
-            ("residentHospitalized", "citizen_hospitalized", "CitizenHospitalized"),
-            ("residentCondition", "citizen_condition", "CitizenCondition"),
-            ("residentRace", "citizen_race", "CitizenRace"),
-            ("residentSex", "citizen_sex", "CitizenSex"),
-            ("residentAge", "citizen_age", "CitizenAge"),
-            ("officerIdentifier", "officer_id", "OfficerId"),
-            ("officerInjured", "officer_injured", "OfficerInjured"),
-            ("officerHospitalized", "officer_hospitalized", "OfficerHospitalized"),
-            ("officerRace", "officer_race", "OfficerRace"),
-            ("officerSex", "officer_sex", "OfficerSex"),
-            ("officerAge", "officer_age", "OfficerAge"),
-            ("officerYearsOfService", "officer_years_of_service", "OfficerYearsOfService")
+            ("id", "opaque_id", "opaqueId"),
+            ("receivedDate", "received_date", "receivedDateTime"),
+            ("division", "division", "division"),
+            ("district", "bureau", "bureau"),
+            ("shift", "shift", "shift"),
+            ("useOfForceReason", "use_of_force_reason", "useOfForceReason"),
+            ("citizenResistType", "citizen_resist_type", "citizenResistType"),
+            ("citizenResistance", "citizen_resistance", "citizenResistance"),
+            ("officerForceType", "officer_force_type", "officerForceType"),
+            ("arrestCharges", "arrest_charges", "arrestCharges"),
+            ("disposition", "disposition", "disposition"),
+            ("serviceType", "service_type", "serviceType"),
+            ("arrestMade", "arrest_made", "arrestMade"),
+            ("residentId", "citizen_id", "citizenId"),
+            ("residentInjured", "citizen_injured", "citizenInjured"),
+            ("residentHospitalized", "citizen_hospitalized", "citizenHospitalized"),
+            ("residentCondition", "citizen_condition", "citizenCondition"),
+            ("residentRace", "citizen_race", "citizenRace"),
+            ("residentSex", "citizen_sex", "citizenSex"),
+            ("residentAge", "citizen_age", "citizenAge"),
+            ("officerIdentifier", "officer_id", "officerId"),
+            ("officerInjured", "officer_injured", "officerInjured"),
+            ("officerHospitalized", "officer_hospitalized", "officerHospitalized"),
+            ("officerRace", "officer_race", "officerRace"),
+            ("officerSex", "officer_sex", "officerSex"),
+            ("officerAge", "officer_age", "officerAge"),
+            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
     @classmethod
@@ -1606,23 +1606,23 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
         # get a cleaner instance
         cleaner = Cleaners()
         # clean force type, race, gender
-        incident["OfficerForceType"] = cleaner.officer_force_type(incident["OfficerForceType"])
-        incident["CitizenRace"] = cleaner.race(incident["CitizenRace"])
-        incident["CitizenSex"] = cleaner.sex(incident["CitizenSex"])
-        incident["OfficerRace"] = cleaner.race(incident["OfficerRace"])
-        incident["OfficerSex"] = cleaner.sex(incident["OfficerSex"])
+        incident["officerForceType"] = cleaner.officer_force_type(incident["officerForceType"])
+        incident["citizenRace"] = cleaner.race(incident["citizenRace"])
+        incident["citizenSex"] = cleaner.sex(incident["citizenSex"])
+        incident["officerRace"] = cleaner.race(incident["officerRace"])
+        incident["officerSex"] = cleaner.sex(incident["officerSex"])
         # make sure values that might've been sent as integers are strings
-        incident["CitizenAge"] = cleaner.number_to_string(incident["CitizenAge"])
-        incident["OfficerAge"] = cleaner.number_to_string(incident["OfficerAge"])
-        incident["OfficerYearsOfService"] = cleaner.number_to_string(incident["OfficerYearsOfService"])
+        incident["citizenAge"] = cleaner.number_to_string(incident["citizenAge"])
+        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
 
         # check and set the incident last updated
-        incident_kwargs = dict(opaque_id=incident["IncidentId"], department_id=department.id, incident_type="uof")
+        incident_kwargs = dict(opaque_id=incident["opaqueId"], department_id=department.id, incident_type="uof")
         incident_updated = IncidentsUpdated.query.filter_by(**incident_kwargs).first()
         # this is the first time we've encountered this incident in this update
         if not incident_updated:
             # delete this incident's rows from the database
-            cls.query.filter_by(incident_id=incident["IncidentId"]).delete()
+            cls.query.filter_by(opaque_id=incident["opaqueId"]).delete()
             db.session.commit()
             # remember it for this incident's following rows in this update
             IncidentsUpdated.create(**incident_kwargs)
@@ -1630,33 +1630,33 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
         # create the new incident row
         cls.create(
             department_id=department.id,
-            incident_id=incident["IncidentId"],
-            received_date=incident["ReceivedDateTime"],
-            division=incident["Division"],
-            bureau=incident["Bureau"],
-            shift=incident["Shift"],
-            use_of_force_reason=incident["UseOfForceReason"],
-            citizen_resist_type=incident["CitizenResistType"],
-            citizen_resistance=incident["CitizenResistance"],
-            officer_force_type=incident["OfficerForceType"],
-            arrest_charges=incident["ArrestCharges"],
-            disposition=incident["Disposition"],
-            service_type=incident["ServiceType"],
-            arrest_made=incident["ArrestMade"],
-            citizen_id=incident["CitizenId"],
-            citizen_injured=incident["CitizenInjured"],
-            citizen_hospitalized=incident["CitizenHospitalized"],
-            citizen_condition=incident["CitizenCondition"],
-            citizen_race=incident["CitizenRace"],
-            citizen_sex=incident["CitizenSex"],
-            citizen_age=incident["CitizenAge"],
-            officer_id=incident["OfficerId"],
-            officer_injured=incident["OfficerInjured"],
-            officer_hospitalized=incident["OfficerHospitalized"],
-            officer_race=incident["OfficerRace"],
-            officer_sex=incident["OfficerSex"],
-            officer_age=incident["OfficerAge"],
-            officer_years_of_service=incident["OfficerYearsOfService"]
+            opaque_id=incident["opaqueId"],
+            received_date=incident["receivedDateTime"],
+            division=incident["division"],
+            bureau=incident["bureau"],
+            shift=incident["shift"],
+            use_of_force_reason=incident["useOfForceReason"],
+            citizen_resist_type=incident["citizenResistType"],
+            citizen_resistance=incident["citizenResistance"],
+            officer_force_type=incident["officerForceType"],
+            arrest_charges=incident["arrestCharges"],
+            disposition=incident["disposition"],
+            service_type=incident["serviceType"],
+            arrest_made=incident["arrestMade"],
+            citizen_id=incident["citizenId"],
+            citizen_injured=incident["citizenInjured"],
+            citizen_hospitalized=incident["citizenHospitalized"],
+            citizen_condition=incident["citizenCondition"],
+            citizen_race=incident["citizenRace"],
+            citizen_sex=incident["citizenSex"],
+            citizen_age=incident["citizenAge"],
+            officer_id=incident["officerId"],
+            officer_injured=incident["officerInjured"],
+            officer_hospitalized=incident["officerHospitalized"],
+            officer_race=incident["officerRace"],
+            officer_sex=incident["officerSex"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"]
         )
 
         # TODO: re-evaluate what this return value means
@@ -1665,7 +1665,7 @@ class UseOfForceIncidentWPD(SurrogatePK, Model):
 class CitizenComplaintWPD(SurrogatePK, Model):
     __tablename__ = 'citizen_complaints_wpd'
     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
-    incident_id = Column(db.String(255), unique=False, nullable=True)
+    opaque_id = Column(db.String(255), unique=False, nullable=True)
     received_date = Column(db.DateTime, unique=False, nullable=True)
     division = Column(db.String(255), unique=False, nullable=True)
     bureau = Column(db.String(255), unique=False, nullable=True)
@@ -1694,26 +1694,26 @@ class CitizenComplaintWPD(SurrogatePK, Model):
         ''' Return the CSV column headers and variable names, along with the variable names expected from the extractor.
         '''
         return [
-            ("id", "incident_id", "IncidentId"),
-            ("receivedDate", "received_date", "ReceivedDateTime"),
-            ("division", "division", "Division"),
-            ("district", "bureau", "Bureau"),
-            ("shift", "shift", "Shift"),
-            ("serviceType", "service_type", "ServiceType"),
-            ("source", "source", "Source"),
-            ("allegationType", "incident_type", "IncidentType"),
-            ("allegation", "allegation", "Allegation"),
-            ("finding", "finding", "Finding"),
-            ("disposition", "disposition", "Disposition"),
-            ("residentId", "citizen_id", "CitizenId"),
-            ("residentRace", "citizen_race", "CitizenRace"),
-            ("residentSex", "citizen_sex", "CitizenSex"),
-            ("residentAge", "citizen_age", "CitizenAge"),
-            ("officerIdentifier", "officer_id", "OfficerId"),
-            ("officerRace", "officer_race", "OfficerRace"),
-            ("officerSex", "officer_sex", "OfficerSex"),
-            ("officerAge", "officer_age", "OfficerAge"),
-            ("officerYearsOfService", "officer_years_of_service", "OfficerYearsOfService")
+            ("id", "opaque_id", "opaqueId"),
+            ("receivedDate", "received_date", "receivedDateTime"),
+            ("division", "division", "division"),
+            ("district", "bureau", "bureau"),
+            ("shift", "shift", "shift"),
+            ("serviceType", "service_type", "serviceType"),
+            ("source", "source", "source"),
+            ("allegationType", "incident_type", "incidentType"),
+            ("allegation", "allegation", "allegation"),
+            ("finding", "finding", "finding"),
+            ("disposition", "disposition", "disposition"),
+            ("residentId", "citizen_id", "citizenId"),
+            ("residentRace", "citizen_race", "citizenRace"),
+            ("residentSex", "citizen_sex", "citizenSex"),
+            ("residentAge", "citizen_age", "citizenAge"),
+            ("officerIdentifier", "officer_id", "officerId"),
+            ("officerRace", "officer_race", "officerRace"),
+            ("officerSex", "officer_sex", "officerSex"),
+            ("officerAge", "officer_age", "officerAge"),
+            ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService")
         ]
 
     @classmethod
@@ -1723,24 +1723,24 @@ class CitizenComplaintWPD(SurrogatePK, Model):
         # get a cleaner instance
         cleaner = Cleaners()
         # make sure values that might've been sent as integers are strings
-        incident["CitizenAge"] = cleaner.number_to_string(incident["CitizenAge"])
-        incident["OfficerAge"] = cleaner.number_to_string(incident["OfficerAge"])
-        incident["OfficerYearsOfService"] = cleaner.number_to_string(incident["OfficerYearsOfService"])
+        incident["citizenAge"] = cleaner.number_to_string(incident["citizenAge"])
+        incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
+        incident["officerYearsOfService"] = cleaner.number_to_string(incident["officerYearsOfService"])
         # capitalize all the fields in the incident
         incident = cleaner.capitalize_incident(incident)
         # clean sex & race
-        incident["CitizenSex"] = cleaner.sex(incident["CitizenSex"])
-        incident["CitizenRace"] = cleaner.race(incident["CitizenRace"])
-        incident["OfficerSex"] = cleaner.sex(incident["OfficerSex"])
-        incident["OfficerRace"] = cleaner.race(incident["OfficerRace"])
+        incident["citizenSex"] = cleaner.sex(incident["citizenSex"])
+        incident["citizenRace"] = cleaner.race(incident["citizenRace"])
+        incident["officerSex"] = cleaner.sex(incident["officerSex"])
+        incident["officerRace"] = cleaner.race(incident["officerRace"])
 
         # check and set the incident last updated
-        incident_kwargs = dict(opaque_id=incident["IncidentId"], department_id=department.id, incident_type="complaints")
+        incident_kwargs = dict(opaque_id=incident["opaqueId"], department_id=department.id, incident_type="complaints")
         incident_updated = IncidentsUpdated.query.filter_by(**incident_kwargs).first()
         # this is the first time we've encountered this incident in this update
         if not incident_updated:
             # delete this incident's rows from the database
-            cls.query.filter_by(incident_id=incident["IncidentId"]).delete()
+            cls.query.filter_by(opaque_id=incident["opaqueId"]).delete()
             db.session.commit()
             # remember it for this incident's following rows in this update
             IncidentsUpdated.create(**incident_kwargs)
@@ -1748,143 +1748,27 @@ class CitizenComplaintWPD(SurrogatePK, Model):
         # create the new incident row
         cls.create(
             department_id=department.id,
-            incident_id=incident["IncidentId"],
-            received_date=incident["ReceivedDateTime"],
-            division=incident["Division"],
-            bureau=incident["Bureau"],
-            shift=incident["Shift"],
-            service_type=incident["ServiceType"],
-            source=incident["Source"],
-            incident_type=incident["IncidentType"],
-            allegation=incident["Allegation"],
-            finding=incident["Finding"],
-            disposition=incident["Disposition"],
-            citizen_id=incident["CitizenId"],
-            citizen_race=incident["CitizenRace"],
-            citizen_sex=incident["CitizenSex"],
-            citizen_age=incident["CitizenAge"],
-            officer_id=incident["OfficerId"],
-            officer_race=incident["OfficerRace"],
-            officer_sex=incident["OfficerSex"],
-            officer_age=incident["OfficerAge"],
-            officer_years_of_service=incident["OfficerYearsOfService"]
+            opaque_id=incident["opaqueId"],
+            received_date=incident["receivedDateTime"],
+            division=incident["division"],
+            bureau=incident["bureau"],
+            shift=incident["shift"],
+            service_type=incident["serviceType"],
+            source=incident["source"],
+            incident_type=incident["incidentType"],
+            allegation=incident["allegation"],
+            finding=incident["finding"],
+            disposition=incident["disposition"],
+            citizen_id=incident["citizenId"],
+            citizen_race=incident["citizenRace"],
+            citizen_sex=incident["citizenSex"],
+            citizen_age=incident["citizenAge"],
+            officer_id=incident["officerId"],
+            officer_race=incident["officerRace"],
+            officer_sex=incident["officerSex"],
+            officer_age=incident["officerAge"],
+            officer_years_of_service=incident["officerYearsOfService"]
         )
 
         # TODO: re-evaluate what this return value means
         return True
-
-# class OfficerInvolvedShootingWPD(SurrogatePK, Model):
-#     __tablename__ = 'officer_involved_shootings_wpd'
-#     department_id = Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
-#     opaque_id = Column(db.String(255), unique=False, nullable=False)
-#     case_number = Column(db.String(255), unique=False, nullable=True)
-#     occurred_date = Column(db.DateTime, nullable=True)
-#     received_date = Column(db.DateTime, nullable=True)
-#     completed_date = Column(db.DateTime, nullable=True)
-#     assignment = Column(db.String(255), unique=False, nullable=True)
-#     has_disposition = Column(db.Boolean, nullable=True)
-#     resident_weapon_used = Column(db.String(255), unique=False, nullable=True)
-#     officer_weapon_used = Column(db.String(255), unique=False, nullable=True)
-#     service_type = Column(db.String(255), unique=False, nullable=True)
-#     resident_condition = Column(db.String(255), unique=False, nullable=True)
-#     officer_condition = Column(db.String(255), unique=False, nullable=True)
-#     resident_identifier = Column(db.String(255), unique=False, nullable=True)
-#     resident_race = Column(db.String(255), unique=False, nullable=True)
-#     resident_sex = Column(db.String(255), unique=False, nullable=True)
-#     resident_age = Column(db.String(255), unique=False, nullable=True)
-#     officer_race = Column(db.String(255), unique=False, nullable=True)
-#     officer_sex = Column(db.String(255), unique=False, nullable=True)
-#     officer_age = Column(db.String(255), unique=False, nullable=True)
-#     officer_years_of_service = Column(db.Integer, unique=False, nullable=True)
-#     officer_identifier = Column(db.String(255), unique=False, nullable=True)
-
-#     def __init__(self, **kwargs):
-#         db.Model.__init__(self, **kwargs)
-
-#     @classmethod
-#     def get_csv_schema(cls):
-#         ''' Return the CSV column headers and variable names, along with the variable names expected from the extractor.
-#         '''
-#         return [
-#             ("id", "opaque_id", "opaqueId"),
-#             ("caseNumber", "case_number", "caseNumber"),
-#             ("occurredDate", "occurred_date", "occurredDate"),
-#             ("receivedDate", "received_date", "receivedDate"),
-#             ("completedDate", "completed_date", "completedDate"),
-#             ("assignment", "assignment", "assignment"),
-#             ("hasDisposition", "has_disposition", "hasDisposition"),
-#             ("residentWeaponUsed", "resident_weapon_used", "residentWeaponUsed"),
-#             ("officerWeaponUsed", "officer_weapon_used", "officerWeaponUsed"),
-#             ("serviceType", "service_type", "serviceType"),
-#             ("residentCondition", "resident_condition", "residentCondition"),
-#             ("officerCondition", "officer_condition", "officerCondition"),
-#             ("residentIdentifier", "resident_identifier", "residentIdentifier"),
-#             ("residentRace", "resident_race", "residentRace"),
-#             ("residentSex", "resident_sex", "residentSex"),
-#             ("residentAge", "resident_age", "residentAge"),
-#             ("officerRace", "officer_race", "officerRace"),
-#             ("officerSex", "officer_sex", "officerSex"),
-#             ("officerAge", "officer_age", "officerAge"),
-#             ("officerYearsOfService", "officer_years_of_service", "officerYearsOfService"),
-#             ("officerIdentifier", "officer_id", "officerId")
-#         ]
-
-#     @classmethod
-#     def add_or_update_incident(cls, department, incident):
-#         ''' Add a new OIS incident or update an existing one
-#         '''
-#         # get a cleaner instance
-#         cleaner = Cleaners()
-#         # capitalize the assignment
-#         incident["assignment"] = cleaner.capitalize(incident["assignment"])
-#         # clean weapon, race, gender
-#         incident["residentWeaponUsed"] = cleaner.resident_weapon_used(incident["residentWeaponUsed"])
-#         incident["residentSex"] = cleaner.sex(incident["residentSex"])
-#         incident["residentRace"] = cleaner.race(incident["residentRace"])
-#         incident["officerSex"] = cleaner.sex(incident["officerSex"])
-#         incident["officerRace"] = cleaner.race(incident["officerRace"])
-#         # make sure values that might've been sent as integers are strings
-#         incident["residentAge"] = cleaner.number_to_string(incident["residentAge"])
-#         incident["officerAge"] = cleaner.number_to_string(incident["officerAge"])
-#         # and values that might've been sent as strings are integers
-#         incident["officerYearsOfService"] = cleaner.string_to_integer(incident["officerYearsOfService"])
-
-#         # check and set the incident last updated
-#         incident_kwargs = dict(opaque_id=incident["opaqueId"], department_id=department.id, incident_type="ois")
-#         incident_updated = IncidentsUpdated.query.filter_by(**incident_kwargs).first()
-#         # this is the first time we've encountered this incident in this update
-#         if not incident_updated:
-#             # delete this incident's rows from the database
-#             cls.query.filter_by(opaque_id=incident["opaqueId"]).delete()
-#             db.session.commit()
-#             # remember it for this incident's following rows in this update
-#             IncidentsUpdated.create(**incident_kwargs)
-
-#         cls.create(
-#             department_id=department.id,
-#             opaque_id=incident["opaqueId"],
-#             case_number=incident["caseNumber"],
-#             occurred_date=parse_date(incident["occurredDate"]),
-#             received_date=parse_date(incident["receivedDate"]),
-#             completed_date=parse_date(incident["completedDate"]),
-#             assignment=incident["assignment"],
-#             has_disposition=incident["hasDisposition"],
-#             resident_weapon_used=incident["residentWeaponUsed"],
-#             officer_weapon_used=incident["officerWeaponUsed"],
-#             service_type=incident["serviceType"],
-#             resident_condition=incident["residentCondition"],
-#             officer_condition=incident["officerCondition"],
-#             resident_identifier=incident["residentIdentifier"],
-#             resident_race=incident["residentRace"],
-#             resident_sex=incident["residentSex"],
-#             resident_age=incident["residentAge"],
-#             officer_race=incident["officerRace"],
-#             officer_sex=incident["officerSex"],
-#             officer_age=incident["officerAge"],
-#             officer_years_of_service=parse_int(incident["officerYearsOfService"]),
-#             officer_identifier=incident["officerIdentifier"]
-#         )
-
-#         # TODO: re-evaluate what this return value means
-#         return True
-
