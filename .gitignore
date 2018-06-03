@@ -28,6 +28,7 @@ pip-log.txt
 .tox
 nosetests.xml
 tests/.cache
+.pytest_cache/*
 
 # database dumps
 *.dump
