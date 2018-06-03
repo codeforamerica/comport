@@ -17,12 +17,12 @@ class TestPublicPages:
 
     def test_home_page_links_to_about(self, testapp):
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/about/") is not None
 
     def test_about_page_exists(self, testapp):
         response = testapp.get("/about/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="https://www.codeforamerica.org") is not None
 
     def test_multiple_depts_display(self, testapp):
@@ -34,7 +34,7 @@ class TestPublicPages:
         UseOfForceIncidentLMPD.create(department_id=lmpd.id, opaque_id="12345abcde")
 
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/LMPD/useofforce") is None
@@ -51,7 +51,7 @@ class TestPublicPages:
 
         # A non logged-in user can only see the public department
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/LMPD/useofforce") is None
@@ -60,7 +60,7 @@ class TestPublicPages:
         # available datasets when logged in
         create_and_log_in_user(testapp=testapp, department=bpd, username="user1")
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/LMPD/useofforce") is None
@@ -68,7 +68,7 @@ class TestPublicPages:
         # A user with admin access can see all departments' available datasets
         create_and_log_in_user(testapp=testapp, department=impd, rolename='admin', username="user2")
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/LMPD/useofforce") is not None
@@ -76,7 +76,7 @@ class TestPublicPages:
         # Log out and only the public department should be visible
         testapp.get(url_for('public.logout')).follow()
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/IMPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/LMPD/useofforce") is None
@@ -90,7 +90,7 @@ class TestPublicPages:
         PursuitSRPD.create(department_id=SRDepartment.id, opaque_id="45678defgh")
 
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is not None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is not None
@@ -103,7 +103,7 @@ class TestPublicPages:
         department.is_public_officer_involved_shootings = False
 
         response = testapp.get("/", status=200)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="/department/BPD/complaints") is not None
         assert soup.find("a", href="/department/BPD/useofforce") is None
         assert soup.find("a", href="/department/BPD/officerinvolvedshootings") is None
@@ -126,25 +126,25 @@ class TestPublicPages:
         srpd_extractor.last_contact = datetime.datetime(2014, 11, 2)
 
         response = testapp.get("/department/BPD/schema/complaints/")
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         updated_span = soup.find("span", {"class": "updated"})
         assert updated_span is not None
         assert "Last Updated September 16, 2012" == updated_span.text
 
         response = testapp.get("/department/BPD/schema/useofforce/")
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         updated_span = soup.find("span", {"class": "updated"})
         assert updated_span is not None
         assert "Last Updated September 16, 2012" == updated_span.text
 
         response = testapp.get("/department/BPD/schema/officerinvolvedshootings/")
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         updated_span = soup.find("span", {"class": "updated"})
         assert updated_span is not None
         assert "Last Updated September 16, 2012" == updated_span.text
 
         response = testapp.get("/department/SRPD/schema/pursuits/")
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         updated_span = soup.find("span", {"class": "updated"})
         assert updated_span is not None
         assert "Last Updated November 02, 2014" == updated_span.text

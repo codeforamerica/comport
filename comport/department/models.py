@@ -483,7 +483,8 @@ class Extractor(User):
         extractor = Extractor.create(username='%s-extractor' % department.name.replace(
             " ", "_"), email='extractor@example.com', password=password)
         extractor.departments.append(department)
-        extractor.roles.append(Role.create(name="extractor"))
+        role = Role.create(name="extractor")
+        extractor.roles.append(role)
         extractor.save()
 
         envs = extractor.generate_envs(password)

@@ -103,7 +103,7 @@ class TestAdminEditForms:
         # make a request to specific front page
         response = testapp.get("/department/{}".format(department.id))
         assert response.status_code == 200
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html.parser")
         assert soup.find("a", href="{}/preview/useofforce".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/complaints".format(department.id)) is not None
         assert soup.find("a", href="{}/preview/ois".format(department.id)) is not None
@@ -136,7 +136,7 @@ class TestAdminEditForms:
 
             response = testapp.get("/department/{}/preview/{}".format(department.id, page))
             assert response.status_code == 200
-            soup = BeautifulSoup(response.text)
+            soup = BeautifulSoup(response.text, "html.parser")
             assert soup.find("a", href="/department/{}/edit/{}".format(department.id, page)) is not None
             assert soup.find("a", href="/department/{}".format(department.id)) is not None
 
@@ -556,6 +556,6 @@ class TestAdminEditForms:
 
             response = testapp.get("/department/{}/preview/schema/{}".format(department.id, page))
             assert response.status_code == 200
-            soup = BeautifulSoup(response.text)
+            soup = BeautifulSoup(response.text, "html.parser")
             assert soup.find("a", href="/department/{}/edit/schema/{}".format(department.id, page)) is not None
             assert soup.find("a", href="/department/{}".format(department.id)) is not None
