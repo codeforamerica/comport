@@ -2,6 +2,7 @@
 
 # Vim
 *.sw[op]
+tags
 
 # C extensions
 *.so
