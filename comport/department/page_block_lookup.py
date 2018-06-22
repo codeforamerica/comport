@@ -121,6 +121,21 @@ class PageBlockLookup:
                 ]
             }
 
+        if short_name == 'WPD':
+            return {
+                'introduction': 'complaints-introduction',
+                'first-block': 'complaints-by-month',
+                'blocks': [
+                    'complaints-by-allegation-type',
+                    'complaints-by-finding',
+                    'complaints-by-precinct',
+                    'officer-demographics',
+                    'complaints-by-demographic',
+                    'complaints-by-officer'
+                ]
+            }
+
+
         # IMPD's blocks are the default
         return {
             'introduction': 'complaints-introduction',

@@ -11,12 +11,11 @@ class TestDepartmentModelWPD:
     def test_get_complaint_blocks(self):
         ''' Set and get complaint chart blocks.
         '''
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=False)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-introduction")
         complaint_bm = ChartBlock(title="BYMONTH", dataset="bymonth", slug="complaints-by-month")
-        complaint_bya = ChartBlock(title="BYALLEGATION", dataset="bya", slug="complaints-by-allegation")
         complaint_byat = ChartBlock(title="BYALLEGATIONTYPE", dataset="byat", slug="complaints-by-allegation-type")
         complaint_bdis = ChartBlock(title="BYDISPOSITION", dataset="bdis", slug="complaints-by-finding")
         complaint_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-precinct")
@@ -26,7 +25,6 @@ class TestDepartmentModelWPD:
 
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
-        department.chart_blocks.append(complaint_bya)
         department.chart_blocks.append(complaint_byat)
         department.chart_blocks.append(complaint_bdis)
         department.chart_blocks.append(complaint_bpre)
@@ -39,18 +37,17 @@ class TestDepartmentModelWPD:
         complaint_blocks = department.get_complaint_blocks()
         assert complaint_blocks['introduction'] == complaint_intro
         assert complaint_blocks['first-block'] == complaint_bm
-        assert complaint_blocks['blocks'][0] == complaint_bya
-        assert complaint_blocks['blocks'][1] == complaint_byat
-        assert complaint_blocks['blocks'][2] == complaint_bdis
-        assert complaint_blocks['blocks'][3] == complaint_bpre
-        assert complaint_blocks['blocks'][4] == complaint_od
-        assert complaint_blocks['blocks'][5] == complaint_bde
-        assert complaint_blocks['blocks'][6] == complaint_bof
+        assert complaint_blocks['blocks'][0] == complaint_byat
+        assert complaint_blocks['blocks'][1] == complaint_bdis
+        assert complaint_blocks['blocks'][2] == complaint_bpre
+        assert complaint_blocks['blocks'][3] == complaint_od
+        assert complaint_blocks['blocks'][4] == complaint_bde
+        assert complaint_blocks['blocks'][5] == complaint_bof
 
     def test_get_complaint_schema_blocks(self):
         ''' Set and get complaint schema chart blocks.
         '''
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=False)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         complaint_intro = ChartBlock(title="INTRO", dataset="intros", slug="complaints-schema-introduction")
@@ -86,7 +83,7 @@ class TestDepartmentModelWPD:
     def test_get_uof_blocks(self):
         ''' Set and get uof chart blocks.
         '''
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=False)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-introduction")
@@ -112,7 +109,7 @@ class TestDepartmentModelWPD:
     def test_get_uof_schema_blocks(self):
         ''' Set and get uof schema chart blocks.
         '''
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=False)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=False)
 
         # create & append chart blocks with the expected slugs
         uof_intro = ChartBlock(title="INTRO", dataset="intros", slug="uof-schema-introduction")
@@ -149,7 +146,7 @@ class TestDepartmentModelWPD:
         ''' The dataset lookup returns usable information
         '''
         # create a department
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=True)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=True)
 
         complaints_lookup = department.get_dataset_lookup("complaints")
         uof_lookup = department.get_dataset_lookup("uof")
@@ -182,7 +179,7 @@ class TestDepartmentModelWPD:
         ''' We can accurately tell if a dataset is public and has data.
         '''
         # create a department
-        department = Department.create(name="IM Police Department", short_name="WPD", load_defaults=True)
+        department = Department.create(name="W Police Department", short_name="WPD", load_defaults=True)
 
         # none of the datasets have data, so they should all return false
         assert department.dataset_is_public_and_has_data("complaints") == False
