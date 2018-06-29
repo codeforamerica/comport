@@ -131,7 +131,7 @@ class PageBlockLookup:
                     'complaints-by-precinct',
                     'officer-demographics',
                     'complaints-by-demographic',
-                    'complaints-by-officer'
+                    'complaints-by-officer-with-cap',
                 ]
             }
 
