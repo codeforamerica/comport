@@ -21,7 +21,7 @@ class TestDepartmentModelWPD:
         complaint_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-precinct")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         complaint_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="complaints-by-demographic")
-        complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer")
+        complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer-with-cap")
 
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
