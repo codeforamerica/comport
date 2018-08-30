@@ -126,6 +126,7 @@ class PageBlockLookup:
                 'introduction': 'complaints-introduction',
                 'first-block': 'complaints-by-month',
                 'blocks': [
+                    'complaints-by-allegation',
                     'complaints-by-allegation-type',
                     'complaints-by-finding',
                     'complaints-by-precinct',
