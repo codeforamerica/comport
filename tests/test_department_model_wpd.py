@@ -21,7 +21,6 @@ class TestDepartmentModelWPD:
         complaint_bpre = ChartBlock(title="BYPRECINCT", dataset="bpre", slug="complaints-by-precinct")
         complaint_od = ChartBlock(title="OFFICERDEMOS", dataset="od", slug="officer-demographics")
         complaint_bde = ChartBlock(title="BYDEMO", dataset="bde", slug="complaints-by-demographic")
-        complaint_bof = ChartBlock(title="BYOFFICER", dataset="bof", slug="complaints-by-officer-with-cap")
 
         department.chart_blocks.append(complaint_intro)
         department.chart_blocks.append(complaint_bm)
@@ -30,7 +29,6 @@ class TestDepartmentModelWPD:
         department.chart_blocks.append(complaint_bpre)
         department.chart_blocks.append(complaint_od)
         department.chart_blocks.append(complaint_bde)
-        department.chart_blocks.append(complaint_bof)
         department.save()
 
         # verify that the blocks are returned in the expected structure
@@ -42,7 +40,6 @@ class TestDepartmentModelWPD:
         assert complaint_blocks['blocks'][2] == complaint_bpre
         assert complaint_blocks['blocks'][3] == complaint_od
         assert complaint_blocks['blocks'][4] == complaint_bde
-        assert complaint_blocks['blocks'][5] == complaint_bof
 
     def test_get_complaint_schema_blocks(self):
         ''' Set and get complaint schema chart blocks.
